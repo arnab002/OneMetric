@@ -1,0 +1,481 @@
+.image-18-icon {
+  height: 41px;
+  width: 36px;
+  position: relative;
+  object-fit: cover;
+}
+
+.onemetric {
+  text-decoration: none;
+  position: relative;
+  line-height: 22px;
+  font-weight: 700;
+  color: inherit;
+  display: inline-block;
+  min-width: 100px;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.frame-child {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  display: none;
+}
+
+.frame-item {
+  width: 13px;
+  height: 12px;
+  position: relative;
+}
+
+.frame-parent,
+.otp1 {
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+}
+
+.frame-parent {
+  height: 40px;
+  width: 40px;
+  backdrop-filter: blur(40px);
+  border-radius: var(--br-5xs);
+  flex-shrink: 0;
+  display: none;
+  flex-direction: column;
+  padding: 10px 0;
+  box-sizing: border-box;
+  gap: var(--gap-5xs);
+}
+
+.otp1 {
+  align-self: stretch;
+  background-color: var(--color-gray-200);
+  display: flex;
+  flex-direction: row;
+  padding: 11.5px var(--padding-xl);
+  gap: 16px;
+  top: 0;
+  z-index: 99;
+  position: sticky;
+  text-align: center;
+  font-size: 18px;
+  color: var(--color-white);
+  font-family: var(--font-montserrat);
+}
+
+.frame-inner,
+.rectangle-div {
+  position: absolute;
+  border-radius: var(--br-5xs);
+}
+
+.frame-inner {
+  top: 0;
+  left: 0;
+  box-shadow: 0 2px 3px #3b4aac inset, 0 4px 12px rgba(36, 56, 192, 0.25) inset;
+  background: linear-gradient(180deg, #101747, #0a0c18);
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+
+.rectangle-div {
+  width: calc(100% - 4.5px);
+  top: 4.5px;
+  right: 2.2px;
+  left: 2.3px;
+  box-shadow: 0 2px 2px rgba(58, 69, 148, 0.3) inset;
+  background-color: #000;
+  height: 91.1px;
+  z-index: 1;
+}
+
+.ellipse-div,
+.rectangle-parent {
+  position: absolute;
+  background: linear-gradient(180deg, #101747, #0a0c18);
+}
+
+.rectangle-parent {
+  top: 0;
+  left: 0;
+  box-shadow: 0 2px 3px #3b4aac inset, 0 4px 12px rgba(36, 56, 192, 0.25) inset;
+  border-radius: var(--br-5xs);
+  width: 100%;
+  height: 100%;
+}
+
+.ellipse-div {
+  top: 97.6px;
+  left: 26px;
+  box-shadow: 0 1px 0 rgba(59, 74, 172, 0.4);
+  border-radius: 50%;
+  width: 7.9px;
+  height: 7.9px;
+  z-index: 2;
+}
+
+.frame-parent1 {
+  position: absolute;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 17.3px;
+  width: 59.8px;
+}
+
+.group-icon {
+  position: absolute;
+  top: 27.6px;
+  left: 0;
+  width: 63px;
+  height: 35.9px;
+  object-fit: contain;
+  z-index: 3;
+}
+
+.group-div {
+  position: absolute;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 5.1px;
+  width: 77px;
+}
+
+.frame-child1 {
+  position: absolute;
+  top: 60.5px;
+  left: 0;
+  background: linear-gradient(180deg, rgba(10, 12, 24, 0), #0a0c18);
+  width: 103.1px;
+  height: 53px;
+  z-index: 4;
+}
+
+.frame-container {
+  position: absolute;
+  top: 0;
+  left: 26.9px;
+  width: 103.1px;
+  height: 113.6px;
+}
+
+.frame-child2,
+.frame-child3,
+.frame-child4 {
+  position: absolute;
+  top: 32.1px;
+  left: 18.7px;
+  background: linear-gradient(90deg,
+      rgba(31, 118, 217, 0),
+      rgba(31, 118, 217, 0.5));
+  width: 14.9px;
+  height: 3px;
+  z-index: 5;
+}
+
+.frame-child3,
+.frame-child4 {
+  top: 39.6px;
+  left: 9.7px;
+  width: 23.9px;
+}
+
+.frame-child4 {
+  top: 47.1px;
+  left: 0;
+  width: 33.6px;
+}
+
+.frame-group {
+  height: 113.6px;
+  flex: 1;
+  position: relative;
+}
+
+.metric-inner {
+  width: 130px;
+  margin: 0 !important;
+  position: absolute;
+  top: -75px;
+  left: 88px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  opacity: 0;
+}
+
+.enter-your-whatsapp {
+  margin: 0;
+  position: relative;
+  font-size: inherit;
+  line-height: 160%;
+  font-weight: 600;
+  font-family: inherit;
+}
+
+.number-field {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.an-otp-will {
+  width: 290px;
+  position: relative;
+  font-size: var(--font-size-sm);
+  line-height: 160%;
+  color: var(--color-lightslategray);
+  text-align: center;
+  display: inline-block;
+}
+
+.number-input {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 var(--padding-xs);
+  gap: 4px;
+}
+
+.full-name,
+.sreejesh-parambath {
+  position: relative;
+  display: inline-block;
+}
+
+.full-name {
+  line-height: 16px;
+  min-width: 69px;
+}
+
+.sreejesh-parambath {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  font-weight: 500;
+  font-family: var(--font-poppins);
+  font-size: var(--font-size-sm);
+  background-color: transparent;
+  height: 14px;
+  line-height: 100%;
+  color: var(--color-white);
+  text-align: left;
+  padding: 0;
+}
+
+.input-boxes,
+.input-labels,
+.nested-input-boxes {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+
+.nested-input-boxes {
+  flex: 1;
+  border-radius: var(--br-5xs);
+  background-color: var(--color-gray-100);
+  border: 1px solid var(--color-dimgray-100);
+  box-sizing: border-box;
+  align-items: center;
+  padding: var(--padding-lg) var(--padding-xs);
+}
+
+.input-boxes,
+.input-labels {
+  align-self: stretch;
+  align-items: flex-start;
+}
+
+.input-labels {
+  flex-direction: column;
+  gap: var(--gap-5xs);
+}
+
+.email-id,
+.emaili-d {
+  position: relative;
+  display: inline-block;
+}
+
+.email-id {
+  line-height: 16px;
+  min-width: 57px;
+}
+
+.emaili-d {
+  width: 57px;
+  border: 0;
+  outline: 0;
+  font-weight: 500;
+  font-family: var(--font-poppins);
+  font-size: var(--font-size-sm);
+  background-color: transparent;
+  height: 14px;
+  line-height: 100%;
+  color: var(--color-lightslategray);
+  text-align: left;
+  padding: 0;
+}
+
+.billing-address-optional,
+.no-3-rmz {
+  position: relative;
+  line-height: 16px;
+}
+
+.no-3-rmz {
+  flex: 1;
+  line-height: 140%;
+  font-weight: 500;
+}
+
+.no-3-rmz-infinity-tower-e-wrapper {
+  flex: 1;
+  border-radius: var(--br-5xs);
+  background-color: var(--color-gray-100);
+  border: 1px solid var(--color-dimgray-100);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 10px 11px 30px;
+  width: 324px;
+  color: white;
+}
+
+.input-fields,
+.input-labels-child,
+.personal-info {
+  align-self: stretch;
+  display: flex;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+
+.input-labels-child {
+  height: 54px;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0;
+  box-sizing: border-box;
+  text-align: left;
+  font-size: var(--font-size-sm);
+}
+
+.input-fields,
+.personal-info {
+  flex-direction: column;
+}
+
+.personal-info {
+  align-items: flex-start;
+  gap: 24px;
+  text-align: center;
+  font-size: var(--font-size-xs);
+}
+
+.input-fields {
+  align-items: center;
+  gap: 40px;
+}
+
+.finish {
+  position: relative;
+  display: inline-block;
+  min-width: 45px;
+}
+
+.finish-wrapper {
+  width: 100%;
+  margin-top: 12%;
+  border-radius: var(--br-5xs);
+  background-color: #009D4F;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding-base) var(--padding-xl);
+  text-align: left;
+  font-size: 16px;
+  color: white;
+  font-family: var(--font-poppins);
+}
+
+.input-fields-parent {
+  flex: 1;
+  flex-direction: column;
+  gap: 48px;
+  z-index: 6;
+}
+
+.input-fields-parent,
+.metric,
+.metric-wrapper,
+.otp {
+  max-width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.metric {
+  flex: 1;
+  flex-direction: row;
+  position: relative;
+}
+
+.metric-wrapper,
+.otp {
+  box-sizing: border-box;
+}
+
+.metric-wrapper {
+  align-self: stretch;
+  flex-direction: row;
+  padding: 0 var(--padding-base);
+  text-align: left;
+  font-size: 20px;
+  color: var(--color-white);
+  font-family: var(--font-poppins);
+}
+
+.otp {
+  width: 100%;
+  background-color: var(--color-gray-200);
+  overflow: hidden;
+  flex-direction: column;
+  padding: 32px 0 95px;
+  gap: 43px;
+  line-height: normal;
+  letter-spacing: normal;
+}
+
+@media only screen and (min-width: 375px) and (max-width: 667px){
+  .enter-your-whatsapp{
+    padding-left: 4%;
+  }
+}
+
+@media only screen and (min-width: 390px) and (max-width: 844px){
+  .enter-your-whatsapp{
+    padding-left: 6%;
+  }
+}

@@ -1,0 +1,321 @@
+.login-child {
+  width: 41.1px;
+  height: 26.7px;
+  position: relative;
+  display: none;
+}
+.image-18-icon {
+  height: 41px;
+  width: 36px;
+  position: relative;
+  object-fit: cover;
+}
+.onemetric {
+  text-decoration: none;
+  position: relative;
+  line-height: 22px;
+  font-weight: 700;
+  color: inherit;
+}
+.content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.frame-child {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  display: none;
+}
+.frame-item {
+  width: 13px;
+  height: 12px;
+  position: relative;
+}
+.frame-parent,
+.main {
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+}
+.frame-parent {
+  height: 40px;
+  width: 40px;
+  backdrop-filter: blur(40px);
+  border-radius: var(--br-5xs);
+  flex-shrink: 0;
+  display: none;
+  flex-direction: column;
+  padding: 10px 0;
+  box-sizing: border-box;
+  gap: var(--gap-5xs);
+}
+.main {
+  align-self: stretch;
+  background-color: var(--color-gray-200);
+  display: flex;
+  flex-direction: row;
+  padding: 11.5px var(--padding-xl);
+  gap: 16px;
+  top: 0;
+  z-index: 99;
+  position: sticky;
+  text-align: center;
+  font-size: 18px;
+  color: var(--color-white);
+  font-family: var(--font-montserrat);
+}
+.number-field-child {
+  height: 61px;
+  width: 61px;
+  position: relative;
+}
+.number-field {
+  width: 311.5px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0 var(--padding-xl);
+  box-sizing: border-box;
+}
+.enter-your-whatsapp {
+  margin: 0;
+  position: relative;
+  font-size: 20px;
+  line-height: 160%;
+  font-weight: 600;
+  font-family: var(--font-poppins);
+  color: var(--color-white);
+  text-align: left;
+}
+.input-instruction {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.an-otp-will {
+  width: 290px;
+  height: 44px;
+  position: relative;
+  font-size: var(--font-size-sm);
+  line-height: 160%;
+  font-family: var(--font-poppins);
+  color: var(--color-lightslategray);
+  text-align: center;
+  display: inline-block;
+}
+.number-info {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 var(--padding-xs);
+  gap: 4px;
+}
+.whatsapp-number {
+  font-size: 12px;
+  line-height: 130%;
+  font-family: var(--font-poppins);
+  color: var(--color-white);
+  text-align: center;
+}
+.flag-icon,
+.ind,
+.whatsapp-number {
+  position: relative;
+}
+.ind {
+  font-size: var(--font-size-sm);
+  line-height: 100%;
+  font-weight: 500;
+  font-family: var(--font-poppins);
+  color: var(--color-lightslategray);
+  text-align: left;
+}
+.flag-icon {
+  width: 16px;
+  height: 8px;
+}
+.country-code,
+.flag {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.flag {
+  flex-direction: column;
+  padding: 8px 4px;
+  min-height: 24px;
+  width: 24px;
+  height: 24px;
+}
+.country-code {
+  width: 96px;
+  border-radius: var(--br-5xs);
+  background-color: var(--color-gray-100);
+  border: 1px solid var(--color-dimgray-100);
+  flex-direction: row;
+  padding: 16px var(--padding-xs);
+  gap: 20px;
+  color: white;
+}
+.whatsapp-number1 {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  font-weight: 500;
+  font-family: var(--font-poppins);
+  font-size: var(--font-size-sm);
+  background-color: transparent;
+  height: 14px;
+  flex: 1;
+  position: relative;
+  line-height: 100%;
+  text-align: left;
+  display: inline-block;
+  min-width: 105px;
+  padding: 0;
+  color: white;
+}
+.number-input {
+  flex: 1;
+  border-radius: var(--br-5xs);
+  background-color: var(--color-gray-100);
+  border: 1px solid var(--color-dimgray-100);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: var(--padding-lg) 36px var(--padding-lg) 11px;
+}
+.description,
+.input-content,
+.input-wrapper {
+  align-self: stretch;
+  display: flex;
+  justify-content: flex-start;
+}
+.input-content {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--gap-5xs);
+}
+.description,
+.input-wrapper {
+  flex-direction: column;
+}
+.input-wrapper {
+  align-items: flex-start;
+  gap: var(--gap-5xs);
+}
+.description {
+  align-items: center;
+  gap: 40px;
+}
+.send-otp {
+  height: 24px;
+  position: relative;
+  font-size: 16px;
+  font-family: var(--font-poppins);
+  color: white;
+  text-align: left;
+  display: inline-block;
+}
+.button-container {
+  cursor: pointer;
+  border: 0;
+  padding: var(--padding-base) var(--padding-xl);
+  background-color: #009D4F;
+  align-self: stretch;
+  border-radius: var(--br-5xs);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+.button-container:hover{
+  background-color: 009D4F;
+}
+.input-details {
+  margin: 0;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 48px;
+}
+.form,
+.login,
+.number-field-parent {
+  max-width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+.number-field-parent {
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 64px;
+}
+.form,
+.login {
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+.form {
+  align-self: stretch;
+  flex-direction: row;
+  padding: 0 var(--padding-base);
+}
+.login {
+  width: 100%;
+  background-color: var(--color-gray-200);
+  overflow: hidden;
+  flex-direction: column;
+  padding: 32px 0 144px;
+  gap: 73px;
+  line-height: normal;
+  letter-spacing: normal;
+}
+
+@media only screen and (min-width: 375px) and (max-width: 667px){
+  .enter-your-whatsapp{
+    padding-left: 3.5%;
+  }
+  .number-field{
+    width: 95%;
+  }
+}
+
+@media only screen and (min-width: 390px) and (max-width: 844px){
+  .login{
+    height: 850px;
+  }
+}
+
+@media only screen and (min-width: 412px) and (max-width: 915px){
+  .login{
+    height: 950px;
+  }
+  .enter-your-whatsapp{
+    padding-left: 8%;
+  }
+}
+
+@media only screen and (min-width: 430px) and (max-width: 932px){
+  .login{
+    height: 950px;
+  }
+  .enter-your-whatsapp{
+    padding-left: 10%;
+  }
+}
