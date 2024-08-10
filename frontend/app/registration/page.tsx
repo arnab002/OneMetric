@@ -12,7 +12,7 @@ function Registration() {
 
     const [fullname, setFullname] = useState('');
     const [email, setEmail] = useState('');
-    const [countrycode, setCountryCode] = useState('');
+    // const [countrycode, setCountryCode] = useState('');
     const [pincode, setPinCode] = useState('');
     const [billingAddress, setBillingAddress] = useState('');
 
@@ -22,7 +22,6 @@ function Registration() {
             const response = await axios.post(`${baseApiURL()}/userRegistration`, {
                 fullname,
                 email,
-                countrycode,
                 pincode,
                 billing_address: billingAddress,
                 mobile,
@@ -123,7 +122,7 @@ function Registration() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="input-labels">
+                                        {/* <div className="input-labels">
                                             <div className="email-id">Country Code</div>
                                             <div className="input-boxes">
                                                 <div className="nested-input-boxes">
@@ -136,7 +135,7 @@ function Registration() {
                                                     />
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> */}
                                         <div className="input-labels">
                                             <div className="email-id">Pin Code</div>
                                             <div className="input-boxes">
@@ -166,7 +165,7 @@ function Registration() {
                                         </div>
                                     </div>
                                     <button type="submit" className="finish-wrapper">
-                                        Finish
+                                        Register
                                     </button>
                                 </form>
                             </div>

@@ -479,3 +479,9 @@
     padding-left: 6%;
   }
 }
+
+@media only screen and (min-width: 412px) and (max-width: 915px){
+  .otp{
+    height: 950px;
+  } 
+}

@@ -234,9 +234,6 @@ function Home() {
               <div className="bank-nifty">Bank Nifty</div>
             </div>
           </div>
-          {/* <div className="all-banks-wrapper">
-            <div className="all-banks">All Banks</div>
-          </div> */}
         </section>
         <img className="image-13-icon" alt="" src="./public/home/image-13@2x.png" />
         <img className="vector-icon" alt="" src="./public/home/vector.svg" />
@@ -570,12 +567,6 @@ function Home() {
                                   <div className="category-items2">
                                     <div className="bank-nifty1">Bank Nifty</div>
                                   </div>
-                                  {/* <div className="category-items3">
-                                    <div className="all-banks1">All Banks</div>
-                                  </div>
-                                  <div className="category-items4">
-                                    <div className="psus">PSUs</div>
-                                  </div> */}
                                 </div>
                                 <div className="stock-list">
                                   <div className="stock-items">
@@ -657,11 +648,6 @@ function Home() {
                 </div>
               </div>
             </div>
-            {/* <div className="p-s-us-category">
-              <div className="p-s-us-container">
-                <div className="all-banks">PSUs</div>
-              </div>
-            </div> */}
           </div>
         </section>
         <section className="one-metric-content-wrapper">
@@ -791,7 +777,7 @@ function Home() {
         </section>
         <section className="simply-grow-content-wrapper">
           <div className="simply-grow-content">
-            <h3 className="why-simply-grow">Why Simply Grow?</h3>
+            <h3 className="why-simply-grow">Why One Metric?</h3>
             <div className="simply-grow-features">
               <div className="feature-containers">
                 <div className="feature-items">
@@ -988,10 +974,10 @@ function Home() {
                 <div className="what-is-container">
                   <div className="diamond-feature-descriptions">
                     <div className="what-is-simplygrow">
-                      What is SimplyGrow and what does it do?
+                      What is OneMetric and what does it do?
                     </div>
                     <div className="simplygrow-is-a">
-                      SimplyGrow is a platform that delivers personalized stock news,
+                      OneMetric is a platform that delivers personalized stock news,
                       insights, and charts directly to your WhatsApp.
                     </div>
                   </div>
@@ -1009,7 +995,7 @@ function Home() {
                 <div className="what-is-container">
                   <div className="question">
                     <div className="what-is-simplygrow">
-                      Is SimplyGrow an app or does it work on WhatsApp?
+                      Is OneMetric an app or does it work on WhatsApp?
                     </div>
                   </div>
                   <div className="what-is-container-inner">
@@ -1025,7 +1011,7 @@ function Home() {
                 <div className="what-is-container">
                   <div className="question">
                     <div className="what-is-simplygrow">
-                      How much does SimplyGrow cost? SimplyGrow offers two plans:
+                      How much does OneMetric cost? OneMetric offers two plans:
                     </div>
                   </div>
                   <div className="what-is-container-inner">

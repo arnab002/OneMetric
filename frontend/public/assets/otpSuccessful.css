@@ -273,6 +273,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
+  width: 100%;
 }
 .deletion-container {
   align-self: stretch;
@@ -301,5 +302,11 @@
   }
   .delete-wrapper{
     padding: 0px 85px;
+  }
+}
+
+@media only screen and (min-width: 430px) and (max-width: 932px){
+  .deletion-container{
+    padding: 0 94px;
   }
 }

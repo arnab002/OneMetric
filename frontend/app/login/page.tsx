@@ -79,7 +79,7 @@ function Login() {
                     <div className="number-input">
                       <input
                         className="whatsapp-number1"
-                        placeholder="+91 - WhatsApp Number"
+                        placeholder="WhatsApp Number"
                         type="text"
                         inputMode='numeric'
                         autoFocus

@@ -510,11 +510,17 @@
   .otp{
     height: 850px;
   }
+  .frame-parent1{
+    padding: 40% 0 0;
+  }
 }
 
 @media only screen and (min-width: 412px) and (max-width: 915px){
   .otp{
     height: 930px;
+  }
+  .frame-parent1{
+    padding: 50% 0 0;
   }
 }
 

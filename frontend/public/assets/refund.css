@@ -518,6 +518,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
+  margin: auto;
 }
 .copyright-container-wrapper {
   align-self: stretch;

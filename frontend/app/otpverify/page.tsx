@@ -14,6 +14,7 @@ const OTPVerify: React.FC = () => {
     const [resendDisabled, setResendDisabled] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
     const [isOtpInvalid, setIsOtpInvalid] = useState<boolean>(false);
+    const [remainingTime, setRemainingTime] = useState<number>(60);
     const otpGeneratedRef = useRef(false);
 
     useEffect(() => {
@@ -66,6 +67,19 @@ const OTPVerify: React.FC = () => {
     }, [otp, mobile, router]);
 
     useEffect(() => {
+        let timer: NodeJS.Timeout;
+        if (resendDisabled && remainingTime > 0) {
+            timer = setInterval(() => {
+                setRemainingTime((prevTime) => prevTime - 1);
+            }, 1000);
+        } else if (remainingTime === 0) {
+            setResendDisabled(false);
+            setRemainingTime(60);
+        }
+        return () => clearInterval(timer);
+    }, [resendDisabled, remainingTime]);
+
+    useEffect(() => {
         // Focus on the first OTP input field when the component loads
         (document.getElementById(`otp-0`) as HTMLInputElement)?.focus();
     }, []);
@@ -86,8 +100,8 @@ const OTPVerify: React.FC = () => {
 
     const handleResend = () => {
         setResendDisabled(true);
+        setRemainingTime(60);
 
-        // Resend OTP using the mobile number
         axios.post(`${baseApiURL()}/generate-otp`, { mobile })
             .then(response => {
                 setMessage('OTP has been resent to your mobile number.');
@@ -97,7 +111,6 @@ const OTPVerify: React.FC = () => {
                 console.error('Error resending OTP:', error);
             });
 
-        // Enable the resend button after 30 seconds
         setTimeout(() => {
             setResendDisabled(false);
         }, 30000);
@@ -236,7 +249,7 @@ const OTPVerify: React.FC = () => {
                                     </button>
                                     <div className="it-may-take-container">
                                         <span>It may take up to </span>
-                                        <span className="secs">30 secs</span>
+                                        <span className="secs">{remainingTime} secs</span>
                                         <span> to receive OTP </span>
                                     </div>
                                 </div>

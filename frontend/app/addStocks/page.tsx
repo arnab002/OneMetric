@@ -125,6 +125,36 @@ function AddStocks() {
         <div>
             <div className="add-stocks">
                 <div className="add-stocks-parent">
+                    <header className="main">
+                        <img
+                            className="image-18-icon"
+                            loading="lazy"
+                            alt=""
+                            src="./public/insights/image-18@2x.png"
+                        />
+                        <div className="main-inner">
+                            <div className="main-inner">
+                                <a className="onemetric">OneMetric</a>
+                            </div>
+                        </div>
+                        <div className="frame-container">
+                            <div className="frame-div">
+                                <img
+                                    className="frame-child1"
+                                    alt=""
+                                    src="./public/insights/group-1000000998@2x.png"
+                                />
+                            </div>
+                            <div className="union-wrapper">
+                                <img
+                                    className="union-icon"
+                                    loading="lazy"
+                                    alt=""
+                                    src="./public/insights/union.svg"
+                                />
+                            </div>
+                        </div>
+                    </header>
                     <div className="add-stocks1">
                         <div className="icons-back">
                             <div className="icons" id="iconsContainer">
@@ -135,14 +165,6 @@ function AddStocks() {
                                 </div>
                             </div>
                             <div className="add-stocks2">Add Stocks</div>
-                            <div className="frame-parent">
-                                <img
-                                    className="frame-child"
-                                    alt=""
-                                    src="./public/addstocks/group-1000001006.svg"
-                                />
-                                <div className="import-cas-file">Import CAS file</div>
-                            </div>
                         </div>
                         <div className="icons-back1">
                             <div className="frame-group" id="frameContainer">
@@ -160,33 +182,6 @@ function AddStocks() {
                                     value={searchQuery}
                                     onChange={handleSearchChange}
                                 />
-                            </div>
-                            <div className="iconfilter" id="iconFilterContainer">
-                                <div className="frame-container">
-                                    <div className="iconback-arrow">
-                                        <img className="frame-inner" alt="" src="./public/addstocks/line-48.svg" />
-                                        <div className="ellipse-div" />
-                                        <img className="line-icon" alt="" src="./public/addstocks/line-49.svg" />
-                                    </div>
-                                    <div className="iconback-arrow">
-                                        <img
-                                            className="frame-child1"
-                                            alt=""
-                                            src="./public/addstocks/line-481.svg"
-                                        />
-                                        <div className="ellipse-div" />
-                                        <img
-                                            className="frame-child3"
-                                            alt=""
-                                            src="./public/addstocks/line-491.svg"
-                                        />
-                                    </div>
-                                    <div className="iconback-arrow">
-                                        <img className="frame-inner" alt="" src="./public/addstocks/line-48.svg" />
-                                        <div className="ellipse-div" />
-                                        <img className="line-icon" alt="" src="./public/addstocks/line-49.svg" />
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -253,33 +248,6 @@ function AddStocks() {
                         </div>
                     </div>
                 </div>
-                {/* <div className="add-stocks-inner">
-                    <div className="all-banks8-wrapper">
-                        <div className="all-banks8">
-                            <span>
-                                <span>All Banks</span>
-                                <span className="span1">(8) </span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div className="add-stocks-child">
-                    <div className="psus-2-wrapper">
-                        <div className="psus-2">
-                            <span>
-                                <span>PSUs </span>
-                                <span className="span1">(2) </span>
-                            </span>
-                        </div>
-                    </div>
-                </div> */}
-                <div className="frame-parent1">
-                    <div className="frame-wrapper1">
-                        <img className="group-icon" alt="" src="./public/addstocks/group-10000009771.svg" />
-                    </div>
-                    <div className="search-stock">Search Stock</div>
-                </div>
-                <div className="good-evening">Good Evening</div>
             </div>
         </div>
     );
