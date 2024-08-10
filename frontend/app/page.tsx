@@ -17,6 +17,7 @@ function Home() {
   const [planData, setPlanData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [razorpayLoaded, setRazorpayLoaded] = useState<boolean>(false);
+  const [openFAQs, setOpenFAQs] = useState<{ [key: number]: boolean }>({});
   const searchParams = useSearchParams();
   const mobile = searchParams.get('mobile');
   const router = useRouter();
@@ -32,6 +33,13 @@ function Home() {
       document.body.removeChild(script);
     };
   }, []);
+
+  const toggleFAQ = (index: number) => {
+    setOpenFAQs(prevState => ({
+      ...prevState,
+      [index]: !prevState[index]
+    }));
+  };
 
   const handleClick = () => {
     router.push(`/insights?mobile=${mobile}`);
@@ -970,60 +978,43 @@ function Home() {
           <div className="plan-options">
             <h3 className="faq">FAQ</h3>
             <div className="questions">
-              <div className="what-is-container-wrapper">
-                <div className="what-is-container">
-                  <div className="diamond-feature-descriptions">
-                    <div className="what-is-simplygrow">
-                      What is OneMetric and what does it do?
+              {[
+                {
+                  question: "What is OneMetric and what does it do?",
+                  answer: "OneMetric is a platform that delivers personalized stock news, insights, and charts directly to your WhatsApp."
+                },
+                {
+                  question: "Is OneMetric an app or does it work on WhatsApp?",
+                  answer: "OneMetric works directly through WhatsApp, so there's no need to download a separate app."
+                },
+                {
+                  question: "How much does OneMetric cost?",
+                  answer: "OneMetric offers two plans: Gold and Diamond. Please check our pricing section for current rates and features."
+                }
+              ].map((faq, index) => (
+                <div key={index} className="what-is-container-wrapper">
+                  <div className="what-is-container" onClick={() => toggleFAQ(index)}>
+                    <div className="diamond-feature-descriptions">
+                      <div className="what-is-simplygrow">
+                        {faq.question}
+                      </div>
+                      {openFAQs[index] && (
+                        <div className="simplygrow-is-a">
+                          {faq.answer}
+                        </div>
+                      )}
                     </div>
-                    <div className="simplygrow-is-a">
-                      OneMetric is a platform that delivers personalized stock news,
-                      insights, and charts directly to your WhatsApp.
+                    <div className="what-is-container-inner">
+                      <img
+                        className="frame-child32"
+                        loading="lazy"
+                        alt=""
+                        src={openFAQs[index] ? "./public/home/vector-212.svg" : "./public/home/vector-212-1.svg"}
+                      />
                     </div>
-                  </div>
-                  <div className="what-is-container-inner">
-                    <img
-                      className="frame-child32"
-                      loading="lazy"
-                      alt=""
-                      src="./public/home/vector-212.svg"
-                    />
                   </div>
                 </div>
-              </div>
-              <div className="what-is-container-wrapper">
-                <div className="what-is-container">
-                  <div className="question">
-                    <div className="what-is-simplygrow">
-                      Is OneMetric an app or does it work on WhatsApp?
-                    </div>
-                  </div>
-                  <div className="what-is-container-inner">
-                    <img
-                      className="frame-child33"
-                      alt=""
-                      src="./public/home/vector-212-1.svg"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="what-is-container-wrapper">
-                <div className="what-is-container">
-                  <div className="question">
-                    <div className="what-is-simplygrow">
-                      How much does OneMetric cost? OneMetric offers two plans:
-                    </div>
-                  </div>
-                  <div className="what-is-container-inner">
-                    <img
-                      className="frame-child33"
-                      loading="lazy"
-                      alt=""
-                      src="./public/home/vector-212-1.svg"
-                    />
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>
@@ -1119,14 +1110,14 @@ function Home() {
               />
               <div className="link-columns-parent">
                 <div className="link-columns">
-                  <div className="about-us">About Us</div>
-                  <div className="contact-us">Contact Us</div>
-                  <div className="refund-policy">Refund Policy</div>
+                  <a href='/about' style={{ textDecoration: "none", color: "inherit" }} className="about-us">About Us</a>
+                  <a href='#' style={{ textDecoration: "none", color: "inherit" }} className="contact-us">Contact Us</a>
+                  <a href='/refund' style={{ textDecoration: "none", color: "inherit" }} className="refund-policy">Refund Policy</a>
                 </div>
                 <div className="link-columns1">
-                  <div className="terms-conditions">Terms &amp; conditions</div>
-                  <div className="referral-policy">Referral Policy</div>
-                  <div className="faqs">FAQs</div>
+                  <a href='#' style={{ textDecoration: "none", color: "inherit" }} className="terms-conditions">Terms &amp; conditions</a>
+                  <a href='/referral' style={{ textDecoration: "none", color: "inherit" }} className="referral-policy">Referral Policy</a>
+                  <a href='#' style={{ textDecoration: "none", color: "inherit" }} className="faqs">FAQs</a>
                 </div>
               </div>
               <img

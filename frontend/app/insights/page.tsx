@@ -485,14 +485,14 @@ function Insights() {
                             />
                             <div className="link-items">
                                 <div className="link-names">
-                                    <div className="about-us">About Us</div>
-                                    <div className="contact-us">Contact Us</div>
-                                    <div className="refund-policy">Refund Policy</div>
+                                    <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us">About Us</a>
+                                    <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Contact Us</a>
+                                    <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">Refund Policy</a>
                                 </div>
                                 <div className="link-names1">
-                                    <div className="terms-conditions">Terms &amp; conditions</div>
-                                    <div className="referral-policy">Referral Policy</div>
-                                    <div className="faqs">FAQs</div>
+                                    <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
+                                    <a href='/referral' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Referral Policy</a>
+                                    <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="faqs">FAQs</a>
                                 </div>
                             </div>
                             <img

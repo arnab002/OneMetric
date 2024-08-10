@@ -244,14 +244,14 @@ const Refund: React.FC = () => {
               />
               <div className="footer-links-content">
                 <div className="about-us-parent">
-                  <div className="about-us1">About Us</div>
-                  <div className="contact-us">Contact Us</div>
-                  <div className="refund-policy1">Refund Policy</div>
+                  <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us1">About Us</a>
+                  <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Contact Us</a>
+                  <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy1">Refund Policy</a>
                 </div>
                 <div className="terms-conditions-parent">
-                  <div className="terms-conditions">Terms &amp; conditions</div>
-                  <div className="referral-policy">Referral Policy</div>
-                  <div className="faqs">FAQs</div>
+                  <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
+                  <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Referral Policy</a>
+                  <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="faqs">FAQs</a>
                 </div>
               </div>
               <img

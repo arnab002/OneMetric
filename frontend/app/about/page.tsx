@@ -65,7 +65,7 @@ function About() {
                         <h3 className="about-us1">About US</h3>
                         <div className="at-wegro-were-container">
                             <span>At </span>
-                            <span className="wegro">Wegro,</span>
+                            <span className="wegro">OneMetric,</span>
                             <span>
                                 we're on a mission to revolutionize the way people access news for
                                 their stock market investments. We understand the challenges faced by
@@ -138,14 +138,14 @@ function About() {
                             />
                             <div className="link-columns">
                                 <div className="link-column">
-                                    <div className="about-us2">About Us</div>
-                                    <div className="contact-us">Contact Us</div>
-                                    <div className="refund-policy">Refund Policy</div>
+                                    <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us2">About Us</a>
+                                    <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Contact Us</a>
+                                    <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">Refund Policy</a>
                                 </div>
                                 <div className="link-column1">
-                                    <div className="terms-conditions">Terms &amp; conditions</div>
-                                    <div className="referral-policy">Referral Policy</div>
-                                    <div className="faqs">FAQs</div>
+                                    <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
+                                    <a href='/referral' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Referral Policy</a>
+                                    <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="faqs">FAQs</a>
                                 </div>
                             </div>
                             <img
