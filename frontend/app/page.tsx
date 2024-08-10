@@ -960,7 +960,7 @@ function Home() {
                       </div>
                     </div>
                     <div className="diamond-feature-descriptions">
-                      <div className="days-free-trial">{plan.duration_in_months} Days Free Trial</div>
+                      <div className="days-free-trial">{plan.duration_in_months} Months</div>
                       <div className="ideal-for-beginners">
                         No card required for {plan.duration_in_months} days free Trial
                       </div>

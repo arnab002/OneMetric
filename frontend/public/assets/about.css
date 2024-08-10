@@ -454,18 +454,18 @@
 
 @media only screen and (min-width: 390px) and (max-width: 844px){
   .about-us{
-    height: 850px;
+    height: 100vh;
   }
 }
 
 @media only screen and (min-width: 412px) and (max-width: 915px){
   .about-us{
-    height: 930px;
+    height: 100vh;
   }
 }
 
 @media only screen and (min-width: 430px) and (max-width: 932px){
   .about-us{
-    height: 950px;
+    height: 100vh;
   }
 }

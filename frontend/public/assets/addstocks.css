@@ -614,7 +614,7 @@
   flex-shrink: 0;
 }
 .add-stocks {
-  height: 792px;
+  height: 100vh;
   background-color: #090c18;
   max-width: 100%;
   overflow-y: auto;
@@ -664,18 +664,6 @@
 
 @media only screen and (min-width: 390px) and (max-width: 844px){
   .add-stocks{
-    height: 850px;
-  }
-}
-
-@media only screen and (min-width: 412px) and (max-width: 915px){
-  .add-stocks{
-    height: 950px;
-  }
-}
-
-@media only screen and (min-width: 430px) and (max-width: 932px){
-  .add-stocks{
-    height: 950px;
+    height: 100vh;
   }
 }
