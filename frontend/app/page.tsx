@@ -49,7 +49,7 @@ function Home() {
     const fetchStockData = async () => {
       try {
         const response = await axios.get(`${baseApiURL()}/stocks`);
-        setStockData(response.data);
+        setStockData(response.data.slice(0, 30));
         setLoading(false);
       } catch (error) {
         console.error('Error fetching stock data:', error);

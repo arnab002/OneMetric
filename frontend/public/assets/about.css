@@ -135,7 +135,7 @@
   align-self: stretch;
   background-color: var(--color-gray-200);
   overflow: hidden;
-  padding: 11.5px 22px;
+  padding: 17px 22px;
   gap: var(--gap-base);
   top: 0;
   z-index: 99;
@@ -371,7 +371,7 @@
 .footer {
   width: 100%;
   height: 245px;
-  margin-top: 40%;
+  margin-top: 30%;
   background-color: var(--color-gray-100);
   overflow: hidden;
   flex-shrink: 0;
