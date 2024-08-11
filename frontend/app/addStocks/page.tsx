@@ -12,11 +12,16 @@ function AddStocks() {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [isSearching, setIsSearching] = useState<boolean>(false);
     const [noDataFound, setNoDataFound] = useState<boolean>(false);
+    const [selectedFilter, setSelectedFilter] = useState('all');
     const [visibleActions, setVisibleActions] = useState<{ [key: number]: boolean }>({});
     const [userId, setUserId] = useState<string>('');
     const [addedStocks, setAddedStocks] = useState<number[]>([]); // Track added stocks
     const searchParams = useSearchParams();
     const mobile = searchParams.get('mobile');
+
+    const handleFilterChange = (filter: string) => {
+        setSelectedFilter(filter);
+    };
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -187,22 +192,31 @@ function AddStocks() {
                     </div>
                     <div className="indices-options-parent">
                         <div className="indices-options">
-                            <div className="indices-names">
+                            <div
+                                className={`indices-names ${selectedFilter === 'all' ? 'active' : ''}`}
+                                onClick={() => handleFilterChange('all')}
+                            >
                                 <div className="all-16">
                                     <b>All </b>
                                     <span className="span">(16)</span>
                                 </div>
                             </div>
-                            <div className="indices-names1">
+                            <div
+                                className={`indices-names1 ${selectedFilter === 'bankNifty' ? 'active' : ''}`}
+                                onClick={() => handleFilterChange('bankNifty')}
+                            >
                                 <div className="bank-nifty-50-container">
                                     <span>Bank Nifty </span>
                                     <span className="span1">(50)</span>
                                     <span> </span>
                                 </div>
                             </div>
-                            <div className="indices-names2">
+                            <div
+                                className={`indices-names2 ${selectedFilter === 'nifty50' ? 'active' : ''}`}
+                                onClick={() => handleFilterChange('nifty50')}
+                            >
                                 <div className="all-nifty-50-container">
-                                    <span>All Nifty 50</span>
+                                    <span>Nifty 50</span>
                                     <span className="span1">
                                         <b className="b"> </b>
                                         <span>(22)</span>

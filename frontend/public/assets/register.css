@@ -250,6 +250,7 @@
   justify-content: flex-start;
   padding: 0 var(--padding-xs);
   gap: 4px;
+  margin: auto;
 }
 
 .full-name,
@@ -459,6 +460,7 @@
 
 .otp {
   width: 100%;
+  height: 100vh;
   background-color: var(--color-gray-200);
   overflow: hidden;
   flex-direction: column;
@@ -468,20 +470,3 @@
   letter-spacing: normal;
 }
 
-@media only screen and (min-width: 375px) and (max-width: 667px){
-  .enter-your-whatsapp{
-    padding-left: 4%;
-  }
-}
-
-@media only screen and (min-width: 390px) and (max-width: 844px){
-  .enter-your-whatsapp{
-    padding-left: 6%;
-  }
-}
-
-@media only screen and (min-width: 412px) and (max-width: 915px){
-  .otp{
-    height: 950px;
-  } 
-}

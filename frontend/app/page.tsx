@@ -17,6 +17,8 @@ function Home() {
   const [planData, setPlanData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [razorpayLoaded, setRazorpayLoaded] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<string>('All');
+  const [filteredStockData, setFilteredStockData] = useState<any[]>([]);
   const [openFAQs, setOpenFAQs] = useState<{ [key: number]: boolean }>({});
   const searchParams = useSearchParams();
   const mobile = searchParams.get('mobile');
@@ -45,11 +47,23 @@ function Home() {
     router.push(`/insights?mobile=${mobile}`);
   };
 
+  const handleTabSwitch = (tab: string) => {
+    setActiveTab(tab);
+    if (tab === 'All') {
+      setFilteredStockData(stockData);
+    } else {
+      const filtered = stockData.filter(stock => stock.sc_type === tab);
+      setFilteredStockData(filtered);
+    }
+  };
+
   useEffect(() => {
     const fetchStockData = async () => {
       try {
         const response = await axios.get(`${baseApiURL()}/stocks`);
-        setStockData(response.data.slice(0, 30));
+        const data = response.data.slice(0, 30);
+        setStockData(data);
+        setFilteredStockData(data); // Set initial filtered data
         setLoading(false);
       } catch (error) {
         console.error('Error fetching stock data:', error);
@@ -232,14 +246,23 @@ function Home() {
             </div>
           </div>
           <div className="nifty-trio-parent">
-            <div className="nifty-trio">
+            <div
+              className={`nifty-trio ${activeTab === 'All' ? 'active' : ''}`}
+              onClick={() => handleTabSwitch('All')}
+            >
               <b className="all">All</b>
             </div>
-            <div className="nifty-trio1">
-              <div className="all-nifty-50">All Nifty 50</div>
+            <div
+              className={`nifty-trio ${activeTab === 'Bank Nifty' ? 'active' : ''}`}
+              onClick={() => handleTabSwitch('Bank Nifty')}
+            >
+              <div className="all-nifty-50">Bank Nifty</div>
             </div>
-            <div className="nifty-trio2">
-              <div className="bank-nifty">Bank Nifty</div>
+            <div
+              className={`nifty-trio ${activeTab === 'Nifty 50' ? 'active' : ''}`}
+              onClick={() => handleTabSwitch('Nifty 50')}
+            >
+              <div className="bank-nifty">Nifty 50</div>
             </div>
           </div>
         </section>
@@ -385,7 +408,7 @@ function Home() {
                         />
                       </div>
                       <div className="started-30-days">
-                        Started 30 Days Free Trial
+                        Started 14 Days Free Trial
                       </div>
                     </button>
                   </div>
@@ -403,7 +426,7 @@ function Home() {
                       <div className="header-columns">
                         <div className="header-items">
                           <div className="adani-group">
-                            {loading ? 'Loading...' : stockData.map(stock => (
+                            {loading ? 'Loading...' : filteredStockData.map(stock => (
                               <div key={stock.isin_code}>
                                 {stock.stock_long_name} ({stock.sc_type})
                                 <br /><br />
@@ -780,7 +803,7 @@ function Home() {
         </section>
         <section className="free-trial-button">
           <button className="trial-button-container" onClick={handleStartTrialClick}>
-            <div className="started-30-days">Start 30 Days Free Trial</div>
+            <div className="started-30-days">Start 14 Days Free Trial</div>
           </button>
         </section>
         <section className="simply-grow-content-wrapper">

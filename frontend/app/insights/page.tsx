@@ -11,6 +11,7 @@ function Insights() {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [isSearching, setIsSearching] = useState<boolean>(false);
     const [noDataFound, setNoDataFound] = useState<boolean>(false);
+    const [selectedFilter, setSelectedFilter] = useState('all');
     const searchParams = useSearchParams();
     const mobile = searchParams.get('mobile');
     const router = useRouter();
@@ -29,9 +30,17 @@ function Insights() {
                     ? `${baseApiURL()}/search-stocks`
                     : `${baseApiURL()}/stocks`;
 
-                const response = await axios.get(endpoint, {
-                    params: isSearching ? { query: searchQuery } : {},
-                });
+                const params: Record<string, string> = {};
+                
+                if (isSearching) {
+                    params.query = searchQuery;
+                }
+
+                if (selectedFilter !== 'all') {
+                    params.filter = selectedFilter;
+                }
+
+                const response = await axios.get(endpoint, { params });
 
                 const data = response.data.data || response.data;
                 setStockData(data);
@@ -50,11 +59,17 @@ function Insights() {
         };
 
         fetchStockData();
-    }, [searchQuery, isSearching]);
+    }, [searchQuery, isSearching, selectedFilter]);
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value);
         setIsSearching(event.target.value.length > 0);
+    };
+
+    const handleFilterChange = (filter: string) => {
+        setSelectedFilter(filter);
+        setIsSearching(false);
+        setSearchQuery('');
     };
 
     return (
@@ -139,7 +154,7 @@ function Insights() {
                         </div>
                     </div>
                 </div>
-                <div className="simply-grow-all">Simply Grow, All Right reserved © 2024</div>
+                <div className="simply-grow-all">OneMetric, All Right reserved © 2024</div>
                 <main className="watchlist-wrapper">
                     <section className="watchlist">
                         <div className="watchlist-header">
@@ -158,45 +173,31 @@ function Insights() {
                             </div>
                             <div className="watchlist-filters">
                                 <div className="filter-tabs">
-                                    <div className="filter-names">
+                                    <div
+                                        className={`filter-names ${selectedFilter === 'all' ? 'active' : ''}`}
+                                        onClick={() => handleFilterChange('all')}
+                                    >
                                         <div className="all-16">
                                             <b className="all">All </b>
-                                            <span className="span2">(16)</span>
+                                            <span className="span2">({stockData.length})</span>
                                         </div>
                                     </div>
-                                    <div className="filter-names1">
+                                    <div
+                                        className={`filter-names1 ${selectedFilter === 'bankNifty' ? 'active' : ''}`}
+                                        onClick={() => handleFilterChange('bankNifty')}
+                                    >
                                         <div className="bank-nifty-50-container">
                                             <span className="bank-nifty">Bank Nifty </span>
-                                            <span className="span3">(50)</span>
-                                            <span className="bank-nifty"> </span>
+                                            <span className="span3">({stockData.filter(stock => stock.category === 'bankNifty').length})</span>
                                         </div>
                                     </div>
-                                    <div className="filter-names2">
+                                    <div
+                                        className={`filter-names2 ${selectedFilter === 'nifty50' ? 'active' : ''}`}
+                                        onClick={() => handleFilterChange('nifty50')}
+                                    >
                                         <div className="all-nifty-50-container">
-                                            <span className="all">All Nifty 50</span>
-                                            <span className="span3">
-                                                <b className="b"> </b>
-                                                <span className="b">(22)</span>
-                                            </span>
-                                            <span className="b">
-                                                <span className="bank-nifty"> </span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="filter-names3">
-                                        <div className="all-banks8">
-                                            <span>
-                                                <span className="bank-nifty">All Banks</span>
-                                                <span className="span3">(8) </span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="filter-names4">
-                                        <div className="psus-2">
-                                            <span>
-                                                <span className="bank-nifty">PSUs </span>
-                                                <span className="span3">(2) </span>
-                                            </span>
+                                            <span className="all">Nifty 50</span>
+                                            <span className="span3">({stockData.filter(stock => stock.category === 'nifty50').length})</span>
                                         </div>
                                     </div>
                                 </div>

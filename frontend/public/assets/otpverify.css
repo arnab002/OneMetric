@@ -194,7 +194,7 @@
   flex-shrink: 0;
 }
 .input-container {
-  width: 294px;
+  width: 100%;
   justify-content: center;
   padding: 0 var(--padding-xl);
   box-sizing: border-box;
@@ -485,6 +485,7 @@
 }
 .otp {
   width: 100%;
+  height: 100vh;
   background-color: var(--color-gray-300);
   max-width: 100%;
   overflow: hidden;
@@ -508,7 +509,7 @@
 
 @media only screen and (min-width: 390px) and (max-width: 844px){
   .otp{
-    height: 850px;
+    height: 100vh;
   }
   .frame-parent1{
     padding: 40% 0 0;
@@ -517,15 +518,15 @@
 
 @media only screen and (min-width: 412px) and (max-width: 915px){
   .otp{
-    height: 930px;
+    height: 100vh;
   }
   .frame-parent1{
-    padding: 50% 0 0;
+    padding: 60% 0 0;
   }
 }
 
 @media only screen and (min-width: 430px) and (max-width: 932px){
   .otp{
-    height: 930px;
+    height: 100vh;
   }
 }

@@ -179,8 +179,9 @@
 }
 .image-and-verification {
   position: absolute;
-  top: 0;
+  top: -140px;
   left: 0;
+  margin: auto;
   background-color: var(--color-gray);
   width: 100%;
   display: flex;
@@ -231,6 +232,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   padding: 0 73px;
+  margin: auto;
 }
 .placeholder,
 .successfully-verified {
@@ -271,9 +273,7 @@
 .frame-parent2,
 .otp {
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  width: 100%;
+  margin: auto;
 }
 .deletion-container {
   align-self: stretch;
@@ -287,6 +287,7 @@
 .otp {
   background-color: var(--color-gray);
   max-width: 100%;
+  height: 100vh;
   overflow: hidden;
   flex-direction: column;
   padding: 220px 0 360px;
@@ -296,7 +297,7 @@
   letter-spacing: normal;
 }
 
-@media only screen and (min-width: 375px) and (max-width: 667px){
+/* @media only screen and (min-width: 375px) and (max-width: 667px){
   .successfully-verified-parent{
     padding-left: 4%;
   }
@@ -309,4 +310,4 @@
   .deletion-container{
     padding: 0 94px;
   }
-}
+} */

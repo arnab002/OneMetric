@@ -83,11 +83,8 @@ function Registration() {
                                 <div className="number-input">
                                     <div className="number-field">
                                         <h3 className="enter-your-whatsapp">
-                                            Enter Your WhatsApp Number
+                                            Enter Your Profile Details
                                         </h3>
-                                    </div>
-                                    <div className="an-otp-will">
-                                        An OTP will be sent to your WhatsApp number for verification
                                     </div>
                                 </div>
                                 <form onSubmit={handleSubmit}>
