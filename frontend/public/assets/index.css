@@ -2557,7 +2557,7 @@
 .gold {
   text-decoration: none;
   height: 22px;
-  color: inherit;
+  color: var(--color-darkkhaki);
   display: flex;
   align-items: center;
   min-width: 76px;

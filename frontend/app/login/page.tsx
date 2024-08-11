@@ -1,41 +1,81 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import '../../public/assets/login.css';
 import baseApiURL from '@/baseUrl';
+import { parsePhoneNumberFromString, getCountries, CountryCode, getCountryCallingCode } from 'libphonenumber-js';
 
-function Login() {
+interface CountryOption {
+  code: CountryCode;
+  name: string;
+}
+
+function Login(): JSX.Element {
   const [mobile, setMobile] = useState<string>('');
-  const [error, setError] = useState<string | null>(null); // State to hold validation error
+  const [countryCode, setCountryCode] = useState<CountryCode>('IN');
+  const [error, setError] = useState<string | null>(null);
+  const [countryCodes, setCountryCodes] = useState<CountryOption[]>([]);
   const router = useRouter();
 
-  const validateMobile = (mobile: string) => {
-    const regex = /^[6789]\d{9}$/;
-    return regex.test(mobile);
+  useEffect(() => {
+    const codes: CountryOption[] = getCountries().map((country) => ({
+      code: country,
+      name: new Intl.DisplayNames(['en'], { type: 'region' }).of(country) || country,
+    }));
+    setCountryCodes(codes);
+  }, []);
+
+  const validateMobile = (phoneNumber: string, country: CountryCode): boolean => {
+    try {
+      const parsedNumber = parsePhoneNumberFromString(phoneNumber, country);
+      return parsedNumber?.isValid() || false;
+    } catch (error) {
+      return false;
+    }
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!validateMobile(mobile)) {
-      setError('Please enter a valid 10-digit Indian mobile number starting with 7, 8, or 9.');
+    if (!validateMobile(mobile, countryCode)) {
+      setError('Please enter a valid mobile number.');
       return;
     }
-    setError(null); // Clear any previous error
+    setError(null);
     try {
-      const response = await axios.post(`${baseApiURL()}/check-mobile`, { mobile });
+      const countryCallingCode = `+${getCountryCallingCode(countryCode)}`;
+      const parsedNumber = parsePhoneNumberFromString(mobile, countryCode);
+      const formattedNumber = parsedNumber?.nationalNumber; // Just the mobile number without country code
+
+      const payload = {
+        country_code: countryCallingCode,
+        mobile: formattedNumber,
+      };
+
+      const response = await axios.post(`${baseApiURL()}/check-mobile`, payload);
       const { redirect } = response.data;
-      router.push(`${redirect}?mobile=${mobile}`);
+      router.push(`${redirect}?mobile=${countryCallingCode}${formattedNumber}`);
     } catch (error) {
       console.error('Error checking mobile number', error);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, ''); // Remove non-digit characters
-    if (value.length <= 10) {
-      setMobile(value);
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, '');
+    setMobile(value);
+
+    // Attempt to detect country code from input
+    const parsedNumber = parsePhoneNumberFromString(value);
+    if (parsedNumber?.isValid()) {
+      const detectedCountry = parsedNumber.country;
+      if (detectedCountry) {
+        setCountryCode(detectedCountry as CountryCode);
+      }
     }
+  };
+
+  const handleCountryCodeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setCountryCode(e.target.value as CountryCode);
   };
 
   return (
@@ -70,28 +110,33 @@ function Login() {
                 <div className="input-wrapper">
                   <div className="whatsapp-number">WhatsApp Number</div>
                   <div className="input-content">
-                    <select className="country-code">
-                      <option className="ind">IND</option>
-                      {/* <div className="flag">
-                        <img className="flag-icon" alt="" src="./public/flag-icon.svg" />
-                      </div> */}
+                    <select 
+                      className="country-code" 
+                      value={countryCode} 
+                      onChange={handleCountryCodeChange}
+                    >
+                      {countryCodes.map((country) => (
+                        <option key={country.code} value={country.code}>
+                          {country.name} (+{getCountryCallingCode(country.code)})
+                        </option>
+                      ))}
                     </select>
                     <div className="number-input">
                       <input
                         className="whatsapp-number1"
                         placeholder="WhatsApp Number"
-                        type="text"
-                        inputMode='numeric'
+                        type="tel"
+                        inputMode='tel'
                         autoFocus
-                        maxLength={10}
                         value={mobile}
+                        maxLength={10}
                         onChange={handleChange}
                       />
                     </div>
                   </div>
                 </div>
               </div>
-              {error && <div className="error-message" style={{color: 'red'}}>{error}</div>} {/* Display validation error */}
+              {error && <div className="error-message" style={{color: 'red'}}>{error}</div>}
               <button className="button-container" type="submit">
                 <div className="send-otp">Send OTP</div>
               </button>

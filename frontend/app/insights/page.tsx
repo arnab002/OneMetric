@@ -9,6 +9,7 @@ function Insights() {
     const [newsData, setNewsData] = useState<Array<{ [key: string]: any }>>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const postsPerPage = 5;
+    const [dropdownVisible, setDropdownVisible] = useState(false);
     const [stockData, setStockData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [newsLoading, setNewsLoading] = useState<boolean>(true);
@@ -118,6 +119,15 @@ function Insights() {
     // Handle pagination
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
+    const toggleDropdown = () => {
+        setDropdownVisible(!dropdownVisible);
+    };
+
+    const handleLogout = () => {
+        // Implement your logout logic here
+        console.log("Logged out");
+    };
+
     return (
         <div>
             <div className="dashboard">
@@ -168,7 +178,14 @@ function Insights() {
                                 loading="lazy"
                                 alt=""
                                 src="./public/insights/union.svg"
+                                onClick={toggleDropdown} // Toggle dropdown on click
+                                style={{ cursor: 'pointer' }}
                             />
+                            {dropdownVisible && (
+                                <div className="dropdown-menu">
+                                    <button onClick={handleLogout}>Log Out</button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </header>
@@ -484,7 +501,7 @@ function Insights() {
                                     <div style={{ color: 'white', margin: 'auto' }}>Loading...</div>
                                 ) : noNewsDataFound ? (
                                     <div style={{ color: 'white', margin: 'auto' }}>No data found</div>
-                                ): (
+                                ) : (
                                     currentPosts.map((news) => (
                                         <div className="newsfeed1" key={news.id}>
                                             <div className="news-content">
@@ -538,7 +555,7 @@ function Insights() {
                                         </div>
                                     ))
                                 )
-                              }
+                                }
                             </div>
                             {/* <div className="pagination">
                                 {Array.from({ length: Math.ceil(newsData.length / postsPerPage) }, (_, index) => (

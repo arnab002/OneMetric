@@ -12,6 +12,7 @@
     "@types/mysql": "^2.15.26",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
+    "libphonenumber-js": "^1.11.5",
     "mysql": "^2.18.1",
     "next": "14.2.5",
     "react": "^18",

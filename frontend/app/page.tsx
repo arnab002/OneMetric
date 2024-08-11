@@ -77,11 +77,12 @@ function Home() {
   useEffect(() => {
     const fetchPlanData = async () => {
       try {
-        const response = await axios.get(`${baseApiURL()}/allPlans`);
-        setPlanData(response.data);
+        const response = await axios.get<any[]>(`${baseApiURL()}/allPlans`);
+        const filteredPlans = response.data.filter(plan => ![1].includes(plan.id));
+        setPlanData(filteredPlans);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching stock data:', error);
+        console.error('Error fetching plan data:', error);
         setLoading(false);
       }
     };
@@ -408,7 +409,7 @@ function Home() {
                         />
                       </div>
                       <div className="started-30-days">
-                        Started 14 Days Free Trial
+                        Start 14 Days Free Trial
                       </div>
                     </button>
                   </div>
@@ -902,13 +903,13 @@ function Home() {
               <div key={plan.id} className="diamond-plan">
                 <div className="diamond-details">
                   <div className="diamond-name-container">
-                    <a className="diamond">{index % 2 === 0 ? "Diamond" : "Gold"}</a>
-                    <button className="diamond-billing">
-                      <div className="yearly">{index % 2 === 0 ? "Yearly" : "Monthly"}</div>
+                    <a className={index % 2 === 0 ? "diamond" : "gold"}>{index % 2 === 0 ? "Diamond" : "Gold"}</a>
+                    <button className={index % 2 === 0 ? "diamond-billing" : "plan-duration"}>
+                      <div className={index % 2 === 0 ? "yearly" : "monthly"}>{index % 2 === 0 ? "Yearly" : "Monthly"}</div>
                     </button>
                   </div>
                   <div className="diamond-price">
-                    <h1 className="h1">₹</h1>
+                    <h1 className="h1" style={{color: index % 2 === 0 ? "#7994ff" : "#bdc25d"}}>₹</h1>
                     <b className="diamond-value">
                       <span className="diamond-value-txt-container">
                         <span>{plan.amount_in_rs}</span>
@@ -983,10 +984,7 @@ function Home() {
                       </div>
                     </div>
                     <div className="diamond-feature-descriptions">
-                      <div className="days-free-trial">{plan.duration_in_months} Months</div>
-                      <div className="ideal-for-beginners">
-                        No card required for {plan.duration_in_months} days free Trial
-                      </div>
+                      <div className="days-free-trial">{plan.duration_in_months} {plan.duration_in_months === 1 ? "Month" : "Months"}</div>
                     </div>
                   </div>
                 </div>

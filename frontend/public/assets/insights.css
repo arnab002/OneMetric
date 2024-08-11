@@ -1657,6 +1657,23 @@
   letter-spacing: normal;
 }
 
+.dropdown-menu {
+  position: absolute;
+  top: 50px; /* Adjust based on your design */
+  right: 10px;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 0px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-menu button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
 .filter-names.active, .filter-names1.active, .filter-names2.active {
   background-color: #2a2d37;
   border-bottom: 2px solid var(--color-gold);
