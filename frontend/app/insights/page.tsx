@@ -6,18 +6,28 @@ import baseApiURL from '@/baseUrl';
 import '../../public/assets/insights.css'
 
 function Insights() {
+    const [newsData, setNewsData] = useState<Array<{ [key: string]: any }>>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const postsPerPage = 5;
     const [stockData, setStockData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [newsLoading, setNewsLoading] = useState<boolean>(true);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [isSearching, setIsSearching] = useState<boolean>(false);
     const [noDataFound, setNoDataFound] = useState<boolean>(false);
+    const [noNewsDataFound, setNoNewsDataFound] = useState<boolean>(false);
     const [selectedFilter, setSelectedFilter] = useState('all');
+    const [displayCount, setDisplayCount] = useState(30);
     const searchParams = useSearchParams();
     const mobile = searchParams.get('mobile');
     const router = useRouter();
 
     const handleClick = () => {
         router.push(`/addStocks?mobile=${mobile}`);
+    };
+
+    const showMore = () => {
+        setDisplayCount(prevCount => prevCount + 30);
     };
 
     useEffect(() => {
@@ -31,7 +41,7 @@ function Insights() {
                     : `${baseApiURL()}/stocks`;
 
                 const params: Record<string, string> = {};
-                
+
                 if (isSearching) {
                     params.query = searchQuery;
                 }
@@ -71,6 +81,42 @@ function Insights() {
         setIsSearching(false);
         setSearchQuery('');
     };
+
+    useEffect(() => {
+        // Fetch data from the API
+        const fetchNewsData = async () => {
+            setNewsLoading(true);
+            setNoNewsDataFound(false);
+
+            try {
+                const response = await axios.get(`${baseApiURL()}/news`);
+                const result = await response.data;
+                setNewsData(result);
+
+                if (result.length === 0) {
+                    setNoNewsDataFound(true);
+                } else {
+                    setNoNewsDataFound(false);
+                }
+            } catch (error) {
+                console.error('Error fetching the news data:', error);
+                setNoNewsDataFound(true);
+
+            } finally {
+                setNewsLoading(false);
+            }
+        };
+
+        fetchNewsData();
+    }, []);
+
+    // Calculate pagination
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = newsData.slice(indexOfFirstPost, indexOfLastPost);
+
+    // Handle pagination
+    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
     return (
         <div>
@@ -207,7 +253,7 @@ function Insights() {
                                     ) : noDataFound ? (
                                         <div style={{ color: 'white', margin: 'auto' }}>No data found</div>
                                     ) : (
-                                        stockData.map(stock => (
+                                        stockData.slice(0, displayCount).map(stock => (
                                             <div key={stock.isin_code} className="select-stocks">
                                                 <div className="select-stocks-inner">
                                                     <div className="vector-wrapper">
@@ -250,10 +296,14 @@ function Insights() {
                                             </div>
                                         ))
                                     )}
+                                    <br />
+                                    {!loading && stockData.length > displayCount && (
+                                        <button onClick={showMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px" }}>Show More</button>
+                                    )}
                                 </div>
                             </div>
                         </div>
-                        <div className="watchlist-header">
+                        {/* <div className="watchlist-header">
                             <div className="alert-list-items">
                                 <h3 className="newsfeed">Newsfeed</h3>
                                 <div className="view-all-news">
@@ -421,6 +471,82 @@ function Insights() {
                                     </div>
                                 </div>
                             </div>
+                        </div> */}
+                        <div className="watchlist-header">
+                            <div className="alert-list-items">
+                                <h3 className="newsfeed">Newsfeed</h3>
+                                {/* <div className="view-all-news">
+                                    <a className="view-all1">View All</a>
+                                </div> */}
+                            </div>
+                            <div className="news-items">
+                                {newsLoading ? (
+                                    <div style={{ color: 'white', margin: 'auto' }}>Loading...</div>
+                                ) : noNewsDataFound ? (
+                                    <div style={{ color: 'white', margin: 'auto' }}>No data found</div>
+                                ): (
+                                    currentPosts.map((news) => (
+                                        <div className="newsfeed1" key={news.id}>
+                                            <div className="news-content">
+                                                <img
+                                                    className="image-9-icon"
+                                                    loading="lazy"
+                                                    alt=""
+                                                    src="./public/insights/image-9@2x.png"
+                                                />
+                                            </div>
+                                            <div className="news-details">
+                                                <div className="watchlist-filters">
+                                                    <div className="reliance-industries">{news.stock_long_name}</div>
+                                                    <div className="reliance-gets-us">{news.news_sub}</div>
+                                                    <div className="news-time">
+                                                        <div className="jul-23-2024">{new Date(news.news_date_time).toLocaleString()}</div>
+                                                        <div className="read-parent">
+                                                            <div className="read">Read</div>
+                                                            <img
+                                                                className="frame-child4"
+                                                                alt=""
+                                                                src="./public/insights/vector-213.svg"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="traders-opinion-vote-on-this-n-parent">
+                                                        <div className="traders-opinion-vote">
+                                                            Traders opinion vote on this news
+                                                        </div>
+                                                        <div className="frame-parent5">
+                                                            <div className="vector-parent1">
+                                                                <img
+                                                                    className="frame-child21"
+                                                                    alt=""
+                                                                    src="./public/insights/polygon-3.svg"
+                                                                />
+                                                                <div className="buy">243 Buy</div>
+                                                            </div>
+                                                            <div className="vector-parent2">
+                                                                <img
+                                                                    className="frame-child22"
+                                                                    alt=""
+                                                                    src="./public/insights/polygon-3-1.svg"
+                                                                />
+                                                                <div className="buy">3938 Sell</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                )
+                              }
+                            </div>
+                            {/* <div className="pagination">
+                                {Array.from({ length: Math.ceil(newsData.length / postsPerPage) }, (_, index) => (
+                                    <button key={index} onClick={() => paginate(index + 1)}>
+                                        {index + 1}
+                                    </button>
+                                ))}
+                            </div> */}
                         </div>
                     </section>
                 </main>

@@ -157,6 +157,7 @@
   align-self: stretch;
   position: relative;
   line-height: 160%;
+  text-align: justify;
 }
 .refund-eligibility {
   position: relative;
@@ -209,6 +210,7 @@
   gap: var(--gap-5xs);
   font-size: var(--font-size-sm);
   color: var(--color-silver);
+  text-align: justify;
 }
 .refund-method {
   position: relative;
@@ -262,6 +264,7 @@
   position: relative;
   line-height: 160%;
   color: var(--color-lightslategray-200);
+  text-align: justify;
 }
 .about-us-inner,
 .refund-policy-parent {

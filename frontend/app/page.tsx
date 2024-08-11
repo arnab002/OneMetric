@@ -428,7 +428,7 @@ function Home() {
                           <div className="adani-group">
                             {loading ? 'Loading...' : filteredStockData.map(stock => (
                               <div key={stock.isin_code}>
-                                {stock.stock_long_name} ({stock.sc_type})
+                                {stock.stock_long_name}
                                 <br /><br />
                               </div>
                             ))}
@@ -904,7 +904,7 @@ function Home() {
                   <div className="diamond-name-container">
                     <a className="diamond">{index % 2 === 0 ? "Diamond" : "Gold"}</a>
                     <button className="diamond-billing">
-                      <div className="yearly">Yearly</div>
+                      <div className="yearly">{index % 2 === 0 ? "Yearly" : "Monthly"}</div>
                     </button>
                   </div>
                   <div className="diamond-price">
@@ -912,7 +912,7 @@ function Home() {
                     <b className="diamond-value">
                       <span className="diamond-value-txt-container">
                         <span>{plan.amount_in_rs}</span>
-                        <span className="span">.00</span>
+                        <span className="span">.00 + 18% GST</span>
                       </span>
                     </b>
                   </div>

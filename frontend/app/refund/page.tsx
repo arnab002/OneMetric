@@ -33,7 +33,7 @@ const Refund: React.FC = () => {
     {
       title: "Refund Request Process",
       content: [
-        "To request a refund, please contact our customer support team at <b>support@wegro.co.in</b> within <b>7days</b> of your purchase.",
+        "To request a refund, please contact our customer support team at <b>support@onemetric.co.in</b> within <b>7days</b> of your purchase.",
         "Please provide detailed information regarding the reason for your refund request, along with any relevant documentation or evidence."
       ]
     },
@@ -55,7 +55,7 @@ const Refund: React.FC = () => {
     {
       title: "Contact Information",
       content: [
-        "If you have any questions or concerns regarding our refund policy, please contact us at <b>support@wegro.co.in</b>"
+        "If you have any questions or concerns regarding our refund policy, please contact us at <b>support@onemetric.co.in</b>"
       ]
     },
     {
@@ -250,7 +250,7 @@ const Refund: React.FC = () => {
                 </div>
                 <div className="terms-conditions-parent">
                   <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
-                  <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Referral Policy</a>
+                  <a href='/referral' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Referral Policy</a>
                   <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="faqs">FAQs</a>
                 </div>
               </div>

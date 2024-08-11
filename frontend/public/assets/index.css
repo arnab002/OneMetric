@@ -3110,30 +3110,6 @@
   font-family: var(--font-poppins);
 }
 
-/* @media only screen and (min-width: 375px) and (max-width: 667px){
-  .homepage{
-    padding: 0 8px 23.9px;
-  }
-}
-
-@media only screen and (min-width: 390px) and (max-width: 844px){
-  .homepage{
-    padding: 0 14px 23.9px;
-  }
-}
-
-@media only screen and (min-width: 412px) and (max-width: 915px){
-  .homepage{
-    padding: 0 26px 23.9px;
-  }
-}
-
-@media only screen and (min-width: 430px) and (max-width: 932px){
-  .homepage{
-    padding: 0 30px 23.9px;
-  }
-} */
-
 .nifty-trio.active {
   background-color: #121523;
   font-weight: bold;
