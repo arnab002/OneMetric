@@ -63,7 +63,15 @@ function Home() {
     const fetchStockData = async () => {
       try {
         const response = await axios.get(`${baseApiURL()}/stocks`);
-        const data = (response.data.data as { stock_long_name: string }[]).slice(0, 100).sort((a, b) => a.stock_long_name.localeCompare(b.stock_long_name));
+        const data = (response.data.data as { stock_long_name: string }[])
+          .filter(stock => {
+            // Remove entries with patterns like "182D050924" or other unwanted formats
+            const regexPattern = /^[\dA-Z]+$/; // Match any string that consists only of digits and uppercase letters
+            return !regexPattern.test(stock.stock_long_name);
+          })
+          .slice(0, 100)
+          .sort((a, b) => a.stock_long_name.localeCompare(b.stock_long_name));
+  
         setStockData(data);
         setFilteredStockData(data); // Set initial filtered data
         setLoading(false);
@@ -72,9 +80,10 @@ function Home() {
         setLoading(false);
       }
     };
-
+  
     fetchStockData();
-  }, []);
+  }, []);  
+
 
   useEffect(() => {
     const fetchPlanData = async () => {

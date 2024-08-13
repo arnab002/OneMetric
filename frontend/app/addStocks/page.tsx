@@ -14,6 +14,7 @@ function AddStocks() {
     const [selectedFilter, setSelectedFilter] = useState('all');
     const [visibleActions, setVisibleActions] = useState<{ [key: number]: boolean }>({});
     const [addedStocks, setAddedStocks] = useState<number[]>([]); // Track added stocks
+    const [displayCount, setDisplayCount] = useState(30);
     const token = sessionStorage.getItem('authToken');
     if (!token) {
         console.error('No token found in sessionStorage');
@@ -126,6 +127,10 @@ function AddStocks() {
         }));
     };
 
+    const showMore = () => {
+        setDisplayCount(prevCount => prevCount + 30);
+    };
+
     return (
         <div>
             <div className="add-stocks">
@@ -233,7 +238,7 @@ function AddStocks() {
                             ) : noDataFound ? (
                                 <div style={{ color: 'white', margin: 'auto' }}>No data found</div>
                             ) : (
-                                stockData.map((stock, index) => (
+                                stockData.slice(0, displayCount).map((stock, index) => (
                                     <div key={index} className="select-stocks">
                                         <div className="select-stocks-inner">
                                             <div className="vector-wrapper">
@@ -258,6 +263,9 @@ function AddStocks() {
                                         </div>
                                     </div>
                                 ))
+                            )}
+                            {!loading && stockData.length > displayCount && (
+                                <button onClick={showMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px" }}>Show More</button>
                             )}
                         </div>
                     </div>

@@ -346,7 +346,7 @@ function Insights() {
                                                     className="image-9-icon"
                                                     loading="lazy"
                                                     alt=""
-                                                    src="./public/insights/image-9@2x.png"
+                                                    src="./public/insights/Stock_Market.jpg"
                                                 />
                                             </div>
                                             <div className="news-details">
