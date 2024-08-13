@@ -4,17 +4,15 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import "../../public/assets/otpSuccessful.css"
 
 function OTPSuccess() {
-    // const router = useRouter();
-    // const searchParams = useSearchParams();
-    // const mobile = searchParams.get('mobile');
+    const router = useRouter();
 
-    // useEffect(() => {
-    //     const timer = setTimeout(() => {
-    //         router.push(`/?mobile=${mobile}`);
-    //     }, 3500); // 3.5 seconds
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            router.push(`/`);
+        }, 3500); // 3.5 seconds
 
-    //     return () => clearTimeout(timer);
-    // }, [mobile, router]);
+        return () => clearTimeout(timer);
+    }, [router]);
 
     return (
         <div>

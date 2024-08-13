@@ -1681,7 +1681,7 @@
   font-weight: bold;
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 1920px) {
   .filter-tabs {
     flex-direction: row;
     align-items: stretch;

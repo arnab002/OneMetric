@@ -52,9 +52,9 @@ function Login(): JSX.Element {
         mobile: formattedNumber,
       };
 
-      const response = await axios.post(`${baseApiURL()}/check-mobile`, payload);
-      const { redirect } = response.data;
-      router.push(`${redirect}?mobile=${countryCallingCode}${formattedNumber}`);
+      const response = await axios.post(`${baseApiURL()}/login`, payload);
+      console.log(`OTP for ${formattedNumber} is: ${response.data.otp}`)
+      router.push(`/otpverify?countryCode=${countryCallingCode}&mobile=${formattedNumber}`);
     } catch (error) {
       console.error('Error checking mobile number', error);
     }

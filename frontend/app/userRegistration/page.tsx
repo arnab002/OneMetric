@@ -2,17 +2,19 @@
 import React, { useState } from 'react'
 import '../../public/assets/register.css'
 import axios from 'axios';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import baseApiURL from '@/baseUrl';
 
 function Registration() {
-    const searchParams = useSearchParams();
-    const mobile = searchParams.get('mobile');
     const router = useRouter();
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+        console.error('No token found in sessionStorage');
+        return;
+    }
 
     const [fullname, setFullname] = useState('');
     const [email, setEmail] = useState('');
-    // const [countrycode, setCountryCode] = useState('');
     const [pincode, setPinCode] = useState('');
     const [billingAddress, setBillingAddress] = useState('');
 
@@ -24,9 +26,13 @@ function Registration() {
                 email,
                 pincode,
                 billing_address: billingAddress,
-                mobile,
-            });
-            router.push(`/successRegister?mobile=${mobile}`);
+            },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Passing the token in the Authorization header
+                    },
+                });
+            router.push(`/successRegister`);
         } catch (error) {
             console.error('Error creating user:', error);
         }

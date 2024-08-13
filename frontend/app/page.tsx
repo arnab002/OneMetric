@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
 import '../public/assets/index.css'
@@ -12,6 +12,10 @@ interface RazorpayResponse {
   razorpay_signature: string;
 }
 
+interface Plan {
+  id: number;
+}
+
 function Home() {
   const [stockData, setStockData] = useState<any[]>([]);
   const [planData, setPlanData] = useState<any[]>([]);
@@ -20,8 +24,6 @@ function Home() {
   const [activeTab, setActiveTab] = useState<string>('All');
   const [filteredStockData, setFilteredStockData] = useState<any[]>([]);
   const [openFAQs, setOpenFAQs] = useState<{ [key: number]: boolean }>({});
-  const searchParams = useSearchParams();
-  const mobile = searchParams.get('mobile');
   const router = useRouter();
 
   useEffect(() => {
@@ -44,7 +46,7 @@ function Home() {
   };
 
   const handleClick = () => {
-    router.push(`/insights?mobile=${mobile}`);
+    router.push(`/insights`);
   };
 
   const handleTabSwitch = (tab: string) => {
@@ -61,7 +63,7 @@ function Home() {
     const fetchStockData = async () => {
       try {
         const response = await axios.get(`${baseApiURL()}/stocks`);
-        const data = response.data.slice(0, 30);
+        const data = (response.data.data as { stock_long_name: string }[]).slice(0, 100).sort((a, b) => a.stock_long_name.localeCompare(b.stock_long_name));
         setStockData(data);
         setFilteredStockData(data); // Set initial filtered data
         setLoading(false);
@@ -77,8 +79,8 @@ function Home() {
   useEffect(() => {
     const fetchPlanData = async () => {
       try {
-        const response = await axios.get<any[]>(`${baseApiURL()}/allPlans`);
-        const filteredPlans = response.data.filter(plan => ![1].includes(plan.id));
+        const response = await axios.get<{ data: Plan[] }>(`${baseApiURL()}/plans`);
+        const filteredPlans = response.data.data.filter((plan: Plan) => ![1].includes(plan.id));
         setPlanData(filteredPlans);
         setLoading(false);
       } catch (error) {
@@ -113,10 +115,15 @@ function Home() {
     }
 
     try {
-      const response = await axios.post(`${baseApiURL()}/createPayment`, {
+      const response = await axios.post(`${baseApiURL()}/createRazorPayment`, {
         plan_id: planId,
-        token: token,
-      });
+      },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Passing the token in the Authorization header
+          },
+        }
+      );
 
       const { transaction_id, payment_order_id, user_id, plan_id, amount, status } = response.data;
 
@@ -180,10 +187,15 @@ function Home() {
     }
 
     try {
-      const response = await axios.post(`${baseApiURL()}/createPayment`, {
+      const response = await axios.post(`${baseApiURL()}/createRazorPayment`, {
         plan_id: '1',
-        token: token,
-      });
+      },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Passing the token in the Authorization header
+          },
+        }
+      );
 
       const { transaction_id, payment_order_id, user_id, plan_id, amount, status } = response.data;
 
@@ -903,13 +915,13 @@ function Home() {
               <div key={plan.id} className="diamond-plan">
                 <div className="diamond-details">
                   <div className="diamond-name-container">
-                    <a className={index % 2 === 0 ? "diamond" : "gold"}>{index % 2 === 0 ? "Diamond" : "Gold"}</a>
-                    <button className={index % 2 === 0 ? "diamond-billing" : "plan-duration"}>
-                      <div className={index % 2 === 0 ? "yearly" : "monthly"}>{index % 2 === 0 ? "Yearly" : "Monthly"}</div>
+                    <a className={index % 2 === 0 ? "gold" : "diamond"}>{index % 2 === 0 ? "Gold" : "Diamond"}</a>
+                    <button className={index % 2 === 0 ? "plan-duration" : "diamond-billing"}>
+                      <div className={index % 2 === 0 ? "yearly" : "monthly"}>{index % 2 === 0 ? "Monthly" : "Yearly"}</div>
                     </button>
                   </div>
                   <div className="diamond-price">
-                    <h1 className="h1" style={{color: index % 2 === 0 ? "#7994ff" : "#bdc25d"}}>₹</h1>
+                    <h1 className="h1" style={{ color: index % 2 === 0 ? "#bdc25d" : "#7994ff" }}>₹</h1>
                     <b className="diamond-value">
                       <span className="diamond-value-txt-container">
                         <span>{plan.amount_in_rs}</span>

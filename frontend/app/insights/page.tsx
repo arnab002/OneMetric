@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
 import '../../public/assets/insights.css'
@@ -19,12 +19,10 @@ function Insights() {
     const [noNewsDataFound, setNoNewsDataFound] = useState<boolean>(false);
     const [selectedFilter, setSelectedFilter] = useState('all');
     const [displayCount, setDisplayCount] = useState(30);
-    const searchParams = useSearchParams();
-    const mobile = searchParams.get('mobile');
     const router = useRouter();
 
     const handleClick = () => {
-        router.push(`/addStocks?mobile=${mobile}`);
+        router.push(`/addStocks`);
     };
 
     const showMore = () => {
@@ -35,27 +33,38 @@ function Insights() {
         const fetchStockData = async () => {
             setLoading(true);
             setNoDataFound(false);
-
+    
             try {
-                const endpoint = isSearching
-                    ? `${baseApiURL()}/search-stocks`
-                    : `${baseApiURL()}/stocks`;
-
-                const params: Record<string, string> = {};
-
+                let response;
+    
                 if (isSearching) {
-                    params.query = searchQuery;
+                    const endpoint = `${baseApiURL()}/search-stocks`;
+    
+                    // Define params with both query and filter properties
+                    const params: { query: string; filter?: string } = { query: searchQuery };
+    
+                    if (selectedFilter !== 'all') {
+                        params.filter = selectedFilter;
+                    }
+    
+                    // Make a POST request for searching stocks
+                    response = await axios.post(endpoint, params);
+    
+                } else {
+                    const endpoint = `${baseApiURL()}/stocks`;
+                    const params: Record<string, string> = {};
+    
+                    if (selectedFilter !== 'all') {
+                        params.filter = selectedFilter;
+                    }
+    
+                    // Make a GET request for fetching stocks
+                    response = await axios.get(endpoint, { params });
                 }
-
-                if (selectedFilter !== 'all') {
-                    params.filter = selectedFilter;
-                }
-
-                const response = await axios.get(endpoint, { params });
-
-                const data = response.data.data || response.data;
+    
+                const data = response.data.data || response.data.data;
                 setStockData(data);
-
+    
                 if (data.length === 0) {
                     setNoDataFound(true);
                 } else {
@@ -68,9 +77,9 @@ function Insights() {
                 setLoading(false);
             }
         };
-
+    
         fetchStockData();
-    }, [searchQuery, isSearching, selectedFilter]);
+    }, [searchQuery, isSearching, selectedFilter]);    
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value);
@@ -91,7 +100,7 @@ function Insights() {
 
             try {
                 const response = await axios.get(`${baseApiURL()}/news`);
-                const result = await response.data;
+                const result = await response.data.data;
                 setNewsData(result);
 
                 if (result.length === 0) {
@@ -320,181 +329,9 @@ function Insights() {
                                 </div>
                             </div>
                         </div>
-                        {/* <div className="watchlist-header">
-                            <div className="alert-list-items">
-                                <h3 className="newsfeed">Newsfeed</h3>
-                                <div className="view-all-news">
-                                    <a className="view-all1">View All</a>
-                                </div>
-                            </div>
-                            <div className="news-items">
-                                <div className="newsfeed1">
-                                    <div className="news-content">
-                                        <img
-                                            className="image-9-icon"
-                                            loading="lazy"
-                                            alt=""
-                                            src="./public/insights/image-9@2x.png"
-                                        />
-                                    </div>
-                                    <div className="news-details">
-                                        <div className="watchlist-filters">
-                                            <div className="reliance-industries">Reliance Industries</div>
-                                            <div className="reliance-gets-us">
-                                                Reliance gets US approval to resume crude imports from
-                                                Venezuela
-                                            </div>
-                                            <div className="news-time">
-                                                <div className="jul-23-2024">Jul 23 2024 07:21 PM</div>
-                                                <div className="read-parent">
-                                                    <div className="read">Read</div>
-                                                    <img
-                                                        className="frame-child4"
-                                                        alt=""
-                                                        src="./public/insights/vector-213.svg"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="traders-opinion-vote-on-this-n-parent">
-                                                <div className="traders-opinion-vote">
-                                                    Traders opinion vote on this news
-                                                </div>
-                                                <div className="frame-parent5">
-                                                    <div className="vector-parent1">
-                                                        <img
-                                                            className="frame-child21"
-                                                            alt=""
-                                                            src="./public/insights/polygon-3.svg"
-                                                        />
-                                                        <div className="buy">243 Buy</div>
-                                                    </div>
-                                                    <div className="vector-parent2">
-                                                        <img
-                                                            className="frame-child22"
-                                                            alt=""
-                                                            src="./public/insights/polygon-3-1.svg"
-                                                        />
-                                                        <div className="buy">3938 Sell</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="newsfeed1">
-                                    <div className="news-content">
-                                        <img
-                                            className="image-9-icon"
-                                            loading="lazy"
-                                            alt=""
-                                            src="./public/insights/image-91@2x.png"
-                                        />
-                                    </div>
-                                    <div className="news-details">
-                                        <div className="watchlist-filters">
-                                            <div className="reliance-industries">Tata Power</div>
-                                            <div className="tata-powers-microgrid">
-                                                Tata Power’s Microgrid Arm partners with National Dairy
-                                                Development Board to Solarize Milk Value Chain
-                                            </div>
-                                            <div className="news-time">
-                                                <div className="jul-24-2024">Jul 24 2024 09:30 AM</div>
-                                                <div className="read-parent">
-                                                    <div className="read">Read</div>
-                                                    <img
-                                                        className="frame-child4"
-                                                        alt=""
-                                                        src="./public/insights/vector-213.svg"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="traders-opinion-vote-on-this-n-parent">
-                                                <div className="traders-opinion-vote">
-                                                    Traders opinion vote on this news
-                                                </div>
-                                                <div className="frame-parent6">
-                                                    <div className="vector-parent3">
-                                                        <img
-                                                            className="frame-child21"
-                                                            alt=""
-                                                            src="./public/insights/polygon-3.svg"
-                                                        />
-                                                        <div className="buy">1423 Buy</div>
-                                                    </div>
-                                                    <div className="vector-parent4">
-                                                        <img
-                                                            className="frame-child22"
-                                                            alt=""
-                                                            src="./public/insights/polygon-3-1.svg"
-                                                        />
-                                                        <div className="buy">232 Sell</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="newsfeed1">
-                                    <div className="news-content">
-                                        <img
-                                            className="image-9-icon"
-                                            loading="lazy"
-                                            alt=""
-                                            src="./public/insights/image-92@2x.png"
-                                        />
-                                    </div>
-                                    <div className="news-details">
-                                        <div className="watchlist-filters">
-                                            <div className="reliance-industries">Muthoot Finance</div>
-                                            <div className="reliance-gets-us">
-                                                Muthoot Finance Consolidated March 2024 Net Sales at Rs
-                                                4,163.80 crore, up 27.14% Y-o-Y
-                                            </div>
-                                            <div className="news-time">
-                                                <div className="jul-25-2024">Jul 25 2024 11:32 AM</div>
-                                                <div className="read-parent">
-                                                    <div className="read">Read</div>
-                                                    <img
-                                                        className="frame-child4"
-                                                        alt=""
-                                                        src="./public/insights/vector-213.svg"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="traders-opinion-vote-on-this-n-parent">
-                                                <div className="traders-opinion-vote">
-                                                    Traders opinion vote on this news
-                                                </div>
-                                                <div className="frame-parent7">
-                                                    <div className="vector-parent5">
-                                                        <img
-                                                            className="frame-child21"
-                                                            alt=""
-                                                            src="./public/insights/polygon-3.svg"
-                                                        />
-                                                        <div className="buy">126 Buy</div>
-                                                    </div>
-                                                    <div className="vector-parent6">
-                                                        <img
-                                                            className="frame-child22"
-                                                            alt=""
-                                                            src="./public/insights/polygon-3-1.svg"
-                                                        />
-                                                        <div className="buy">43 Sell</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> */}
                         <div className="watchlist-header">
                             <div className="alert-list-items">
                                 <h3 className="newsfeed">Newsfeed</h3>
-                                {/* <div className="view-all-news">
-                                    <a className="view-all1">View All</a>
-                                </div> */}
                             </div>
                             <div className="news-items">
                                 {newsLoading ? (
@@ -570,7 +407,7 @@ function Insights() {
                 <div className="good-evening">Good Evening</div>
                 <div className="footer">
                     <div className="footer-content">
-                        <div className="frame-parent">
+                        {/* <div className="frame-parent">
                             <img
                                 className="frame-child"
                                 alt=""
@@ -589,7 +426,7 @@ function Insights() {
                                 src="./public/insights/group-1000001000.svg"
                             />
                             <div className="add-stocks">Add Stocks</div>
-                        </div>
+                        </div> */}
                         <img
                             className="image-18-icon1"
                             loading="lazy"

@@ -8,6 +8,7 @@ import baseApiURL from '@/baseUrl';
 const OTPVerify: React.FC = () => {
     const searchParams = useSearchParams();
     const mobile = searchParams.get('mobile');
+    const country_code = searchParams.get('countryCode');
     const router = useRouter();
     const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
     const [message, setMessage] = useState<string>('');
@@ -17,45 +18,41 @@ const OTPVerify: React.FC = () => {
     const [remainingTime, setRemainingTime] = useState<number>(60);
     const otpGeneratedRef = useRef(false);
 
-    useEffect(() => {
-        if (mobile && !otpGeneratedRef.current) {
-            // Generate OTP using the provided mobile number
-            otpGeneratedRef.current = true;
-            axios.post(`${baseApiURL()}/generate-otp`, { mobile })
-                .then(response => {
-                    setMessage('OTP has been sent to your mobile number.');
-                })
-                .catch(error => {
-                    setMessage('Error sending OTP.');
-                    console.error('Error sending OTP:', error);
-                });
+    // useEffect(() => {
+    //     if (mobile && !otpGeneratedRef.current) {
+    //         // Generate OTP using the provided mobile number
+    //         otpGeneratedRef.current = true;
+    //         axios.post(`${baseApiURL()}/generate-otp`, { mobile })
+    //             .then(response => {
+    //                 setMessage('OTP has been sent to your mobile number.');
+    //             })
+    //             .catch(error => {
+    //                 setMessage('Error sending OTP.');
+    //                 console.error('Error sending OTP:', error);
+    //             });
 
-            // Enable the resend button after 30 seconds
-            const timer = setTimeout(() => {
-                setResendDisabled(false);
-            }, 30000);
+    //         // Enable the resend button after 30 seconds
+    //         const timer = setTimeout(() => {
+    //             setResendDisabled(false);
+    //         }, 30000);
 
-            return () => clearTimeout(timer);
-        }
-    }, [mobile]);
+    //         return () => clearTimeout(timer);
+    //     }
+    // }, [mobile]);
 
     useEffect(() => {
         if (otp.join('').length === 6) {
-            axios.post(`${baseApiURL()}/verify-otp`, { mobile, otp: otp.join('') })
+            const formattedCountryCode = (country_code ?? '91').trim();
+            const finalCountryCode = formattedCountryCode.startsWith('+') ? formattedCountryCode : `+${formattedCountryCode}`;
+
+            axios.post(`${baseApiURL()}/verify-otp`, { mobile, country_code: finalCountryCode, otp: otp.join('') })
                 .then(response => {
                     setIsOtpInvalid(false);
-                    axios.post(`${baseApiURL()}/verification`, { mobile })
-                        .then(response => {
-                            const token = response.data.token;
-                            const redirectUrl = response.data.redirectUrl;
-                            sessionStorage.setItem('authToken', token);
-                            console.log('Token stored in session storage');
-                            router.push(`/successOtp?mobile=${mobile}&redirectUrl=${redirectUrl}`);
-                        })
-                        .catch(error => {
-                            setError('Error during mobile number verification.');
-                            console.error('Error during mobile number verification:', error);
-                        });
+                    const token = response.data.token;
+                    const redirectUrl = response.data.redirect;
+                    sessionStorage.setItem('authToken', token);
+                    console.log('Token stored in session storage');
+                    router.push(`/successOtp?mobile=${mobile}&redirectUrl=${redirectUrl}`);
                 })
                 .catch(error => {
                     setError('Invalid OTP. Please Try again.');
@@ -64,7 +61,7 @@ const OTPVerify: React.FC = () => {
                     (document.getElementById(`otp-0`) as HTMLInputElement)?.focus();
                 });
         }
-    }, [otp, mobile, router]);
+    }, [otp, mobile, country_code, router]);
 
     useEffect(() => {
         let timer: NodeJS.Timeout;

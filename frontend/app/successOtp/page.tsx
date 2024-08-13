@@ -12,7 +12,7 @@ function OTPSuccess() {
     useEffect(() => {
         const timer = setTimeout(() => {
             if (redirectUrl) {
-                router.push(`${redirectUrl}?mobile=${mobile}`);
+                router.push(`${redirectUrl}`);
             }
         }, 2000); // 3 seconds
 

@@ -1,20 +1,18 @@
 'use client';
 import React, { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import "../../public/assets/otpSuccessful.css"
 
 function OTPSuccess() {
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const mobile = searchParams.get('mobile');
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            router.push(`/?mobile=${mobile}`);
+            router.push(`/`);
         }, 3500); // 3.5 seconds
 
         return () => clearTimeout(timer);
-    }, [mobile, router]);
+    }, [router]);
 
     return (
         <div>

@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 import '../../public/assets/addstocks.css';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
@@ -14,24 +13,18 @@ function AddStocks() {
     const [noDataFound, setNoDataFound] = useState<boolean>(false);
     const [selectedFilter, setSelectedFilter] = useState('all');
     const [visibleActions, setVisibleActions] = useState<{ [key: number]: boolean }>({});
-    const [userId, setUserId] = useState<string>('');
     const [addedStocks, setAddedStocks] = useState<number[]>([]); // Track added stocks
-    const searchParams = useSearchParams();
-    const mobile = searchParams.get('mobile');
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+        console.error('No token found in sessionStorage');
+        return;
+    }
 
     const handleFilterChange = (filter: string) => {
         setSelectedFilter(filter);
     };
 
     useEffect(() => {
-        const fetchUserId = async () => {
-            try {
-                const response = await axios.post(`${baseApiURL()}/get-user-id`, { mobile });
-                setUserId(response.data.user_id);
-            } catch (error) {
-                console.error('Error fetching user ID:', error);
-            }
-        };
 
         const fetchStockData = async () => {
             setLoading(true);
@@ -62,9 +55,8 @@ function AddStocks() {
             }
         };
 
-        fetchUserId();
         fetchStockData();
-    }, [mobile, searchQuery, isSearching]);
+    }, [searchQuery, isSearching]);
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value);
@@ -83,12 +75,16 @@ function AddStocks() {
         const scrip_cd = selectedStock.scrip_cd;
 
         try {
-            await axios.post(`${baseApiURL()}/add-stock`, {
-                user_id: userId,
+            await axios.post(`${baseApiURL()}/add-stock-to-watchlist`, {
                 scrip_cd: scrip_cd
-            });
+            },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Passing the token in the Authorization header
+                    },
+                });
             alert("Stock Added Successfully!!");
-            console.log(`Stock ${scrip_cd} added for user ${userId}`);
+            console.log(`Stock ${scrip_cd} added!!`);
 
             // Add this stock to the addedStocks state
             setAddedStocks((prev) => [...prev, index]);
@@ -108,12 +104,16 @@ function AddStocks() {
         const scrip_cd = selectedStock.scrip_cd;
 
         try {
-            await axios.post(`${baseApiURL()}/delete-stock`, {
-                user_id: userId,
+            await axios.post(`${baseApiURL()}/delete-stock-from-watchlist`, {
                 scrip_cd: scrip_cd
-            });
+            },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Passing the token in the Authorization header
+                    },
+                });
             alert("Stock Deleted Successfully!!!");
-            console.log(`Stock ${scrip_cd} deleted for user ${userId}`);
+            console.log(`Stock ${scrip_cd} deleted !!`);
             setStockData(stockData.filter((_, i) => i !== index));
             setAddedStocks((prev) => prev.filter((i) => i !== index)); // Remove from addedStocks
         } catch (error) {
