@@ -1244,6 +1244,7 @@
 .newsfeed1 {
   width: 100%;
   border-radius: var(--br-5xs);
+  flex: 1 1 calc(24% - var(--gap-base));
   background-color: var(--color-gray-200);
   overflow: hidden;
   align-items: center;
@@ -1719,4 +1720,12 @@
     font-size: 16px;
     padding: 12px;
   }
+}
+
+@media only screen and (min-width: 1280px) and (max-width: 1920px){
+  .news-items{
+    flex-direction: row;
+    height: 100%;
+    flex-wrap: wrap;
+  } 
 }
