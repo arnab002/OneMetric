@@ -1,5 +1,5 @@
 import React from 'react'
-import '../../public/assets/about.css'
+import '../../public/assets/contact.css'
 
 function About() {
     return (
@@ -58,10 +58,10 @@ function About() {
                                 we're on a mission to revolutionize the way people access news for
                                 their stock market investments. We understand the challenges faced by
                                 everyday investors who rely on timely and accurate information to make
-                                informed decisions. That's why we've created a platform that delivers
-                                personalized stock news directly to your WhatsApp, in your preferred
-                                language, within just 90 seconds.
+                                informed decisions.
                             </span>
+                            <br /><br /><br />
+                            <span>For Contacting us, Our Mobile Number is <b>9035141333</b> and email is <b>admin@onemetric.ai</b></span>
                         </div>
                     </div>
                 </section>
@@ -131,7 +131,7 @@ function About() {
                                     <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">Refund Policy</a>
                                 </div>
                                 <div className="link-column1">
-                                <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy Policy</a>
+                                    <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy Policy</a>
                                     <a href='/terms' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
                                     <a href='/referral' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Referral Policy</a>
                                     <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="faqs">FAQs</a>

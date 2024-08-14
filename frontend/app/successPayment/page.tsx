@@ -1,18 +1,32 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import "../../public/assets/otpSuccessful.css"
 
 function OTPSuccess() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const [paymentDetails, setPaymentDetails] = useState({
+        transaction_id: '',
+        order_id: '',
+        payment_id: ''
+    });
 
     useEffect(() => {
+        // Get the query parameters
+        const transaction_id = searchParams.get('transaction_id') || 'ABCD';
+        const order_id = searchParams.get('order_id') || 'PQR';
+        const payment_id = searchParams.get('payment_id') || 'FDC';
+
+        // Set the payment details
+        setPaymentDetails({ transaction_id, order_id, payment_id });
+
         const timer = setTimeout(() => {
             router.push(`/`);
-        }, 3500); // 3.5 seconds
+        }, 10000); // 10 seconds (increased from 3.5 seconds to give more time to read)
 
         return () => clearTimeout(timer);
-    }, [router]);
+    }, [router, searchParams]);
 
     return (
         <div>
@@ -83,6 +97,11 @@ function OTPSuccess() {
                         </div>
                         <div className="successfully-verified-parent">
                             <div className="successfully-verified">Payment Done Successfully!</div>
+                            <div style={{marginTop: '20px', fontSize: '14px', color: '#666'}}>
+                                <p>Transaction ID: {paymentDetails.transaction_id}</p>
+                                <p>Order ID: {paymentDetails.order_id}</p>
+                                <p>Payment ID: {paymentDetails.payment_id}</p>
+                            </div>
                         </div>
                     </div>
                 </section>

@@ -7,6 +7,14 @@ import baseApiURL from '@/baseUrl';
 import '../../public/assets/insights.css'
 
 function Insights() {
+    const router = useRouter();
+
+    useEffect(() => {
+        const token = sessionStorage.getItem('authToken');
+        if (!token) {
+            router.push('/login');
+        }
+    }, []);
     const [newsData, setNewsData] = useState<Array<{ [key: string]: any }>>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const postsPerPage = 4;
@@ -21,7 +29,7 @@ function Insights() {
     const [selectedFilter, setSelectedFilter] = useState('all');
     const [buttonStates, setButtonStates] = useState<{ [key: string]: boolean }>({});
     const [displayCount, setDisplayCount] = useState(30);
-    const router = useRouter();
+    const token = sessionStorage.getItem('authToken');
 
     const handleClick = () => {
         router.push(`/addStocks`);
@@ -40,14 +48,15 @@ function Insights() {
                 const endpoint = isSearching
                     ? `${baseApiURL()}/search-stocks`
                     : `${baseApiURL()}/stocks`;
-
+            
                 const response = await axios.get(endpoint, {
                     params: isSearching ? { query: searchQuery } : {},
+                    headers: !isSearching ? { Authorization: `Bearer ${token}` } : {}, 
                 });
-
-                const data = response.data.data || response.data;
+            
+                const data = response.data.data || response.data.data;
                 setStockData(data);
-
+            
                 if (data.length === 0) {
                     setNoDataFound(true);
                 } else {
@@ -58,7 +67,7 @@ function Insights() {
                 setNoDataFound(true);
             } finally {
                 setLoading(false);
-            }
+            }            
         };
 
         fetchStockData();
@@ -270,60 +279,6 @@ function Insights() {
                                         </div>
                                     </div>
                                 </div>
-                                {/* <div className="watchlist-items">
-                                    {loading ? (
-                                        <div style={{ color: 'white', margin: 'auto' }}>Loading...</div>
-                                    ) : noDataFound ? (
-                                        <div style={{ color: 'white', margin: 'auto' }}>No data found</div>
-                                    ) : (
-                                        stockData.slice(0, displayCount).map(stock => (
-                                            <div key={stock.isin_code} className="select-stocks">
-                                                <div className="select-stocks-inner">
-                                                    <div className="vector-wrapper">
-                                                        <img className="frame-child5" alt="" />
-                                                    </div>
-                                                </div>
-                                                <div className="stock-item">
-                                                    <div className="adani-group1">{stock.stock_long_name}</div>
-                                                </div>
-                                                <div className="actions">
-                                                    <div className="edit-delet">
-                                                        <img
-                                                            className="edit-icon"
-                                                            loading="lazy"
-                                                            alt="Edit"
-                                                            src="./public/insights/edit.svg"
-                                                        />
-                                                        <img
-                                                            className="edit-icon"
-                                                            loading="lazy"
-                                                            alt="Delete"
-                                                            src="./public/insights/delete.svg"
-                                                        />
-                                                        <div className="delete1">
-                                                            <img
-                                                                className="edit-2-icon"
-                                                                alt="Edit 2"
-                                                                src="./public/insights/edit2.svg"
-                                                            />
-                                                        </div>
-                                                        <div className="delete2">
-                                                            <img
-                                                                className="edit-2-icon1"
-                                                                alt="Edit 2-1"
-                                                                src="./public/insights/edit2-1.svg"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))
-                                    )}
-                                    <br />
-                                    {!loading && stockData.length > displayCount && (
-                                        <button onClick={showMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px" }}>Show More</button>
-                                    )}
-                                </div> */}
                                 <div className="watchlist-items">
                                     {loading ? (
                                         <div style={{ color: 'white', margin: 'auto' }}>Loading...</div>

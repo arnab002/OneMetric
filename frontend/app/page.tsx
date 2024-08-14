@@ -6,6 +6,8 @@ import baseApiURL from '@/baseUrl';
 import '../public/assets/index.css'
 import logo from "../public/public/home/image-18@2x.png";
 import { Edit3, Plus, Trash, Check } from 'react-feather';
+import { User, LogOut } from 'react-feather';
+import statsData from '../public/json/stats.json';
 
 interface RazorpayResponse {
   razorpay_payment_id: string;
@@ -26,9 +28,12 @@ type Stock = {
 type ButtonState = 'plus' | 'check' | 'edit' | 'trash';
 
 function Home() {
+  const [stats, setStats] = useState(statsData);
   const [stockData, setStockData] = useState<any[]>([]);
   const [planData, setPlanData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
   const [razorpayLoaded, setRazorpayLoaded] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>('All');
   const [buttonStates, setButtonStates] = useState<{ [key: string]: ButtonState }>({});
@@ -37,6 +42,7 @@ function Home() {
   const [selectedStocks, setSelectedStocks] = useState<string[]>([]);
   const [openFAQs, setOpenFAQs] = useState<{ [key: number]: boolean }>({});
   const router = useRouter();
+  const token = sessionStorage.getItem('authToken');
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -56,6 +62,35 @@ function Home() {
       [index]: !prevState[index]
     }));
   };
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('authToken');
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('authToken');
+    setIsLoggedIn(false);
+    setShowDropdown(false);
+    router.push('/');
+  };
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showDropdown && !(event.target as Element).closest('.user-icon-wrapper')) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showDropdown]);
 
   const handleClick = () => {
     router.push(`/insights`);
@@ -115,7 +150,14 @@ function Home() {
 
   const fetchUserDetails = async (userId: string) => {
     try {
-      const response = await axios.post(`${baseApiURL()}/user/${userId}`);
+      const response = await axios.post(
+        `${baseApiURL()}/fetchUserData`,
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      );
       return response.data.data;
     } catch (error) {
       console.error('Error fetching user details:', error);
@@ -123,30 +165,30 @@ function Home() {
     }
   };
 
+
   const handleStartNowClick = async (planId: string) => {
     if (!razorpayLoaded) {
       console.error('Razorpay script not loaded');
       return;
     }
 
-    const token = sessionStorage.getItem('authToken');
     if (!token) {
       console.error('No token found in sessionStorage');
       return;
     }
 
     try {
-      const response = await axios.post(`${baseApiURL()}/createRazorPayment`, {
+      const response = await axios.post(`${baseApiURL()}/payment`, {
         plan_id: planId,
       },
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Passing the token in the Authorization header
+            Authorization: `${token}`, // Passing the token in the Authorization header
           },
         }
       );
 
-      const { transaction_id, payment_order_id, user_id, plan_id, amount, status } = response.data;
+      const { transaction_id, payment_order_id, user_id, plan_id, amount, status } = response.data.data;
 
       if (status === 'pending') {
 
@@ -166,10 +208,8 @@ function Home() {
           image: logo,
           order_id: payment_order_id,
           handler: function (response: RazorpayResponse) {
-            alert(`Payment ID: ${response.razorpay_payment_id}`);
-            alert(`Order ID: ${response.razorpay_order_id}`);
-            alert(`Signature: ${response.razorpay_signature}`);
-            // Optionally, redirect or update the UI after successful payment
+            const successUrl = `/successPayment?order_id=${response.razorpay_order_id}&payment_id=${response.razorpay_payment_id}&transaction_id=${transaction_id}`;
+            window.location.href = successUrl;
           },
           prefill: {
             name: userDetails.name,
@@ -194,78 +234,6 @@ function Home() {
       console.error('Error creating payment:', error);
     }
   };
-
-  // const handleStartTrialClick = async () => {
-  //   if (!razorpayLoaded) {
-  //     console.error('Razorpay script not loaded');
-  //     return;
-  //   }
-
-  //   const token = sessionStorage.getItem('authToken');
-  //   if (!token) {
-  //     console.error('No token found in sessionStorage');
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await axios.post(`${baseApiURL()}/createRazorPayment`, {
-  //       plan_id: '1',
-  //     },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`, // Passing the token in the Authorization header
-  //         },
-  //       }
-  //     );
-
-  //     const { transaction_id, payment_order_id, user_id, plan_id, amount, status } = response.data;
-
-  //     if (status === 'pending') {
-
-  //       const userDetails = await fetchUserDetails(user_id);
-
-  //       if (!userDetails) {
-  //         console.error('Failed to fetch user details');
-  //         return;
-  //       }
-  //       // Redirect to Razorpay payment page
-  //       const options = {
-  //         key: process.env.RAZORPAY_KEY_ID, // Replace with your Razorpay key ID
-  //         amount: amount * 100, // Amount in paisa (multiply by 100 to convert INR to paisa)
-  //         currency: 'INR',
-  //         name: 'OneMetric',
-  //         description: `Payment for ${plan_id}`,
-  //         image: logo,
-  //         order_id: payment_order_id,
-  //         handler: function (response: RazorpayResponse) {
-  //           alert(`Payment ID: ${response.razorpay_payment_id}`);
-  //           alert(`Order ID: ${response.razorpay_order_id}`);
-  //           alert(`Signature: ${response.razorpay_signature}`);
-  //           // Optionally, redirect or update the UI after successful payment
-  //         },
-  //         prefill: {
-  //           name: userDetails.name,
-  //           email: userDetails.email,
-  //           contact: userDetails.mobile,
-  //         },
-  //         notes: {
-  //           transaction_id: transaction_id,
-  //           user_id: user_id,
-  //         },
-  //         theme: {
-  //           color: '#F37254',
-  //         },
-  //       };
-
-  //       const rzp = new (window as any).Razorpay(options);
-  //       rzp.open();
-  //     } else {
-  //       console.error('Payment status is not created');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error creating payment:', error);
-  //   }
-  // };
 
   const handlePlusClick = (scrip_cd: string) => {
     setButtonStates((prevState) => ({
@@ -298,8 +266,16 @@ function Home() {
   useEffect(() => {
     const storedStocks = sessionStorage.getItem('selectedStocks');
     if (storedStocks) {
-      setSelectedStocks(JSON.parse(storedStocks));
-      setShowWatchlistButton(true);
+      const parsedStocks = JSON.parse(storedStocks);
+      setSelectedStocks(parsedStocks);
+      setShowWatchlistButton(parsedStocks.length > 0);
+
+      // Set initial button states for stored stocks
+      const initialButtonStates: { [key: string]: ButtonState } = {};
+      parsedStocks.forEach((scrip_cd: string) => {
+        initialButtonStates[scrip_cd] = 'edit';
+      });
+      setButtonStates(initialButtonStates);
     }
   }, []);
 
@@ -316,6 +292,18 @@ function Home() {
       ...prevState,
       [scrip_cd]: 'plus',
     }));
+
+    // Remove the stock from selectedStocks
+    setSelectedStocks((prevSelected) => prevSelected.filter((stock) => stock !== scrip_cd));
+
+    // Update session storage
+    const updatedStocks = selectedStocks.filter((stock) => stock !== scrip_cd);
+    sessionStorage.setItem('selectedStocks', JSON.stringify(updatedStocks));
+
+    // If no stocks are selected, hide the watchlist button
+    if (updatedStocks.length === 0) {
+      setShowWatchlistButton(false);
+    }
   };
 
   const handleTrialClick = () => {
@@ -385,9 +373,44 @@ function Home() {
                       <a className="onemetric" href='/'>OneMetric</a>
                     </div>
                   </div>
-                  <button className="sign-in-wrapper" id="frameButton">
-                    <a className="sign-in" href='/login'>Sign In</a>
-                  </button>
+                  {isLoggedIn ? (
+                    <div className="user-icon-wrapper" style={{ position: 'relative' }}>
+                      <User onClick={toggleDropdown} style={{ cursor: 'pointer' }} />
+                      {showDropdown && (
+                        <div
+                          style={{
+                            position: 'absolute',
+                            top: '100%',
+                            right: 0,
+                            backgroundColor: '#fff',
+                            border: '1px solid #ddd',
+                            borderRadius: '4px',
+                            padding: '0px',
+                            zIndex: 1000,
+                          }}
+                        >
+                          <button
+                            onClick={handleLogout}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              background: 'none',
+                              border: 'none',
+                              cursor: 'pointer',
+                              // padding: '-21px 6px',
+                            }}
+                          >
+                            <LogOut size={16} style={{ marginRight: '5px' }} />
+                            Logout
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <button className="sign-in-wrapper" id="frameButton">
+                      <a className="sign-in" href='/login'>Sign In</a>
+                    </button>
+                  )}
                   <div className="frame-parent">
                     <img
                       className="frame-item"
@@ -454,7 +477,7 @@ function Home() {
                           <div className="news-sent">
                             <p className="get-lighting-">
                               <b>
-                                <span>600+</span>
+                                <span>{stats.newsSent}+</span>
                               </b>
                             </p>
                             <p className="news-sent1">
@@ -473,7 +496,7 @@ function Home() {
                           <div className="news-sent">
                             <p className="get-lighting-">
                               <b>
-                                <span>1200+</span>
+                                <span>{stats.subscribedUsers}+</span>
                               </b>
                             </p>
                             <p className="news-sent1">
@@ -527,13 +550,14 @@ function Home() {
                                 <div
                                   key={stock.scrip_cd}
                                   style={{
-                                    backgroundColor: '#171923',
+                                    backgroundColor: selectedStocks.includes(stock.scrip_cd) ? '#1E2128' : '#171923',
                                     padding: '10px',
                                     marginBottom: '10px',
                                     borderRadius: '8px',
                                     display: 'flex',
                                     justifyContent: 'space-between',
                                     alignItems: 'center',
+                                    transition: 'background-color 0.3s',
                                   }}
                                 >
                                   <span>{stock.stock_long_name}</span>
@@ -1085,14 +1109,14 @@ function Home() {
                   <div className="diamond-name-container">
                     <a className={index % 2 === 0 ? "gold" : "diamond"}>{index % 2 === 0 ? "Gold" : "Diamond"}</a>
                     <button className={index % 2 === 0 ? "plan-duration" : "diamond-billing"}>
-                      <div className={index % 2 === 0 ? "yearly" : "monthly"}>{index % 2 === 0 ? "Monthly" : "Yearly"}</div>
+                      <div className={index % 2 === 0 ? "monthly" : "yearly"}>{index % 2 === 0 ? "Monthly" : "Yearly"}</div>
                     </button>
                   </div>
                   <div className="diamond-price">
                     <h1 className="h1" style={{ color: index % 2 === 0 ? "#bdc25d" : "#7994ff" }}>₹</h1>
                     <b className="diamond-value">
                       <span className="diamond-value-txt-container">
-                        <span>{index % 2 === 0 ? <s style={{color: 'red'}}>799</s> : <s style={{color: 'red'}}>7999</s>} {plan.amount_in_rs}</span>
+                        <span>{index % 2 === 0 ? <s style={{ color: '#0FF74D' }}>799</s> : <s style={{ color: '#0FF74D' }}>7999</s>} {plan.amount_in_rs}</span>
                         <span className="span">+ GST</span>
                       </span>
                     </b>
@@ -1110,7 +1134,7 @@ function Home() {
                       </div>
                     </div>
                     <div className="diamond-feature-descriptions">
-                      <div className="track-up-to">Track up to 50 stocks</div>
+                      <div className="track-up-to">Track up to 500 stocks</div>
                       <div className="ideal-for-beginners">
                         Ideal for beginners and casual investors
                       </div>
@@ -1146,9 +1170,9 @@ function Home() {
                       </div>
                     </div>
                     <div className="diamond-feature-descriptions">
-                      <div className="languages">12 Languages</div>
+                      <div className="languages">Multilingual</div>
                       <div className="ideal-for-beginners">
-                        Enjoy news and charts in English or Hindi
+                        Enjoy news and charts in English
                       </div>
                     </div>
                   </div>

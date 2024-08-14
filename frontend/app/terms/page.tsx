@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react';
-import '../../public/assets/refund.css';
+import '../../public/assets/terms.css';
 
 interface SectionContent {
   title: string;
@@ -16,53 +16,65 @@ const Refund: React.FC = () => {
 
   const sections: SectionContent[] = [
     {
-      title: "Refund Eligibility",
+      title: "Eligibility",
       content: [
-        "Refunds are generally <b>not possible</b> for our products or services.",
-        "However, we may consider refund requests in exceptional cases deemed fit by <b>OneMetric</b> at its sole discretion.",
-        "We reserve the right to determine refund eligibility on a <b>case-by-case basis.</b>"
+        "You must be at least 18 years old and have the legal capacity to enter into these Terms.",
       ]
     },
     {
-      title: "Eligible Refund Scenarios",
+      title: "Use of Platform",
       content: [
-        "Only exceptional circumstances will be considered for a refund.",
-        "Such circumstances may include technical issues preventing access to our services, or other situations deemed appropriate by <b>OneMetric.</b>"
+        "In order to access certain features of the Platform, you may be required to create an account. You agree to provide accurate, current, and complete information during the registration process and to update such information as necessary to keep it accurate, current, and complete.",
+        "You are responsible for maintaining the confidentiality of your account credentials and for any activities that occur under your account. You agree to notify us immediately of any unauthorised use of your account or any other breach of security"
       ]
     },
     {
-      title: "Refund Request Process",
+      title: "Content",
       content: [
-        "To request a refund, please contact our customer support team at <b>support@onemetric.co.in</b> within <b>7days</b> of your purchase.",
-        "Please provide detailed information regarding the reason for your refund request, along with any relevant documentation or evidence."
+        "The Platform may contain content provided by the Company, its partners, or third parties. All content, including but not limited to articles, news updates, charts, and analysis, is provided for informational purposes only and should not be construed as financial or investment advice.",
+        "You acknowledge and agree that you are solely responsible for evaluating the accuracy, completeness, and usefulness of any content provided on the Platform and for making investment decisions based on your own judgement and risk tolerance."
       ]
     },
     {
-      title: "Refund Decisions",
+      title: "Intellectual Property",
       content: [
-        "Refund requests will be reviewed and processed by <b>OneMetric</b> on a case-by-case basis.",
-        "We reserve the right to accept or deny refund requests at our sole discretion.",
-        "Our decision regarding refund eligibility is final and not subject to appeal."
+        "The Platform and its content, including but not limited to text, graphics, logos, images, and software, are protected by copyright, trademark, and other intellectual property laws. You agree not to modify, reproduce, distribute, or create derivative works based on the Platform or its content without the Company's prior written consent.",
       ]
     },
     {
-      title: "Refund Method",
+      title: "Privacy",
       content: [
-        "If a refund is approved, it will be processed using the original method of payment.",
-        "Refunds may take <b>15-30 business days</b> to be reflected in your account, depending on your payment provider."
+        "Your use of the Platform is subject to the Company's Privacy Policy, which governs the collection, use, and disclosure of your personal information. By using the Platform, you consent to the collection and use of your personal information as described in the Privacy Policy."
       ]
     },
     {
-      title: "Contact Information",
+      title: "Disclaimers",
       content: [
-        "If you have any questions or concerns regarding our refund policy, please contact us at <b>support@onemetric.co.in</b>"
+        "THE PLATFORM IS PROVIDED AS IS AND AS AVAILABLE WITHOUT ANY WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED. TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, THE COMPANY DISCLAIMS ALL WARRANTIES, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON INFRINGEMENT."
       ]
     },
     {
-      title: "Policy Changes",
+      title: "Limitation of Liability",
       content: [
-        "<b>OneMetric</b> reserves the right to update or modify this refund policy at any time with prior notice.",
-        "Any changes to the refund policy will be effective immediately upon posting on our website."
+        "TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL THE COMPANY OR ITS AFFILIATES, PARTNERS, LICENSORS, OR SERVICE PROVIDERS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, DATA, OR GOODWILL, ARISING OUT OF OR IN CONNECTION WITH YOUR USE OF THE PLATFORM.",
+      ]
+    },
+    {
+      title: "Governing Law",
+      content: [
+        "These Terms shall be governed by and construed in accordance with the laws of Karnataka State, without regard to its conflict of law principles.",
+      ]
+    },
+    {
+      title: "Modifications to Terms",
+      content: [
+        "The Company reserves the right to modify or update these Terms at any time without prior notice. Any changes to these Terms will be effective immediately upon posting on the Platform. Your continued use of the Platform after any such modifications constitutes your acceptance of the revised Terms.",
+      ]
+    },
+    {
+      title: "Contact Us",
+      content: [
+        " If you have any questions or concerns about these Terms, please contact us at admin@onemetric.in",
       ]
     }
   ];
@@ -71,18 +83,6 @@ const Refund: React.FC = () => {
     <div>
       <div className="about-us">
         <header className="top-navigation">
-          <div className="icons" id="iconsContainer">
-            <div className="iconback-arrow">
-              <div className="iconback-arrow-inner">
-                <img
-                  className="frame-child"
-                  loading="lazy"
-                  alt=""
-                  src="./public/refund/vector-214.svg"
-                />
-              </div>
-            </div>
-          </div>
           <div className="top-navigation-inner">
             <div className="iconback-arrow">
               <div className="refund-title-container">
@@ -127,24 +127,21 @@ const Refund: React.FC = () => {
         </header>
         <main className="about-us-inner">
           <section className="refund-policy-parent">
-            <h3 className="refund-policy">Refund Policy</h3>
+            <h3 className="refund-policy">Terms and Conditions</h3>
             <div className="at-wegro-we-container">
-              <span>At </span>
-              <b>OneMetric</b>
+              <span>These Terms and Conditions ("Terms") govern your use of </span>
+              <b>OneMetric.in</b>
               <span>
-                , we strive to provide our users with the best experience possible. We
-                understand that occasionally circumstances may arise that require a
-                refund. Please review the following refund policy carefully before
-                making any purchases:
+                , owned and operated by Turnet India . By accessing or using the Platform, you agree to comply with these Terms. If you do not agree with these Terms, please do not use the Platform.
               </span>
             </div>
             <div className="frame-div">
               {sections.map((section, index) => (
                 <div key={index} className="contact-container-parent">
-                  <div 
-                    className="refund-eligibility-parent" 
+                  <div
+                    className="refund-eligibility-parent"
                     onClick={() => toggleSection(index)}
-                    style={{cursor: 'pointer'}}
+                    style={{ cursor: 'pointer' }}
                   >
                     <div className="refund-eligibility">{section.title}</div>
                     <img
@@ -152,7 +149,7 @@ const Refund: React.FC = () => {
                       loading="lazy"
                       alt=""
                       src={`./public/refund/frame-1000001009@2x.png`}
-                      style={{transform: openSection === index ? 'rotate(180deg)' : 'none'}}
+                      style={{ transform: openSection === index ? 'rotate(180deg)' : 'none' }}
                     />
                   </div>
                   {openSection === index && (
@@ -162,9 +159,9 @@ const Refund: React.FC = () => {
                           <div className="refund-bullet-point-details">
                             <div className="bullet-point-icons" />
                           </div>
-                          <div 
-                            className="refunds-are-generally-container" 
-                            dangerouslySetInnerHTML={{__html: item}}
+                          <div
+                            className="refunds-are-generally-container"
+                            dangerouslySetInnerHTML={{ __html: item }}
                           />
                         </div>
                       ))}
@@ -173,14 +170,14 @@ const Refund: React.FC = () => {
                 </div>
               ))}
             </div>
-            <div className="by-making-a-container">
+            {/* <div className="by-making-a-container">
               <span>By making a purchase on </span>
               <b>OneMetric</b>
               <span>
                 , you acknowledge that you have read, understood, and agreed to the
                 terms of this refund policy.
               </span>
-            </div>
+            </div> */}
           </section>
         </main>
         <div className="footer">
@@ -245,7 +242,7 @@ const Refund: React.FC = () => {
               <div className="footer-links-content">
                 <div className="about-us-parent">
                   <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us1">About Us</a>
-                  <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Contact Us</a>
+                  <a href='/contact' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Contact Us</a>
                   <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy1">Refund Policy</a>
                 </div>
                 <div className="terms-conditions-parent">

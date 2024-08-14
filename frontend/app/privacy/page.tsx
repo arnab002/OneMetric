@@ -108,9 +108,9 @@ const Referral: React.FC = () => {
             <h3 className="referral-policy">Privacy Policy</h3>
             <div className="at-wegro-we-container">
               <span>Welcome to </span>
-              <b>OneMetric</b>
+              <b>OneMetric,</b>
               <span>
-                We are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, and protect your information when you use our stock market news app platform.
+                &nbsp;We are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, and protect your information when you use our stock market news app platform.
               </span>
             </div>
             <div className="frame-parent1">

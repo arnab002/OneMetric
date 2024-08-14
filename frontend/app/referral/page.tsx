@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import '../../public/assets/referral.css';
 
+//Content Screen
 interface SectionContent {
   title: string;
   content: string;
@@ -110,18 +111,18 @@ const Referral: React.FC = () => {
               <span>At </span>
               <b>OneMetric</b>
               <span>
-                , we value our users and their support in growing our community. 
-                Our referral program is designed to reward both referrers and 
+                , we value our users and their support in growing our community.
+                Our referral program is designed to reward both referrers and
                 referees. Please review the following referral policy carefully:
               </span>
             </div>
             <div className="frame-parent1">
               {sections.map((section, index) => (
                 <div key={index} className="frame-wrapper3">
-                  <div 
+                  <div
                     className="referral-program-overview-parent"
                     onClick={() => toggleSection(index)}
-                    style={{cursor: 'pointer'}}
+                    style={{ cursor: 'pointer' }}
                   >
                     <div className="referral-program-overview">{section.title}</div>
                     <div className="referral-menu-icons-wrapper">
@@ -129,7 +130,7 @@ const Referral: React.FC = () => {
                         className="referral-menu-icons"
                         alt=""
                         src="./public/referral/referral-menu-icons.svg"
-                        style={{transform: openSection === index ? 'rotate(180deg)' : 'none'}}
+                        style={{ transform: openSection === index ? 'rotate(180deg)' : 'none' }}
                       />
                     </div>
                   </div>
@@ -139,9 +140,9 @@ const Referral: React.FC = () => {
                         <div className="ellipse-wrapper">
                           <div className="ellipse-div" />
                         </div>
-                        <div 
-                          className="at-wegro-we-container1" 
-                          dangerouslySetInnerHTML={{__html: section.content}}
+                        <div
+                          className="at-wegro-we-container1"
+                          dangerouslySetInnerHTML={{ __html: section.content }}
                         />
                       </div>
                     </div>
@@ -225,7 +226,8 @@ const Referral: React.FC = () => {
                   <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">Refund Policy</a>
                 </div>
                 <div className="terms-conditions-parent">
-                  <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
+                  <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy Policy</a>
+                  <a href='/terms' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
                   <a href='/referral' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy1">Referral Policy</a>
                   <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="faqs">FAQs</a>
                 </div>

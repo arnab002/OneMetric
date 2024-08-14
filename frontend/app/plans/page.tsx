@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
 import '../../public/assets/plans.css'
@@ -72,7 +71,7 @@ function Home() {
     }
 
     try {
-      const response = await axios.post(`${baseApiURL()}/createRazorPayment`, {
+      const response = await axios.post(`${baseApiURL()}/payment`, {
         plan_id: planId,
       },
         {
@@ -185,15 +184,15 @@ function Home() {
                   <div className="diamond-name-container">
                     <a className={index % 2 === 0 ? "gold" : "diamond"}>{index % 2 === 0 ? "Gold" : "Diamond"}</a>
                     <button className={index % 2 === 0 ? "plan-duration" : "diamond-billing"}>
-                      <div className={index % 2 === 0 ? "yearly" : "monthly"}>{index % 2 === 0 ? "Monthly" : "Yearly"}</div>
+                      <div className={index % 2 === 0 ? "monthly" : "yearly"}>{index % 2 === 0 ? "Monthly" : "Yearly"}</div>
                     </button>
                   </div>
                   <div className="diamond-price">
                     <h1 className="h1" style={{ color: index % 2 === 0 ? "#bdc25d" : "#7994ff" }}>₹</h1>
                     <b className="diamond-value">
                       <span className="diamond-value-txt-container">
-                        <span>{plan.amount_in_rs}</span>
-                        <span className="span">+GST</span>
+                        <span>{index % 2 === 0 ? <s style={{ color: 'white' }}>799</s> : <s style={{ color: 'white' }}>7999</s>} {plan.amount_in_rs}</span>
+                        <span className="span">+ GST</span>
                       </span>
                     </b>
                   </div>
@@ -247,6 +246,9 @@ function Home() {
                     </div>
                     <div className="diamond-feature-descriptions">
                       <div className="languages">Multilingual</div>
+                      <div className="ideal-for-beginners">
+                        Enjoy news and charts in English
+                      </div>
                     </div>
                   </div>
                   <div className="diamond-feature-containers">
