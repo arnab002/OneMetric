@@ -5,6 +5,7 @@ import axios from 'axios';
 import baseApiURL from '@/baseUrl';
 import '../public/assets/index.css'
 import logo from "../public/public/home/image-18@2x.png";
+import { Delete, Edit3, Plus, Trash, Check } from 'react-feather';
 
 interface RazorpayResponse {
   razorpay_payment_id: string;
@@ -16,12 +17,21 @@ interface Plan {
   id: number;
 }
 
+type Stock = {
+  isin_code: string;
+  stock_long_name: string;
+};
+
+
+type ButtonState = 'plus' | 'check' | 'edit' | 'trash';
+
 function Home() {
   const [stockData, setStockData] = useState<any[]>([]);
   const [planData, setPlanData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [razorpayLoaded, setRazorpayLoaded] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>('All');
+  const [buttonStates, setButtonStates] = useState<{ [key: string]: ButtonState }>({});
   const [filteredStockData, setFilteredStockData] = useState<any[]>([]);
   const [openFAQs, setOpenFAQs] = useState<{ [key: number]: boolean }>({});
   const router = useRouter();
@@ -69,9 +79,9 @@ function Home() {
             const regexPattern = /^[\dA-Z]+$/; // Match any string that consists only of digits and uppercase letters
             return !regexPattern.test(stock.stock_long_name);
           })
-          .slice(0, 100)
+          .slice(0, 10)
           .sort((a, b) => a.stock_long_name.localeCompare(b.stock_long_name));
-  
+
         setStockData(data);
         setFilteredStockData(data); // Set initial filtered data
         setLoading(false);
@@ -80,9 +90,9 @@ function Home() {
         setLoading(false);
       }
     };
-  
+
     fetchStockData();
-  }, []);  
+  }, []);
 
 
   useEffect(() => {
@@ -254,6 +264,37 @@ function Home() {
       console.error('Error creating payment:', error);
     }
   };
+
+  const handlePlusClick = (isin_code: string) => {
+    setButtonStates((prevState) => ({
+      ...prevState,
+      [isin_code]: 'check',
+    }));
+    setTimeout(() => {
+      setButtonStates((prevState) => ({
+        ...prevState,
+        [isin_code]: 'edit',
+      }));
+    }, 2000); // Checkmark visible for 2 seconds
+  };
+
+  const handleEditClick = (isin_code: string) => {
+    setButtonStates((prevState) => ({
+      ...prevState,
+      [isin_code]: 'trash',
+    }));
+  };
+
+  const handleRemoveClick = (isin_code: string) => {
+    // Reset the state back to 'plus'
+    setButtonStates((prevState) => ({
+      ...prevState,
+      [isin_code]: 'plus',
+    }));
+  };
+
+
+
 
   return (
     <div>
@@ -448,12 +489,75 @@ function Home() {
                       <div className="header-columns">
                         <div className="header-items">
                           <div className="adani-group">
-                            {loading ? 'Loading...' : filteredStockData.map(stock => (
-                              <div key={stock.isin_code}>
-                                {stock.stock_long_name}
-                                <br /><br />
-                              </div>
-                            ))}
+                            {loading ? (
+                              'Loading...'
+                            ) : (
+                              filteredStockData.map((stock) => (
+                                <div
+                                  key={stock.isin_code}
+                                  style={{
+                                    backgroundColor: '#171923',
+                                    padding: '10px',
+                                    marginBottom: '10px',
+                                    borderRadius: '8px',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                  }}
+                                >
+                                  <span>{stock.stock_long_name}</span>
+
+                                  {buttonStates[stock.isin_code] === 'plus' || !buttonStates[stock.isin_code] ? (
+                                    <Plus
+                                      onClick={() => handlePlusClick(stock.isin_code)}
+                                      style={{ cursor: 'pointer' }}
+                                    />
+                                  ) : null}
+
+                                  {buttonStates[stock.isin_code] === 'check' && (
+                                    <Check
+                                      style={{
+                                        transition: 'opacity 2s',
+                                        opacity: 1,
+                                        backgroundColor: 'green',
+                                        color: 'white',
+                                        borderRadius: '50%',
+                                        padding: '1%'
+                                      }}
+                                    />
+                                  )}
+
+                                  {buttonStates[stock.isin_code] === 'edit' && (
+                                    <Edit3
+                                      onClick={() => handleEditClick(stock.isin_code)}
+                                      style={{
+                                        transition: 'opacity 2s',
+                                        opacity: 1,
+                                        cursor: 'pointer',
+                                      }}
+                                    />
+                                  )}
+
+                                  {buttonStates[stock.isin_code] === 'trash' && (
+                                    <div
+                                      onClick={() => handleRemoveClick(stock.isin_code)}
+                                      style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        backgroundColor: 'red',
+                                        padding: '10px',
+                                        transition: 'opacity 2s',
+                                        opacity: 1,
+                                        cursor: 'pointer',
+                                      }}
+                                    >
+                                      <Trash style={{ color: 'white' }} />
+                                      <span style={{ marginLeft: '4px', marginTop: '4px' }}>Remove</span>
+                                    </div>
+                                  )}
+                                </div>
+                              ))
+                            )}
                           </div>
                         </div>
                       </div>

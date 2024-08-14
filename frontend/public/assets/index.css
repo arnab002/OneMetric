@@ -54,7 +54,7 @@
 .all {
   position: relative;
   display: inline-block;
-  min-width: 22px;
+  min-width: 85%;
 }
 .nifty-trio {
   border-bottom: 2px solid var(--color-gold);
@@ -83,7 +83,7 @@
 .bank-nifty {
   position: relative;
   display: inline-block;
-  min-width: 79px;
+  min-width: 85%;
 }
 .nifty-trio-parent,
 .nifty-trio2 {
@@ -679,6 +679,7 @@
   right: 0;
   bottom: 0;
 }
+
 .select-stocks-home {
   align-self: stretch;
   border-radius: var(--br-9xs);
@@ -3119,7 +3120,7 @@
     padding: 0 3px 23.9px;
   }
   .all-nifty-50{
-    min-width: 120px;
+    min-width: 100%;
   }
 }
 
@@ -3145,5 +3146,6 @@
   .nifty-trio {
     font-size: 16px;
     padding: 12px;
+    text-align: center;
   }
 }
