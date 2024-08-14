@@ -42,7 +42,6 @@ function Home() {
   const [selectedStocks, setSelectedStocks] = useState<string[]>([]);
   const [openFAQs, setOpenFAQs] = useState<{ [key: number]: boolean }>({});
   const router = useRouter();
-  const token = sessionStorage.getItem('authToken');
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -150,20 +149,21 @@ function Home() {
 
   const fetchUserDetails = async (userId: string) => {
     try {
-      const response = await axios.post(
-        `${baseApiURL()}/fetchUserData`,
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
-      return response.data.data;
+        const token = sessionStorage.getItem('authToken');
+        const response = await axios.post(
+            `${baseApiURL()}/fetchUserData`,
+            {
+                headers: {
+                    Authorization: `${token}`, // Passing the token in the Authorization header
+                },
+            }
+        );
+        return response.data.data;
     } catch (error) {
-      console.error('Error fetching user details:', error);
-      return null;
+        console.error('Error fetching user details:', error);
+        return null;
     }
-  };
+};
 
 
   const handleStartNowClick = async (planId: string) => {
@@ -172,6 +172,7 @@ function Home() {
       return;
     }
 
+    const token = sessionStorage.getItem('authToken');
     if (!token) {
       console.error('No token found in sessionStorage');
       return;
@@ -179,11 +180,11 @@ function Home() {
 
     try {
       const response = await axios.post(`${baseApiURL()}/payment`, {
-        plan_id: planId,
+        plan_id: '1',
       },
         {
           headers: {
-            Authorization: `${token}`, // Passing the token in the Authorization header
+            Authorization: `Bearer ${token}`, // Passing the token in the Authorization header
           },
         }
       );

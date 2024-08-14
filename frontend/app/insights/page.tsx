@@ -8,13 +8,6 @@ import '../../public/assets/insights.css'
 
 function Insights() {
     const router = useRouter();
-
-    useEffect(() => {
-        const token = sessionStorage.getItem('authToken');
-        if (!token) {
-            router.push('/login');
-        }
-    }, []);
     const [newsData, setNewsData] = useState<Array<{ [key: string]: any }>>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const postsPerPage = 4;
@@ -30,6 +23,12 @@ function Insights() {
     const [buttonStates, setButtonStates] = useState<{ [key: string]: boolean }>({});
     const [displayCount, setDisplayCount] = useState(30);
     const token = sessionStorage.getItem('authToken');
+
+    useEffect(() => {
+        if (!token) {
+            router.push('/login');
+        }
+    }, []);
 
     const handleClick = () => {
         router.push(`/addStocks`);
@@ -51,7 +50,7 @@ function Insights() {
             
                 const response = await axios.get(endpoint, {
                     params: isSearching ? { query: searchQuery } : {},
-                    headers: !isSearching ? { Authorization: `Bearer ${token}` } : {}, 
+                    headers: !isSearching ? { Authorization: `${token}` } : {}, 
                 });
             
                 const data = response.data.data || response.data.data;
