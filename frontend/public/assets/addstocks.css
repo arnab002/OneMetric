@@ -53,6 +53,7 @@
   overflow: hidden;
   flex-shrink: 0;
   justify-content: flex-end;
+  background-color: var(--color-gray-500);
   gap: var(--gap-base);
   top: 0;
   z-index: 99;
@@ -449,7 +450,7 @@
 .select-stocks {
   align-self: stretch;
   border-radius: var(--br-9xs);
-  background-color: var(--color-gray-300);
+  background-color: #1e1f27;
   padding: 0 0 0 var(--padding-base);
   gap: var(--gap-base);
   flex-shrink: 0;
@@ -486,7 +487,7 @@
   height: 100vh;
   overflow-y: auto;
   flex-shrink: 0;
-  padding: 0 var(--padding-xl) var(--padding-mini) 0;
+  /* padding: 0 var(--padding-xl) var(--padding-mini) 0; */
   box-sizing: border-box;
   gap: var(--gap-5xs);
   max-width: 100%;
@@ -624,7 +625,8 @@
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
-  padding: var(--padding-5xl) 0 var(--padding-4xs) var(--padding-base);
+  /* padding: var(--padding-5xl) 0 var(--padding-4xs) var(--padding-base); */
+  padding: 4%;
   box-sizing: border-box;
   line-height: normal;
   letter-spacing: normal;
@@ -660,6 +662,49 @@
   border-bottom: 2px solid var(--color-gold);
   border-radius: 4px;
   font-weight: bold;
+}
+
+.enjoy-your-30 {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-gold);
+}
+.add-your-favourite-container,
+.no-card-information {
+  align-self: stretch;
+  position: relative;
+  line-height: 124%;
+}
+.add-your-favourite-container {
+  height: 72px;
+  display: inline-block;
+}
+.no-card-information {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-lightslategray);
+}
+.import-elements-parent,
+.trial-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.trial-info {
+  align-self: stretch;
+  border-radius: var(--br-9xs);
+  background-color: var(--color-gray-200);
+  padding: var(--padding-base);
+  gap: var(--gap-base);
+  font-size: var(--font-size-base);
+}
+.import-elements-parent {
+  width: 348px;
+  padding: 0 var(--padding-xl) 0 0;
+  box-sizing: border-box;
+  gap: 32px;
+  max-width: 100%;
 }
 
 @media (max-width: 1920px) {

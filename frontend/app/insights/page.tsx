@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Edit3, Trash } from 'react-feather';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
 import '../../public/assets/insights.css'
@@ -8,7 +9,7 @@ import '../../public/assets/insights.css'
 function Insights() {
     const [newsData, setNewsData] = useState<Array<{ [key: string]: any }>>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const postsPerPage = 8;
+    const postsPerPage = 4;
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [stockData, setStockData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -18,6 +19,7 @@ function Insights() {
     const [noDataFound, setNoDataFound] = useState<boolean>(false);
     const [noNewsDataFound, setNoNewsDataFound] = useState<boolean>(false);
     const [selectedFilter, setSelectedFilter] = useState('all');
+    const [buttonStates, setButtonStates] = useState<{ [key: string]: boolean }>({});
     const [displayCount, setDisplayCount] = useState(30);
     const router = useRouter();
 
@@ -33,38 +35,19 @@ function Insights() {
         const fetchStockData = async () => {
             setLoading(true);
             setNoDataFound(false);
-    
+
             try {
-                let response;
-    
-                if (isSearching) {
-                    const endpoint = `${baseApiURL()}/search-stocks`;
-    
-                    // Define params with both query and filter properties
-                    const params: { query: string; filter?: string } = { query: searchQuery };
-    
-                    if (selectedFilter !== 'all') {
-                        params.filter = selectedFilter;
-                    }
-    
-                    // Make a POST request for searching stocks
-                    response = await axios.post(endpoint, params);
-    
-                } else {
-                    const endpoint = `${baseApiURL()}/stocks`;
-                    const params: Record<string, string> = {};
-    
-                    if (selectedFilter !== 'all') {
-                        params.filter = selectedFilter;
-                    }
-    
-                    // Make a GET request for fetching stocks
-                    response = await axios.get(endpoint, { params });
-                }
-    
-                const data = response.data.data || response.data.data;
+                const endpoint = isSearching
+                    ? `${baseApiURL()}/search-stocks`
+                    : `${baseApiURL()}/stocks`;
+
+                const response = await axios.get(endpoint, {
+                    params: isSearching ? { query: searchQuery } : {},
+                });
+
+                const data = response.data.data || response.data;
                 setStockData(data);
-    
+
                 if (data.length === 0) {
                     setNoDataFound(true);
                 } else {
@@ -77,9 +60,9 @@ function Insights() {
                 setLoading(false);
             }
         };
-    
+
         fetchStockData();
-    }, [searchQuery, isSearching, selectedFilter]);    
+    }, [searchQuery, isSearching]);
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value);
@@ -135,6 +118,20 @@ function Insights() {
     const handleLogout = () => {
         // Implement your logout logic here
         console.log("Logged out");
+    };
+
+    const handleEditClick = (isin_code: string) => {
+        setButtonStates((prevState) => ({
+            ...prevState,
+            [isin_code]: true,
+        }));
+    };
+
+    const handleRemoveClick = (isin_code: string) => {
+        setButtonStates((prevState) => ({
+            ...prevState,
+            [isin_code]: false,
+        }));
     };
 
     return (
@@ -273,7 +270,7 @@ function Insights() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="watchlist-items">
+                                {/* <div className="watchlist-items">
                                     {loading ? (
                                         <div style={{ color: 'white', margin: 'auto' }}>Loading...</div>
                                     ) : noDataFound ? (
@@ -325,6 +322,63 @@ function Insights() {
                                     <br />
                                     {!loading && stockData.length > displayCount && (
                                         <button onClick={showMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px" }}>Show More</button>
+                                    )}
+                                </div> */}
+                                <div className="watchlist-items">
+                                    {loading ? (
+                                        <div style={{ color: 'white', margin: 'auto' }}>Loading...</div>
+                                    ) : noDataFound ? (
+                                        <div style={{ color: 'white', margin: 'auto' }}>No data found</div>
+                                    ) : (
+                                        stockData.slice(0, displayCount).map((stock) => (
+                                            <div key={stock.isin_code} className="select-stocks">
+                                                <div className="select-stocks-inner">
+                                                    <div className="vector-wrapper">
+                                                        <img className="frame-child5" alt="" />
+                                                    </div>
+                                                </div>
+                                                <div className="stock-item">
+                                                    <div className="adani-group1">{stock.stock_long_name}</div>
+                                                </div>
+                                                <div className="actions">
+                                                    <div>
+                                                        {!buttonStates[stock.isin_code] ? (
+                                                            <Edit3
+                                                                size={18}
+                                                                onClick={() => handleEditClick(stock.isin_code)}
+                                                                style={{
+                                                                    cursor: 'pointer',
+                                                                    transition: 'transform 0.5s, opacity 0.5s',
+                                                                    color: 'white',
+                                                                    marginTop: '7%'
+                                                                }}
+                                                            />
+                                                        ) : (
+                                                            <div
+                                                                onClick={() => handleRemoveClick(stock.isin_code)}
+                                                                style={{
+                                                                    cursor: 'pointer',
+                                                                    transition: 'transform 0.5s, opacity 0.5s',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    backgroundColor: 'red',
+                                                                    padding: '10px',
+                                                                }}
+                                                            >
+                                                                <Trash style={{ color: 'white' }} />
+                                                                <span style={{ marginLeft: '4px', marginTop: '2px', color: 'white' }}>Remove</span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))
+                                    )}
+                                    <br />
+                                    {!loading && stockData.length > displayCount && (
+                                        <button onClick={showMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px" }}>
+                                            Show More
+                                        </button>
                                     )}
                                 </div>
                             </div>

@@ -5,7 +5,7 @@ import axios from 'axios';
 import baseApiURL from '@/baseUrl';
 import '../public/assets/index.css'
 import logo from "../public/public/home/image-18@2x.png";
-import { Delete, Edit3, Plus, Trash, Check } from 'react-feather';
+import { Edit3, Plus, Trash, Check } from 'react-feather';
 
 interface RazorpayResponse {
   razorpay_payment_id: string;
@@ -18,7 +18,7 @@ interface Plan {
 }
 
 type Stock = {
-  isin_code: string;
+  scrip_cd: string;
   stock_long_name: string;
 };
 
@@ -32,7 +32,9 @@ function Home() {
   const [razorpayLoaded, setRazorpayLoaded] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>('All');
   const [buttonStates, setButtonStates] = useState<{ [key: string]: ButtonState }>({});
+  const [showWatchlistButton, setShowWatchlistButton] = useState(false);
   const [filteredStockData, setFilteredStockData] = useState<any[]>([]);
+  const [selectedStocks, setSelectedStocks] = useState<string[]>([]);
   const [openFAQs, setOpenFAQs] = useState<{ [key: number]: boolean }>({});
   const router = useRouter();
 
@@ -193,107 +195,136 @@ function Home() {
     }
   };
 
-  const handleStartTrialClick = async () => {
-    if (!razorpayLoaded) {
-      console.error('Razorpay script not loaded');
-      return;
-    }
+  // const handleStartTrialClick = async () => {
+  //   if (!razorpayLoaded) {
+  //     console.error('Razorpay script not loaded');
+  //     return;
+  //   }
 
-    const token = sessionStorage.getItem('authToken');
-    if (!token) {
-      console.error('No token found in sessionStorage');
-      return;
-    }
+  //   const token = sessionStorage.getItem('authToken');
+  //   if (!token) {
+  //     console.error('No token found in sessionStorage');
+  //     return;
+  //   }
 
-    try {
-      const response = await axios.post(`${baseApiURL()}/createRazorPayment`, {
-        plan_id: '1',
-      },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Passing the token in the Authorization header
-          },
-        }
-      );
+  //   try {
+  //     const response = await axios.post(`${baseApiURL()}/createRazorPayment`, {
+  //       plan_id: '1',
+  //     },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`, // Passing the token in the Authorization header
+  //         },
+  //       }
+  //     );
 
-      const { transaction_id, payment_order_id, user_id, plan_id, amount, status } = response.data;
+  //     const { transaction_id, payment_order_id, user_id, plan_id, amount, status } = response.data;
 
-      if (status === 'pending') {
+  //     if (status === 'pending') {
 
-        const userDetails = await fetchUserDetails(user_id);
+  //       const userDetails = await fetchUserDetails(user_id);
 
-        if (!userDetails) {
-          console.error('Failed to fetch user details');
-          return;
-        }
-        // Redirect to Razorpay payment page
-        const options = {
-          key: process.env.RAZORPAY_KEY_ID, // Replace with your Razorpay key ID
-          amount: amount * 100, // Amount in paisa (multiply by 100 to convert INR to paisa)
-          currency: 'INR',
-          name: 'OneMetric',
-          description: `Payment for ${plan_id}`,
-          image: logo,
-          order_id: payment_order_id,
-          handler: function (response: RazorpayResponse) {
-            alert(`Payment ID: ${response.razorpay_payment_id}`);
-            alert(`Order ID: ${response.razorpay_order_id}`);
-            alert(`Signature: ${response.razorpay_signature}`);
-            // Optionally, redirect or update the UI after successful payment
-          },
-          prefill: {
-            name: userDetails.name,
-            email: userDetails.email,
-            contact: userDetails.mobile,
-          },
-          notes: {
-            transaction_id: transaction_id,
-            user_id: user_id,
-          },
-          theme: {
-            color: '#F37254',
-          },
-        };
+  //       if (!userDetails) {
+  //         console.error('Failed to fetch user details');
+  //         return;
+  //       }
+  //       // Redirect to Razorpay payment page
+  //       const options = {
+  //         key: process.env.RAZORPAY_KEY_ID, // Replace with your Razorpay key ID
+  //         amount: amount * 100, // Amount in paisa (multiply by 100 to convert INR to paisa)
+  //         currency: 'INR',
+  //         name: 'OneMetric',
+  //         description: `Payment for ${plan_id}`,
+  //         image: logo,
+  //         order_id: payment_order_id,
+  //         handler: function (response: RazorpayResponse) {
+  //           alert(`Payment ID: ${response.razorpay_payment_id}`);
+  //           alert(`Order ID: ${response.razorpay_order_id}`);
+  //           alert(`Signature: ${response.razorpay_signature}`);
+  //           // Optionally, redirect or update the UI after successful payment
+  //         },
+  //         prefill: {
+  //           name: userDetails.name,
+  //           email: userDetails.email,
+  //           contact: userDetails.mobile,
+  //         },
+  //         notes: {
+  //           transaction_id: transaction_id,
+  //           user_id: user_id,
+  //         },
+  //         theme: {
+  //           color: '#F37254',
+  //         },
+  //       };
 
-        const rzp = new (window as any).Razorpay(options);
-        rzp.open();
-      } else {
-        console.error('Payment status is not created');
-      }
-    } catch (error) {
-      console.error('Error creating payment:', error);
-    }
-  };
+  //       const rzp = new (window as any).Razorpay(options);
+  //       rzp.open();
+  //     } else {
+  //       console.error('Payment status is not created');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error creating payment:', error);
+  //   }
+  // };
 
-  const handlePlusClick = (isin_code: string) => {
+  const handlePlusClick = (scrip_cd: string) => {
     setButtonStates((prevState) => ({
       ...prevState,
-      [isin_code]: 'check',
+      [scrip_cd]: 'check',
     }));
+    setShowWatchlistButton(true);
+    setSelectedStocks((prevSelected) => [...prevSelected, scrip_cd]);
+
+    // Store selected stocks in session storage
+    sessionStorage.setItem('selectedStocks', JSON.stringify([...selectedStocks, scrip_cd]));
+
     setTimeout(() => {
       setButtonStates((prevState) => ({
         ...prevState,
-        [isin_code]: 'edit',
+        [scrip_cd]: 'edit',
       }));
-    }, 2000); // Checkmark visible for 2 seconds
+    }, 2000);
   };
 
-  const handleEditClick = (isin_code: string) => {
+  const handleAddToWatchlist = () => {
+    // Store selected stocks in session storage (redundant, but ensures it's up to date)
+    sessionStorage.setItem('selectedStocks', JSON.stringify(selectedStocks));
+
+    // Redirect to login page
+    router.push('/login');
+  };
+
+  // Load selected stocks from session storage on component mount
+  useEffect(() => {
+    const storedStocks = sessionStorage.getItem('selectedStocks');
+    if (storedStocks) {
+      setSelectedStocks(JSON.parse(storedStocks));
+      setShowWatchlistButton(true);
+    }
+  }, []);
+
+  const handleEditClick = (scrip_cd: string) => {
     setButtonStates((prevState) => ({
       ...prevState,
-      [isin_code]: 'trash',
+      [scrip_cd]: 'trash',
     }));
   };
 
-  const handleRemoveClick = (isin_code: string) => {
+  const handleRemoveClick = (scrip_cd: string) => {
     // Reset the state back to 'plus'
     setButtonStates((prevState) => ({
       ...prevState,
-      [isin_code]: 'plus',
+      [scrip_cd]: 'plus',
     }));
   };
 
+  const handleTrialClick = () => {
+    router.push(`/login`);
+  };
 
+  const handleReferClick = () => {
+    router.push(`/login`);
+  };
 
 
   return (
@@ -462,7 +493,7 @@ function Home() {
                     </div>
                   </div>
                   <div className="trial-banner">
-                    <button className="trial-content" id="trialContent" onClick={handleStartTrialClick}>
+                    <button className="trial-content" id="trialContent" onClick={handleTrialClick}>
                       <div className="trial-days">
                         <img
                           className="trial-icon"
@@ -488,13 +519,13 @@ function Home() {
                       </div>
                       <div className="header-columns">
                         <div className="header-items">
-                          <div className="adani-group">
+                          <div className="adani-group" style={{ position: 'relative', paddingBottom: '60px' }}>
                             {loading ? (
                               'Loading...'
                             ) : (
                               filteredStockData.map((stock) => (
                                 <div
-                                  key={stock.isin_code}
+                                  key={stock.scrip_cd}
                                   style={{
                                     backgroundColor: '#171923',
                                     padding: '10px',
@@ -507,19 +538,19 @@ function Home() {
                                 >
                                   <span>{stock.stock_long_name}</span>
 
-                                  {buttonStates[stock.isin_code] === 'plus' || !buttonStates[stock.isin_code] ? (
+                                  {buttonStates[stock.scrip_cd] === 'plus' || !buttonStates[stock.scrip_cd] ? (
                                     <Plus
-                                      onClick={() => handlePlusClick(stock.isin_code)}
+                                      onClick={() => handlePlusClick(stock.scrip_cd)}
                                       style={{ cursor: 'pointer' }}
                                     />
                                   ) : null}
 
-                                  {buttonStates[stock.isin_code] === 'check' && (
+                                  {buttonStates[stock.scrip_cd] === 'check' && (
                                     <Check
                                       style={{
                                         transition: 'opacity 2s',
                                         opacity: 1,
-                                        backgroundColor: 'green',
+                                        backgroundColor: '#00A87E',
                                         color: 'white',
                                         borderRadius: '50%',
                                         padding: '1%'
@@ -527,9 +558,9 @@ function Home() {
                                     />
                                   )}
 
-                                  {buttonStates[stock.isin_code] === 'edit' && (
+                                  {buttonStates[stock.scrip_cd] === 'edit' && (
                                     <Edit3
-                                      onClick={() => handleEditClick(stock.isin_code)}
+                                      onClick={() => handleEditClick(stock.scrip_cd)}
                                       style={{
                                         transition: 'opacity 2s',
                                         opacity: 1,
@@ -538,9 +569,9 @@ function Home() {
                                     />
                                   )}
 
-                                  {buttonStates[stock.isin_code] === 'trash' && (
+                                  {buttonStates[stock.scrip_cd] === 'trash' && (
                                     <div
-                                      onClick={() => handleRemoveClick(stock.isin_code)}
+                                      onClick={() => handleRemoveClick(stock.scrip_cd)}
                                       style={{
                                         display: 'flex',
                                         alignItems: 'center',
@@ -553,6 +584,30 @@ function Home() {
                                     >
                                       <Trash style={{ color: 'white' }} />
                                       <span style={{ marginLeft: '4px', marginTop: '4px' }}>Remove</span>
+                                    </div>
+                                  )}
+                                  {showWatchlistButton && (
+                                    <div
+                                      style={{
+                                        position: 'fixed',
+                                        bottom: '20px',
+                                        left: '50%',
+                                        transform: 'translateX(-50%)',
+                                        backgroundColor: '#00A87E',
+                                        color: 'white',
+                                        padding: '10px 20px',
+                                        borderRadius: '5px',
+                                        cursor: 'pointer',
+                                        zIndex: -1000,
+                                        transition: 'opacity 0.3s',
+                                        opacity: 1,
+                                        width: '80%', // Adjust this value to change the button width
+                                        textAlign: 'center',
+                                        boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+                                      }}
+                                      onClick={handleAddToWatchlist}
+                                    >
+                                      Add to Watchlist ({selectedStocks.length})
                                     </div>
                                   )}
                                 </div>
@@ -928,7 +983,7 @@ function Home() {
           </div>
         </section>
         <section className="free-trial-button">
-          <button className="trial-button-container" onClick={handleStartTrialClick}>
+          <button className="trial-button-container" onClick={handleTrialClick}>
             <div className="started-30-days">Start 14 Days Free Trial</div>
           </button>
         </section>
@@ -1037,8 +1092,8 @@ function Home() {
                     <h1 className="h1" style={{ color: index % 2 === 0 ? "#bdc25d" : "#7994ff" }}>₹</h1>
                     <b className="diamond-value">
                       <span className="diamond-value-txt-container">
-                        <span>{plan.amount_in_rs}</span>
-                        <span className="span">.00 + 18% GST</span>
+                        <span>{index % 2 === 0 ? <s style={{color: 'red'}}>799</s> : <s style={{color: 'red'}}>7999</s>} {plan.amount_in_rs}</span>
+                        <span className="span">+ GST</span>
                       </span>
                     </b>
                   </div>
@@ -1170,21 +1225,16 @@ function Home() {
               <div className="refer-and-get-container">
                 <span>Refer and get a </span>
                 <span className="free-month">
-                  <span className="free-month1">FREE month</span>
+                  <span className="free-month1">FREE monthly</span>
                 </span>
                 <span>
                   <span className="free-month"> </span>
-                  <span>of Diamond Plan worth</span>
+                  <span>Plan</span>
                   <span className="span3"> </span>
-                </span>
-                <span className="free-month">
-                  <b className="b">₹</b>
-                  <span className="span5"> </span>
-                  <span className="free-month1">1799</span>
                 </span>
               </div>
               <button className="referral-button">
-                <div className="refer-now">Refer Now</div>
+                <div className="refer-now" onClick={handleReferClick}>Refer Now</div>
               </button>
             </div>
             <div className="referral-container-child" />
