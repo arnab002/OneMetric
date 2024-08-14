@@ -149,21 +149,21 @@ function Home() {
 
   const fetchUserDetails = async (userId: string) => {
     try {
-        const token = sessionStorage.getItem('authToken');
-        const response = await axios.post(
-            `${baseApiURL()}/fetchUserData`,
-            {
-                headers: {
-                    Authorization: `${token}`, // Passing the token in the Authorization header
-                },
-            }
-        );
-        return response.data.data;
+      const token = sessionStorage.getItem('authToken');
+      const response = await axios.post(
+        `${baseApiURL()}/fetchUserData`,
+        {
+          headers: {
+            Authorization: `${token}`, // Passing the token in the Authorization header
+          },
+        }
+      );
+      return response.data.data;
     } catch (error) {
-        console.error('Error fetching user details:', error);
-        return null;
+      console.error('Error fetching user details:', error);
+      return null;
     }
-};
+  };
 
 
   const handleStartNowClick = async (planId: string) => {
@@ -255,12 +255,74 @@ function Home() {
     }, 2000);
   };
 
-  const handleAddToWatchlist = () => {
-    // Store selected stocks in session storage (redundant, but ensures it's up to date)
-    sessionStorage.setItem('selectedStocks', JSON.stringify(selectedStocks));
-
-    // Redirect to login page
-    router.push('/login');
+  const handleAddToWatchlist = async () => {
+    if (!isLoggedIn) {
+      router.push('/login');
+      return;
+    }
+  
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      console.error('No token found in sessionStorage');
+      return;
+    }
+  
+    try {
+      // Initiate payment for free plan
+      const paymentResponse = await axios.post(`${baseApiURL()}/payment`, {
+        plan_id: '1',
+      }, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
+  
+      const { transaction_id } = paymentResponse.data.data;
+  
+      // Check payment status
+      const checkStatusResponse = await axios.post(`${baseApiURL()}/check-payment-status`, {
+        transaction_id: transaction_id,
+      }, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
+  
+      if (checkStatusResponse.data.success) {
+        // Payment successful, now add stocks to watchlist
+        const selectedStocks = JSON.parse(sessionStorage.getItem('selectedStocks') || '[]');
+  
+        for (const scrip_cd of selectedStocks) {
+          try {
+            await axios.post(`${baseApiURL()}/add-stocks-to-watchlist`, {
+              scrip_cd: scrip_cd,
+            }, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+          } catch (error) {
+            console.error(`Failed to add stock ${scrip_cd} to watchlist:`, error);
+          }
+        }
+  
+        alert('Stocks added to watchlist successfully!');
+        // Clear selected stocks from session storage
+        sessionStorage.removeItem('selectedStocks');
+        setSelectedStocks([]);
+        setShowWatchlistButton(false);
+  
+        // Optionally, you can use the additional data from the response
+        const { expire_date } = checkStatusResponse.data.data;
+        console.log(`Your plan will expire on: ${new Date(expire_date).toLocaleDateString()}`);
+  
+      } else {
+        alert('Payment verification failed. Please contact support.');
+      }
+    } catch (error) {
+      console.error('Error processing payment or adding stocks:', error);
+      alert('An error occurred. Please try again.');
+    }
   };
 
   // Load selected stocks from session storage on component mount
@@ -306,6 +368,8 @@ function Home() {
       setShowWatchlistButton(false);
     }
   };
+
+
 
   const handleTrialClick = () => {
     router.push(`/login`);
