@@ -1,18 +1,16 @@
 'use client';
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import "../../public/assets/otpSuccessful.css"
 
 function OTPSuccess() {
-    const router = useRouter();
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            router.push(`/`);
+            window.location.href = '/';
         }, 3500); // 3.5 seconds
 
         return () => clearTimeout(timer);
-    }, [router]);
+    }, []);
 
     return (
         <div>

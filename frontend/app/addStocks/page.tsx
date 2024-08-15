@@ -18,64 +18,116 @@ function AddStocks() {
     const [buttonStates, setButtonStates] = useState<{ [key: string]: ButtonState }>({});
     const [addedStocks, setAddedStocks] = useState<number[]>([]); // Track added stocks
     const [displayCount, setDisplayCount] = useState(30);
-    const [isPlanValid, setIsPlanValid] = useState(true);
-    const token = sessionStorage.getItem('authToken');
-    // if (!token) {
-    //     console.error('No token found in sessionStorage');
-    //     return;
-    // }
+    const [isPlanValid, setIsPlanValid] = useState<boolean>(false);
+    const [planStatus, setPlanStatus] = useState<string>('');
+    const [daysUntilExpiry, setDaysUntilExpiry] = useState<number>(0);
+    const [isPlanExpired, setIsPlanExpired] = useState<boolean>(false);
+    const [isTokenChecked, setIsTokenChecked] = useState(false);
+    const [token, setToken] = useState<string | null>(null);
+
+    useEffect(() => {
+        const checkToken = () => {
+            const storedToken = sessionStorage.getItem('authToken');
+            setToken(storedToken);
+            if (!storedToken) {
+                window.location.href = '/login';
+            } else {
+                setIsTokenChecked(true);
+            }
+        };
+
+        if (typeof window !== 'undefined') {
+            checkToken();
+        }
+    }, []);
+
+    useEffect(() => {
+        if (isTokenChecked && token) {
+            fetchStockData(selectedFilter);
+            checkPlanValidity();
+        }
+    }, [isTokenChecked, token, searchQuery, isSearching, selectedFilter]);
 
     const handleFilterChange = (filter: string) => {
         setSelectedFilter(filter);
+        fetchStockData(filter);
     };
 
-    useEffect(() => {
+    const fetchStockData = async (filter: string = 'all') => {
+        setLoading(true);
+        setNoDataFound(false);
 
-        const fetchStockData = async () => {
-            setLoading(true);
-            setNoDataFound(false);
-
-            try {
-                const endpoint = isSearching
-                    ? `${baseApiURL()}/search-stocks`
-                    : `${baseApiURL()}/stocks`;
-
-                const response = await axios.get(endpoint, {
-                    params: isSearching ? { query: searchQuery } : {},
-                });
-
-                const data = response.data.data || response.data;
-                setStockData(data);
-
-                if (data.length === 0) {
-                    setNoDataFound(true);
-                } else {
-                    setNoDataFound(false);
+        try {
+            let endpoint = `${baseApiURL()}/stocks`;
+            if (isSearching) {
+                endpoint = `${baseApiURL()}/search-stocks`;
+            } else {
+                switch (filter) {
+                    case 'bankNifty':
+                        endpoint = `${baseApiURL()}/banknifty`;
+                        break;
+                    case 'nifty50':
+                        endpoint = `${baseApiURL()}/nifty50`;
+                        break;
                 }
-            } catch (error) {
-                console.error('Error fetching stock data:', error);
-                setNoDataFound(true);
-            } finally {
-                setLoading(false);
             }
-        };
 
-        const checkPlanValidity = async () => {
-            try {
-                const response = await axios.post(`${baseApiURL()}/check-plan-validity`, {
+            const response = await axios.get(endpoint, {
+                params: isSearching ? { query: searchQuery } : {},
+            });
+
+            let data = response.data.data || response.data.data;
+
+            // Apply the filtration with type assertion
+            data = data.filter((stock: { stock_long_name: string }) => {
+                const regexPattern = /^[\dA-Z]+$/; // Match any string that consists only of digits and uppercase letters
+                return !regexPattern.test(stock.stock_long_name);
+            });
+
+            setStockData(data);
+
+            if (data.length === 0) {
+                setNoDataFound(true);
+            } else {
+                setNoDataFound(false);
+            }
+        } catch (error) {
+            console.error('Error fetching stock data:', error);
+            setNoDataFound(true);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const checkPlanValidity = async () => {
+        try {
+            const response = await axios.post(
+                `${baseApiURL()}/check-plan-validity`,
+                undefined,
+                {
                     headers: {
                         Authorization: `${token}`,
                     },
-                });
-                setIsPlanValid(response.data.success);
-            } catch (error) {
-                console.error('Error checking plan validity:', error);
-            }
-        };
+                }
+            );
+            setIsPlanValid(response.data.success);
+            setPlanStatus(response.data.status);
 
-        fetchStockData();
-        checkPlanValidity();
-    }, [searchQuery, isSearching]);
+            if (response.data.success && response.data.status === 'active') {
+                const expiryDate = new Date(response.data.data.expire_date);
+                const currentDate = new Date(response.data.data.current_date);
+                const timeDifference = expiryDate.getTime() - currentDate.getTime();
+                const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+                setDaysUntilExpiry(daysDifference);
+                setIsPlanExpired(daysDifference <= 0);
+            } else {
+                setIsPlanExpired(true);
+            }
+        } catch (error) {
+            console.error('Error checking plan validity:', error);
+            setIsPlanExpired(true);
+        }
+    };
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value);
@@ -152,13 +204,13 @@ function AddStocks() {
     const handleRemoveClick = async (isin_code: string, index: number) => {
         const selectedStock = stockData[index];
         const scrip_cd = selectedStock.scrip_cd;
-    
+
         // Set button state to 'trash' immediately
         setButtonStates((prevState) => ({
             ...prevState,
             [isin_code]: 'trash',
         }));
-    
+
         try {
             // Make the API call to delete the stock
             await axios.post(`${baseApiURL()}/delete-stock-from-watchlist`, {
@@ -168,10 +220,10 @@ function AddStocks() {
                     Authorization: `Bearer ${token}`, // Passing the token in the Authorization header
                 },
             });
-    
+
             // Show success message
             alert("Stock Deleted Successfully!!!");
-    
+
             // Reset the button state to 'plus' after a short delay
             setTimeout(() => {
                 setButtonStates((prevState) => ({
@@ -179,20 +231,24 @@ function AddStocks() {
                     [isin_code]: 'plus',
                 }));
             }, 1000);
-    
+
         } catch (error) {
             console.error('Error deleting stock:', error);
-            
+
             // If there's an error, revert the button state
             setButtonStates((prevState) => ({
                 ...prevState,
                 [isin_code]: 'edit',
             }));
-    
+
             // Show error message
             alert("Failed to delete stock. Please try again.");
         }
     };
+
+    if (!isTokenChecked) {
+        return null; // Render nothing until the token is checked
+    }
 
     return (
         <div>
@@ -263,10 +319,20 @@ function AddStocks() {
                     <div className="trial-info">
                         <div className="add-your-favourite-container">
                             <span>Add your favourite stocks to watch list and </span>
-                            {isPlanValid ? (
-                                <span className="enjoy-your-30">Enjoy your 30 days Free Trial</span>
+                            {isPlanValid && planStatus === 'active' && !isPlanExpired ? (
+                                <span className="plan-expiring">Your Plan is expiring in {daysUntilExpiry} days</span>
+                            ) : isPlanExpired ? (
+                                <>
+                                    <span className="plan-expired">Your Plan has expired</span>
+                                    <button
+                                        className="view-plans-button"
+                                        onClick={() => window.location.href = '/plans'}
+                                    >
+                                        View Plans
+                                    </button>
+                                </>
                             ) : (
-                                <span className="plan-expiring">Your Plan is Expiring</span>
+                                <span className="enjoy-your-30">Enjoy your 30 days Free Trial</span>
                             )}
                         </div>
                         <div className="no-card-information">
@@ -281,7 +347,7 @@ function AddStocks() {
                             >
                                 <div className="all-16">
                                     <b>All </b>
-                                    <span className="span">(16)</span>
+                                    {/* <span className="span">{stockData.length}</span> */}
                                 </div>
                             </div>
                             <div
@@ -290,7 +356,7 @@ function AddStocks() {
                             >
                                 <div className="bank-nifty-50-container">
                                     <span>Bank Nifty </span>
-                                    <span className="span1">(50)</span>
+                                    {/* <span className="span1">(50)</span> */}
                                     <span> </span>
                                 </div>
                             </div>
@@ -302,7 +368,7 @@ function AddStocks() {
                                     <span>Nifty 50</span>
                                     <span className="span1">
                                         <b className="b"> </b>
-                                        <span>(22)</span>
+                                        {/* <span>(22)</span> */}
                                     </span>
                                     <span>
                                         <span> </span>
@@ -324,7 +390,7 @@ function AddStocks() {
                                             </div>
                                         </div>
                                         <div className="adani-group-wrapper">
-                                            <div className="adani-group" style={{ color: 'white' }}>{stock.stock_long_name} ({stock.scrip_cd})</div>
+                                            <div className="adani-group" style={{ color: 'white' }}>{stock.stock_long_name}</div>
                                         </div>
                                         <div className="edit-delete-options-wrapper">
                                             {buttonStates[stock.isin_code] === 'plus' || !buttonStates[stock.isin_code] ? (
@@ -377,9 +443,69 @@ function AddStocks() {
                                     </div>
                                 ))
                             )}
-                            {!loading && stockData.length > displayCount && (
-                                <button onClick={showMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px" }}>Show More</button>
-                            )}
+                        </div>
+                        {!loading && stockData.length > displayCount && (
+                            <button onClick={showMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px" }}>Show More</button>
+                        )}
+                    </div>
+                    <div className="footer">
+                        <div className="footer-content">
+                            <img
+                                className="image-18-icon1"
+                                loading="lazy"
+                                alt=""
+                                src="./public/insights/image-18@2x.png"
+                            />
+                            <div className="main-inner">
+                                <div className="main-inner">
+                                    <b className="onemetric1">OneMetric</b>
+                                </div>
+                            </div>
+                            <div className="footer-social">
+                                <div className="rectangle-parent">
+                                    <div className="rectangle-div" />
+                                    <img
+                                        className="social-icon"
+                                        loading="lazy"
+                                        alt=""
+                                        src="./public/insights/vector.svg"
+                                    />
+                                </div>
+                                <img
+                                    className="vector-icon1"
+                                    loading="lazy"
+                                    alt=""
+                                    src="./public/insights/vector-1.svg"
+                                />
+                            </div>
+                        </div>
+                        <div className="footer-links">
+                            <div className="link-list">
+                                <img
+                                    className="link-icons"
+                                    loading="lazy"
+                                    alt=""
+                                    src="./public/insights/vector-172.svg"
+                                />
+                                <div className="link-items">
+                                    <div className="link-names">
+                                        <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us">About Us</a>
+                                        <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Contact Us</a>
+                                        <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">Refund Policy</a>
+                                    </div>
+                                    <div className="link-names1">
+                                        <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
+                                        <a href='/referral' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Referral Policy</a>
+                                        <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="faqs">FAQs</a>
+                                    </div>
+                                </div>
+                                <img
+                                    className="link-icons1"
+                                    loading="lazy"
+                                    alt=""
+                                    src="./public/insights/vector-172.svg"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>

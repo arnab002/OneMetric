@@ -22,7 +22,7 @@ function OTPSuccess() {
         setPaymentDetails({ transaction_id, order_id, payment_id });
 
         const timer = setTimeout(() => {
-            router.push(`/`);
+            window.location.href = '/';
         }, 10000); // 10 seconds (increased from 3.5 seconds to give more time to read)
 
         return () => clearTimeout(timer);

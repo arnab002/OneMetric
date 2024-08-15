@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
-import '../public/assets/index.css'
-import logo from "../public/public/home/image-18@2x.png";
+import '../../public/assets/index.css'
+import logo from "../../public/public/home/image-18@2x.png";
 import { Edit3, Plus, Trash, Check } from 'react-feather';
 import { User, LogOut } from 'react-feather';
-import statsData from '../public/json/stats.json';
+import statsData from '../../public/json/stats.json';
 
 interface RazorpayResponse {
   razorpay_payment_id: string;
@@ -27,7 +27,7 @@ type Stock = {
 
 type ButtonState = 'plus' | 'check' | 'edit' | 'trash';
 
-function Home() {
+function HomeMobile() {
   const [stats, setStats] = useState(statsData);
   const [stockData, setStockData] = useState<any[]>([]);
   const [bankniftyData, setBankNiftyData] = useState<any[]>([]);
@@ -303,7 +303,7 @@ function Home() {
 
   const handleAddToWatchlist = async () => {
     if (!isLoggedIn) {
-      window.location.href = '/login';
+      router.push('/login');
       return;
     }
 
@@ -357,7 +357,10 @@ function Home() {
         sessionStorage.removeItem('selectedStocks');
         setSelectedStocks([]);
         setShowWatchlistButton(false);
-        window.location.href = '/insights'
+
+        // Optionally, you can use the additional data from the response
+        const { expire_date } = checkStatusResponse.data.data;
+        console.log(`Your plan will expire on: ${new Date(expire_date).toLocaleDateString()}`);
 
       } else {
         alert('Payment verification failed. Please contact support.');
@@ -503,6 +506,7 @@ function Home() {
                               background: 'none',
                               border: 'none',
                               cursor: 'pointer',
+                              // padding: '-21px 6px',
                             }}
                           >
                             <LogOut size={16} style={{ marginRight: '5px' }} />
@@ -1483,4 +1487,4 @@ function Home() {
   )
 }
 
-export default Home
+export default HomeMobile

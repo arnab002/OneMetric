@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState, ChangeEvent, useRef } from 'react';
 import '../../public/assets/otpverify.css';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
 
@@ -9,39 +9,17 @@ const OTPVerify: React.FC = () => {
     const searchParams = useSearchParams();
     const mobile = searchParams.get('mobile');
     const country_code = searchParams.get('countryCode');
-    const router = useRouter();
     const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
     const [message, setMessage] = useState<string>('');
     const [resendDisabled, setResendDisabled] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
     const [isOtpInvalid, setIsOtpInvalid] = useState<boolean>(false);
     const [remainingTime, setRemainingTime] = useState<number>(60);
-    const otpGeneratedRef = useRef(false);
-
-    // useEffect(() => {
-    //     if (mobile && !otpGeneratedRef.current) {
-    //         // Generate OTP using the provided mobile number
-    //         otpGeneratedRef.current = true;
-    //         axios.post(`${baseApiURL()}/generate-otp`, { mobile })
-    //             .then(response => {
-    //                 setMessage('OTP has been sent to your mobile number.');
-    //             })
-    //             .catch(error => {
-    //                 setMessage('Error sending OTP.');
-    //                 console.error('Error sending OTP:', error);
-    //             });
-
-    //         // Enable the resend button after 30 seconds
-    //         const timer = setTimeout(() => {
-    //             setResendDisabled(false);
-    //         }, 30000);
-
-    //         return () => clearTimeout(timer);
-    //     }
-    // }, [mobile]);
+    const [isVerifying, setIsVerifying] = useState<boolean>(false);
 
     useEffect(() => {
         if (otp.join('').length === 6) {
+            setIsVerifying(true);
             const formattedCountryCode = (country_code ?? '91').trim();
             const finalCountryCode = formattedCountryCode.startsWith('+') ? formattedCountryCode : `+${formattedCountryCode}`;
 
@@ -52,16 +30,19 @@ const OTPVerify: React.FC = () => {
                     const redirectUrl = response.data.redirect;
                     sessionStorage.setItem('authToken', token);
                     console.log('Token stored in session storage');
-                    router.push(`/successOtp?mobile=${mobile}&redirectUrl=${redirectUrl}`);
+                    window.location.href = `/successOtp?mobile=${mobile}&redirectUrl=${redirectUrl}`
                 })
                 .catch(error => {
                     setError('Invalid OTP. Please Try again.');
                     setIsOtpInvalid(true);
                     setOtp(['', '', '', '', '', '']);
                     (document.getElementById(`otp-0`) as HTMLInputElement)?.focus();
+                })
+                .finally(() => {
+                    setIsVerifying(false);
                 });
         }
-    }, [otp, mobile, country_code, router]);
+    }, [otp, mobile, country_code]);
 
     useEffect(() => {
         let timer: NodeJS.Timeout;
@@ -99,9 +80,13 @@ const OTPVerify: React.FC = () => {
         setResendDisabled(true);
         setRemainingTime(60);
 
-        axios.post(`${baseApiURL()}/generate-otp`, { mobile })
+        const formattedCountryCode = (country_code ?? '91').trim();
+        const finalCountryCode = formattedCountryCode.startsWith('+') ? formattedCountryCode : `+${formattedCountryCode}`;
+
+        axios.post(`${baseApiURL()}/login`, { mobile, country_code: finalCountryCode })
             .then(response => {
                 setMessage('OTP has been resent to your mobile number.');
+                console.log(`OTP for ${mobile} is: ${response.data.otp}`)
             })
             .catch(error => {
                 setMessage('Error resending OTP.');
@@ -231,7 +216,13 @@ const OTPVerify: React.FC = () => {
                                         />
                                     ))}
                                 </div>
-                                {isOtpInvalid && (
+                                {isVerifying && (
+                                    <div className="verifying-container">
+                                        <div className="spinner"></div>
+                                        <p style={{color: 'white'}}>OTP verifying</p>
+                                    </div>
+                                )}
+                                {isOtpInvalid && !isVerifying && (
                                     <p className="error-message">Invalid OTP. Please Try again.</p>
                                 )}
                             </div>

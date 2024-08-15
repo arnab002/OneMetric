@@ -2,18 +2,16 @@
 import React, { useState } from 'react'
 import '../../public/assets/register.css'
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
 import baseApiURL from '@/baseUrl';
 
 function Registration() {
-    const router = useRouter();
     const token = sessionStorage.getItem('authToken');
     if (!token) {
         console.error('No token found in sessionStorage');
         return;
     }
 
-    const [fullname, setFullname] = useState('');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [pincode, setPinCode] = useState('');
     const [billingAddress, setBillingAddress] = useState('');
@@ -22,17 +20,17 @@ function Registration() {
         event.preventDefault();
         try {
             const response = await axios.post(`${baseApiURL()}/userRegistration`, {
-                fullname,
+                name,
                 email,
                 pincode,
-                billing_address: billingAddress,
+                address: billingAddress,
             },
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`, // Passing the token in the Authorization header
+                        Authorization: `${token}`, // Passing the token in the Authorization header
                     },
                 });
-            router.push(`/successRegister`);
+            window.location.href = '/successRegister'
         } catch (error) {
             console.error('Error creating user:', error);
         }
@@ -103,9 +101,10 @@ function Registration() {
                                                         className="sreejesh-parambath"
                                                         placeholder="John Smith"
                                                         type="text"
-                                                        value={fullname}
-                                                        onChange={(e) => setFullname(e.target.value)}
+                                                        value={name}
+                                                        onChange={(e) => setName(e.target.value)}
                                                         autoFocus
+                                                        required
                                                     />
                                                 </div>
                                             </div>
@@ -121,24 +120,11 @@ function Registration() {
                                                         value={email}
                                                         onChange={(e) => setEmail(e.target.value)}
                                                         autoFocus
+                                                        required
                                                     />
                                                 </div>
                                             </div>
                                         </div>
-                                        {/* <div className="input-labels">
-                                            <div className="email-id">Country Code</div>
-                                            <div className="input-boxes">
-                                                <div className="nested-input-boxes">
-                                                    <input
-                                                        className="sreejesh-parambath"
-                                                        placeholder='IN'
-                                                        type="text"
-                                                        value={countrycode}
-                                                        onChange={(e) => setCountryCode(e.target.value)}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div> */}
                                         <div className="input-labels">
                                             <div className="email-id">Pin Code</div>
                                             <div className="input-boxes">
@@ -150,6 +136,7 @@ function Registration() {
                                                         inputMode='numeric'
                                                         value={pincode}
                                                         onChange={(e) => setPinCode(e.target.value)}
+                                                        required
                                                     />
                                                 </div>
                                             </div>

@@ -1,10 +1,9 @@
 'use client';
 import React, { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import "../../public/assets/otpSuccessful.css"
 
 function OTPSuccess() {
-    const router = useRouter();
     const searchParams = useSearchParams();
     const mobile = searchParams.get('mobile');
     const redirectUrl = searchParams.get('redirectUrl');
@@ -12,12 +11,12 @@ function OTPSuccess() {
     useEffect(() => {
         const timer = setTimeout(() => {
             if (redirectUrl) {
-                router.push(`${redirectUrl}`);
+                window.location.href= `${redirectUrl}`
             }
         }, 2000); // 3 seconds
 
         return () => clearTimeout(timer);
-    }, [mobile, redirectUrl, router]);
+    }, [mobile, redirectUrl]);
 
     return (
         <div>

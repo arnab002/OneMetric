@@ -507,6 +507,33 @@
   margin-top: 10px;
 }
 
+.verifying-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #005A1F;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.verifying-container p {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
 @media only screen and (min-width: 390px) and (max-width: 844px){
   .otp{
     height: 100vh;

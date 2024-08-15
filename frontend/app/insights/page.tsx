@@ -1,13 +1,11 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Edit3, Trash } from 'react-feather';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
 import '../../public/assets/insights.css'
 
 function Insights() {
-    const router = useRouter();
     const [newsData, setNewsData] = useState<Array<{ [key: string]: any }>>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const postsPerPage = 4;
@@ -22,55 +20,88 @@ function Insights() {
     const [selectedFilter, setSelectedFilter] = useState('all');
     const [buttonStates, setButtonStates] = useState<{ [key: string]: boolean }>({});
     const [displayCount, setDisplayCount] = useState(30);
-    const token = sessionStorage.getItem('authToken');
+    const [isTokenChecked, setIsTokenChecked] = useState(false);
+    const [token, setToken] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!token) {
-            router.push('/login');
+        const checkToken = () => {
+            const storedToken = sessionStorage.getItem('authToken');
+            setToken(storedToken);
+            if (!storedToken) {
+                window.location.href = '/login';
+            } else {
+                setIsTokenChecked(true);
+            }
+        };
+
+        if (typeof window !== 'undefined') {
+            checkToken();
         }
     }, []);
 
-    const handleClick = () => {
-        router.push(`/addStocks`);
-    };
+    useEffect(() => {
+        if (isTokenChecked) {
+            fetchStockData();
+            fetchNewsData();
+        }
+    }, [isTokenChecked, searchQuery, isSearching]);
 
     const showMore = () => {
         setDisplayCount(prevCount => prevCount + 30);
     };
 
-    useEffect(() => {
-        const fetchStockData = async () => {
-            setLoading(true);
-            setNoDataFound(false);
+    const fetchStockData = async () => {
+        setLoading(true);
+        setNoDataFound(false);
 
-            try {
-                const endpoint = isSearching
-                    ? `${baseApiURL()}/search-stocks`
-                    : `${baseApiURL()}/stocks`;
-            
-                const response = await axios.get(endpoint, {
-                    params: isSearching ? { query: searchQuery } : {},
-                    headers: !isSearching ? { Authorization: `${token}` } : {}, 
-                });
-            
-                const data = response.data.data || response.data.data;
-                setStockData(data);
-            
-                if (data.length === 0) {
-                    setNoDataFound(true);
-                } else {
-                    setNoDataFound(false);
-                }
-            } catch (error) {
-                console.error('Error fetching stock data:', error);
+        try {
+            const endpoint = isSearching
+                ? `${baseApiURL()}/search-stocks`
+                : `${baseApiURL()}/stocks`;
+        
+            const response = await axios.get(endpoint, {
+                params: isSearching ? { query: searchQuery } : {},
+                headers: !isSearching ? { Authorization: `${token}` } : {}, 
+            });
+        
+            const data = response.data.data || response.data.data;
+            setStockData(data);
+        
+            if (data.length === 0) {
                 setNoDataFound(true);
-            } finally {
-                setLoading(false);
-            }            
-        };
+            } else {
+                setNoDataFound(false);
+            }
+        } catch (error) {
+            console.error('Error fetching stock data:', error);
+            setNoDataFound(true);
+        } finally {
+            setLoading(false);
+        }            
+    };
 
-        fetchStockData();
-    }, [searchQuery, isSearching]);
+    const fetchNewsData = async () => {
+        setNewsLoading(true);
+        setNoNewsDataFound(false);
+
+        try {
+            const response = await axios.get(`${baseApiURL()}/news`);
+            const result = await response.data.data;
+            setNewsData(result);
+
+            if (result.length === 0) {
+                setNoNewsDataFound(true);
+            } else {
+                setNoNewsDataFound(false);
+            }
+        } catch (error) {
+            console.error('Error fetching the news data:', error);
+            setNoNewsDataFound(true);
+
+        } finally {
+            setNewsLoading(false);
+        }
+    };
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value);
@@ -83,41 +114,13 @@ function Insights() {
         setSearchQuery('');
     };
 
-    useEffect(() => {
-        // Fetch data from the API
-        const fetchNewsData = async () => {
-            setNewsLoading(true);
-            setNoNewsDataFound(false);
-
-            try {
-                const response = await axios.get(`${baseApiURL()}/news`);
-                const result = await response.data.data;
-                setNewsData(result);
-
-                if (result.length === 0) {
-                    setNoNewsDataFound(true);
-                } else {
-                    setNoNewsDataFound(false);
-                }
-            } catch (error) {
-                console.error('Error fetching the news data:', error);
-                setNoNewsDataFound(true);
-
-            } finally {
-                setNewsLoading(false);
-            }
-        };
-
-        fetchNewsData();
-    }, []);
-
     // Calculate pagination
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
     const currentPosts = newsData.slice(indexOfFirstPost, indexOfLastPost);
 
     // Handle pagination
-    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+    // const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
     const toggleDropdown = () => {
         setDropdownVisible(!dropdownVisible);
@@ -141,6 +144,10 @@ function Insights() {
             [isin_code]: false,
         }));
     };
+
+    if (!isTokenChecked) {
+        return null; // Render nothing until the token is checked
+    }
 
     return (
         <div>
@@ -237,7 +244,7 @@ function Insights() {
                         <div className="watchlist-header">
                             <div className="alert-list-items">
                                 <h3 className="my-stock-watchlist">My Stock watchlist</h3>
-                                <button className="add-icon-parent" id="frameButton" onClick={handleClick}>
+                                <button className="add-icon-parent" id="frameButton" onClick={() => window.location.href = '/addStocks'}>
                                     <div className="add-icon">
                                         <img
                                             className="add-icon-child"
@@ -415,26 +422,6 @@ function Insights() {
                 <div className="good-evening">Good Evening</div>
                 <div className="footer">
                     <div className="footer-content">
-                        {/* <div className="frame-parent">
-                            <img
-                                className="frame-child"
-                                alt=""
-                                src="./public/insights/group-1000000964.svg"
-                            />
-                            <img
-                                className="frame-item"
-                                alt=""
-                                src="./public/insights/group-1000000966.svg"
-                            />
-                        </div>
-                        <div className="frame-group">
-                            <img
-                                className="frame-inner"
-                                alt=""
-                                src="./public/insights/group-1000001000.svg"
-                            />
-                            <div className="add-stocks">Add Stocks</div>
-                        </div> */}
                         <img
                             className="image-18-icon1"
                             loading="lazy"
