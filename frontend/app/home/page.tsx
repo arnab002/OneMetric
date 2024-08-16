@@ -1,8 +1,419 @@
-import React from 'react'
+'use client'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Edit3, Plus, Trash, Check } from 'react-feather';
+import baseApiURL from '@/baseUrl';
+import logo from "../../public/public/home/image-18@2x.png";
 import '../../public/assets/home-global.css';
 import '../../public/assets/home-desktop.css';
+import statsData from '../../public/json/stats.json';
+
+interface RazorpayResponse {
+    razorpay_payment_id: string;
+    razorpay_order_id: string;
+    razorpay_signature: string;
+}
+
+interface Plan {
+    id: number;
+}
+
+type ButtonState = 'plus' | 'check' | 'edit' | 'trash';
 
 function HomeDesktop() {
+    const [activeTab, setActiveTab] = useState<string>('All');
+    const [planData, setPlanData] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [stockData, setStockData] = useState<any[]>([]);
+    const [bankniftyData, setBankNiftyData] = useState<any[]>([]);
+    const [niftyData, setNiftyData] = useState<any[]>([]);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [razorpayLoaded, setRazorpayLoaded] = useState<boolean>(false);
+    const [buttonStates, setButtonStates] = useState<{ [key: string]: ButtonState }>({});
+    const [showWatchlistButton, setShowWatchlistButton] = useState(false);
+    const [selectedStocks, setSelectedStocks] = useState<string[]>([]);
+    const [filteredStockData, setFilteredStockData] = useState<any[]>([]);
+    const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+    const [faqData, setFaqData] = useState([
+        {
+            question: "What is OneMetric and what does it do?",
+            answer: "OneMetric is a platform that delivers personalized stock news, insights, and charts directly to your WhatsApp.",
+            isOpen: true
+        },
+        {
+            question: "Is OneMetric an app or does it work on WhatsApp?",
+            answer: "OneMetric works directly on WhatsApp, so you don't need to download any additional app.",
+            isOpen: false
+        },
+        {
+            question: "How much does OneMetric cost? OneMetric offers two plans:",
+            answer: "OneMetric offers a Gold plan and a Diamond plan. Please check our pricing section for detailed information.",
+            isOpen: false
+        }
+    ]);
+
+    const toggleFAQ = (index: number) => {
+        setOpenFaqIndex(openFaqIndex === index ? null : index);
+    };
+
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.async = true;
+        script.onload = () => setRazorpayLoaded(true); // Set state when script is loaded
+        script.onerror = () => console.error('Failed to load Razorpay script');
+        document.body.appendChild(script);
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
+
+    useEffect(() => {
+        const token = sessionStorage.getItem('authToken');
+        setIsLoggedIn(!!token);
+    }, []);
+
+    const handleTabSwitch = (tab: string) => {
+        setActiveTab(tab);
+        setLoading(true);
+
+        switch (tab) {
+            case 'All':
+                setFilteredStockData(stockData);
+                setLoading(false);
+                break;
+            case 'Bank Nifty':
+                if (bankniftyData.length === 0) {
+                    fetchBankNiftyStocks();
+                } else {
+                    setFilteredStockData(bankniftyData);
+                    setLoading(false);
+                }
+                break;
+            case 'Nifty 50':
+                if (niftyData.length === 0) {
+                    fetchNifty50Stocks();
+                } else {
+                    setFilteredStockData(niftyData);
+                    setLoading(false);
+                }
+                break;
+        }
+    };
+
+    useEffect(() => {
+        const fetchStockData = async () => {
+            try {
+                const response = await axios.get(`${baseApiURL()}/stocks`);
+                const data = (response.data.data as { stock_long_name: string }[])
+                    .filter(stock => {
+                        // Remove entries with patterns like "182D050924" or other unwanted formats
+                        const regexPattern = /^[\dA-Z]+$/; // Match any string that consists only of digits and uppercase letters
+                        return !regexPattern.test(stock.stock_long_name);
+                    })
+                    .slice(0, 10)
+                    .sort((a, b) => a.stock_long_name.localeCompare(b.stock_long_name));
+
+                setStockData(data);
+                setFilteredStockData(data); // Set initial filtered data
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching stock data:', error);
+                setLoading(false);
+            }
+        };
+
+        fetchStockData();
+    }, []);
+
+    const fetchBankNiftyStocks = async () => {
+        try {
+            const response = await axios.get(`${baseApiURL()}/banknifty`);
+            const data = response.data.data.slice(0, 10);
+            setBankNiftyData(data);
+            setFilteredStockData(data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching Bank Nifty stock data:', error);
+            setLoading(false);
+        }
+    };
+
+    const fetchNifty50Stocks = async () => {
+        try {
+            const response = await axios.get(`${baseApiURL()}/nifty50`);
+            const data = response.data.data.slice(0, 10);
+            setNiftyData(data);
+            setFilteredStockData(data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching Nifty 50 stock data:', error);
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        const fetchPlanData = async () => {
+            try {
+                const response = await axios.get<{ data: Plan[] }>(`${baseApiURL()}/plans`);
+                const filteredPlans = response.data.data.filter((plan: Plan) => ![1].includes(plan.id));
+                setPlanData(filteredPlans);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching plan data:', error);
+                setLoading(false);
+            }
+        };
+
+        fetchPlanData();
+    }, []);
+
+    useEffect(() => {
+        const storedStocks = sessionStorage.getItem('selectedStocks');
+        if (storedStocks) {
+            const parsedStocks = JSON.parse(storedStocks);
+            setSelectedStocks(parsedStocks);
+            setShowWatchlistButton(parsedStocks.length > 0);
+
+            const initialButtonStates: { [key: string]: ButtonState } = {};
+            parsedStocks.forEach((scrip_cd: string) => {
+                initialButtonStates[scrip_cd] = 'edit';
+            });
+            setButtonStates(initialButtonStates);
+        }
+    }, []);
+
+    useEffect(() => {
+        const checkPlanValidity = async () => {
+            const token = sessionStorage.getItem('authToken');
+
+            if (token) {
+                try {
+                    const response = await axios.post(`${baseApiURL()}/check-plan-validity`,
+                        undefined,
+                        {
+                            headers: {
+                                Authorization: `${token}`,
+                            },
+                        });
+
+                    if (response.data.success && response.data.status === 'active') {
+                        window.location.href = '/insights';
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Error checking plan validity:', error);
+                }
+            }
+
+            setLoading(false);
+        };
+
+        checkPlanValidity();
+    }, []);
+
+    const handlePlusClick = (scrip_cd: string) => {
+        setButtonStates((prevState) => ({
+            ...prevState,
+            [scrip_cd]: 'check',
+        }));
+        setSelectedStocks((prevSelected) => {
+            const updatedStocks = [...prevSelected, scrip_cd];
+            setShowWatchlistButton(updatedStocks.length > 0);
+            // Store selected stocks in session storage
+            sessionStorage.setItem('selectedStocks', JSON.stringify(updatedStocks));
+            return updatedStocks;
+        });
+
+        setTimeout(() => {
+            setButtonStates((prevState) => ({
+                ...prevState,
+                [scrip_cd]: 'edit',
+            }));
+        }, 2000);
+    };
+
+    const handleAddToWatchlist = async () => {
+        if (!isLoggedIn) {
+            window.location.href = '/login';
+            return;
+        }
+
+        const token = sessionStorage.getItem('authToken');
+        if (!token) {
+            console.error('No token found in sessionStorage');
+            return;
+        }
+
+        try {
+            // Initiate payment for free plan
+            const paymentResponse = await axios.post(`${baseApiURL()}/payment`, {
+                plan_id: '1',
+            }, {
+                headers: {
+                    Authorization: `${token}`,
+                },
+            });
+
+            const { transaction_id } = paymentResponse.data.data;
+
+            // Check payment status
+            const checkStatusResponse = await axios.post(`${baseApiURL()}/check-payment-status`, {
+                transaction_id: transaction_id,
+            }, {
+                headers: {
+                    Authorization: `${token}`,
+                },
+            });
+
+            if (checkStatusResponse.data.success) {
+                // Payment successful, now add stocks to watchlist
+                const selectedStocks = JSON.parse(sessionStorage.getItem('selectedStocks') || '[]');
+
+                for (const scrip_cd of selectedStocks) {
+                    try {
+                        await axios.post(`${baseApiURL()}/add-stock-to-watchlist`, {
+                            scrip_cd: scrip_cd,
+                        }, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        });
+                    } catch (error) {
+                        console.error(`Failed to add stock ${scrip_cd} to watchlist:`, error);
+                    }
+                }
+
+                alert('Stocks added to watchlist successfully!');
+                window.location.href = '/insights'
+                // Clear selected stocks from session storage
+                sessionStorage.removeItem('selectedStocks');
+                setSelectedStocks([]);
+                setShowWatchlistButton(false);
+
+            } else {
+                alert('Payment verification failed. Please contact support.');
+            }
+        } catch (error) {
+            console.error('Error processing payment or adding stocks:', error);
+            alert('An error occurred. Please try again.');
+        }
+    };
+
+    const handleEditClick = (scrip_cd: string) => {
+        setButtonStates((prevState) => ({
+            ...prevState,
+            [scrip_cd]: 'trash',
+        }));
+    };
+
+    const handleRemoveClick = (scrip_cd: string) => {
+        setButtonStates((prevState) => ({
+            ...prevState,
+            [scrip_cd]: 'plus',
+        }));
+
+        setSelectedStocks((prevSelected) => {
+            const updatedStocks = prevSelected.filter((stock) => stock !== scrip_cd);
+            sessionStorage.setItem('selectedStocks', JSON.stringify(updatedStocks));
+            setShowWatchlistButton(updatedStocks.length > 0);
+            return updatedStocks;
+        });
+    };
+
+    const fetchUserDetails = async (userId: string) => {
+        try {
+            const token = sessionStorage.getItem('authToken');
+            const response = await axios.post(
+                `${baseApiURL()}/fetchUserData`,
+                {
+                    headers: {
+                        Authorization: `${token}`, // Passing the token in the Authorization header
+                    },
+                }
+            );
+            return response.data.data;
+        } catch (error) {
+            console.error('Error fetching user details:', error);
+            return null;
+        }
+    };
+
+
+    const handleStartNowClick = async (planId: string) => {
+        if (!razorpayLoaded) {
+            console.error('Razorpay script not loaded');
+            return;
+        }
+
+        const token = sessionStorage.getItem('authToken');
+        if (!token) {
+            console.error('No token found in sessionStorage');
+            return;
+        }
+
+        try {
+            const response = await axios.post(`${baseApiURL()}/payment`, {
+                plan_id: planId,
+            },
+                {
+                    headers: {
+                        Authorization: `${token}`, // Passing the token in the Authorization header
+                    },
+                }
+            );
+
+            const { transaction_id, payment_order_id, user_id, plan_id, amount, status } = response.data.data;
+
+            if (status === 'pending') {
+
+                const userDetails = await fetchUserDetails(user_id);
+
+                if (!userDetails) {
+                    console.error('Failed to fetch user details');
+                    return;
+                }
+                // Redirect to Razorpay payment page
+                const options = {
+                    key: process.env.RAZORPAY_KEY_ID, // Replace with your Razorpay key ID
+                    amount: amount * 100, // Amount in paisa (multiply by 100 to convert INR to paisa)
+                    currency: 'INR',
+                    name: 'OneMetric',
+                    description: `Payment for ${plan_id}`,
+                    image: logo,
+                    order_id: payment_order_id,
+                    handler: function (response: RazorpayResponse) {
+                        const successUrl = `/successPayment?order_id=${response.razorpay_order_id}&payment_id=${response.razorpay_payment_id}&transaction_id=${transaction_id}`;
+                        window.location.href = successUrl;
+                    },
+                    prefill: {
+                        name: userDetails.name,
+                        email: userDetails.email,
+                        contact: userDetails.mobile,
+                    },
+                    notes: {
+                        transaction_id: transaction_id,
+                        user_id: user_id,
+                    },
+                    theme: {
+                        color: '#F37254',
+                    },
+                };
+
+                const rzp = new (window as any).Razorpay(options);
+                rzp.open();
+            } else {
+                console.error('Payment status is not created');
+            }
+        } catch (error) {
+            console.error('Error creating payment:', error);
+        }
+    };
+
+    if (loading) {
+        return null;
+    }
+
     return (
         <div>
             <div className="homepage">
@@ -11,7 +422,7 @@ function HomeDesktop() {
                         <div className="button-icon-wrapper">
                             <img className="button-icon" alt="" src="./public/home-desktop/vector-3.svg" />
                         </div>
-                        <div className="started-30-days">Started 30 Days Free Trial</div>
+                        <a className="started-30-days" href='/login' style={{ textDecoration: 'none' }}>Started 30 Days Free Trial</a>
                     </button>
                     <div className="frame-parent">
                         <img className="frame-child" alt="" src="./public/home-desktop/group-1000001019.svg" />
@@ -19,7 +430,7 @@ function HomeDesktop() {
                             <div className="news-sent">
                                 <p className="p">
                                     <b>
-                                        <span>600+</span>
+                                        <span>{statsData.newsSent}+</span>
                                     </b>
                                 </p>
                                 <p className="news-sent1">
@@ -197,7 +608,7 @@ function HomeDesktop() {
                             <div className="subscribed">
                                 <p className="p">
                                     <b>
-                                        <span>1200+</span>
+                                        <span>{statsData.subscribedUsers}+</span>
                                     </b>
                                 </p>
                                 <p className="news-sent1">
@@ -233,7 +644,7 @@ function HomeDesktop() {
                             </div>
                         </div>
                         <button className="sign-in-button-container">
-                            <a className="sign-in">Sign In</a>
+                            <a className="sign-in" href='/login'>Sign In</a>
                         </button>
                         <div className="frame-parent8">
                             <img
@@ -262,20 +673,17 @@ function HomeDesktop() {
                             </div>
                         </div>
                         <div className="how-are-you-feeling-today-parent">
-                            <div className="how-are-you-feeling-today">
+                            <div className={`how-are-you-feeling-today ${activeTab === 'All' ? 'active' : ''}`}
+                                onClick={() => handleTabSwitch('All')}>
                                 <b className="all">All</b>
                             </div>
-                            <div className="circle">
-                                <div className="all-nifty-50">All Nifty 50</div>
-                            </div>
-                            <div className="bank-nifty-wrapper">
+                            <div className={`bank-nifty-wrapper ${activeTab === 'Bank Nifty' ? 'active' : ''}`}
+                                onClick={() => handleTabSwitch('Bank Nifty')}>
                                 <div className="bank-nifty">Bank Nifty</div>
                             </div>
-                            <div className="post">
-                                <a className="all-banks">All Banks</a>
-                            </div>
-                            <div className="market-indices">
-                                <div className="psus">PSUs</div>
+                            <div className={`circle ${activeTab === 'Nifty 50' ? 'active' : ''}`}
+                                onClick={() => handleTabSwitch('Nifty 50')}>
+                                <div className="all-nifty-50">Nifty 50</div>
                             </div>
                         </div>
                         <div className="chat-bubble">
@@ -286,430 +694,101 @@ function HomeDesktop() {
                                     </div>
                                 </div>
                                 <div className="desktop-stocks">
-                                    <div className="adani-group-wrapper">
-                                        <div className="adani-group">ABB India Limited (Abb)</div>
-                                    </div>
-                                    <div className="alerts-container">
-                                        <div className="alerts">45 Alerts</div>
-                                    </div>
-                                </div>
-                                <div className="edit-delete-container-wrapper">
-                                    <div className="edit-delete-container">
-                                        <div className="edit-delet">
-                                            <img
-                                                className="edit-icon"
-                                                loading="lazy"
-                                                alt=""
-                                                src="./public/home-desktop/edit.svg"
-                                            />
-                                            <img
-                                                className="delete-icon"
-                                                loading="lazy"
-                                                alt=""
-                                                src="./public/home-desktop/delete.svg"
-                                            />
-                                            <div className="delete">
-                                                <img
-                                                    className="edit-2-icon"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2.svg"
-                                                />
+                                    <div className="adani-group" style={{ position: 'relative', paddingBottom: '20px' }}>
+                                        {loading ? (
+                                            'Loading...'
+                                        ) : (
+                                            filteredStockData.map((stock) => (
+                                                <div
+                                                    key={stock.scrip_cd}
+                                                    style={{
+                                                        backgroundColor: selectedStocks.includes(stock.scrip_cd) ? '#1E2128' : '#171923',
+                                                        padding: '10px',
+                                                        marginBottom: '10px',
+                                                        borderRadius: '8px',
+                                                        display: 'flex',
+                                                        justifyContent: 'space-between',
+                                                        alignItems: 'center',
+                                                        transition: 'background-color 0.3s',
+                                                    }}
+                                                >
+                                                    <span>{stock.stock_long_name}</span>
+
+                                                    {buttonStates[stock.scrip_cd] === 'plus' || !buttonStates[stock.scrip_cd] ? (
+                                                        <Plus
+                                                            onClick={() => handlePlusClick(stock.scrip_cd)}
+                                                            style={{ cursor: 'pointer' }}
+                                                        />
+                                                    ) : null}
+
+                                                    {buttonStates[stock.scrip_cd] === 'check' && (
+                                                        <Check
+                                                            style={{
+                                                                transition: 'opacity 2s',
+                                                                opacity: 1,
+                                                                backgroundColor: '#00A87E',
+                                                                color: 'white',
+                                                                borderRadius: '50%',
+                                                                padding: '1%'
+                                                            }}
+                                                        />
+                                                    )}
+
+                                                    {buttonStates[stock.scrip_cd] === 'edit' && (
+                                                        <Edit3
+                                                            onClick={() => handleEditClick(stock.scrip_cd)}
+                                                            style={{
+                                                                transition: 'opacity 2s',
+                                                                opacity: 1,
+                                                                cursor: 'pointer',
+                                                            }}
+                                                        />
+                                                    )}
+
+                                                    {buttonStates[stock.scrip_cd] === 'trash' && (
+                                                        <div
+                                                            onClick={() => handleRemoveClick(stock.scrip_cd)}
+                                                            style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                backgroundColor: 'red',
+                                                                padding: '10px',
+                                                                transition: 'opacity 2s',
+                                                                opacity: 1,
+                                                                cursor: 'pointer',
+                                                            }}
+                                                        >
+                                                            <Trash style={{ color: 'white' }} />
+                                                            <span style={{ marginLeft: '4px', marginTop: '4px' }}>Remove</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))
+                                        )}
+                                        {showWatchlistButton && (
+                                            <div
+                                                style={{
+                                                    position: 'fixed',
+                                                    bottom: '10px',
+                                                    left: '50%',
+                                                    transform: 'translateX(-50%)',
+                                                    backgroundColor: '#00A87E',
+                                                    color: 'white',
+                                                    padding: '10px 20px',
+                                                    borderRadius: '5px',
+                                                    cursor: 'pointer',
+                                                    zIndex: 1000,
+                                                    transition: 'opacity 0.3s',
+                                                    opacity: 1,
+                                                    width: '40%', // Adjust this value to change the button width
+                                                    textAlign: 'center',
+                                                    boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+                                                }}
+                                                onClick={handleAddToWatchlist}
+                                            >
+                                                Add to Watchlist ({selectedStocks.length})
                                             </div>
-                                            <div className="delete1">
-                                                <img
-                                                    className="edit-2-icon1"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2-1.svg"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="desktop-select-stocks-home">
-                                <div className="desktop-select-stocks-home-inner">
-                                    <div className="vector-container">
-                                        <img className="frame-child45" alt="" />
-                                    </div>
-                                </div>
-                                <div className="desktop-stocks">
-                                    <div className="adani-group-wrapper">
-                                        <div className="adani-group1">
-                                            Adani Energy Solutions (Adanisolen)
-                                        </div>
-                                    </div>
-                                    <div className="alerts-container">
-                                        <div className="alerts">34 Alerts</div>
-                                    </div>
-                                </div>
-                                <div className="edit-delete-container-wrapper">
-                                    <div className="edit-delete-container">
-                                        <div className="edit-delet">
-                                            <img
-                                                className="edit-icon"
-                                                loading="lazy"
-                                                alt=""
-                                                src="./public/home-desktop/edit.svg"
-                                            />
-                                            <img
-                                                className="delete-icon"
-                                                loading="lazy"
-                                                alt=""
-                                                src="./public/home-desktop/delete.svg"
-                                            />
-                                            <div className="delete">
-                                                <img
-                                                    className="edit-2-icon"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2.svg"
-                                                />
-                                            </div>
-                                            <div className="delete1">
-                                                <img
-                                                    className="edit-2-icon1"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2-1.svg"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="desktop-select-stocks-home">
-                                <div className="desktop-select-stocks-home-inner">
-                                    <div className="vector-container">
-                                        <img className="frame-child45" alt="" />
-                                    </div>
-                                </div>
-                                <div className="desktop-stocks">
-                                    <div className="adani-group-frame">
-                                        <div className="adani-group2">
-                                            Adani Enterprises Ltd (Adanigreen)
-                                        </div>
-                                    </div>
-                                    <div className="alerts-container">
-                                        <div className="alerts2">32 Alerts</div>
-                                    </div>
-                                </div>
-                                <div className="edit-delete-container-wrapper">
-                                    <div className="edit-delete-container">
-                                        <div className="edit-delet">
-                                            <img
-                                                className="edit-icon"
-                                                loading="lazy"
-                                                alt=""
-                                                src="./public/home-desktop/edit.svg"
-                                            />
-                                            <img className="delete-icon" alt="" src="./public/home-desktop/delete.svg" />
-                                            <div className="delete">
-                                                <img
-                                                    className="edit-2-icon"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2.svg"
-                                                />
-                                            </div>
-                                            <div className="delete1">
-                                                <img
-                                                    className="edit-2-icon1"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2-1.svg"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="desktop-select-stocks-home">
-                                <div className="desktop-select-stocks-home-inner">
-                                    <div className="vector-container">
-                                        <img className="frame-child45" alt="" />
-                                    </div>
-                                </div>
-                                <div className="desktop-stocks">
-                                    <div className="adani-group-frame">
-                                        <div className="adani-group3">Indusland bank</div>
-                                    </div>
-                                    <div className="alerts-container">
-                                        <div className="alerts2">26 Alerts</div>
-                                    </div>
-                                </div>
-                                <div className="edit-delete-container-wrapper">
-                                    <div className="edit-delete-container">
-                                        <div className="edit-delet">
-                                            <img
-                                                className="edit-icon"
-                                                loading="lazy"
-                                                alt=""
-                                                src="./public/home-desktop/edit.svg"
-                                            />
-                                            <img className="delete-icon" alt="" src="./public/home-desktop/delete.svg" />
-                                            <div className="delete">
-                                                <img
-                                                    className="edit-2-icon"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2.svg"
-                                                />
-                                            </div>
-                                            <div className="delete1">
-                                                <img
-                                                    className="edit-2-icon1"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2-1.svg"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="desktop-select-stocks-home">
-                                <div className="desktop-select-stocks-home-inner">
-                                    <div className="vector-container">
-                                        <img className="frame-child45" alt="" />
-                                    </div>
-                                </div>
-                                <div className="desktop-stocks">
-                                    <div className="adani-group-wrapper2">
-                                        <div className="adani-group4">Adani Group</div>
-                                    </div>
-                                    <div className="alerts-container">
-                                        <div className="alerts4">16 Alerts</div>
-                                    </div>
-                                </div>
-                                <div className="edit-delete-container-wrapper">
-                                    <div className="edit-delete-container">
-                                        <div className="edit-delet">
-                                            <img
-                                                className="edit-icon"
-                                                loading="lazy"
-                                                alt=""
-                                                src="./public/home-desktop/edit.svg"
-                                            />
-                                            <img className="delete-icon" alt="" src="./public/home-desktop/delete.svg" />
-                                            <div className="delete">
-                                                <img
-                                                    className="edit-2-icon"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2.svg"
-                                                />
-                                            </div>
-                                            <div className="delete1">
-                                                <img
-                                                    className="edit-2-icon1"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2-1.svg"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="desktop-select-stocks-home">
-                                <div className="desktop-select-stocks-home-inner">
-                                    <div className="vector-container">
-                                        <img className="frame-child45" alt="" />
-                                    </div>
-                                </div>
-                                <div className="desktop-stocks">
-                                    <div className="adani-group-wrapper">
-                                        <div className="adani-group5">Tata Power</div>
-                                    </div>
-                                    <div className="alerts-container">
-                                        <div className="alerts">48 Alerts</div>
-                                    </div>
-                                </div>
-                                <div className="edit-delete-container-wrapper">
-                                    <div className="edit-delete-container">
-                                        <div className="edit-delet">
-                                            <img
-                                                className="edit-icon"
-                                                loading="lazy"
-                                                alt=""
-                                                src="./public/home-desktop/edit.svg"
-                                            />
-                                            <img className="delete-icon" alt="" src="./public/home-desktop/delete.svg" />
-                                            <div className="delete">
-                                                <img
-                                                    className="edit-2-icon"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2.svg"
-                                                />
-                                            </div>
-                                            <div className="delete1">
-                                                <img
-                                                    className="edit-2-icon1"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2-1.svg"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="desktop-select-stocks-home">
-                                <div className="desktop-select-stocks-home-inner">
-                                    <div className="vector-container">
-                                        <img className="frame-child45" alt="" />
-                                    </div>
-                                </div>
-                                <div className="desktop-stocks">
-                                    <div className="adani-group-wrapper">
-                                        <div className="adani-group6">JSW Energy</div>
-                                    </div>
-                                    <div className="alerts-container">
-                                        <div className="alerts">34 Alerts</div>
-                                    </div>
-                                </div>
-                                <div className="edit-delete-container-wrapper">
-                                    <div className="edit-delete-container">
-                                        <div className="edit-delet">
-                                            <img
-                                                className="edit-icon"
-                                                loading="lazy"
-                                                alt=""
-                                                src="./public/home-desktop/edit.svg"
-                                            />
-                                            <img className="delete-icon" alt="" src="./public/home-desktop/delete.svg" />
-                                            <div className="delete">
-                                                <img
-                                                    className="edit-2-icon"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2.svg"
-                                                />
-                                            </div>
-                                            <div className="delete1">
-                                                <img
-                                                    className="edit-2-icon1"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2-1.svg"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="desktop-select-stocks-home">
-                                <div className="desktop-select-stocks-home-inner">
-                                    <div className="vector-container">
-                                        <img className="frame-child45" alt="" />
-                                    </div>
-                                </div>
-                                <div className="desktop-stocks">
-                                    <div className="adani-group-frame">
-                                        <div className="adani-group7">Suzlon Energy</div>
-                                    </div>
-                                    <div className="alerts-container">
-                                        <div className="alerts2">23 Alerts</div>
-                                    </div>
-                                </div>
-                                <div className="edit-delete-container-wrapper">
-                                    <div className="edit-delete-container">
-                                        <div className="edit-delet">
-                                            <img
-                                                className="edit-icon"
-                                                loading="lazy"
-                                                alt=""
-                                                src="./public/home-desktop/edit.svg"
-                                            />
-                                            <img className="delete-icon" alt="" src="./public/home-desktop/delete.svg" />
-                                            <div className="delete">
-                                                <img
-                                                    className="edit-2-icon"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2.svg"
-                                                />
-                                            </div>
-                                            <div className="delete1">
-                                                <img
-                                                    className="edit-2-icon1"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2-1.svg"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="desktop-select-stocks-home">
-                                <div className="desktop-select-stocks-home-inner">
-                                    <div className="vector-container">
-                                        <img className="frame-child45" alt="" />
-                                    </div>
-                                </div>
-                                <div className="desktop-stocks">
-                                    <div className="adani-group-wrapper">
-                                        <div className="adani-group8">Vodafone Idea Limited</div>
-                                    </div>
-                                    <div className="alerts-container">
-                                        <div className="alerts">45 Alerts</div>
-                                    </div>
-                                </div>
-                                <div className="edit-delete-container-wrapper">
-                                    <div className="edit-delete-container">
-                                        <div className="edit-delet">
-                                            <img
-                                                className="edit-icon"
-                                                loading="lazy"
-                                                alt=""
-                                                src="./public/home-desktop/edit.svg"
-                                            />
-                                            <img className="delete-icon" alt="" src="./public/home-desktop/delete.svg" />
-                                            <div className="delete">
-                                                <img
-                                                    className="edit-2-icon"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2.svg"
-                                                />
-                                            </div>
-                                            <div className="delete1">
-                                                <img
-                                                    className="edit-2-icon1"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2-1.svg"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="desktop-select-stocks-home">
-                                <div className="desktop-select-stocks-home-inner">
-                                    <div className="vector-container">
-                                        <img className="frame-child45" alt="" />
-                                    </div>
-                                </div>
-                                <div className="desktop-stocks">
-                                    <div className="adani-group-wrapper7">
-                                        <div className="adani-group9">Axis Bank</div>
-                                    </div>
-                                    <div className="alerts-wrapper7">
-                                        <div className="alerts9">27Alerts</div>
-                                    </div>
-                                </div>
-                                <div className="edit-delete-container-wrapper">
-                                    <div className="edit-delete-container">
-                                        <div className="edit-delet">
-                                            <img
-                                                className="edit-icon"
-                                                loading="lazy"
-                                                alt=""
-                                                src="./public/home-desktop/edit.svg"
-                                            />
-                                            <img className="delete-icon" alt="" src="./public/home-desktop/delete.svg" />
-                                            <div className="delete">
-                                                <img
-                                                    className="edit-2-icon"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2.svg"
-                                                />
-                                            </div>
-                                            <div className="delete1">
-                                                <img
-                                                    className="edit-2-icon1"
-                                                    alt=""
-                                                    src="./public/home-desktop/edit2-1.svg"
-                                                />
-                                            </div>
-                                        </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -957,7 +1036,7 @@ function HomeDesktop() {
                                     </div>
                                 </div>
                                 <button className="trial-button-container">
-                                    <div className="start-30-days">Start 30 Days Free Trail</div>
+                                    <a className="start-30-days" href='/login' style={{ textDecoration: 'none' }}>Start 30 Days Free Trial</a>
                                 </button>
                             </div>
                             <div className="frame-parent35">
@@ -1141,7 +1220,7 @@ function HomeDesktop() {
                 </div>
                 <div className="homepage-inner1">
                     <section className="why-simply-grow-parent">
-                        <h1 className="how-it-works">Why Simply Grow?</h1>
+                        <h1 className="how-it-works">Why OneMetric?</h1>
                         <div className="benefits-container">
                             <div className="benefits-row">
                                 <div className="benefit-item-parent">
@@ -1239,259 +1318,133 @@ function HomeDesktop() {
                         <div className="affordable-plans-wrapper">
                             <h1 className="affordable-plans">Affordable plans!</h1>
                         </div>
-                        <div className="dots-horizontal-parent">
-                            <div className="dots-horizontal">
-                                <div className="chat-bubble1">
-                                    <div className="gold-plan">
-                                        <div className="plan-type">
-                                            <h1 className="diamond">Diamond</h1>
-                                            <button className="yearly-plan">
-                                                <div className="yearly">Yearly</div>
-                                            </button>
-                                        </div>
-                                        <div className="amet-minim-mollit-non-deserunt">
-                                            <h1 className="h1">₹</h1>
-                                            <b className="sad-face">
-                                                <span className="sad-face-txt-container">
-                                                    <span>1799</span>
-                                                    <span className="span">.00</span>
-                                                </span>
-                                            </b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="div2">
-                                    <div className="diamond-plan-details">
-                                        <div className="marvin-mckinney">
-                                            <div className="mins-ago-edited">
-                                                <img
-                                                    className="edit-profile-icon"
-                                                    loading="lazy"
-                                                    alt=""
-                                                    src="./public/home-desktop/vector-207.svg"
-                                                />
+                        {loading ? 'Loading...' : (
+                            <div className="plans-container">
+                                {planData.map((plan, index) => (
+                                    <div key={plan.id} className="plan-card">
+                                        <div className="chat-bubble1">
+                                            <div className={index % 2 === 0 ? "gold-plan" : "frame-parent48"}>
+                                                <div className="plan-type">
+                                                    <h1 className={index % 2 === 0 ? "gold" : "diamond"}>{index % 2 === 0 ? "Gold" : "Diamond"}</h1>
+                                                    <button className={index % 2 === 0 ? "monthly-plan" : "yearly-plan"}>
+                                                        <div className={index % 2 === 0 ? "monthly" : "yearly"}>{index % 2 === 0 ? "Monthly" : "Yearly"}</div>
+                                                    </button>
+                                                </div>
+                                                <div className="amet-minim-mollit-non-deserunt">
+                                                    <h1 className="h1">₹</h1>
+                                                    <b className="price">
+                                                        <span className="sad-face-txt-container">
+                                                            <span>{plan.amount_in_rs}</span>
+                                                            <span className="span">.00</span>
+                                                        </span>
+                                                    </b>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="comments">
-                                            <div className="track-up-to">Track up to 50 stocks</div>
-                                            <div className="ideal-for-beginners">
-                                                Ideal for beginners and casual investors
+                                        <div className="div2">
+                                            <div className="diamond-plan-details">
+                                                <div className="marvin-mckinney">
+                                                    <div className="mins-ago-edited">
+                                                        <img
+                                                            className="edit-profile-icon"
+                                                            loading="lazy"
+                                                            alt=""
+                                                            src="./public/home-desktop/vector-207.svg"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="comments">
+                                                    <div className="track-up-to">Track up to 500 stocks</div>
+                                                    <div className="ideal-for-beginners">
+                                                        Ideal for beginners and casual investors
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="diamond-plan-details">
+                                                <div className="marvin-mckinney">
+                                                    <div className="mins-ago-edited">
+                                                        <img
+                                                            className="edit-profile-icon"
+                                                            loading="lazy"
+                                                            alt=""
+                                                            src="./public/home-desktop/vector-207.svg"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="comments">
+                                                    <div className="track-up-to">Real-time updates</div>
+                                                    <div className="ideal-for-beginners">
+                                                        Get instant alerts and insights without any delay.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="diamond-plan-details">
+                                                <div className="marvin-mckinney">
+                                                    <div className="mins-ago-edited">
+                                                        <img
+                                                            className="edit-profile-icon"
+                                                            loading="lazy"
+                                                            alt=""
+                                                            src="./public/home-desktop/vector-207.svg"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="comments">
+                                                    <div className="languages">Multilingual</div>
+                                                    <div className="ideal-for-beginners">
+                                                        Enjoy news and charts in English
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="diamond-plan-details">
+                                                <div className="marvin-mckinney">
+                                                    <div className="mins-ago-edited">
+                                                        <img
+                                                            className="edit-profile-icon"
+                                                            loading="lazy"
+                                                            alt=""
+                                                            src="./public/home-desktop/vector-207.svg"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="comments">
+                                                    <div className="days-free-trial">{plan.duration_in_months} {plan.duration_in_months === 1 ? "Month" : "Months"}</div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="diamond-plan-details">
-                                        <div className="marvin-mckinney">
-                                            <div className="mins-ago-edited">
-                                                <img
-                                                    className="edit-profile-icon"
-                                                    loading="lazy"
-                                                    alt=""
-                                                    src="./public/home-desktop/vector-207.svg"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="comments">
-                                            <div className="track-up-to">Real-time updates</div>
-                                            <div className="ideal-for-beginners">
-                                                Get instant alerts and insights without any delay.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="diamond-plan-details">
-                                        <div className="marvin-mckinney">
-                                            <div className="mins-ago-edited">
-                                                <img
-                                                    className="edit-profile-icon"
-                                                    loading="lazy"
-                                                    alt=""
-                                                    src="./public/home-desktop/vector-207.svg"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="comments">
-                                            <div className="languages">12 Languages</div>
-                                            <div className="ideal-for-beginners">
-                                                Enjoy news and charts in English or Hindi
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="diamond-plan-details">
-                                        <div className="marvin-mckinney">
-                                            <div className="mins-ago-edited">
-                                                <img
-                                                    className="edit-profile-icon"
-                                                    loading="lazy"
-                                                    alt=""
-                                                    src="./public/home-desktop/vector-207.svg"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="comments">
-                                            <div className="days-free-trial">30 Days Free Trial</div>
-                                            <div className="ideal-for-beginners">
-                                                No card required for 30 dasys free Trial
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button className="continue">
-                                    <div className="start-now">Start Now</div>
-                                </button>
-                            </div>
-                            <div className="close-button">
-                                <div className="frame-parent48">
-                                    <div className="plan-type">
-                                        <h1 className="gold">Gold</h1>
-                                        <button className="monthly-plan">
-                                            <div className="monthly">Monthly</div>
+                                        <button className={index % 2 === 0 ? "start-now-wrapper" : "continue"} onClick={() => handleStartNowClick(plan.id)}>
+                                            <div className="start-now">Start Now</div>
                                         </button>
                                     </div>
-                                    <div className="amet-minim-mollit-non-deserunt">
-                                        <h1 className="h1">₹</h1>
-                                        <b className="price">
-                                            <span className="sad-face-txt-container">
-                                                <span>179</span>
-                                                <span className="span">.00</span>
-                                            </span>
-                                        </b>
-                                    </div>
-                                </div>
-                                <div className="div2">
-                                    <div className="diamond-plan-details">
-                                        <div className="marvin-mckinney">
-                                            <div className="mins-ago-edited">
-                                                <img
-                                                    className="edit-profile-icon"
-                                                    loading="lazy"
-                                                    alt=""
-                                                    src="./public/home-desktop/vector-207.svg"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="comments">
-                                            <div className="track-up-to">Track up to 50 stocks</div>
-                                            <div className="ideal-for-beginners">
-                                                Ideal for beginners and casual investors
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="diamond-plan-details">
-                                        <div className="marvin-mckinney">
-                                            <div className="mins-ago-edited">
-                                                <img
-                                                    className="edit-profile-icon"
-                                                    alt=""
-                                                    src="./public/home-desktop/vector-207.svg"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="comments">
-                                            <div className="track-up-to">Real-time updates</div>
-                                            <div className="ideal-for-beginners">
-                                                Get instant alerts and insights without any delay.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="diamond-plan-details">
-                                        <div className="marvin-mckinney">
-                                            <div className="mins-ago-edited">
-                                                <img
-                                                    className="edit-profile-icon"
-                                                    alt=""
-                                                    src="./public/home-desktop/vector-207.svg"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="comments">
-                                            <div className="languages">12 Languages</div>
-                                            <div className="ideal-for-beginners">
-                                                Enjoy news and charts in English or Hindi
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="diamond-plan-details">
-                                        <div className="marvin-mckinney">
-                                            <div className="mins-ago-edited">
-                                                <img
-                                                    className="edit-profile-icon"
-                                                    alt=""
-                                                    src="./public/home-desktop/vector-207.svg"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="comments">
-                                            <div className="days-free-trial">30 Days Free Trial</div>
-                                            <div className="ideal-for-beginners">
-                                                No card required for 30 dasys free Trial
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button className="start-now-wrapper">
-                                    <div className="start-now">Start Now</div>
-                                </button>
+                                ))}
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
                 <div className="homepage-inner3">
                     <section className="faq-parent">
                         <h1 className="faq">FAQ</h1>
                         <div className="f-a-q-container">
-                            <div className="what-is-simply-grow">
-                                <div className="simply-grow-description">
-                                    <div className="what-is-simplygrow-and-what-do-parent">
-                                        <div className="what-is-simplygrow">
-                                            What is SimplyGrow and what does it do?
+                            {faqData.map((faq, index) => (
+                                <div key={index} className="what-is-simply-grow">
+                                    <div className="simply-grow-description">
+                                        <div className="what-is-simplygrow-and-what-do-parent">
+                                            <div className="what-is-simplygrow">{faq.question}</div>
+                                            {openFaqIndex === index && (
+                                                <div className="simplygrow-is-a">{faq.answer}</div>
+                                            )}
                                         </div>
-                                        <div className="simplygrow-is-a">
-                                            SimplyGrow is a platform that delivers personalized stock news,
-                                            insights, and charts directly to your WhatsApp.
+                                        <div className="definition-icon-wrapper" onClick={() => toggleFAQ(index)}>
+                                            <img
+                                                className="definition-icon"
+                                                loading="lazy"
+                                                alt=""
+                                                src={openFaqIndex === index ? "./public/home-desktop/vector-212.svg" : "./public/home-desktop/vector-212-1.svg"}
+                                            />
                                         </div>
-                                    </div>
-                                    <div className="definition-icon-wrapper">
-                                        <img
-                                            className="definition-icon"
-                                            loading="lazy"
-                                            alt=""
-                                            src="./public/home-desktop/vector-212.svg"
-                                        />
                                     </div>
                                 </div>
-                            </div>
-                            <div className="what-is-simply-grow">
-                                <div className="simply-grow-description">
-                                    <div className="question-content">
-                                        <div className="what-is-simplygrow">
-                                            Is SimplyGrow an app or does it work on WhatsApp?
-                                        </div>
-                                    </div>
-                                    <div className="definition-icon-wrapper">
-                                        <img
-                                            className="question-icon"
-                                            alt=""
-                                            src="./public/home-desktop/vector-212-1.svg"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="what-is-simply-grow">
-                                <div className="simply-grow-description">
-                                    <div className="question-content">
-                                        <div className="what-is-simplygrow">
-                                            How much does SimplyGrow cost? SimplyGrow offers two plans:
-                                        </div>
-                                    </div>
-                                    <div className="definition-icon-wrapper">
-                                        <img
-                                            className="question-icon"
-                                            loading="lazy"
-                                            alt=""
-                                            src="./public/home-desktop/vector-212-1.svg"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
+                            ))}
                         </div>
                     </section>
                 </div>
@@ -1501,11 +1454,11 @@ function HomeDesktop() {
                             <h3 className="refer-and-get-container">
                                 <span>Refer and get a </span>
                                 <span className="free-month">
-                                    <span className="free-month1">FREE month</span>
+                                    <span className="free-month1">FREE monthly</span>
                                 </span>
                                 <span>
                                     <span className="free-month"> </span>
-                                    <span>of Diamond Plan worth</span>
+                                    <span>Plan</span>
                                     <span className="span3"> </span>
                                 </span>
                                 <span className="free-month">
@@ -1515,7 +1468,7 @@ function HomeDesktop() {
                                 </span>
                             </h3>
                             <button className="refer-now-button">
-                                <div className="refer-now">Refer now</div>
+                                <a className="refer-now" href='/login' style={{ textDecoration: 'none' }}>Refer now</a>
                             </button>
                         </div>
                         <img
@@ -1605,7 +1558,7 @@ function HomeDesktop() {
                     <div className="frame-wrapper31">
                         <div className="simply-grow-all-right-reserve-parent">
                             <div className="simply-grow-all">
-                                Simply Grow, All Right reserved © 2024
+                                OneMetric, All Right reserved © 2024
                             </div>
                             <div className="frame-wrapper32">
                                 <div className="copyright-icon-parent">

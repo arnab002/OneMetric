@@ -878,10 +878,11 @@
   align-items: flex-end;
   justify-content: center;
   min-width: 24px;
+  margin: auto;
 }
 .how-are-you-feeling-today {
-  width: 176px;
-  border-bottom: 2px solid var(--color-gold);
+  width: 33%;
+  border-bottom: 2px solid var(--color-gray-100);
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -890,15 +891,17 @@
   padding: var(--padding-5xl) 76px var(--padding-2xl);
   color: var(--color-white);
 }
+
 .all-nifty-50 {
   position: relative;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   min-width: 93px;
+  margin: auto;
 }
 .circle {
-  width: 176px;
+  width: 33%;
   border-bottom: 2px solid var(--color-gray-100);
   box-sizing: border-box;
   display: flex;
@@ -907,15 +910,22 @@
   justify-content: flex-start;
   padding: var(--padding-5xl) 41.5px var(--padding-2xl);
 }
+.how-are-you-feeling-today.active, .bank-nifty-wrapper.active, .circle.active{
+  background-color: #121523;
+  font-weight: bold;
+  border-bottom: 2px solid var(--color-gold);
+}
+
 .bank-nifty {
   position: relative;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   min-width: 89px;
+  margin: auto;
 }
 .bank-nifty-wrapper {
-  width: 176px;
+  width: 33%;
   border-bottom: 2px solid var(--color-gray-100);
   box-sizing: border-box;
   display: flex;
@@ -924,6 +934,7 @@
   justify-content: flex-start;
   padding: var(--padding-5xl) 43.5px var(--padding-2xl);
 }
+
 .all-banks {
   text-decoration: none;
   position: relative;
@@ -1000,7 +1011,7 @@
   position: relative;
   display: inline-block;
   min-width: 130px;
-  max-width: 100%;
+  width: 100%;
 }
 .adani-group-wrapper {
   height: 22.5px;
@@ -1128,8 +1139,8 @@
 .desktop-select-stocks-home {
   align-self: stretch;
   border-radius: var(--br-9xs);
-  background-color: var(--color-gray-300);
-  padding: var(--padding-5xs) 0 var(--padding-5xs) var(--padding-5xl);
+  /* background-color: var(--color-gray-300); */
+  /* padding: var(--padding-5xs) 0 var(--padding-5xs) var(--padding-5xl); */
   box-sizing: border-box;
   gap: var(--gap-base);
   max-width: 100%;
@@ -1307,7 +1318,7 @@
 }
 .frame-parent9,
 .homepage-inner {
-  height: 978px;
+  height: auto;
 }
 .frame-parent9 {
   width: 880px;
@@ -3258,6 +3269,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  margin-bottom: 20px;
 }
 .gold-plan {
   align-items: center;
@@ -3346,13 +3358,16 @@
   gap: var(--gap-5xl);
   max-width: 100%;
   color: var(--color-white);
+  margin-bottom: 30px;
 }
+
 .start-now {
   position: relative;
   font-weight: 500;
   font-family: var(--font-poppins);
   color: var(--color-mediumseagreen-200);
   text-align: left;
+  margin: auto;
   display: inline-block;
   min-width: 78px;
 }
@@ -3444,6 +3459,7 @@
   gap: var(--gap-13xl);
   max-width: 100%;
   height: 100%;
+  margin-bottom: 20px;
 }
 .close-button,
 .start-now-wrapper {
@@ -3482,9 +3498,9 @@
   justify-content: flex-start;
 }
 .dots-horizontal-parent {
-  width: 1120px;
+  width: 50%;
   height: 579px;
-  flex-direction: row;
+  flex-direction: column;
   gap: var(--gap-21xl);
   color: var(--color-cornflowerblue-200);
 }
@@ -4026,6 +4042,30 @@
   color: var(--color-white);
   font-family: var(--font-poppins);
 }
+
+.plans-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.plan-card {
+  width: calc(50% - 110px); /* Adjust the 20px to set the gap between cards */
+  margin-bottom: 40px; /* Space between rows */
+  padding: 30px;
+  background: linear-gradient(#161923, #161923),
+  linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.1));
+  border-radius: 5%;
+}
+
+@media (max-width: 768px) {
+  .plan-card {
+    width: 100%;
+  }
+}
+
+
 @media screen and (max-width: 975px) {
   .get-lighting-container {
     font-size: 38px;

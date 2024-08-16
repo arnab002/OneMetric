@@ -27,7 +27,7 @@ type Stock = {
 
 type ButtonState = 'plus' | 'check' | 'edit' | 'trash';
 
-function HomeMobile() {
+function Home() {
   const [stats, setStats] = useState(statsData);
   const [stockData, setStockData] = useState<any[]>([]);
   const [bankniftyData, setBankNiftyData] = useState<any[]>([]);
@@ -57,28 +57,34 @@ function HomeMobile() {
     };
   }, []);
 
-  const toggleFAQ = (index: number) => {
-    setOpenFAQs(prevState => ({
-      ...prevState,
-      [index]: !prevState[index]
-    }));
-  };
-
   useEffect(() => {
-    const token = sessionStorage.getItem('authToken');
-    setIsLoggedIn(!!token);
+    const checkPlanValidity = async () => {
+      const token = sessionStorage.getItem('authToken');
+      
+      if (token) {
+        try {
+          const response = await axios.post(`${baseApiURL()}/check-plan-validity`, 
+          undefined,
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+          });
+
+          if (response.data.success && response.data.status === 'active') {
+            window.location.href= '/insights';
+            return;
+          }
+        } catch (error) {
+          console.error('Error checking plan validity:', error);
+        }
+      }
+
+      setLoading(false);
+    };
+
+    checkPlanValidity();
   }, []);
-
-  const handleLogout = () => {
-    sessionStorage.removeItem('authToken');
-    setIsLoggedIn(false);
-    setShowDropdown(false);
-    router.push('/');
-  };
-
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
-  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -92,6 +98,87 @@ function HomeMobile() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showDropdown]);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('authToken');
+    setIsLoggedIn(!!token);
+  }, []);
+
+  useEffect(() => {
+    const fetchStockData = async () => {
+      try {
+        const response = await axios.get(`${baseApiURL()}/stocks`);
+        const data = (response.data.data as { stock_long_name: string }[])
+          .filter(stock => {
+            // Remove entries with patterns like "182D050924" or other unwanted formats
+            const regexPattern = /^[\dA-Z]+$/; // Match any string that consists only of digits and uppercase letters
+            return !regexPattern.test(stock.stock_long_name);
+          })
+          .slice(0, 10)
+          .sort((a, b) => a.stock_long_name.localeCompare(b.stock_long_name));
+
+        setStockData(data);
+        setFilteredStockData(data); // Set initial filtered data
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching stock data:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchStockData();
+  }, []);
+
+  useEffect(() => {
+    const fetchPlanData = async () => {
+      try {
+        const response = await axios.get<{ data: Plan[] }>(`${baseApiURL()}/plans`);
+        const filteredPlans = response.data.data.filter((plan: Plan) => ![1].includes(plan.id));
+        setPlanData(filteredPlans);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching plan data:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchPlanData();
+  }, []);
+
+  // Load selected stocks from session storage on component mount
+  useEffect(() => {
+    const storedStocks = sessionStorage.getItem('selectedStocks');
+    if (storedStocks) {
+      const parsedStocks = JSON.parse(storedStocks);
+      setSelectedStocks(parsedStocks);
+      setShowWatchlistButton(parsedStocks.length > 0);
+
+      // Set initial button states for stored stocks
+      const initialButtonStates: { [key: string]: ButtonState } = {};
+      parsedStocks.forEach((scrip_cd: string) => {
+        initialButtonStates[scrip_cd] = 'edit';
+      });
+      setButtonStates(initialButtonStates);
+    }
+  }, []);
+
+  const toggleFAQ = (index: number) => {
+    setOpenFAQs(prevState => ({
+      ...prevState,
+      [index]: !prevState[index]
+    }));
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('authToken');
+    setIsLoggedIn(false);
+    setShowDropdown(false);
+    router.push('/');
+  };
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
 
   const handleClick = () => {
     window.location.href = '/insights';
@@ -125,31 +212,6 @@ function HomeMobile() {
     }
   };
 
-  useEffect(() => {
-    const fetchStockData = async () => {
-      try {
-        const response = await axios.get(`${baseApiURL()}/stocks`);
-        const data = (response.data.data as { stock_long_name: string }[])
-          .filter(stock => {
-            // Remove entries with patterns like "182D050924" or other unwanted formats
-            const regexPattern = /^[\dA-Z]+$/; // Match any string that consists only of digits and uppercase letters
-            return !regexPattern.test(stock.stock_long_name);
-          })
-          .slice(0, 10)
-          .sort((a, b) => a.stock_long_name.localeCompare(b.stock_long_name));
-
-        setStockData(data);
-        setFilteredStockData(data); // Set initial filtered data
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching stock data:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchStockData();
-  }, []);
-
   const fetchBankNiftyStocks = async () => {
     try {
       const response = await axios.get(`${baseApiURL()}/banknifty`);
@@ -175,23 +237,6 @@ function HomeMobile() {
       setLoading(false);
     }
   };
-
-
-  useEffect(() => {
-    const fetchPlanData = async () => {
-      try {
-        const response = await axios.get<{ data: Plan[] }>(`${baseApiURL()}/plans`);
-        const filteredPlans = response.data.data.filter((plan: Plan) => ![1].includes(plan.id));
-        setPlanData(filteredPlans);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching plan data:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchPlanData();
-  }, []);
 
   const fetchUserDetails = async (userId: string) => {
     try {
@@ -303,7 +348,7 @@ function HomeMobile() {
 
   const handleAddToWatchlist = async () => {
     if (!isLoggedIn) {
-      router.push('/login');
+      window.location.href = '/login';
       return;
     }
 
@@ -357,10 +402,7 @@ function HomeMobile() {
         sessionStorage.removeItem('selectedStocks');
         setSelectedStocks([]);
         setShowWatchlistButton(false);
-
-        // Optionally, you can use the additional data from the response
-        const { expire_date } = checkStatusResponse.data.data;
-        console.log(`Your plan will expire on: ${new Date(expire_date).toLocaleDateString()}`);
+        window.location.href = '/insights'
 
       } else {
         alert('Payment verification failed. Please contact support.');
@@ -370,23 +412,6 @@ function HomeMobile() {
       alert('An error occurred. Please try again.');
     }
   };
-
-  // Load selected stocks from session storage on component mount
-  useEffect(() => {
-    const storedStocks = sessionStorage.getItem('selectedStocks');
-    if (storedStocks) {
-      const parsedStocks = JSON.parse(storedStocks);
-      setSelectedStocks(parsedStocks);
-      setShowWatchlistButton(parsedStocks.length > 0);
-
-      // Set initial button states for stored stocks
-      const initialButtonStates: { [key: string]: ButtonState } = {};
-      parsedStocks.forEach((scrip_cd: string) => {
-        initialButtonStates[scrip_cd] = 'edit';
-      });
-      setButtonStates(initialButtonStates);
-    }
-  }, []);
 
   const handleEditClick = (scrip_cd: string) => {
     setButtonStates((prevState) => ({
@@ -422,6 +447,10 @@ function HomeMobile() {
   const handleReferClick = () => {
     window.location.href = '/login'
   };
+
+  if (loading) {
+    return null;
+  }
 
 
   return (
@@ -506,7 +535,6 @@ function HomeMobile() {
                               background: 'none',
                               border: 'none',
                               cursor: 'pointer',
-                              // padding: '-21px 6px',
                             }}
                           >
                             <LogOut size={16} style={{ marginRight: '5px' }} />
@@ -723,7 +751,7 @@ function HomeMobile() {
                                     <div
                                       style={{
                                         position: 'fixed',
-                                        bottom: '20px',
+                                        bottom: '10px',
                                         left: '50%',
                                         transform: 'translateX(-50%)',
                                         backgroundColor: '#00A87E',
@@ -1487,4 +1515,4 @@ function HomeMobile() {
   )
 }
 
-export default HomeMobile
+export default Home

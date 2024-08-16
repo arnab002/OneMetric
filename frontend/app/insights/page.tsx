@@ -20,7 +20,12 @@ function Insights() {
     const [selectedFilter, setSelectedFilter] = useState('all');
     const [buttonStates, setButtonStates] = useState<{ [key: string]: boolean }>({});
     const [displayCount, setDisplayCount] = useState(30);
+    const [isPlanValid, setIsPlanValid] = useState<boolean>(false);
+    const [planStatus, setPlanStatus] = useState<string>('');
+    const [daysUntilExpiry, setDaysUntilExpiry] = useState<number>(0);
+    const [isPlanExpired, setIsPlanExpired] = useState<boolean>(false);
     const [isTokenChecked, setIsTokenChecked] = useState(false);
+    const [isCheckingPlan, setIsCheckingPlan] = useState(false);
     const [token, setToken] = useState<string | null>(null);
 
     useEffect(() => {
@@ -40,14 +45,50 @@ function Insights() {
     }, []);
 
     useEffect(() => {
-        if (isTokenChecked) {
+        if (isTokenChecked && token) {
             fetchStockData();
             fetchNewsData();
+            checkPlanValidity();
         }
-    }, [isTokenChecked, searchQuery, isSearching]);
+    }, [isTokenChecked, searchQuery, isSearching, token]);
 
     const showMore = () => {
         setDisplayCount(prevCount => prevCount + 30);
+    };
+
+    const checkPlanValidity = async () => {
+        setIsCheckingPlan(true);
+        try {
+            const response = await axios.post(
+                `${baseApiURL()}/check-plan-validity`,
+                undefined,
+                {
+                    headers: {
+                        Authorization: `${token}`,
+                    },
+                }
+            );
+            setIsPlanValid(response.data.success);
+            setPlanStatus(response.data.status);
+
+            if (response.data.success && response.data.status === 'active') {
+                const expiryDate = new Date(response.data.data.expire_date);
+                const currentDate = new Date(response.data.data.current_date);
+                const timeDifference = expiryDate.getTime() - currentDate.getTime();
+                const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+                setDaysUntilExpiry(daysDifference);
+                setIsPlanExpired(daysDifference <= 0);
+            } else if (response.data.status === 'newuser') {
+                setIsPlanExpired(false);
+            } else {
+                setIsPlanExpired(true);
+            }
+        } catch (error) {
+            console.error('Error checking plan validity:', error);
+            setIsPlanExpired(true);
+        } finally {
+            setIsCheckingPlan(false);
+        }
     };
 
     const fetchStockData = async () => {
@@ -56,17 +97,17 @@ function Insights() {
 
         try {
             const endpoint = isSearching
-                ? `${baseApiURL()}/search-stocks`
+                ? `https://yzeab2y3rxgoogdsnt3552dlcy0luxco.lambda-url.us-east-1.on.aws/`
                 : `${baseApiURL()}/stocks`;
-        
+
             const response = await axios.get(endpoint, {
                 params: isSearching ? { query: searchQuery } : {},
-                headers: !isSearching ? { Authorization: `${token}` } : {}, 
+                headers: !isSearching ? { Authorization: `${token}` } : {},
             });
-        
+
             const data = response.data.data || response.data.data;
             setStockData(data);
-        
+
             if (data.length === 0) {
                 setNoDataFound(true);
             } else {
@@ -77,7 +118,7 @@ function Insights() {
             setNoDataFound(true);
         } finally {
             setLoading(false);
-        }            
+        }
     };
 
     const fetchNewsData = async () => {
@@ -127,8 +168,8 @@ function Insights() {
     };
 
     const handleLogout = () => {
-        // Implement your logout logic here
-        console.log("Logged out");
+        sessionStorage.removeItem('authToken');
+        window.location.href = '/login';
     };
 
     const handleEditClick = (isin_code: string) => {
@@ -143,6 +184,58 @@ function Insights() {
             ...prevState,
             [isin_code]: false,
         }));
+    };
+
+    const handleAddToWatchlist = async () => {
+
+        const token = sessionStorage.getItem('authToken');
+        if (!token) {
+            console.error('No token found in sessionStorage');
+            return;
+        }
+
+        try {
+            // Initiate payment for free plan
+            const paymentResponse = await axios.post(`${baseApiURL()}/payment`, {
+                plan_id: '1',
+            }, {
+                headers: {
+                    Authorization: `${token}`,
+                },
+            });
+
+            const { transaction_id } = paymentResponse.data.data;
+
+            // Check payment status
+            const checkStatusResponse = await axios.post(`${baseApiURL()}/check-payment-status`, {
+                transaction_id: transaction_id,
+            }, {
+                headers: {
+                    Authorization: `${token}`,
+                },
+            });
+
+            if (checkStatusResponse.data.success) {
+
+                // Re-check plan validity
+                await checkPlanValidity();
+
+                // Show updated plan status to user
+                if (isPlanValid && planStatus === 'active') {
+                    alert(`Your plan is now active and will expire in ${daysUntilExpiry} days.`);
+                } else if (planStatus === 'newuser') {
+                    alert('Your 30-day free trial has started!');
+                } else {
+                    alert('Your plan status has been updated. Please check your account for details.');
+                }
+
+            } else {
+                alert('Payment verification failed. Please contact support.');
+            }
+        } catch (error) {
+            console.error('Error processing payment or adding stocks:', error);
+            alert('An error occurred. Please try again.');
+        }
     };
 
     if (!isTokenChecked) {
@@ -241,6 +334,35 @@ function Insights() {
                 <div className="simply-grow-all">OneMetric, All Right reserved © 2024</div>
                 <main className="watchlist-wrapper">
                     <section className="watchlist">
+                        <div className="trial-info">
+                            <div className="add-your-favourite-container">
+                                <span style={{color: 'white'}}>Add your favourite stocks to watch list and </span>
+                                {isCheckingPlan ? (
+                                    <span>Checking plan status...</span>
+                                ) : isPlanValid && planStatus === 'active' && !isPlanExpired ? (
+                                    <span className="plan-expiring">Your Plan is expiring in {daysUntilExpiry} days</span>
+                                ) : isPlanExpired ? (
+                                    <>
+                                        <span className="plan-expired">Your Plan has expired</span>
+                                        <button className="renew-plan-button" onClick={handleAddToWatchlist}>
+                                            Renew Plan
+                                        </button>
+                                    </>
+                                ) : planStatus === 'newuser' ? (
+                                    <>
+                                        <span className="enjoy-your-30">Enjoy your free 30 days trial</span>
+                                        <button className="purchase-plan-button" onClick={handleAddToWatchlist}>
+                                            Purchase Plan
+                                        </button>
+                                    </>
+                                ) : (
+                                    <span>Check your plan status</span>
+                                )}
+                            </div>
+                            <div className="no-card-information">
+                                No card information is required for the free trial
+                            </div>
+                        </div>
                         <div className="watchlist-header">
                             <div className="alert-list-items">
                                 <h3 className="my-stock-watchlist">My Stock watchlist</h3>

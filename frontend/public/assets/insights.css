@@ -1682,6 +1682,53 @@
   font-weight: bold;
 }
 
+.enjoy-your-30 {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-gold);
+}
+
+.plan-expiring {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-gold);
+}
+
+.add-your-favourite-container,
+.no-card-information {
+  align-self: stretch;
+  position: relative;
+}
+
+.add-your-favourite-container {
+  height: 72px;
+  display: inline-block;
+  line-height: 2;
+}
+
+.no-card-information {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-lightslategray);
+}
+
+.import-elements-parent,
+.trial-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.trial-info {
+  align-self: stretch;
+  border-radius: var(--br-9xs);
+  background-color: var(--color-gray-200);
+  padding: var(--padding-base);
+  gap: var(--gap-base);
+  font-size: var(--font-size-base);
+}
+
 @media (max-width: 1920px) {
   .filter-tabs {
     flex-direction: row;
