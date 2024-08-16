@@ -6,6 +6,7 @@ import baseApiURL from '@/baseUrl';
 import logo from "../../public/public/home/image-18@2x.png";
 import '../../public/assets/home-global.css';
 import '../../public/assets/home-desktop.css';
+import { User, LogOut } from 'react-feather';
 import statsData from '../../public/json/stats.json';
 
 interface RazorpayResponse {
@@ -24,10 +25,12 @@ function HomeDesktop() {
     const [activeTab, setActiveTab] = useState<string>('All');
     const [planData, setPlanData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [loadingPlanValidity, setLoadingPlanValidity] = useState<boolean>(true);
     const [stockData, setStockData] = useState<any[]>([]);
     const [bankniftyData, setBankNiftyData] = useState<any[]>([]);
     const [niftyData, setNiftyData] = useState<any[]>([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [showDropdown, setShowDropdown] = useState(false);
     const [razorpayLoaded, setRazorpayLoaded] = useState<boolean>(false);
     const [buttonStates, setButtonStates] = useState<{ [key: string]: ButtonState }>({});
     const [showWatchlistButton, setShowWatchlistButton] = useState(false);
@@ -69,9 +72,33 @@ function HomeDesktop() {
     }, []);
 
     useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (showDropdown && !(event.target as Element).closest('.user-icon-wrapper')) {
+                setShowDropdown(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showDropdown]);
+
+    useEffect(() => {
         const token = sessionStorage.getItem('authToken');
         setIsLoggedIn(!!token);
     }, []);
+
+    const handleLogout = () => {
+        sessionStorage.removeItem('authToken');
+        setIsLoggedIn(false);
+        setShowDropdown(false);
+        window.location.href = '/';
+    };
+
+    const toggleDropdown = () => {
+        setShowDropdown(!showDropdown);
+    };
 
     const handleTabSwitch = (tab: string) => {
         setActiveTab(tab);
@@ -206,7 +233,7 @@ function HomeDesktop() {
                 }
             }
 
-            setLoading(false);
+            setLoadingPlanValidity(false);
         };
 
         checkPlanValidity();
@@ -410,7 +437,11 @@ function HomeDesktop() {
         }
     };
 
-    if (loading) {
+    const handleInsightsRedirect = () => {
+        window.location.href = '/insights'
+    };
+
+    if (loadingPlanValidity) {
         return null;
     }
 
@@ -422,7 +453,7 @@ function HomeDesktop() {
                         <div className="button-icon-wrapper">
                             <img className="button-icon" alt="" src="./public/home-desktop/vector-3.svg" />
                         </div>
-                        <a className="started-30-days" href='/login' style={{ textDecoration: 'none' }}>Started 30 Days Free Trial</a>
+                        <a className="started-30-days" href='/login' style={{ textDecoration: 'none' }}>Started 14 Days Free Trial</a>
                     </button>
                     <div className="frame-parent">
                         <img className="frame-child" alt="" src="./public/home-desktop/group-1000001019.svg" />
@@ -643,9 +674,43 @@ function HomeDesktop() {
                                 <a className="onemetric1">OneMetric</a>
                             </div>
                         </div>
-                        <button className="sign-in-button-container">
-                            <a className="sign-in" href='/login'>Sign In</a>
-                        </button>
+                        {isLoggedIn ? (
+                            <div className="user-icon-wrapper" style={{ position: 'relative' }}>
+                                <User onClick={toggleDropdown} style={{ cursor: 'pointer' }} />
+                                {showDropdown && (
+                                    <div
+                                        style={{
+                                            position: 'absolute',
+                                            top: '100%',
+                                            right: 0,
+                                            backgroundColor: '#fff',
+                                            border: '1px solid #ddd',
+                                            borderRadius: '4px',
+                                            padding: '0px',
+                                            zIndex: 1000,
+                                        }}
+                                    >
+                                        <button
+                                            onClick={handleLogout}
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                background: 'none',
+                                                border: 'none',
+                                                cursor: 'pointer',
+                                            }}
+                                        >
+                                            <LogOut size={16} style={{ marginRight: '5px' }} />
+                                            Logout
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <button className="sign-in-button-container">
+                                <a className="sign-in" href='/login'>Sign In</a>
+                            </button>
+                        )}
                         <div className="frame-parent8">
                             <img
                                 className="frame-child43"
@@ -795,7 +860,7 @@ function HomeDesktop() {
                         </div>
                         <div className="theresa-webb-wrapper">
                             <div className="theresa-webb">
-                                <div className="stocks">+4600 Stocks</div>
+                                <div className="stocks" onClick={handleInsightsRedirect} style={{ cursor: 'pointer' }}>+4600 Stocks</div>
                                 <div className="profile-pic-wrapper">
                                     <img
                                         className="profile-pic-icon"
@@ -1036,7 +1101,7 @@ function HomeDesktop() {
                                     </div>
                                 </div>
                                 <button className="trial-button-container">
-                                    <a className="start-30-days" href='/login' style={{ textDecoration: 'none' }}>Start 30 Days Free Trial</a>
+                                    <a className="start-30-days" href='/login' style={{ textDecoration: 'none' }}>Start 14 Days Free Trial</a>
                                 </button>
                             </div>
                             <div className="frame-parent35">
@@ -1325,17 +1390,17 @@ function HomeDesktop() {
                                         <div className="chat-bubble1">
                                             <div className={index % 2 === 0 ? "gold-plan" : "frame-parent48"}>
                                                 <div className="plan-type">
-                                                    <h1 className={index % 2 === 0 ? "gold" : "diamond"}>{index % 2 === 0 ? "Gold" : "Diamond"}</h1>
+                                                    <h1 className={index % 2 === 0 ? "gold" : "diamond"} style={{ color: index % 2 === 0 ? '#bdc25d' : '#7994ff' }}>{index % 2 === 0 ? "Gold" : "Diamond"}</h1>
                                                     <button className={index % 2 === 0 ? "monthly-plan" : "yearly-plan"}>
                                                         <div className={index % 2 === 0 ? "monthly" : "yearly"}>{index % 2 === 0 ? "Monthly" : "Yearly"}</div>
                                                     </button>
                                                 </div>
                                                 <div className="amet-minim-mollit-non-deserunt">
-                                                    <h1 className="h1">₹</h1>
+                                                    <h1 className="h1" style={{ color: index % 2 === 0 ? "#bdc25d" : "#7994ff" }}>₹</h1>
                                                     <b className="price">
                                                         <span className="sad-face-txt-container">
-                                                            <span>{plan.amount_in_rs}</span>
-                                                            <span className="span">.00</span>
+                                                            <span>{index % 2 === 0 ? <s style={{ color: '#0FF74D' }}>799</s> : <s style={{ color: '#0FF74D' }}>7999</s>} {plan.amount_in_rs}</span>
+                                                            <span className="span">+ GST</span>
                                                         </span>
                                                     </b>
                                                 </div>
@@ -1461,11 +1526,6 @@ function HomeDesktop() {
                                     <span>Plan</span>
                                     <span className="span3"> </span>
                                 </span>
-                                <span className="free-month">
-                                    <b className="b">₹</b>
-                                    <span className="span5"> </span>
-                                    <span className="free-month1">1799</span>
-                                </span>
                             </h3>
                             <button className="refer-now-button">
                                 <a className="refer-now" href='/login' style={{ textDecoration: 'none' }}>Refer now</a>
@@ -1524,13 +1584,14 @@ function HomeDesktop() {
                                 />
                                 <div className="link-containers">
                                     <div className="policy-links">
-                                        <div className="about-us">About Us</div>
-                                        <div className="contact-us">Contact Us</div>
-                                        <div className="refund-policy">Refund Policy</div>
+                                        <a href='/about' className="about-us" style={{ textDecoration: "none", color: "inherit" }}>About Us</a>
+                                        <a href='/contact' className="contact-us" style={{ textDecoration: "none", color: "inherit" }}>Contact Us</a>
+                                        <a href='/refund' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Refund Policy</a>
                                     </div>
                                     <div className="terms-links">
-                                        <div className="terms-conditions">Terms &amp; conditions</div>
-                                        <div className="referral-policy">Referral Policy</div>
+                                        <a href='/privacy' className="terms-conditions" style={{ textDecoration: "none", color: "inherit" }}>Privacy &amp; Policy</a>
+                                        <a href='/terms' className="terms-conditions" style={{ textDecoration: "none", color: "inherit" }}>Terms &amp; conditions</a>
+                                        <a href='/referral' className="referral-policy" style={{ textDecoration: "none", color: "inherit" }}>Referral Policy</a>
                                         <div className="social-icons">
                                             <div className="icon-background-parent">
                                                 <div className="icon-background1" />

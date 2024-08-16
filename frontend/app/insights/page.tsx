@@ -46,11 +46,16 @@ function Insights() {
 
     useEffect(() => {
         if (isTokenChecked && token) {
-            fetchStockData();
-            fetchNewsData();
             checkPlanValidity();
         }
-    }, [isTokenChecked, searchQuery, isSearching, token]);
+    }, [isTokenChecked, token]);
+
+    useEffect(() => {
+        if (isTokenChecked && token) {
+            fetchStockData();
+            fetchNewsData();
+        }
+    }, [isTokenChecked, token, searchQuery, isSearching]);
 
     const showMore = () => {
         setDisplayCount(prevCount => prevCount + 30);
@@ -98,7 +103,7 @@ function Insights() {
         try {
             const endpoint = isSearching
                 ? `https://yzeab2y3rxgoogdsnt3552dlcy0luxco.lambda-url.us-east-1.on.aws/`
-                : `${baseApiURL()}/stocks`;
+                : `${baseApiURL()}/stock-watchlist`;
 
             const response = await axios.get(endpoint, {
                 params: isSearching ? { query: searchQuery } : {},
@@ -124,13 +129,20 @@ function Insights() {
     const fetchNewsData = async () => {
         setNewsLoading(true);
         setNoNewsDataFound(false);
-
+    
         try {
             const response = await axios.get(`${baseApiURL()}/news`);
             const result = await response.data.data;
-            setNewsData(result);
-
-            if (result.length === 0) {
+            
+            // Assign images to news items
+            const newsWithImages = result.map((newsItem: any, index: number) => ({
+                ...newsItem,
+                imageUrl: newsImages[index % newsImages.length]
+            }));
+            
+            setNewsData(newsWithImages);
+    
+            if (newsWithImages.length === 0) {
                 setNoNewsDataFound(true);
             } else {
                 setNoNewsDataFound(false);
@@ -138,7 +150,6 @@ function Insights() {
         } catch (error) {
             console.error('Error fetching the news data:', error);
             setNoNewsDataFound(true);
-
         } finally {
             setNewsLoading(false);
         }
@@ -238,6 +249,13 @@ function Insights() {
         }
     };
 
+    const [newsImages, setNewsImages] = useState<string[]>([
+        "./public/insights/Stock_Market.jpg",
+        "./public/insights/Stock_1.jpg",
+        "./public/insights/Stock_2.jpg",
+        "./public/insights/Stock_3.jpg",
+    ]);
+
     if (!isTokenChecked) {
         return null; // Render nothing until the token is checked
     }
@@ -336,9 +354,9 @@ function Insights() {
                     <section className="watchlist">
                         <div className="trial-info">
                             <div className="add-your-favourite-container">
-                                <span style={{color: 'white'}}>Add your favourite stocks to watch list and </span>
+                                <span style={{ color: 'white' }}>Add your favourite stocks to watch list and </span>
                                 {isCheckingPlan ? (
-                                    <span>Checking plan status...</span>
+                                    <span style={{ color: 'white' }}>Checking plan status...</span>
                                 ) : isPlanValid && planStatus === 'active' && !isPlanExpired ? (
                                     <span className="plan-expiring">Your Plan is expiring in {daysUntilExpiry} days</span>
                                 ) : isPlanExpired ? (
@@ -359,9 +377,9 @@ function Insights() {
                                     <span>Check your plan status</span>
                                 )}
                             </div>
-                            <div className="no-card-information">
+                            {/* <div className="no-card-information">
                                 No card information is required for the free trial
-                            </div>
+                            </div> */}
                         </div>
                         <div className="watchlist-header">
                             <div className="alert-list-items">
@@ -414,14 +432,14 @@ function Insights() {
                                         <div style={{ color: 'white', margin: 'auto' }}>No data found</div>
                                     ) : (
                                         stockData.slice(0, displayCount).map((stock) => (
-                                            <div key={stock.isin_code} className="select-stocks">
+                                            <div key={stock.id} className="select-stocks">
                                                 <div className="select-stocks-inner">
                                                     <div className="vector-wrapper">
                                                         <img className="frame-child5" alt="" />
                                                     </div>
                                                 </div>
                                                 <div className="stock-item">
-                                                    <div className="adani-group1">{stock.stock_long_name}</div>
+                                                    <div className="adani-group1">{stock.scrip_cd}</div>
                                                 </div>
                                                 <div className="actions">
                                                     <div>
@@ -483,7 +501,7 @@ function Insights() {
                                                     className="image-9-icon"
                                                     loading="lazy"
                                                     alt=""
-                                                    src="./public/insights/Stock_Market.jpg"
+                                                    src={news.imageUrl}
                                                 />
                                             </div>
                                             <div className="news-details">
@@ -584,11 +602,12 @@ function Insights() {
                             <div className="link-items">
                                 <div className="link-names">
                                     <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us">About Us</a>
-                                    <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Contact Us</a>
+                                    <a href='/contact' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Contact Us</a>
                                     <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">Refund Policy</a>
                                 </div>
                                 <div className="link-names1">
-                                    <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
+                                    <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy &amp; Policy</a>
+                                    <a href='/terms' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
                                     <a href='/referral' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Referral Policy</a>
                                     <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="faqs">FAQs</a>
                                 </div>

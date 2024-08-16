@@ -34,6 +34,7 @@ function Home() {
   const [niftyData, setNiftyData] = useState<any[]>([]);
   const [planData, setPlanData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadingPlanValidity, setLoadingPlanValidity] = useState<boolean>(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [razorpayLoaded, setRazorpayLoaded] = useState<boolean>(false);
@@ -80,7 +81,7 @@ function Home() {
         }
       }
 
-      setLoading(false);
+      setLoadingPlanValidity(false);
     };
 
     checkPlanValidity();
@@ -173,7 +174,7 @@ function Home() {
     sessionStorage.removeItem('authToken');
     setIsLoggedIn(false);
     setShowDropdown(false);
-    router.push('/');
+    window.location.href= '/';
   };
 
   const toggleDropdown = () => {
@@ -448,7 +449,7 @@ function Home() {
     window.location.href = '/login'
   };
 
-  if (loading) {
+  if (loadingPlanValidity) {
     return null;
   }
 
@@ -759,7 +760,7 @@ function Home() {
                                         padding: '10px 20px',
                                         borderRadius: '5px',
                                         cursor: 'pointer',
-                                        zIndex: -1000,
+                                        zIndex: 1000,
                                         transition: 'opacity 0.3s',
                                         opacity: 1,
                                         width: '80%', // Adjust this value to change the button width
@@ -1468,11 +1469,12 @@ function Home() {
               <div className="link-columns-parent">
                 <div className="link-columns">
                   <a href='/about' style={{ textDecoration: "none", color: "inherit" }} className="about-us">About Us</a>
-                  <a href='#' style={{ textDecoration: "none", color: "inherit" }} className="contact-us">Contact Us</a>
+                  <a href='/contact' style={{ textDecoration: "none", color: "inherit" }} className="contact-us">Contact Us</a>
                   <a href='/refund' style={{ textDecoration: "none", color: "inherit" }} className="refund-policy">Refund Policy</a>
                 </div>
                 <div className="link-columns1">
-                  <a href='#' style={{ textDecoration: "none", color: "inherit" }} className="terms-conditions">Terms &amp; conditions</a>
+                  <a href='/privacy' style={{ textDecoration: "none", color: "inherit" }} className="terms-conditions">Privacy &amp; Policy</a>
+                  <a href='/terms' style={{ textDecoration: "none", color: "inherit" }} className="terms-conditions">Terms &amp; conditions</a>
                   <a href='/referral' style={{ textDecoration: "none", color: "inherit" }} className="referral-policy">Referral Policy</a>
                   <a href='#' style={{ textDecoration: "none", color: "inherit" }} className="faqs">FAQs</a>
                 </div>

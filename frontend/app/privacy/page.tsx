@@ -219,12 +219,12 @@ const Referral: React.FC = () => {
               <div className="frame-parent8">
                 <div className="about-us-parent">
                   <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us1">About Us</a>
-                  <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us1">Contact Us</a>
+                  <a href='/contact' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us1">Contact Us</a>
                   <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">Refund Policy</a>
                 </div>
                 <div className="terms-conditions-parent">
                   <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy &amp; Policy</a>
-                  <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
+                  <a href='/terms' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
                   <a href='/referral' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy1">Referral Policy</a>
                   <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="faqs">FAQs</a>
                 </div>
