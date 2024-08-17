@@ -71,18 +71,6 @@ const Refund: React.FC = () => {
     <div>
       <div className="about-us">
         <header className="top-navigation">
-          <div className="icons" id="iconsContainer">
-            <div className="iconback-arrow">
-              <div className="iconback-arrow-inner">
-                <img
-                  className="frame-child"
-                  loading="lazy"
-                  alt=""
-                  src="./public/refund/vector-214.svg"
-                />
-              </div>
-            </div>
-          </div>
           <div className="top-navigation-inner">
             <div className="iconback-arrow">
               <div className="refund-title-container">

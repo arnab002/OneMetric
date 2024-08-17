@@ -50,7 +50,7 @@ function About() {
                 </header>
                 <section className="about">
                     <div className="about-us-parent">
-                        <h3 className="about-us1">About US</h3>
+                        <h3 className="about-us1">Contact Us</h3>
                         <div className="at-wegro-were-container">
                             <span>At </span>
                             <span className="wegro">OneMetric,</span>

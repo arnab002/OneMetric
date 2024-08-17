@@ -452,3 +452,9 @@
   color: #8a8c9e;
   font-family: var(--font-poppins);
 }
+
+@media only screen and (min-width: 1280px) and (max-width: 1920px){
+  .about-us{
+    height: 100%;
+  }
+}

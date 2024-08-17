@@ -5,9 +5,17 @@ import axios from 'axios';
 import baseApiURL from '@/baseUrl';
 import '../../public/assets/insights.css'
 
+interface Stock {
+    id: string;
+    isin_code: string;
+    scrip_cd: string;
+    // Add other properties of your stock object here
+}
+
 function Insights() {
     const [newsData, setNewsData] = useState<Array<{ [key: string]: any }>>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [editingStocks, setEditingStocks] = useState<{ [key: string]: boolean }>({});
     const postsPerPage = 4;
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [stockData, setStockData] = useState<any[]>([]);
@@ -129,19 +137,19 @@ function Insights() {
     const fetchNewsData = async () => {
         setNewsLoading(true);
         setNoNewsDataFound(false);
-    
+
         try {
             const response = await axios.get(`${baseApiURL()}/news`);
             const result = await response.data.data;
-            
+
             // Assign images to news items
             const newsWithImages = result.map((newsItem: any, index: number) => ({
                 ...newsItem,
                 imageUrl: newsImages[index % newsImages.length]
             }));
-            
+
             setNewsData(newsWithImages);
-    
+
             if (newsWithImages.length === 0) {
                 setNoNewsDataFound(true);
             } else {
@@ -184,17 +192,37 @@ function Insights() {
     };
 
     const handleEditClick = (isin_code: string) => {
-        setButtonStates((prevState) => ({
+        setEditingStocks(prevState => ({
             ...prevState,
-            [isin_code]: true,
+            [isin_code]: !prevState[isin_code]
         }));
     };
 
-    const handleRemoveClick = (isin_code: string) => {
-        setButtonStates((prevState) => ({
-            ...prevState,
-            [isin_code]: false,
-        }));
+    const handleRemoveClick = async (isin_code: string) => {
+        try {
+            const response = await axios.post(
+                `${baseApiURL()}/delete-stock-from-watchlist`,
+                { isin_code },
+                {
+                    headers: {
+                        Authorization: `${token}`,
+                    },
+                }
+            );
+
+            if (response.data.success) {
+                setStockData(prevStocks => prevStocks.filter(stock => stock.isin_code !== isin_code));
+                setEditingStocks(prevState => {
+                    const newState = { ...prevState };
+                    delete newState[isin_code];
+                    return newState;
+                });
+            } else {
+                console.error('Failed to delete stock:', response.data.message);
+            }
+        } catch (error) {
+            console.error('Error deleting stock:', error);
+        }
     };
 
     const handleAddToWatchlist = async () => {
@@ -442,35 +470,33 @@ function Insights() {
                                                     <div className="adani-group1">{stock.scrip_cd}</div>
                                                 </div>
                                                 <div className="actions">
-                                                    <div>
-                                                        {!buttonStates[stock.isin_code] ? (
-                                                            <Edit3
-                                                                size={18}
-                                                                onClick={() => handleEditClick(stock.isin_code)}
-                                                                style={{
-                                                                    cursor: 'pointer',
-                                                                    transition: 'transform 0.5s, opacity 0.5s',
-                                                                    color: 'white',
-                                                                    marginTop: '7%'
-                                                                }}
-                                                            />
-                                                        ) : (
-                                                            <div
-                                                                onClick={() => handleRemoveClick(stock.isin_code)}
-                                                                style={{
-                                                                    cursor: 'pointer',
-                                                                    transition: 'transform 0.5s, opacity 0.5s',
-                                                                    display: 'flex',
-                                                                    alignItems: 'center',
-                                                                    backgroundColor: 'red',
-                                                                    padding: '10px',
-                                                                }}
-                                                            >
-                                                                <Trash style={{ color: 'white' }} />
-                                                                <span style={{ marginLeft: '4px', marginTop: '2px', color: 'white' }}>Remove</span>
-                                                            </div>
-                                                        )}
-                                                    </div>
+                                                    {editingStocks[stock.isin_code] ? (
+                                                        <div
+                                                            onClick={() => handleRemoveClick(stock.isin_code)}
+                                                            style={{
+                                                                cursor: 'pointer',
+                                                                transition: 'transform 0.5s, opacity 0.5s',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                backgroundColor: 'red',
+                                                                padding: '10px',
+                                                            }}
+                                                        >
+                                                            <Trash style={{ color: 'white' }} />
+                                                            <span style={{ marginLeft: '4px', marginTop: '2px', color: 'white' }}>Remove</span>
+                                                        </div>
+                                                    ) : (
+                                                        <Edit3
+                                                            size={18}
+                                                            onClick={() => handleEditClick(stock.isin_code)}
+                                                            style={{
+                                                                cursor: 'pointer',
+                                                                transition: 'transform 0.5s, opacity 0.5s',
+                                                                color: 'white',
+                                                                marginTop: '7%'
+                                                            }}
+                                                        />
+                                                    )}
                                                 </div>
                                             </div>
                                         ))
