@@ -299,6 +299,13 @@
   align-items: center;
   justify-content: center;
 }
+.edit-delete-options-wrapper{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 5%;
+}
 .pl {
   align-self: stretch;
   position: relative;

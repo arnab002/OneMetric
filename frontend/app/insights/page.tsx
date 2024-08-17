@@ -12,10 +12,12 @@ interface Stock {
     // Add other properties of your stock object here
 }
 
+type ButtonState = 'plus' | 'check' | 'edit' | 'trash';
+
 function Insights() {
     const [newsData, setNewsData] = useState<Array<{ [key: string]: any }>>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [editingStocks, setEditingStocks] = useState<{ [key: string]: boolean }>({});
+    const [editStates, setEditStates] = useState<{ [key: string]: boolean }>({});
     const postsPerPage = 4;
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [stockData, setStockData] = useState<any[]>([]);
@@ -26,7 +28,7 @@ function Insights() {
     const [noDataFound, setNoDataFound] = useState<boolean>(false);
     const [noNewsDataFound, setNoNewsDataFound] = useState<boolean>(false);
     const [selectedFilter, setSelectedFilter] = useState('all');
-    const [buttonStates, setButtonStates] = useState<{ [key: string]: boolean }>({});
+    const [buttonStates, setButtonStates] = useState<{ [key: string]: ButtonState }>({});
     const [displayCount, setDisplayCount] = useState(30);
     const [isPlanValid, setIsPlanValid] = useState<boolean>(false);
     const [planStatus, setPlanStatus] = useState<string>('');
@@ -121,6 +123,13 @@ function Insights() {
             const data = response.data.data || response.data.data;
             setStockData(data);
 
+            // Initialize edit states for each stock
+            const initialEditStates: { [key: string]: boolean } = {};
+            data.forEach((stock: Stock) => {
+                initialEditStates[stock.isin_code] = false;
+            });
+            setEditStates(initialEditStates);
+
             if (data.length === 0) {
                 setNoDataFound(true);
             } else {
@@ -192,36 +201,43 @@ function Insights() {
     };
 
     const handleEditClick = (isin_code: string) => {
-        setEditingStocks(prevState => ({
-            ...prevState,
-            [isin_code]: !prevState[isin_code]
+        setEditStates(prevStates => ({
+            ...prevStates,
+            [isin_code]: !prevStates[isin_code]
         }));
     };
 
-    const handleRemoveClick = async (isin_code: string) => {
-        try {
-            const response = await axios.post(
-                `${baseApiURL()}/delete-stock-from-watchlist`,
-                { isin_code },
-                {
-                    headers: {
-                        Authorization: `${token}`,
-                    },
-                }
-            );
+    const handleRemoveClick = async (isin_code: string, index: number) => {
+        const selectedStock = stockData[index];
+        const scrip_cd = selectedStock.scrip_cd;
 
-            if (response.data.success) {
-                setStockData(prevStocks => prevStocks.filter(stock => stock.isin_code !== isin_code));
-                setEditingStocks(prevState => {
-                    const newState = { ...prevState };
-                    delete newState[isin_code];
-                    return newState;
-                });
-            } else {
-                console.error('Failed to delete stock:', response.data.message);
-            }
+        try {
+            // Make the API call to delete the stock
+            await axios.post(`${baseApiURL()}/delete-stock-from-watchlist`, {
+                scrip_cd: scrip_cd
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            // Show success message
+            alert("Stock Deleted Successfully!!!");
+
+            // Reset the edit state for this stock
+            setEditStates(prevStates => ({
+                ...prevStates,
+                [isin_code]: false
+            }));
+
+            // Refresh the stock data
+            fetchStockData();
+
         } catch (error) {
             console.error('Error deleting stock:', error);
+
+            // Show error message
+            alert("Failed to delete stock. Please try again.");
         }
     };
 
@@ -459,7 +475,7 @@ function Insights() {
                                     ) : noDataFound ? (
                                         <div style={{ color: 'white', margin: 'auto' }}>No data found</div>
                                     ) : (
-                                        stockData.slice(0, displayCount).map((stock) => (
+                                        stockData.slice(0, displayCount).map((stock, index) => (
                                             <div key={stock.id} className="select-stocks">
                                                 <div className="select-stocks-inner">
                                                     <div className="vector-wrapper">
@@ -470,32 +486,32 @@ function Insights() {
                                                     <div className="adani-group1">{stock.scrip_cd}</div>
                                                 </div>
                                                 <div className="actions">
-                                                    {editingStocks[stock.isin_code] ? (
-                                                        <div
-                                                            onClick={() => handleRemoveClick(stock.isin_code)}
+                                                    {!editStates[stock.isin_code] ? (
+                                                        <Edit3
+                                                            onClick={() => handleEditClick(stock.isin_code)}
                                                             style={{
+                                                                transition: 'opacity 0.3s',
+                                                                opacity: 1,
                                                                 cursor: 'pointer',
-                                                                transition: 'transform 0.5s, opacity 0.5s',
+                                                                color: 'white'
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <div
+                                                            onClick={() => handleRemoveClick(stock.isin_code, index)}
+                                                            style={{
                                                                 display: 'flex',
                                                                 alignItems: 'center',
                                                                 backgroundColor: 'red',
                                                                 padding: '10px',
+                                                                transition: 'opacity 0.3s',
+                                                                opacity: 1,
+                                                                cursor: 'pointer',
                                                             }}
                                                         >
                                                             <Trash style={{ color: 'white' }} />
-                                                            <span style={{ marginLeft: '4px', marginTop: '2px', color: 'white' }}>Remove</span>
+                                                            <span style={{ marginLeft: '4px', marginTop: '4px', color: 'white' }}>Remove</span>
                                                         </div>
-                                                    ) : (
-                                                        <Edit3
-                                                            size={18}
-                                                            onClick={() => handleEditClick(stock.isin_code)}
-                                                            style={{
-                                                                cursor: 'pointer',
-                                                                transition: 'transform 0.5s, opacity 0.5s',
-                                                                color: 'white',
-                                                                marginTop: '7%'
-                                                            }}
-                                                        />
                                                     )}
                                                 </div>
                                             </div>
