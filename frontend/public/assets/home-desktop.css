@@ -3998,6 +3998,7 @@
   width: 228px;
   flex-direction: column;
   gap: var(--gap-base);
+  margin: auto;
 }
 .footer-parent,
 .frame-wrapper31,
@@ -4008,10 +4009,9 @@
   justify-content: flex-start;
 }
 .frame-wrapper31 {
-  width: 754px;
+  width: 100%;
   height: 77.1px;
   flex-direction: row;
-  padding: 0 0 0 526px;
   box-sizing: border-box;
 }
 .footer-parent,
