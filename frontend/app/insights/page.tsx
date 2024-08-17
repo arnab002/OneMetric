@@ -17,7 +17,7 @@ type ButtonState = 'plus' | 'check' | 'edit' | 'trash';
 function Insights() {
     const [newsData, setNewsData] = useState<Array<{ [key: string]: any }>>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [editStates, setEditStates] = useState<{ [key: string]: boolean }>({});
+    const [editingStockId, setEditingStockId] = useState<string | null>(null);
     const postsPerPage = 4;
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [stockData, setStockData] = useState<any[]>([]);
@@ -112,7 +112,7 @@ function Insights() {
 
         try {
             const endpoint = isSearching
-                ? `https://yzeab2y3rxgoogdsnt3552dlcy0luxco.lambda-url.us-east-1.on.aws/`
+                ? `https://yzeab2y3rxgoogdsnt3552dlcy0luxco.lambda-url.us-east-1.on.aws`
                 : `${baseApiURL()}/stock-watchlist`;
 
             const response = await axios.get(endpoint, {
@@ -122,13 +122,6 @@ function Insights() {
 
             const data = response.data.data || response.data.data;
             setStockData(data);
-
-            // Initialize edit states for each stock
-            const initialEditStates: { [key: string]: boolean } = {};
-            data.forEach((stock: Stock) => {
-                initialEditStates[stock.isin_code] = false;
-            });
-            setEditStates(initialEditStates);
 
             if (data.length === 0) {
                 setNoDataFound(true);
@@ -200,19 +193,12 @@ function Insights() {
         window.location.href = '/login';
     };
 
-    const handleEditClick = (isin_code: string) => {
-        setEditStates(prevStates => ({
-            ...prevStates,
-            [isin_code]: !prevStates[isin_code]
-        }));
+    const handleEditClick = (id: string) => {
+        setEditingStockId(currentId => currentId === id ? null : id);
     };
 
-    const handleRemoveClick = async (isin_code: string, index: number) => {
-        const selectedStock = stockData[index];
-        const scrip_cd = selectedStock.scrip_cd;
-
+    const handleRemoveClick = async (isin_code: string, scrip_cd: string) => {
         try {
-            // Make the API call to delete the stock
             await axios.post(`${baseApiURL()}/delete-stock-from-watchlist`, {
                 scrip_cd: scrip_cd
             }, {
@@ -221,25 +207,15 @@ function Insights() {
                 },
             });
 
-            // Show success message
             alert("Stock Deleted Successfully!!!");
-
-            // Reset the edit state for this stock
-            setEditStates(prevStates => ({
-                ...prevStates,
-                [isin_code]: false
-            }));
-
-            // Refresh the stock data
+            setEditingStockId(null); // Reset editing state
             fetchStockData();
-
         } catch (error) {
             console.error('Error deleting stock:', error);
-
-            // Show error message
             alert("Failed to delete stock. Please try again.");
         }
     };
+
 
     const handleAddToWatchlist = async () => {
 
@@ -486,32 +462,29 @@ function Insights() {
                                                     <div className="adani-group1">{stock.scrip_cd}</div>
                                                 </div>
                                                 <div className="actions">
-                                                    {!editStates[stock.isin_code] ? (
-                                                        <Edit3
-                                                            onClick={() => handleEditClick(stock.isin_code)}
-                                                            style={{
-                                                                transition: 'opacity 0.3s',
-                                                                opacity: 1,
-                                                                cursor: 'pointer',
-                                                                color: 'white'
-                                                            }}
-                                                        />
-                                                    ) : (
+                                                    {editingStockId === stock.id ? (
                                                         <div
-                                                            onClick={() => handleRemoveClick(stock.isin_code, index)}
+                                                            onClick={() => handleRemoveClick(stock.isin_code, stock.scrip_cd)}
                                                             style={{
                                                                 display: 'flex',
                                                                 alignItems: 'center',
                                                                 backgroundColor: 'red',
                                                                 padding: '10px',
-                                                                transition: 'opacity 0.3s',
-                                                                opacity: 1,
+                                                                borderRadius: '4px',
                                                                 cursor: 'pointer',
                                                             }}
                                                         >
                                                             <Trash style={{ color: 'white' }} />
-                                                            <span style={{ marginLeft: '4px', marginTop: '4px', color: 'white' }}>Remove</span>
+                                                            <span style={{ marginLeft: '4px', color: 'white' }}>Remove</span>
                                                         </div>
+                                                    ) : (
+                                                        <Edit3
+                                                            onClick={() => handleEditClick(stock.id)}
+                                                            style={{
+                                                                cursor: 'pointer',
+                                                                color: 'white'
+                                                            }}
+                                                        />
                                                     )}
                                                 </div>
                                             </div>

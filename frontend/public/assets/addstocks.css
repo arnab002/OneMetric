@@ -1020,6 +1020,12 @@
   }
 }
 
+@media only screen and (min-width: 375px) and (max-width: 667px){
+  .plan-expiring{
+    font-size: 17px;
+  }
+}
+
 @media (max-width: 768px) {
   .indices-names {
     font-size: 16px;

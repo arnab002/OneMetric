@@ -66,7 +66,7 @@ function AddStocks() {
         try {
             let endpoint = `${baseApiURL()}/stocks`;
             if (isSearching) {
-                endpoint = `${baseApiURL()}/search-stocks`;
+                endpoint = `https://yzeab2y3rxgoogdsnt3552dlcy0luxco.lambda-url.us-east-1.on.aws`;
             } else {
                 switch (filter) {
                     case 'bankNifty':
