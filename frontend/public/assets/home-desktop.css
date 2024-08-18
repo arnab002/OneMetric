@@ -33,7 +33,7 @@
   background-color: var(--color-mediumseagreen-200);
   position: absolute;
   top: 458px;
-  left: 80px;
+  left: 204px;
   border-radius: var(--br-5xs);
   box-sizing: border-box;
   width: 384px;
@@ -671,7 +671,7 @@
 .frame-parent {
   position: absolute;
   top: 35px;
-  left: 484px;
+  left: 590px;
   width: 796px;
   height: 537px;
   flex-direction: row;
@@ -704,7 +704,7 @@
 .get-lighting-container {
   position: absolute;
   top: 214px;
-  left: 80px;
+  left: 210px;
   line-height: 124%;
   font-size: 40px;
   color: var(--color-white);
@@ -808,7 +808,7 @@
   overflow-x: auto;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   padding: var(--padding-xs) var(--padding-61xl);
   gap: var(--gap-base);
   max-width: 100%;
@@ -1324,11 +1324,12 @@
   width: 880px;
   flex-direction: column;
   gap: var(--gap-base);
+  margin: auto;
 }
 .homepage-inner {
   width: 100%;
   flex-direction: row;
-  padding: 0 0 0 240px;
+  /* padding: 0 0 0 240px; */
   box-sizing: border-box;
 }
 .how-it-works {
@@ -2852,11 +2853,12 @@
   width: 1119.8px;
   flex-direction: column;
   gap: var(--gap-21xl);
+  margin: auto;
 }
 .homepage-child {
   width: 100%;
   flex-direction: row;
-  padding: 0 0 0 110px;
+  /* padding: 0 0 0 110px; */
   box-sizing: border-box;
 }
 .icon-background {
@@ -3153,13 +3155,14 @@
   font-size: var(--font-size-13xl);
   color: var(--color-white);
   font-family: var(--font-poppins);
+  margin: auto;
 }
 .homepage-inner1 {
   width: 100%;
   height: 418px;
   flex-direction: row;
   align-items: flex-start;
-  padding: 0 0 0 110px;
+  /* padding: 0 0 0 110px; */
 }
 .affordable-plans {
   margin: 0;
@@ -3512,11 +3515,12 @@
   width: 1120px;
   flex-direction: column;
   gap: var(--gap-21xl);
+  margin: auto;
 }
 .homepage-inner2 {
   width: 100%;
   flex-direction: row;
-  padding: 0 0 0 110px;
+  /* padding: 0 0 0 110px; */
   box-sizing: border-box;
 }
 .faq {
@@ -3624,6 +3628,7 @@
   width: 1120px;
   flex-direction: column;
   align-items: center;
+  margin: auto;
   padding: 0 var(--padding-xl);
   gap: var(--gap-5xl);
   max-width: 100%;
@@ -3637,7 +3642,7 @@
   height: 338px;
   flex-direction: row;
   align-items: flex-start;
-  padding: 0 0 0 110px;
+  /* padding: 0 0 0 110px; */
 }
 .free-month1 {
   font-weight: 800;
@@ -3728,6 +3733,7 @@
 }
 .referral-offer-parent {
   width: 880px;
+  margin: auto;
   border-radius: var(--br-5xs);
   background: linear-gradient(#161923, #161923),
     linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.1));
@@ -3745,7 +3751,7 @@
 .homepage-inner4 {
   width: 100%;
   height: 194px;
-  padding: 0 0 0 230px;
+  /* padding: 0 0 0 230px; */
 }
 .frame-child112 {
   height: 11px;
