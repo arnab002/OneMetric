@@ -318,13 +318,13 @@ function PlanDesktop() {
                                                         </div>
                                                     </div>
                                                     <div className="comments">
-                                                        <div className="languages">Multilingual</div>
-                                                        <div className="ideal-for-beginners">
-                                                            Enjoy news and charts in English
-                                                        </div>
+                                                        <div className="days-free-trial">{plan.duration_in_months} {plan.duration_in_months === 1 ? "Month" : "Months"}</div>
                                                     </div>
                                                 </div>
                                                 <div className="diamond-plan-details">
+                                                    <div className="coming-soon-container">
+                                                        <i className="coming-soon">Coming soon</i>
+                                                    </div>
                                                     <div className="marvin-mckinney">
                                                         <div className="mins-ago-edited">
                                                             <img
@@ -336,7 +336,10 @@ function PlanDesktop() {
                                                         </div>
                                                     </div>
                                                     <div className="comments">
-                                                        <div className="days-free-trial">{plan.duration_in_months} {plan.duration_in_months === 1 ? "Month" : "Months"}</div>
+                                                        <div className="languages">Multilingual</div>
+                                                        <div className="ideal-for-beginners">
+                                                            Enjoy news and charts in English and Other Languages
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

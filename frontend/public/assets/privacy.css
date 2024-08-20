@@ -574,4 +574,16 @@
     color: var(--color-lightslategray-200);
     font-family: var(--font-poppins);
   }
+
+  @media only screen and (min-width: 1280px) and (max-width: 1920px){
+    .icons-parent{
+      padding: 25px 80px;
+    }
+    .referral-policy-parent{
+      padding: 0px 80px;
+    }
+    .footer{
+      padding: 0 82px 40px;
+    }
+  }
   

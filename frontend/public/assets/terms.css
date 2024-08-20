@@ -546,3 +546,15 @@
   color: var(--color-mediumseagreen);
   font-family: var(--font-poppins);
 }
+
+@media only screen and (min-width: 1280px) and (max-width: 1920px){
+  .top-navigation{
+    padding: 25px 80px;
+  }
+  .refund-policy-parent{
+    padding: 0px 80px;
+  }
+  .footer{
+    padding: 0 82px 40px;
+  }
+}

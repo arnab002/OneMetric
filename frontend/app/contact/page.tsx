@@ -53,7 +53,7 @@ function About() {
                         <h3 className="about-us1">Contact Us</h3>
                         <div className="at-wegro-were-container">
                             <span>At </span>
-                            <span className="wegro">OneMetric,</span>
+                            <span className="wegro">OneMetric,&nbsp;&nbsp;</span>
                             <span>
                                 we're on a mission to revolutionize the way people access news for
                                 their stock market investments. We understand the challenges faced by

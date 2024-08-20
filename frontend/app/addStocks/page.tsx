@@ -454,7 +454,7 @@ function AddStocks() {
                                 <span className="plan-expiring">Your Plan is expiring in {daysUntilExpiry} days</span>
                             ) : isPlanExpired ? (
                                 <>
-                                    <span className="plan-expired">Your Plan has expired</span>
+                                    <span className="plan-expired">Your Plan has expired&nbsp;&nbsp;</span>
                                     <button className="renew-plan-button" onClick={handleAddToWatchlist}>
                                         Renew Plan
                                     </button>

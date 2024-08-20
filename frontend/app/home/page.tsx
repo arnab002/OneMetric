@@ -179,13 +179,13 @@ function HomeDesktop() {
         try {
             const response = await axios.get(`${baseApiURL()}/nifty50`);
             const data = (response.data.data as { stock_long_name: string }[])
-                    .filter(stock => {
-                        // Remove entries with patterns like "182D050924" or other unwanted formats
-                        const regexPattern = /^[\dA-Z]+$/; // Match any string that consists only of digits and uppercase letters
-                        return !regexPattern.test(stock.stock_long_name);
-                    })
-                    .slice(0, 10)
-                    .sort((a, b) => a.stock_long_name.localeCompare(b.stock_long_name));
+                .filter(stock => {
+                    // Remove entries with patterns like "182D050924" or other unwanted formats
+                    const regexPattern = /^[\dA-Z]+$/; // Match any string that consists only of digits and uppercase letters
+                    return !regexPattern.test(stock.stock_long_name);
+                })
+                .slice(0, 10)
+                .sort((a, b) => a.stock_long_name.localeCompare(b.stock_long_name));
             setNiftyData(data);
             setFilteredStockData(data);
             setLoading(false);
@@ -760,15 +760,15 @@ function HomeDesktop() {
                             </div>
                             <div className="how-are-you-feeling-today-parent">
                                 <div className={`how-are-you-feeling-today ${activeTab === 'All' ? 'active' : ''}`}
-                                    onClick={() => handleTabSwitch('All')}>
+                                    onClick={() => handleTabSwitch('All')} style={{cursor: 'pointer'}}>
                                     <b className="all">All</b>
                                 </div>
                                 <div className={`bank-nifty-wrapper ${activeTab === 'Bank Nifty' ? 'active' : ''}`}
-                                    onClick={() => handleTabSwitch('Bank Nifty')}>
+                                    onClick={() => handleTabSwitch('Bank Nifty')} style={{cursor: 'pointer'}}>
                                     <div className="bank-nifty">Bank Nifty</div>
                                 </div>
                                 <div className={`circle ${activeTab === 'Nifty 50' ? 'active' : ''}`}
-                                    onClick={() => handleTabSwitch('Nifty 50')}>
+                                    onClick={() => handleTabSwitch('Nifty 50')} style={{cursor: 'pointer'}}>
                                     <div className="all-nifty-50">Nifty 50</div>
                                 </div>
                             </div>
@@ -1353,8 +1353,8 @@ function HomeDesktop() {
                                                     Daily Impact Reports &amp; Market Insights
                                                 </div>
                                             </div>
-                                            <div className="coming-soon-container">
-                                                <i className="coming-soon">Coming soon</i>
+                                            <div className="coming-soon-container1">
+                                                <i className="coming-soon1">Coming soon</i>
                                             </div>
                                         </div>
                                     </div>
@@ -1476,13 +1476,13 @@ function HomeDesktop() {
                                                         </div>
                                                     </div>
                                                     <div className="comments">
-                                                        <div className="languages">Multilingual</div>
-                                                        <div className="ideal-for-beginners">
-                                                            Enjoy news and charts in English
-                                                        </div>
+                                                        <div className="days-free-trial">{plan.duration_in_months} {plan.duration_in_months === 1 ? "Month" : "Months"}</div>
                                                     </div>
                                                 </div>
                                                 <div className="diamond-plan-details">
+                                                    <div className="coming-soon-container">
+                                                        <i className="coming-soon">Coming soon</i>
+                                                    </div>
                                                     <div className="marvin-mckinney">
                                                         <div className="mins-ago-edited">
                                                             <img
@@ -1494,7 +1494,10 @@ function HomeDesktop() {
                                                         </div>
                                                     </div>
                                                     <div className="comments">
-                                                        <div className="days-free-trial">{plan.duration_in_months} {plan.duration_in_months === 1 ? "Month" : "Months"}</div>
+                                                        <div className="languages">Multilingual</div>
+                                                        <div className="ideal-for-beginners">
+                                                            Enjoy news and charts in English and Other Languages
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

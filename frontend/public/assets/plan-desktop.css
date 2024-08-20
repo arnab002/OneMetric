@@ -2986,8 +2986,9 @@
   height: 17px;
   margin: 0 !important;
   position: absolute;
-  top: 1px;
-  left: 8px;
+  top: -4px;
+  left: 145px;
+  padding: 1.5%;
   border-radius: var(--br-5xs);
   background-color: var(--color-darkslateblue);
   display: flex;
@@ -3336,6 +3337,7 @@
   align-self: stretch;
   flex-direction: row;
   gap: var(--gap-base);
+  position: relative;
 }
 .languages {
   display: inline-block;
@@ -3953,7 +3955,7 @@
 .footer {
   background-color: var(--color-gray-400);
   overflow: hidden;
-  padding: 0 142px var(--padding-21xl);
+  padding: 0 190px var(--padding-21xl);
   box-sizing: border-box;
   gap: var(--gap-21xl);
   text-align: left;

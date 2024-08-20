@@ -160,7 +160,7 @@
 }
 .at-wegro-were-container {
   align-self: stretch;
-  height: 198px;
+  height: 100%;
   position: relative;
   font-size: var(--font-size-sm);
   line-height: 160%;
@@ -451,4 +451,22 @@
   font-size: 12px;
   color: #8a8c9e;
   font-family: var(--font-poppins);
+}
+
+@media only screen and (min-width: 360px) and (max-width: 380px){
+  .about-us{
+    height: 100%;
+  }
+}
+
+@media only screen and (min-width: 1280px) and (max-width: 1920px){
+  .navigation{
+    padding: 25px 80px;
+  }
+  .about-us-parent{
+    padding: 0px 80px;
+  }
+  .footer{
+    padding: 0 80px 40px;
+  }
 }

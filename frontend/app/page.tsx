@@ -1231,8 +1231,8 @@ function Home() {
                         Daily Impact Reports &amp; Market Insights
                       </div>
                     </div>
-                    <div className="coming-soon-wrapper">
-                      <i className="coming-soon">Coming soon</i>
+                    <div className="coming-soon-wrapper1">
+                      <i className="coming-soon1">Coming soon</i>
                     </div>
                   </div>
                 </div>
@@ -1251,7 +1251,7 @@ function Home() {
                         Family Portfolio Tracking
                       </div>
                     </div>
-                    <div className="coming-soon-wrapper">
+                    <div className="coming-soon-wrapper1">
                       <i className="upgrade-available">Upgrade Available</i>
                     </div>
                   </div>
@@ -1330,13 +1330,13 @@ function Home() {
                         </div>
                       </div>
                       <div className="diamond-feature-descriptions">
-                        <div className="languages">Multilingual</div>
-                        <div className="ideal-for-beginners">
-                          Enjoy news and charts in English
-                        </div>
+                        <div className="days-free-trial">{plan.duration_in_months} {plan.duration_in_months === 1 ? "Month" : "Months"}</div>
                       </div>
                     </div>
                     <div className="diamond-feature-containers">
+                      <div className="coming-soon-wrapper">
+                        <i className="coming-soon">Coming soon</i>
+                      </div>
                       <div className="diamond-feature-items">
                         <div className="diamond-feature-icons">
                           <img
@@ -1348,7 +1348,10 @@ function Home() {
                         </div>
                       </div>
                       <div className="diamond-feature-descriptions">
-                        <div className="days-free-trial">{plan.duration_in_months} {plan.duration_in_months === 1 ? "Month" : "Months"}</div>
+                        <div className="languages">Multilingual</div>
+                        <div className="ideal-for-beginners">
+                          Enjoy news and charts in English and Other Languages
+                        </div>
                       </div>
                     </div>
                   </div>

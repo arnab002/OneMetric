@@ -53,7 +53,7 @@ function About() {
                         <h3 className="about-us1">About US</h3>
                         <div className="at-wegro-were-container">
                             <span>At </span>
-                            <span className="wegro">OneMetric,</span>
+                            <span className="wegro">OneMetric,&nbsp;&nbsp;</span>
                             <span>
                                 we're on a mission to revolutionize the way people access news for
                                 their stock market investments. We understand the challenges faced by
@@ -61,6 +61,24 @@ function About() {
                                 informed decisions. That's why we've created a platform that delivers
                                 personalized stock news directly to your WhatsApp, in your preferred
                                 language, within just 90 seconds.
+                            </span>
+                        </div>
+                        <br />
+                        <h3 className="about-us1">Vision Statement</h3>
+                        <div className="at-wegro-were-container">
+                            <span>💡 At </span>
+                            <span className="wegro">&nbsp;OneMetric,&nbsp;&nbsp;</span>
+                            <span>
+                                our vision is to empower investors in Bharat by providing them with effortless access to timely and relevant stock market news. We envision a future where every investor, regardless of their experience or background, can make informed decisions with confidence and ease. Through our innovative platform, we strive to simplify the complexities of the stock market and pave the way for a more inclusive and accessible trading experience. Our ultimate goal is to become the go-to destination for investors seeking reliable, personalized news that helps them unlock their full potential in the world of finance.
+                            </span>
+                        </div>
+                        <br />
+                        <h3 className="about-us1">Mission Statement</h3>
+                        <div className="at-wegro-were-container">
+                            <span>💡 At </span>
+                            <span className="wegro">&nbsp;OneMetric,&nbsp;&nbsp;</span>
+                            <span>
+                                our mission is to revolutionize the way investors access and utilize stock market news. We are dedicated to providing a seamless and personalized experience that saves time, effort, and frustration for our users. Through the power of technology and data-driven insights, we strive to deliver accurate, timely, and actionable information directly to our users' fingertips via WhatsApp. By democratizing access to reliable stock market news, we aim to empower investors of all levels to make informed decisions and achieve their financial goals with confidence and ease. Our commitment is to simplify the trading process and enhance the lives of investors by delivering unparalleled value and convenience through our platform.
                             </span>
                         </div>
                     </div>
@@ -132,7 +150,7 @@ function About() {
                                     <a href='/plans' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Pricing</a>
                                 </div>
                                 <div className="link-column1">
-                                <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy Policy</a>
+                                    <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy Policy</a>
                                     <a href='/terms' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
                                     <a href='/referral' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Referral Policy</a>
                                     <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="faqs">FAQs</a>
