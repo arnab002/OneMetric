@@ -298,9 +298,9 @@ function Insights() {
         "./public/insights/Stock_3.jpg",
     ]);
 
-    // if (!isTokenChecked) {
-    //     return null; // Render nothing until the token is checked
-    // }
+    if (!isTokenChecked) {
+        return null; // Render nothing until the token is checked
+    }
 
     return (
         <div>

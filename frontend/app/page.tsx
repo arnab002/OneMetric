@@ -1275,6 +1275,7 @@ function Home() {
                             className="diamond-feature-checkmarks"
                             loading="lazy"
                             alt=""
+                            src="./public/home/vector-207-2.svg"
                           />
                         </div>
                       </div>

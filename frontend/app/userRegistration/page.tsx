@@ -1,16 +1,12 @@
 'use client';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../../public/assets/register.css'
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
 
 function Registration() {
-    const token = sessionStorage.getItem('authToken');
-    if (!token) {
-        console.error('No token found in sessionStorage');
-        return;
-    }
-
+    const [isTokenChecked, setIsTokenChecked] = useState(false);
+    const [token, setToken] = useState<string | null>(null);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [pincode, setPinCode] = useState('');
@@ -35,6 +31,27 @@ function Registration() {
             console.error('Error creating user:', error);
         }
     };
+
+    useEffect(() => {
+        const checkToken = () => {
+            const storedToken = sessionStorage.getItem('authToken');
+            setToken(storedToken);
+            if (!storedToken) {
+                window.location.href = '/login';
+            } else {
+                setIsTokenChecked(true);
+            }
+        };
+
+        if (typeof window !== 'undefined') {
+            checkToken();
+        }
+    }, []);
+
+    if (!isTokenChecked) {
+        return null; // Render nothing until the token is checked
+    }
+
     return (
         <div>
             <div className="otp">

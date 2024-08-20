@@ -12,6 +12,7 @@ interface CountryOption {
 }
 
 function Login(): JSX.Element {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [mobile, setMobile] = useState<string>('');
   const [countryCode, setCountryCode] = useState<CountryCode>('IN');
   const [error, setError] = useState<string | null>(null);
@@ -42,6 +43,7 @@ function Login(): JSX.Element {
       return;
     }
     setError(null);
+    setIsLoading(true);
     try {
       const countryCallingCode = `+${getCountryCallingCode(countryCode)}`;
       const parsedNumber = parsePhoneNumberFromString(mobile, countryCode);
@@ -57,6 +59,8 @@ function Login(): JSX.Element {
       router.push(`/otpverify?countryCode=${countryCallingCode}&mobile=${formattedNumber}`);
     } catch (error) {
       console.error('Error checking mobile number', error);
+      setError('Error Sending OTP.');
+      setIsLoading(false);
     }
   };
 
@@ -110,9 +114,9 @@ function Login(): JSX.Element {
                 <div className="input-wrapper">
                   <div className="whatsapp-number">WhatsApp Number</div>
                   <div className="input-content">
-                    <select 
-                      className="country-code" 
-                      value={countryCode} 
+                    <select
+                      className="country-code"
+                      value={countryCode}
                       onChange={handleCountryCodeChange}
                     >
                       {countryCodes.map((country) => (
@@ -136,9 +140,9 @@ function Login(): JSX.Element {
                   </div>
                 </div>
               </div>
-              {error && <div className="error-message" style={{color: 'red'}}>{error}</div>}
-              <button className="button-container" type="submit">
-                <div className="send-otp">Send OTP</div>
+              {error && <div className="error-message" style={{ color: 'red', margin: 'auto' }}>{error}</div>}
+              <button className="button-container" type="submit" disabled={isLoading}>
+                <div className="send-otp">{isLoading ? "Sending OTP....." : "Send OTP"}</div>
               </button>
             </form>
           </div>
