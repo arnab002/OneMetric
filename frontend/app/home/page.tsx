@@ -32,6 +32,7 @@ function HomeDesktop() {
     const [niftyData, setNiftyData] = useState<any[]>([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [isProcessing, setIsProcessing] = useState<boolean>(false);
     const [razorpayLoaded, setRazorpayLoaded] = useState<boolean>(false);
     const [buttonStates, setButtonStates] = useState<{ [key: string]: ButtonState }>({});
     const [showWatchlistButton, setShowWatchlistButton] = useState(false);
@@ -273,6 +274,8 @@ function HomeDesktop() {
             return;
         }
 
+        setIsProcessing(true);
+
         try {
             // Initiate payment for free plan
             const paymentResponse = await axios.post(`${baseApiURL()}/payment`, {
@@ -325,6 +328,8 @@ function HomeDesktop() {
         } catch (error) {
             console.error('Error processing payment or adding stocks:', error);
             alert('An error occurred. Please try again.');
+        } finally {
+            setIsProcessing(false); // Stop processing
         }
     };
 
@@ -851,9 +856,9 @@ function HomeDesktop() {
                                                         textAlign: 'center',
                                                         boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
                                                     }}
-                                                    onClick={handleAddToWatchlist}
+                                                    onClick={!isProcessing ? handleAddToWatchlist : undefined}
                                                 >
-                                                    Add to Watchlist ({selectedStocks.length})
+                                                    {isProcessing ? 'Processing...' : `Add to Watchlist (${selectedStocks.length})`}
                                                 </div>
                                             )}
                                         </div>

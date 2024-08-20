@@ -1,5 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
+import { User, LogOut } from 'react-feather';
 import { Edit3, Trash } from 'react-feather';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
@@ -19,7 +20,6 @@ function Insights() {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [editingStockId, setEditingStockId] = useState<string | null>(null);
     const postsPerPage = 4;
-    const [dropdownVisible, setDropdownVisible] = useState(false);
     const [stockData, setStockData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [newsLoading, setNewsLoading] = useState<boolean>(true);
@@ -36,6 +36,8 @@ function Insights() {
     const [isPlanExpired, setIsPlanExpired] = useState<boolean>(false);
     const [isTokenChecked, setIsTokenChecked] = useState(false);
     const [isCheckingPlan, setIsCheckingPlan] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [showDropdown, setShowDropdown] = useState(false);
     const [token, setToken] = useState<string | null>(null);
 
     useEffect(() => {
@@ -66,6 +68,35 @@ function Insights() {
             fetchNewsData();
         }
     }, [isTokenChecked, token, searchQuery, isSearching]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (showDropdown && !(event.target as Element).closest('.user-icon-wrapper')) {
+                setShowDropdown(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showDropdown]);
+
+    useEffect(() => {
+        const token = sessionStorage.getItem('authToken');
+        setIsLoggedIn(!!token);
+    }, []);
+
+    const handleLogout = () => {
+        sessionStorage.removeItem('authToken');
+        setIsLoggedIn(false);
+        setShowDropdown(false);
+        window.location.href = '/';
+    };
+
+    const toggleDropdown = () => {
+        setShowDropdown(!showDropdown);
+    };
 
     const showMore = () => {
         setDisplayCount(prevCount => prevCount + 30);
@@ -184,15 +215,6 @@ function Insights() {
     // Handle pagination
     // const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-    const toggleDropdown = () => {
-        setDropdownVisible(!dropdownVisible);
-    };
-
-    const handleLogout = () => {
-        sessionStorage.removeItem('authToken');
-        window.location.href = '/login';
-    };
-
     const handleEditClick = (id: string) => {
         setEditingStockId(currentId => currentId === id ? null : id);
     };
@@ -276,9 +298,9 @@ function Insights() {
         "./public/insights/Stock_3.jpg",
     ]);
 
-    if (!isTokenChecked) {
-        return null; // Render nothing until the token is checked
-    }
+    // if (!isTokenChecked) {
+    //     return null; // Render nothing until the token is checked
+    // }
 
     return (
         <div>
@@ -324,21 +346,48 @@ function Insights() {
                                 src="./public/insights/group-1000000998@2x.png"
                             />
                         </div>
-                        <div className="union-wrapper">
-                            <img
-                                className="union-icon"
-                                loading="lazy"
-                                alt=""
-                                src="./public/insights/union.svg"
-                                onClick={toggleDropdown} // Toggle dropdown on click
-                                style={{ cursor: 'pointer' }}
-                            />
-                            {dropdownVisible && (
-                                <div className="dropdown-menu">
-                                    <button onClick={handleLogout}>Log Out</button>
-                                </div>
-                            )}
-                        </div>
+                        {isLoggedIn ? (
+                            <div className="user-icon-wrapper" style={{ position: 'relative' }}>
+                                <User onClick={toggleDropdown} style={{ cursor: 'pointer' }} />
+                                {showDropdown && (
+                                    <div
+                                        style={{
+                                            position: 'absolute',
+                                            top: '100%',
+                                            right: 0,
+                                            backgroundColor: '#fff',
+                                            border: '1px solid #ddd',
+                                            borderRadius: '4px',
+                                            padding: '0px',
+                                            zIndex: 1000,
+                                        }}
+                                    >
+                                        <button
+                                            onClick={handleLogout}
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                background: 'none',
+                                                border: 'none',
+                                                cursor: 'pointer',
+                                            }}
+                                        >
+                                            <LogOut size={16} style={{ marginRight: '5px' }} />
+                                            Logout
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <div className="union-wrapper">
+                                <img
+                                    className="union-icon"
+                                    loading="lazy"
+                                    alt=""
+                                    src="./public/insights/union.svg"
+                                />
+                            </div>
+                        )}
                     </div>
                 </header>
                 <div className="frame-parent4">

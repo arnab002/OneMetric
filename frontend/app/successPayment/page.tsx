@@ -97,10 +97,10 @@ function OTPSuccess() {
                         </div>
                         <div className="successfully-verified-parent">
                             <div className="successfully-verified">Payment Done Successfully!</div>
-                            <div style={{marginTop: '20px', fontSize: '14px', color: '#666'}}>
-                                <p>Transaction ID: {paymentDetails.transaction_id}</p>
-                                <p>Order ID: {paymentDetails.order_id}</p>
-                                <p>Payment ID: {paymentDetails.payment_id}</p>
+                            <div style={{marginTop: '20px', fontSize: '14px'}}>
+                                <p className="successfully-verified">Transaction ID: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style={{color: 'white'}}>{paymentDetails.transaction_id}</span></p>
+                                <p className="successfully-verified">Order ID: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style={{color: 'white'}}>{paymentDetails.order_id}</span></p>
+                                <p className="successfully-verified">Payment ID: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style={{color: 'white'}}>{paymentDetails.payment_id}</span></p>
                             </div>
                         </div>
                     </div>

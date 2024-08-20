@@ -83,13 +83,21 @@ function Home() {
 
   const fetchUserDetails = async (userId: string) => {
     try {
-      const response = await axios.post(`${baseApiURL()}/user/${userId}`);
-      return response.data.data;
+        const token = sessionStorage.getItem('authToken');
+        const response = await axios.post(
+            `${baseApiURL()}/fetchUserData`,
+            {
+                headers: {
+                    Authorization: `${token}`, // Passing the token in the Authorization header
+                },
+            }
+        );
+        return response.data.data;
     } catch (error) {
-      console.error('Error fetching user details:', error);
-      return null;
+        console.error('Error fetching user details:', error);
+        return null;
     }
-  };
+};
 
   const handleStartNowClick = async (planId: string) => {
     if (!razorpayLoaded) {

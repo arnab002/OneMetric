@@ -38,6 +38,7 @@ function Home() {
   const [loadingPlanValidity, setLoadingPlanValidity] = useState<boolean>(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [razorpayLoaded, setRazorpayLoaded] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>('All');
   const [buttonStates, setButtonStates] = useState<{ [key: string]: ButtonState }>({});
@@ -360,6 +361,8 @@ function Home() {
       return;
     }
 
+    setIsProcessing(true); // Start processing
+
     try {
       // Initiate payment for free plan
       const paymentResponse = await axios.post(`${baseApiURL()}/payment`, {
@@ -400,11 +403,11 @@ function Home() {
         }
 
         alert('Stocks added to watchlist successfully!');
+        window.location.href = '/insights'
         // Clear selected stocks from session storage
         sessionStorage.removeItem('selectedStocks');
         setSelectedStocks([]);
         setShowWatchlistButton(false);
-        window.location.href = '/insights'
 
       } else {
         alert('Payment verification failed. Please contact support.');
@@ -412,6 +415,8 @@ function Home() {
     } catch (error) {
       console.error('Error processing payment or adding stocks:', error);
       alert('An error occurred. Please try again.');
+    } finally {
+      setIsProcessing(false); // Stop processing
     }
   };
 
@@ -769,9 +774,9 @@ function Home() {
                                           textAlign: 'center',
                                           boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
                                         }}
-                                        onClick={handleAddToWatchlist}
+                                        onClick={!isProcessing ? handleAddToWatchlist : undefined}
                                       >
-                                        Add to Watchlist ({selectedStocks.length})
+                                        {isProcessing ? 'Processing...' : `Add to Watchlist (${selectedStocks.length})`}
                                       </div>
                                     )}
                                   </div>
