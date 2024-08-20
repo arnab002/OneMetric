@@ -218,7 +218,14 @@ function Home() {
   const fetchBankNiftyStocks = async () => {
     try {
       const response = await axios.get(`${baseApiURL()}/banknifty`);
-      const data = response.data.data.slice(0, 10);
+      const data = (response.data.data as { stock_long_name: string }[])
+        .filter(stock => {
+          // Remove entries with patterns like "182D050924" or other unwanted formats
+          const regexPattern = /^[\dA-Z]+$/; // Match any string that consists only of digits and uppercase letters
+          return !regexPattern.test(stock.stock_long_name);
+        })
+        .slice(0, 10)
+        .sort((a, b) => a.stock_long_name.localeCompare(b.stock_long_name));;
       setBankNiftyData(data);
       setFilteredStockData(data);
       setLoading(false);
@@ -231,7 +238,14 @@ function Home() {
   const fetchNifty50Stocks = async () => {
     try {
       const response = await axios.get(`${baseApiURL()}/nifty50`);
-      const data = response.data.data.slice(0, 10);
+      const data = (response.data.data as { stock_long_name: string }[])
+        .filter(stock => {
+          // Remove entries with patterns like "182D050924" or other unwanted formats
+          const regexPattern = /^[\dA-Z]+$/; // Match any string that consists only of digits and uppercase letters
+          return !regexPattern.test(stock.stock_long_name);
+        })
+        .slice(0, 10)
+        .sort((a, b) => a.stock_long_name.localeCompare(b.stock_long_name));;
       setNiftyData(data);
       setFilteredStockData(data);
       setLoading(false);
