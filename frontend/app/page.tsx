@@ -8,7 +8,7 @@ import logo from "../public/public/home/image-18@2x.png";
 import { Edit3, Plus, Trash, Check } from 'react-feather';
 import { User, LogOut } from 'react-feather';
 import statsData from '../public/json/stats.json';
-import MobileView from '@/middlewares/MobileView';
+import HomeMobileView from '@/middlewares/home/HomeMobileView';
 
 interface RazorpayResponse {
   razorpay_payment_id: string;
@@ -456,7 +456,7 @@ function Home() {
 
 
   return (
-    <MobileView>
+    <HomeMobileView>
       <div>
         <div className="homepage">
           <div className="homepage-child" />
@@ -1473,6 +1473,7 @@ function Home() {
                     <a href='/about' style={{ textDecoration: "none", color: "inherit" }} className="about-us">About Us</a>
                     <a href='/contact' style={{ textDecoration: "none", color: "inherit" }} className="contact-us">Contact Us</a>
                     <a href='/refund' style={{ textDecoration: "none", color: "inherit" }} className="refund-policy">Refund Policy</a>
+                    <a href='/plans' style={{ textDecoration: "none", color: "inherit" }} className="refund-policy">Pricing</a>
                   </div>
                   <div className="link-columns1">
                     <a href='/privacy' style={{ textDecoration: "none", color: "inherit" }} className="terms-conditions">Privacy &amp; Policy</a>
@@ -1516,7 +1517,7 @@ function Home() {
           </div>
         </div>
       </div>
-    </MobileView>
+    </HomeMobileView>
   )
 }
 

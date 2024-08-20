@@ -8,7 +8,7 @@ import '../../public/assets/home-global.css';
 import '../../public/assets/home-desktop.css';
 import { User, LogOut } from 'react-feather';
 import statsData from '../../public/json/stats.json';
-import DesktopView from '@/middlewares/DesktopView';
+import HomeDesktopView from '@/middlewares/home/HomeDesktopView';
 
 interface RazorpayResponse {
     razorpay_payment_id: string;
@@ -447,7 +447,7 @@ function HomeDesktop() {
     }
 
     return (
-        <DesktopView>
+        <HomeDesktopView>
             <div>
                 <div className="homepage">
                     <div className="trial-button-parent">
@@ -1589,6 +1589,7 @@ function HomeDesktop() {
                                             <a href='/about' className="about-us" style={{ textDecoration: "none", color: "inherit" }}>About Us</a>
                                             <a href='/contact' className="contact-us" style={{ textDecoration: "none", color: "inherit" }}>Contact Us</a>
                                             <a href='/refund' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Refund Policy</a>
+                                            <a href='/plan' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Pricing</a>
                                         </div>
                                         <div className="terms-links">
                                             <a href='/privacy' className="terms-conditions" style={{ textDecoration: "none", color: "inherit" }}>Privacy &amp; Policy</a>
@@ -1644,7 +1645,7 @@ function HomeDesktop() {
                     </div>
                 </div>
             </div>
-        </DesktopView>
+        </HomeDesktopView>
     )
 }
 

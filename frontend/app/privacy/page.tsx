@@ -49,18 +49,6 @@ const Referral: React.FC = () => {
     <div>
       <div className="about-us">
         <header className="icons-parent">
-          {/* <div className="icons" id="iconsContainer">
-            <div className="iconback-arrow">
-              <div className="iconback-arrow-inner">
-                <img
-                  className="frame-child"
-                  loading="lazy"
-                  alt=""
-                  src="./public/referral/vector-214.svg"
-                />
-              </div>
-            </div>
-          </div> */}
           <div className="frame-wrapper">
             <div className="iconback-arrow">
               <div className="image-18-parent">
@@ -147,14 +135,6 @@ const Referral: React.FC = () => {
                 </div>
               ))}
             </div>
-            {/* <div className="by-making-a-container">
-              <span>By participating in the referral program on </span>
-              <b>OneMetric</b>
-              <span>
-                , you acknowledge that you have read, understood, and agreed to the
-                terms of this referral policy.
-              </span>
-            </div> */}
           </div>
         </section>
         <section className="footer">
@@ -221,6 +201,7 @@ const Referral: React.FC = () => {
                   <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us1">About Us</a>
                   <a href='/contact' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us1">Contact Us</a>
                   <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">Refund Policy</a>
+                  <a href='/plans' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Pricing</a>
                 </div>
                 <div className="terms-conditions-parent">
                   <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy &amp; Policy</a>

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 
-interface DesktopViewProps {
+interface HomeDesktopViewProps {
     children: React.ReactNode;
 }
 
-const DesktopView: React.FC<DesktopViewProps> = ({ children }) => {
+const HomeDesktopView: React.FC<HomeDesktopViewProps> = ({ children }) => {
     const isDesktop = useMediaQuery({ minWidth: 1280 });
     const [shouldRender, setShouldRender] = useState(true);
 
@@ -25,4 +25,4 @@ const DesktopView: React.FC<DesktopViewProps> = ({ children }) => {
     return null;
 };
 
-export default DesktopView;
+export default HomeDesktopView;

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 
-interface ResponsiveViewProps {
+interface PlanMobileViewProps {
     children: React.ReactNode;
 }
 
-const ResponsiveView: React.FC<ResponsiveViewProps> = ({ children }) => {
+const PlanMobileView: React.FC<PlanMobileViewProps> = ({ children }) => {
     const isMobile = useMediaQuery({ maxWidth: 767 });
     const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1024 });
     const [shouldRender, setShouldRender] = useState(true);
@@ -14,7 +14,7 @@ const ResponsiveView: React.FC<ResponsiveViewProps> = ({ children }) => {
         if (typeof window !== 'undefined') {
             if (!isMobile && !isTablet) {
                 setShouldRender(false);
-                window.location.href = "/home";
+                window.location.href = "/plan";
             } else {
                 setShouldRender(true);
             }
@@ -28,4 +28,4 @@ const ResponsiveView: React.FC<ResponsiveViewProps> = ({ children }) => {
     return null;
 };
 
-export default ResponsiveView;
+export default PlanMobileView;

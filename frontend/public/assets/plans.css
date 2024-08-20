@@ -2396,7 +2396,7 @@
   color: var(--color-white);
   align-items: center;
   min-width: 112px;
-  font-size: var(--font-size-29xl);
+  font-size: 40px;
 }
 .diamond-details,
 .diamond-price {
@@ -2550,6 +2550,7 @@
   font-size: var(--font-size-xl);
   color: var(--color-white);
   font-family: var(--font-poppins);
+  margin-top: -16%;
 }
 .gold,
 .monthly {

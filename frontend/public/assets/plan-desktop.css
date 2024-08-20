@@ -2215,7 +2215,6 @@
   flex-direction: row;
   white-space: nowrap;
   max-width: 100%;
-  margin-left: 5%;
 }
 .frame-parent29 {
   height: 385px;
@@ -3521,7 +3520,7 @@
 .homepage-inner2 {
   width: 100%;
   flex-direction: row;
-  /* padding: 0 0 0 110px; */
+  margin-top: 8%;
   box-sizing: border-box;
 }
 .faq {

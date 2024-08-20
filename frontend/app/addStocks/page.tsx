@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import '../../public/assets/addstocks.css';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
+import { User, LogOut } from 'react-feather';
 import { Plus, Check, Edit3, Trash } from 'react-feather';
 
 type ButtonState = 'plus' | 'check' | 'edit' | 'trash';
@@ -13,6 +14,8 @@ function AddStocks() {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [isSearching, setIsSearching] = useState<boolean>(false);
     const [noDataFound, setNoDataFound] = useState<boolean>(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [showDropdown, setShowDropdown] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState('all');
     const [visibleActions, setVisibleActions] = useState<{ [key: number]: boolean }>({});
     const [buttonStates, setButtonStates] = useState<{ [key: string]: ButtonState }>({});
@@ -53,6 +56,35 @@ function AddStocks() {
             fetchStockData(selectedFilter);
         }
     }, [isTokenChecked, token, searchQuery, isSearching, selectedFilter]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (showDropdown && !(event.target as Element).closest('.user-icon-wrapper')) {
+                setShowDropdown(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showDropdown]);
+
+    useEffect(() => {
+        const token = sessionStorage.getItem('authToken');
+        setIsLoggedIn(!!token);
+    }, []);
+
+    const handleLogout = () => {
+        sessionStorage.removeItem('authToken');
+        setIsLoggedIn(false);
+        setShowDropdown(false);
+        window.location.href = '/';
+    };
+
+    const toggleDropdown = () => {
+        setShowDropdown(!showDropdown);
+    };
 
     const handleFilterChange = (filter: string) => {
         setSelectedFilter(filter);
@@ -337,14 +369,48 @@ function AddStocks() {
                                     src="./public/insights/group-1000000998@2x.png"
                                 />
                             </div>
-                            <div className="union-wrapper">
-                                <img
-                                    className="union-icon"
-                                    loading="lazy"
-                                    alt=""
-                                    src="./public/insights/union.svg"
-                                />
-                            </div>
+                            {isLoggedIn ? (
+                                <div className="user-icon-wrapper" style={{ position: 'relative' }}>
+                                    <User onClick={toggleDropdown} style={{ cursor: 'pointer' }} />
+                                    {showDropdown && (
+                                        <div
+                                            style={{
+                                                position: 'absolute',
+                                                top: '100%',
+                                                right: 0,
+                                                backgroundColor: '#fff',
+                                                border: '1px solid #ddd',
+                                                borderRadius: '4px',
+                                                padding: '0px',
+                                                zIndex: 1000,
+                                            }}
+                                        >
+                                            <button
+                                                onClick={handleLogout}
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    background: 'none',
+                                                    border: 'none',
+                                                    cursor: 'pointer',
+                                                }}
+                                            >
+                                                <LogOut size={16} style={{ marginRight: '5px' }} />
+                                                Logout
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <div className="union-wrapper">
+                                    <img
+                                        className="union-icon"
+                                        loading="lazy"
+                                        alt=""
+                                        src="./public/insights/union.svg"
+                                    />
+                                </div>
+                            )}
                         </div>
                     </header>
                     <div className="add-stocks1">
@@ -561,6 +627,7 @@ function AddStocks() {
                                         <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us">About Us</a>
                                         <a href='/contact' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Contact Us</a>
                                         <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">Refund Policy</a>
+                                        <a href='/plans' className="refund-policy" style={{ textDecoration: "none", color: "#8A8D9E" }}>Pricing</a>
                                     </div>
                                     <div className="link-names1">
                                         <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy &amp; Policy</a>
