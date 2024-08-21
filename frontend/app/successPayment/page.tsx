@@ -1,19 +1,17 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
 import "../../public/assets/otpSuccessful.css"
 
 function OTPSuccess() {
-    const router = useRouter();
-    const searchParams = useSearchParams();
     const [paymentDetails, setPaymentDetails] = useState({
-        transaction_id: '',
-        order_id: '',
-        payment_id: ''
+        transaction_id: 'ABCD',
+        order_id: 'PQR',
+        payment_id: 'FDC',
     });
 
     useEffect(() => {
-        // Get the query parameters
+        // Client-side fetching of query parameters
+        const searchParams = new URLSearchParams(window.location.search);
         const transaction_id = searchParams.get('transaction_id') || 'ABCD';
         const order_id = searchParams.get('order_id') || 'PQR';
         const payment_id = searchParams.get('payment_id') || 'FDC';
@@ -23,10 +21,10 @@ function OTPSuccess() {
 
         const timer = setTimeout(() => {
             window.location.href = '/';
-        }, 10000); // 10 seconds (increased from 3.5 seconds to give more time to read)
+        }, 10000); // 10 seconds
 
         return () => clearTimeout(timer);
-    }, [router, searchParams]);
+    }, []);
 
     return (
         <div>

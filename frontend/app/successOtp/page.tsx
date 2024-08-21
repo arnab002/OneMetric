@@ -1,22 +1,28 @@
 'use client';
-import React, { useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
 import "../../public/assets/otpSuccessful.css"
 
 function OTPSuccess() {
-    const searchParams = useSearchParams();
-    const mobile = searchParams.get('mobile');
-    const redirectUrl = searchParams.get('redirectUrl');
+    const [mobile, setMobile] = useState<string | null>(null);
+    const [redirectUrl, setRedirectUrl] = useState<string | null>(null);
 
     useEffect(() => {
+        // Fetch search params only on the client side
+        const searchParams = new URLSearchParams(window.location.search);
+        const mobileParam = searchParams.get('mobile');
+        const redirectUrlParam = searchParams.get('redirectUrl');
+        
+        setMobile(mobileParam);
+        setRedirectUrl(redirectUrlParam);
+
         const timer = setTimeout(() => {
-            if (redirectUrl) {
-                window.location.href= `${redirectUrl}`
+            if (redirectUrlParam) {
+                window.location.href = `${redirectUrlParam}`;
             }
-        }, 2000); // 3 seconds
+        }, 2000); // 2 seconds
 
         return () => clearTimeout(timer);
-    }, [mobile, redirectUrl]);
+    }, []);
 
     return (
         <div>

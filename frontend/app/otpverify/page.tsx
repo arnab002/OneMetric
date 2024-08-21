@@ -1,14 +1,12 @@
 'use client';
-import React, { useEffect, useState, ChangeEvent, useRef } from 'react';
+import React, { useEffect, useState, ChangeEvent } from 'react';
 import '../../public/assets/otpverify.css';
-import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
 
 const OTPVerify: React.FC = () => {
-    const searchParams = useSearchParams();
-    const mobile = searchParams.get('mobile');
-    const country_code = searchParams.get('countryCode');
+    const [mobile, setMobile] = useState<string | null>(null);
+    const [country_code, setCountryCode] = useState<string>('91');
     const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
     const [message, setMessage] = useState<string>('');
     const [resendDisabled, setResendDisabled] = useState<boolean>(true);
@@ -18,7 +16,16 @@ const OTPVerify: React.FC = () => {
     const [isVerifying, setIsVerifying] = useState<boolean>(false);
 
     useEffect(() => {
-        if (otp.join('').length === 6) {
+        const params = new URLSearchParams(window.location.search);
+        setMobile(params.get('mobile'));
+        const countryCodeParam = params.get('countryCode');
+        if (countryCodeParam) {
+            setCountryCode(countryCodeParam);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (otp.join('').length === 6 && mobile) {
             setIsVerifying(true);
             const formattedCountryCode = (country_code ?? '91').trim();
             const finalCountryCode = formattedCountryCode.startsWith('+') ? formattedCountryCode : `+${formattedCountryCode}`;
@@ -86,7 +93,6 @@ const OTPVerify: React.FC = () => {
         axios.post(`${baseApiURL()}/login`, { mobile, country_code: finalCountryCode })
             .then(response => {
                 setMessage('OTP has been resent to your mobile number.');
-                console.log(`OTP for ${mobile} is: ${response.data.otp}`)
             })
             .catch(error => {
                 setMessage('Error resending OTP.');
