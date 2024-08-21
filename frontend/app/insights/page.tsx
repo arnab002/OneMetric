@@ -19,6 +19,7 @@ function Insights() {
     const [newsData, setNewsData] = useState<Array<{ [key: string]: any }>>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [editingStockId, setEditingStockId] = useState<string | null>(null);
+    const [isRemoving, setIsRemoving] = useState<{ [key: string]: boolean }>({});
     const postsPerPage = 4;
     const [stockData, setStockData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -220,10 +221,15 @@ function Insights() {
         setEditingStockId(currentId => currentId === id ? null : id);
     };
 
-    const handleRemoveClick = async (isin_code: string, scrip_cd: string) => {
+    const handleRemoveClick = async (isin_code: string, scrip_cd: string, id: string) => {
+        setIsRemoving((prevState) => ({
+            ...prevState,
+            [id]: true,
+        }));
+
         try {
             await axios.post(`${baseApiURL()}/delete-stock-from-watchlist`, {
-                scrip_cd: scrip_cd
+                scrip_cd: scrip_cd,
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -236,6 +242,11 @@ function Insights() {
         } catch (error) {
             console.error('Error deleting stock:', error);
             alert("Failed to delete stock. Please try again.");
+        } finally {
+            setIsRemoving((prevState) => ({
+                ...prevState,
+                [id]: false,
+            }));
         }
     };
 
@@ -349,7 +360,7 @@ function Insights() {
                         </div>
                         {isLoggedIn ? (
                             <div className="user-icon-wrapper" style={{ position: 'relative' }}>
-                                <User onClick={toggleDropdown} style={{ cursor: 'pointer' }} />
+                                <User onClick={toggleDropdown} style={{ cursor: 'pointer', color: 'white' }} />
                                 {showDropdown && (
                                     <div
                                         style={{
@@ -431,7 +442,7 @@ function Insights() {
                                     <span className="plan-expiring">Your Plan is expiring in {daysUntilExpiry} days</span>
                                 ) : isPlanExpired ? (
                                     <>
-                                        <span className="plan-expired" style={{color: 'white'}}>Your Plan has expired&nbsp;&nbsp;</span>
+                                        <span className="plan-expired" style={{ color: 'white' }}>Your Plan has expired&nbsp;&nbsp;</span>
                                         <button className="renew-plan-button" onClick={handleAddToWatchlist}>
                                             Renew Plan
                                         </button>
@@ -514,7 +525,7 @@ function Insights() {
                                                 <div className="actions">
                                                     {editingStockId === stock.id ? (
                                                         <div
-                                                            onClick={() => handleRemoveClick(stock.isin_code, stock.scrip_cd)}
+                                                            onClick={() => handleRemoveClick(stock.isin_code, stock.scrip_cd, stock.id)}
                                                             style={{
                                                                 display: 'flex',
                                                                 alignItems: 'center',
@@ -525,7 +536,9 @@ function Insights() {
                                                             }}
                                                         >
                                                             <Trash style={{ color: 'white' }} />
-                                                            <span style={{ marginLeft: '4px', color: 'white' }}>Remove</span>
+                                                            <span style={{ marginLeft: '4px', color: 'white' }}>
+                                                                {isRemoving[stock.id] ? 'Removing....' : 'Remove'}
+                                                            </span>
                                                         </div>
                                                     ) : (
                                                         <Edit3
@@ -687,6 +700,7 @@ function Insights() {
                     </div>
                 </div>
                 <footer className="bottom-sheet-icon-parent">
+                    <h6 style={{ position: 'absolute', color: 'white', top: '-20px', left: '80px' }}>OneMetric, All Right reserved © 2024</h6>
                     <img
                         className="bottom-sheet-icon"
                         loading="lazy"

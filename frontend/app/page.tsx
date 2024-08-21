@@ -1226,7 +1226,7 @@ function Home() {
                     />
                   </div>
                   <div className="sub-feature-descriptions-parent">
-                    <div className="sub-feature-descriptions">
+                    <div className="sub-feature-descriptions" style={{marginTop: '2%'}}>
                       <div className="effortless-tracking-seamless">
                         Daily Impact Reports &amp; Market Insights
                       </div>

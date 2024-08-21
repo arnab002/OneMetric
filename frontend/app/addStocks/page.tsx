@@ -6,7 +6,7 @@ import baseApiURL from '@/baseUrl';
 import { User, LogOut } from 'react-feather';
 import { Plus, Check, Edit3, Trash } from 'react-feather';
 
-type ButtonState = 'plus' | 'check' | 'edit' | 'trash';
+type ButtonState = 'plus' | 'check' | 'edit' | 'trash' | 'removing';
 
 function AddStocks() {
     const [stockData, setStockData] = useState<any[]>([]);
@@ -17,6 +17,7 @@ function AddStocks() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState('all');
+    const [isRemoving, setIsRemoving] = useState<{ [key: number]: boolean }>({});
     const [visibleActions, setVisibleActions] = useState<{ [key: number]: boolean }>({});
     const [buttonStates, setButtonStates] = useState<{ [key: string]: ButtonState }>({});
     const [addedStocks, setAddedStocks] = useState<number[]>([]); // Track added stocks
@@ -248,10 +249,16 @@ function AddStocks() {
         const selectedStock = stockData[index];
         const scrip_cd = selectedStock.scrip_cd;
 
-        // Set button state to 'trash' immediately
+        // Set button state to 'removing' immediately
         setButtonStates((prevState) => ({
             ...prevState,
-            [isin_code]: 'trash',
+            [isin_code]: 'removing',
+        }));
+
+        // Set the isRemoving state for this index
+        setIsRemoving((prevState) => ({
+            ...prevState,
+            [index]: true,
         }));
 
         try {
@@ -273,6 +280,12 @@ function AddStocks() {
                     ...prevState,
                     [isin_code]: 'plus',
                 }));
+
+                // Reset the isRemoving state for this index
+                setIsRemoving((prevState) => ({
+                    ...prevState,
+                    [index]: false,
+                }));
             }, 1000);
 
         } catch (error) {
@@ -282,6 +295,12 @@ function AddStocks() {
             setButtonStates((prevState) => ({
                 ...prevState,
                 [isin_code]: 'edit',
+            }));
+
+            // Reset the isRemoving state for this index
+            setIsRemoving((prevState) => ({
+                ...prevState,
+                [index]: false,
             }));
 
             // Show error message
@@ -376,7 +395,7 @@ function AddStocks() {
                                         <div
                                             style={{
                                                 position: 'absolute',
-                                                top: '100%',
+                                                top: '80%',
                                                 right: 0,
                                                 backgroundColor: '#fff',
                                                 border: '1px solid #ddd',
@@ -571,7 +590,25 @@ function AddStocks() {
                                                     }}
                                                 >
                                                     <Trash style={{ color: 'white' }} />
-                                                    <span style={{ marginLeft: '4px', marginTop: '4px', color: 'white' }}>Remove</span>
+                                                    <span style={{ marginLeft: '4px', marginTop: '4px', color: 'white' }}>
+                                                        {isRemoving[index] ? 'Removing...' : 'Remove'}
+                                                    </span>
+                                                </div>
+                                            )}
+                                            {buttonStates[stock.isin_code] === 'removing' && (
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        backgroundColor: 'red',
+                                                        padding: '10px',
+                                                        transition: 'opacity 2s',
+                                                        opacity: 1,
+                                                        cursor: 'pointer',
+                                                    }}
+                                                >
+                                                    <Trash style={{ color: 'white' }} />
+                                                    <span style={{ marginLeft: '4px', marginTop: '4px', color: 'white' }}>Removing...</span>
                                                 </div>
                                             )}
                                         </div>
@@ -642,6 +679,29 @@ function AddStocks() {
                                     alt=""
                                     src="./public/insights/vector-172.svg"
                                 />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="copyright">
+                        <div className="simply-grow-all-right-reserve-parent">
+                            <div className="simply-grow-all">
+                                OneMetric, All Right reserved © 2024
+                            </div>
+                            <div className="social-links">
+                                <div className="social-icon-parent">
+                                    <img
+                                        className="social-icon"
+                                        loading="lazy"
+                                        alt=""
+                                        src="./public/about/vector-2.svg"
+                                    />
+                                    <img
+                                        className="frame-child4"
+                                        loading="lazy"
+                                        alt=""
+                                        src="./public/about/group-219911503.svg"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
