@@ -1420,8 +1420,8 @@ function Home() {
                     <span className="span3"> </span>
                   </span>
                 </div>
-                <button className="referral-button">
-                  <div className="refer-now" onClick={handleReferClick}>Refer Now</div>
+                <button className="referral-button" onClick={handleReferClick}>
+                  <div className="refer-now">Refer Now</div>
                 </button>
               </div>
               <div className="referral-container-child" />
