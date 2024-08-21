@@ -3537,6 +3537,10 @@
   .all-nifty-50 {
     min-width: 100%;
   }
+
+  .diamond-value-txt-container{
+    font-size: 35px;
+  }
 }
 
 @media (max-width: 1920px) {

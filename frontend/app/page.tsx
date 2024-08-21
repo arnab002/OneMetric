@@ -258,7 +258,7 @@ function Home() {
   const fetchUserDetails = async (userId: string) => {
     try {
       const token = sessionStorage.getItem('authToken');
-      const response = await axios.post(
+      const response = await axios.get(
         `${baseApiURL()}/fetchUserData`,
         {
           headers: {

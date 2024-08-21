@@ -435,9 +435,9 @@ function Insights() {
                     <section className="watchlist">
                         <div className="trial-info">
                             <div className="add-your-favourite-container">
-                                <span style={{ color: 'white' }}>Add your favourite stocks to watch list and </span>
+                                <span style={{ color: 'white', fontSize: '14px' }}>Add your favourite stocks to watch list and </span>
                                 {isCheckingPlan ? (
-                                    <span style={{ color: 'white' }}>Checking plan status...</span>
+                                    <span style={{ color: 'white', fontSize: '14px' }}>Checking plan status...</span>
                                 ) : isPlanValid && planStatus === 'active' && !isPlanExpired ? (
                                     <span className="plan-expiring">Your Plan is expiring in {daysUntilExpiry} days</span>
                                 ) : isPlanExpired ? (
@@ -449,7 +449,7 @@ function Insights() {
                                     </>
                                 ) : planStatus === 'newuser' ? (
                                     <>
-                                        <span className="enjoy-your-30">Enjoy your free 30 days trial</span>
+                                        <span className="enjoy-your-30">Enjoy your free 30 days trial&nbsp;&nbsp;</span>
                                         <button className="purchase-plan-button" onClick={handleAddToWatchlist}>
                                             Purchase Plan
                                         </button>

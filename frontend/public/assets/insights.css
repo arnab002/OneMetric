@@ -1689,13 +1689,13 @@
 }
 
 .enjoy-your-30 {
-  font-size: var(--font-size-xl);
+  font-size: 14px;
   font-weight: 600;
   color: var(--color-gold);
 }
 
 .plan-expiring {
-  font-size: var(--font-size-xl);
+  font-size: 14px;
   font-weight: 600;
   color: var(--color-gold);
 }
@@ -1781,7 +1781,6 @@
   }
 }
 
-
 @media only screen and (min-width: 375px) and (max-width: 667px){
   .plan-expiring{
     font-size: 18px;
@@ -1808,5 +1807,11 @@
   }
   .footer-content{
     padding: 35px 20px;
+  }
+  .enjoy-your-30{
+    font-size: 17px;
+  }
+  .plan-expiring{
+    font-size: 17px;
   }
 }
