@@ -139,6 +139,12 @@ function Insights() {
         }
     };
 
+    const sortStocksAlphabetically = (stocks: any[]) => {
+        return [...stocks].sort((a, b) =>
+            a.stock_long_name.localeCompare(b.stock_long_name, undefined, { sensitivity: 'base' })
+        );
+    };
+
     const fetchStockData = async () => {
         setLoading(true);
         setNoDataFound(false);
@@ -154,9 +160,11 @@ function Insights() {
             });
 
             const data = response.data.data || response.data.data;
-            setStockData(data);
 
-            if (data.length === 0) {
+            const sortedData = sortStocksAlphabetically(data);
+            setStockData(sortedData);
+
+            if (sortedData.length === 0) {
                 setNoDataFound(true);
             } else {
                 setNoDataFound(false);
@@ -520,7 +528,7 @@ function Insights() {
                                                     </div>
                                                 </div>
                                                 <div className="stock-item">
-                                                    <div className="adani-group1">{stock.scrip_cd}</div>
+                                                    <div className="adani-group1">{stock.stock_long_name}</div>
                                                 </div>
                                                 <div className="actions">
                                                     {editingStockId === stock.id ? (

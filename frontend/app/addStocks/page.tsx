@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import '../../public/assets/addstocks.css';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
@@ -26,6 +26,7 @@ function AddStocks() {
     const [planStatus, setPlanStatus] = useState<string>('');
     const [daysUntilExpiry, setDaysUntilExpiry] = useState<number>(0);
     const [isPlanExpired, setIsPlanExpired] = useState<boolean>(false);
+    const [userWatchlist, setUserWatchlist] = useState<number[]>([]);
     const [isTokenChecked, setIsTokenChecked] = useState(false);
     const [isCheckingPlan, setIsCheckingPlan] = useState(false);
     const [token, setToken] = useState<string | null>(null);
@@ -55,8 +56,29 @@ function AddStocks() {
     useEffect(() => {
         if (isTokenChecked && token) {
             fetchStockData(selectedFilter);
+            fetchUserWatchlist();
         }
     }, [isTokenChecked, token, searchQuery, isSearching, selectedFilter]);
+
+
+    const sortStocksAlphabetically = (stocks: any[]) => {
+        return [...stocks].sort((a, b) =>
+            a.stock_long_name.localeCompare(b.stock_long_name, undefined, { sensitivity: 'base' })
+        );
+    };
+
+    const fetchUserWatchlist = async () => {
+        try {
+            const response = await axios.get(`${baseApiURL()}/stock-watchlist`, {
+                headers: {
+                    Authorization: `${token}`,
+                },
+            });
+            setUserWatchlist(response.data.data.map((stock: any) => stock.scrip_cd));
+        } catch (error) {
+            console.error('Error fetching user watchlist:', error);
+        }
+    };
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -123,9 +145,12 @@ function AddStocks() {
                 return !regexPattern.test(stock.stock_long_name);
             });
 
-            setStockData(data);
+            // Sort the data alphabetically
+            const sortedData = sortStocksAlphabetically(data);
 
-            if (data.length === 0) {
+            setStockData(sortedData);
+
+            if (sortedData.length === 0) {
                 setNoDataFound(true);
             } else {
                 setNoDataFound(false);
@@ -137,6 +162,8 @@ function AddStocks() {
             setLoading(false);
         }
     };
+
+    const sortedStockData = useMemo(() => sortStocksAlphabetically(stockData), [stockData]);
 
     const checkPlanValidity = async () => {
         setIsCheckingPlan(true);
@@ -183,34 +210,29 @@ function AddStocks() {
     };
 
     const handlePlusClick = async (isin_code: string, index: number) => {
-        const selectedStock = stockData[index];
+        const selectedStock = sortedStockData[index];
         const scrip_cd = selectedStock.scrip_cd;
 
-        // Set button state to 'check' immediately
         setButtonStates((prevState) => ({
             ...prevState,
             [isin_code]: 'check',
         }));
 
         try {
-            // Make the API call
             await axios.post(`${baseApiURL()}/add-stock-to-watchlist`, {
                 scrip_cd: scrip_cd
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`, // Passing the token in the Authorization header
+                    Authorization: `Bearer ${token}`,
                 },
             });
 
             console.log(`Stock ${scrip_cd} added!!`);
 
-            // Add this stock to the addedStocks state
-            setAddedStocks((prev) => [...prev, index]);
+            setUserWatchlist((prev) => [...prev, scrip_cd]);
 
-            // Show success message
             alert("Stock Added Successfully!!");
 
-            // Change button state to 'edit' after a delay
             setTimeout(() => {
                 setButtonStates((prevState) => ({
                     ...prevState,
@@ -220,18 +242,13 @@ function AddStocks() {
 
         } catch (error) {
             console.error('Error adding stock:', error);
-
-            // If there's an error, revert the button state
             setButtonStates((prevState) => ({
                 ...prevState,
                 [isin_code]: 'plus',
             }));
-
-            // Show error message
             alert("Failed to add stock. Please try again.");
         }
 
-        // Hide any visible actions
         setVisibleActions((prevState) => ({
             ...prevState,
             [index]: false,
@@ -246,42 +263,38 @@ function AddStocks() {
     };
 
     const handleRemoveClick = async (isin_code: string, index: number) => {
-        const selectedStock = stockData[index];
+        const selectedStock = sortedStockData[index];
         const scrip_cd = selectedStock.scrip_cd;
 
-        // Set button state to 'removing' immediately
         setButtonStates((prevState) => ({
             ...prevState,
             [isin_code]: 'removing',
         }));
 
-        // Set the isRemoving state for this index
         setIsRemoving((prevState) => ({
             ...prevState,
             [index]: true,
         }));
 
         try {
-            // Make the API call to delete the stock
             await axios.post(`${baseApiURL()}/delete-stock-from-watchlist`, {
                 scrip_cd: scrip_cd
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`, // Passing the token in the Authorization header
+                    Authorization: `Bearer ${token}`,
                 },
             });
 
-            // Show success message
             alert("Stock Deleted Successfully!!!");
 
-            // Reset the button state to 'plus' after a short delay
+            setUserWatchlist((prev) => prev.filter(id => id !== scrip_cd));
+
             setTimeout(() => {
                 setButtonStates((prevState) => ({
                     ...prevState,
                     [isin_code]: 'plus',
                 }));
 
-                // Reset the isRemoving state for this index
                 setIsRemoving((prevState) => ({
                     ...prevState,
                     [index]: false,
@@ -290,20 +303,14 @@ function AddStocks() {
 
         } catch (error) {
             console.error('Error deleting stock:', error);
-
-            // If there's an error, revert the button state
             setButtonStates((prevState) => ({
                 ...prevState,
                 [isin_code]: 'edit',
             }));
-
-            // Reset the isRemoving state for this index
             setIsRemoving((prevState) => ({
                 ...prevState,
                 [index]: false,
             }));
-
-            // Show error message
             alert("Failed to delete stock. Please try again.");
         }
     };
@@ -536,7 +543,7 @@ function AddStocks() {
                             ) : noDataFound ? (
                                 <div style={{ color: 'white', margin: 'auto' }}>No data found</div>
                             ) : (
-                                stockData.slice(0, displayCount).map((stock, index) => (
+                                sortedStockData.slice(0, displayCount).map((stock, index) => (
                                     <div key={index} className="select-stocks">
                                         <div className="select-stocks-inner">
                                             <div className="vector-wrapper">
@@ -547,53 +554,54 @@ function AddStocks() {
                                             <div className="adani-group" style={{ color: 'white' }}>{stock.stock_long_name}</div>
                                         </div>
                                         <div className="edit-delete-options-wrapper">
-                                            {buttonStates[stock.isin_code] === 'plus' || !buttonStates[stock.isin_code] ? (
-                                                <Plus
-                                                    onClick={() => handlePlusClick(stock.isin_code, index)}
-                                                    style={{ cursor: 'pointer', color: 'white' }}
-                                                />
-                                            ) : null}
-                                            {buttonStates[stock.isin_code] === 'check' && (
-                                                <Check
-                                                    style={{
-                                                        transition: 'opacity 2s',
-                                                        opacity: 1,
-                                                        backgroundColor: 'green',
-                                                        color: 'white',
-                                                        borderRadius: '50%',
-                                                        padding: '1%'
-                                                    }}
-                                                />
-                                            )}
-                                            {buttonStates[stock.isin_code] === 'edit' && (
-                                                <Edit3
-                                                    onClick={() => handleEditClick(stock.isin_code)}
-                                                    style={{
-                                                        transition: 'opacity 2s',
-                                                        opacity: 1,
-                                                        cursor: 'pointer',
-                                                        color: 'white'
-                                                    }}
-                                                />
-                                            )}
-                                            {buttonStates[stock.isin_code] === 'trash' && (
-                                                <div
-                                                    onClick={() => handleRemoveClick(stock.isin_code, index)}
-                                                    style={{
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        backgroundColor: 'red',
-                                                        padding: '10px',
-                                                        transition: 'opacity 2s',
-                                                        opacity: 1,
-                                                        cursor: 'pointer',
-                                                    }}
-                                                >
-                                                    <Trash style={{ color: 'white' }} />
-                                                    <span style={{ marginLeft: '4px', marginTop: '4px', color: 'white' }}>
-                                                        {isRemoving[index] ? 'Removing...' : 'Remove'}
-                                                    </span>
-                                                </div>
+                                            {userWatchlist.includes(stock.scrip_cd) ? (
+                                                buttonStates[stock.isin_code] === 'edit' || !buttonStates[stock.isin_code] ? (
+                                                    <Edit3
+                                                        onClick={() => handleEditClick(stock.isin_code)}
+                                                        style={{
+                                                            transition: 'opacity 2s',
+                                                            opacity: 1,
+                                                            cursor: 'pointer',
+                                                            color: 'white'
+                                                        }}
+                                                    />
+                                                ) : buttonStates[stock.isin_code] === 'trash' ? (
+                                                    <div
+                                                        onClick={() => handleRemoveClick(stock.isin_code, index)}
+                                                        style={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            backgroundColor: 'red',
+                                                            padding: '10px',
+                                                            transition: 'opacity 2s',
+                                                            opacity: 1,
+                                                            cursor: 'pointer',
+                                                        }}
+                                                    >
+                                                        <Trash style={{ color: 'white' }} />
+                                                        <span style={{ marginLeft: '4px', marginTop: '4px', color: 'white' }}>
+                                                            {isRemoving[index] ? 'Removing...' : 'Remove'}
+                                                        </span>
+                                                    </div>
+                                                ) : null
+                                            ) : (
+                                                buttonStates[stock.isin_code] === 'plus' || !buttonStates[stock.isin_code] ? (
+                                                    <Plus
+                                                        onClick={() => handlePlusClick(stock.isin_code, index)}
+                                                        style={{ cursor: 'pointer', color: 'white' }}
+                                                    />
+                                                ) : buttonStates[stock.isin_code] === 'check' ? (
+                                                    <Check
+                                                        style={{
+                                                            transition: 'opacity 2s',
+                                                            opacity: 1,
+                                                            backgroundColor: 'green',
+                                                            color: 'white',
+                                                            borderRadius: '50%',
+                                                            padding: '1%'
+                                                        }}
+                                                    />
+                                                ) : null
                                             )}
                                             {buttonStates[stock.isin_code] === 'removing' && (
                                                 <div
@@ -616,7 +624,7 @@ function AddStocks() {
                                 ))
                             )}
                         </div>
-                        {!loading && stockData.length > displayCount && (
+                        {!loading && sortedStockData.length > displayCount && (
                             <button onClick={showMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px" }}>Show More</button>
                         )}
                     </div>

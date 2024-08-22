@@ -1051,18 +1051,21 @@
     padding: 15px;
     font-size: 18px;
     width: 32%;
+    cursor: pointer;
   }
 
   .indices-names1 {
     padding: 15px;
     font-size: 18px;
     width: 32%;
+    cursor: pointer;
   }
 
   .indices-names2 {
     padding: 15px;
     font-size: 18px;
     width: 32%;
+    cursor: pointer;
   }
 }
 
