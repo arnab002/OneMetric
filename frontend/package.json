@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@iconify/react": "^5.0.2",
     "@types/mysql": "^2.15.26",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
