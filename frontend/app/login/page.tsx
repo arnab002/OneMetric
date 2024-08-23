@@ -101,7 +101,7 @@ function Login(): JSX.Element {
         <section className="form">
           <div className="number-field-parent">
             <div className="number-field">
-              <img className="number-field-child" loading="lazy" alt="" src="./public/login/group-1000001008.svg" />
+              <img className="number-field-child" loading="lazy" alt="" src="./public/login/Group 1000001008.png" />
             </div>
             <form className="input-details" onSubmit={handleSubmit}>
               <div className="description">

@@ -329,7 +329,6 @@ function HomeDesktop() {
                     }
                 }
 
-                alert('Stocks added to watchlist successfully!');
                 window.location.href = '/insights'
                 // Clear selected stocks from session storage
                 sessionStorage.removeItem('selectedStocks');
@@ -461,6 +460,10 @@ function HomeDesktop() {
         window.location.href = '/insights'
     };
 
+    const handleTwitterRedirect = () => {
+        window.open('https://x.com/Onemetric_in', '_blank');
+    };
+
     if (loadingPlanValidity) {
         return null;
     }
@@ -514,7 +517,7 @@ function HomeDesktop() {
                                                         className="group-icon"
                                                         loading="lazy"
                                                         alt=""
-                                                        src="./public/home-desktop/group-1000000965.svg"
+                                                        src="./public/home-desktop/image-18-1@2x.png"
                                                     />
                                                 </div>
                                                 <div className="frame-wrapper2">
@@ -692,7 +695,7 @@ function HomeDesktop() {
                             />
                             <div className="one-metric-sign-in-container">
                                 <div className="one-metric-sign-in-logo-contai">
-                                    <a className="onemetric1">OneMetric</a>
+                                    <a className="onemetric1" href='/'>OneMetric</a>
                                 </div>
                             </div>
                             {isLoggedIn ? (
@@ -754,21 +757,21 @@ function HomeDesktop() {
                                         <h1 className="add-to-your">Add to your watchlist</h1>
                                     </div>
                                     <div className="select-your-stocks">
-                                        Select your stocks to get Latest news now.
+                                        Select stocks that you follow or subscribe to our list.
                                     </div>
                                 </div>
                             </div>
                             <div className="how-are-you-feeling-today-parent">
                                 <div className={`how-are-you-feeling-today ${activeTab === 'All' ? 'active' : ''}`}
-                                    onClick={() => handleTabSwitch('All')} style={{cursor: 'pointer'}}>
+                                    onClick={() => handleTabSwitch('All')} style={{ cursor: 'pointer' }}>
                                     <b className="all">All</b>
                                 </div>
                                 <div className={`bank-nifty-wrapper ${activeTab === 'Bank Nifty' ? 'active' : ''}`}
-                                    onClick={() => handleTabSwitch('Bank Nifty')} style={{cursor: 'pointer'}}>
+                                    onClick={() => handleTabSwitch('Bank Nifty')} style={{ cursor: 'pointer' }}>
                                     <div className="bank-nifty">Bank Nifty</div>
                                 </div>
                                 <div className={`circle ${activeTab === 'Nifty 50' ? 'active' : ''}`}
-                                    onClick={() => handleTabSwitch('Nifty 50')} style={{cursor: 'pointer'}}>
+                                    onClick={() => handleTabSwitch('Nifty 50')} style={{ cursor: 'pointer' }}>
                                     <div className="all-nifty-50">Nifty 50</div>
                                 </div>
                             </div>
@@ -780,7 +783,7 @@ function HomeDesktop() {
                                         </div>
                                     </div>
                                     <div className="desktop-stocks">
-                                        <div className="adani-group" style={{ position: 'relative', paddingBottom: '20px' }}>
+                                        <div className="adani-group" style={{ position: 'relative'}}>
                                             {loading ? (
                                                 'Loading...'
                                             ) : (
@@ -910,11 +913,11 @@ function HomeDesktop() {
                                     </div>
                                     <div className="enter-your-whatsapp-number-parent">
                                         <div className="enter-your-whatsapp">
-                                            Enter your WhatsApp number
+                                            Get OTP on Whatsapp for verification
                                         </div>
                                         <div className="enter-your-whatsapp-receive-a-parent">
                                             <div className="enter-your-whatsapp1">
-                                                Enter Your WhatsApp, receive a code via WhatsApp/SMS for
+                                                Enter Your WhatsApp, receive a code via WhatsApp for
                                                 verification.
                                             </div>
                                             <div className="frame-wrapper13">
@@ -1158,7 +1161,7 @@ function HomeDesktop() {
                                                             <img
                                                                 className="one-metric-logo"
                                                                 alt=""
-                                                                src="./public/home-desktop/group-1000000965-1.svg"
+                                                                src="./public/home-desktop/image-18-1@2x.png"
                                                             />
                                                         </div>
                                                         <div className="frame-wrapper17">
@@ -1296,7 +1299,7 @@ function HomeDesktop() {
                                                 className="placeholder-icon"
                                                 loading="lazy"
                                                 alt=""
-                                                src="./public/home-desktop/group-1000001008.svg"
+                                                src="./public/home-desktop/Group 1000001008.png"
                                             />
                                         </div>
                                     </div>
@@ -1317,7 +1320,7 @@ function HomeDesktop() {
                                                     className="benefit-icon"
                                                     loading="lazy"
                                                     alt=""
-                                                    src="./public/home-desktop/vector-4.svg"
+                                                    src="./public/home-desktop/Group 1000001008.png"
                                                 />
                                             </div>
                                         </div>
@@ -1442,7 +1445,7 @@ function HomeDesktop() {
                                                     <div className="comments">
                                                         <div className="track-up-to">Track up to 500 stocks</div>
                                                         <div className="ideal-for-beginners">
-                                                            Ideal for beginners and casual investors
+                                                            {index % 2 === 0 ? "Ideal for beginners and casual investors" : "Ideal for Traders and Fund Managers"}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1496,7 +1499,7 @@ function HomeDesktop() {
                                                     <div className="comments">
                                                         <div className="languages">Multilingual</div>
                                                         <div className="ideal-for-beginners">
-                                                            Enjoy news and charts in English and Other Languages
+                                                            Available in 9 languages
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1617,7 +1620,7 @@ function HomeDesktop() {
                                             <a href='/privacy' className="terms-conditions" style={{ textDecoration: "none", color: "inherit" }}>Privacy &amp; Policy</a>
                                             <a href='/terms' className="terms-conditions" style={{ textDecoration: "none", color: "inherit" }}>Terms &amp; conditions</a>
                                             <a href='/referral' className="referral-policy" style={{ textDecoration: "none", color: "inherit" }}>Referral Policy</a>
-                                            <div className="social-icons">
+                                            <div className="social-icons" style={{cursor: 'pointer'}}>
                                                 <div className="icon-background-parent">
                                                     <div className="icon-background1" />
                                                     <img
@@ -1632,6 +1635,7 @@ function HomeDesktop() {
                                                     loading="lazy"
                                                     alt=""
                                                     src="./public/home-desktop/vector-1.svg"
+                                                    onClick={handleTwitterRedirect}
                                                 />
                                             </div>
                                             <div className="faqs">FAQs</div>

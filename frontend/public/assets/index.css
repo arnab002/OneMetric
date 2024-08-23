@@ -644,7 +644,7 @@
 
 .header-columns {
   flex: 1;
-  padding: var(--padding-mini-5) 0 var(--padding-3xs-5);
+  padding: var(--padding-mini-5) 0 0;
   gap: var(--gap-5xs);
 }
 
@@ -3010,7 +3010,6 @@
   position: relative;
   font-size: var(--font-size-sm);
   line-height: 130%;
-  text-transform: capitalize;
   color: var(--color-lightslategray-100);
 }
 
@@ -3550,6 +3549,12 @@
 .nifty-trio.active {
   background-color: #121523;
   font-weight: bold;
+}
+
+.start-now-wrapper:hover,
+.refer-now-button:hover,
+.sign-in-button-container:hover {
+  background-color: #13d4191b;
 }
 
 

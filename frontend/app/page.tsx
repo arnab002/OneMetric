@@ -469,6 +469,10 @@ function Home() {
     window.location.href = '/login'
   };
 
+  const handleTwitterRedirect = () => {
+    window.open('https://x.com/Onemetric_in', '_blank');
+  };
+
   if (loadingPlanValidity) {
     return null;
   }
@@ -484,7 +488,7 @@ function Home() {
             <div className="add-to-your-watchlist-parent">
               <h3 className="add-to-your">Add to your watchlist</h3>
               <div className="select-your-stocks">
-                Select your stocks to get Latest news now.
+                Select stocks that you follow or subscribe to our list.
               </div>
             </div>
             <div className="nifty-trio-parent">
@@ -515,7 +519,7 @@ function Home() {
               className="content-child"
               loading="lazy"
               alt=""
-              src="./public/home/group-1000001008.svg"
+              src="./public/home/Group 1000001008.png"
             />
             <img className="chart-icon" alt="" src="./public/home/chart.svg" />
             <div className="hero-container-parent">
@@ -701,7 +705,7 @@ function Home() {
                         </div>
                         <div className="header-columns">
                           <div className="header-items">
-                            <div className="adani-group" style={{ position: 'relative', paddingBottom: '60px' }}>
+                            <div className="adani-group" style={{ position: 'relative' }}>
                               {loading ? (
                                 'Loading...'
                               ) : (
@@ -838,10 +842,10 @@ function Home() {
                           <div className="input-container">
                             <div className="number-fields">
                               <div className="enter-your-whatsapp">
-                                Enter your WhatsApp number
+                                Get OTP on Whatsapp for verification
                               </div>
                               <div className="enter-your-whatsapp1">
-                                Enter Your WhatsApp, receive a code via WhatsApp/SMS for
+                                Enter Your WhatsApp, receive a code via WhatsApp for
                                 verification.
                               </div>
                             </div>
@@ -1053,7 +1057,7 @@ function Home() {
                     className="one-metric-logo-container-child"
                     loading="lazy"
                     alt=""
-                    src="./public/home/group-1000000965.svg"
+                    src="./public/home/image-18-1@2x.png"
                   />
                 </div>
                 <div className="trial-days">
@@ -1212,7 +1216,7 @@ function Home() {
                       src="./public/home/vector-21.svg"
                     />
                   </div>
-                  <div className="effortless-tracking-seamless">
+                  <div className="effortless-tracking-seamless" style={{ marginTop: '3.5%' }}>
                     Your Language, Your Choice
                   </div>
                 </div>
@@ -1226,7 +1230,7 @@ function Home() {
                     />
                   </div>
                   <div className="sub-feature-descriptions-parent">
-                    <div className="sub-feature-descriptions" style={{marginTop: '2%'}}>
+                    <div className="sub-feature-descriptions" style={{ marginTop: '2%' }}>
                       <div className="effortless-tracking-seamless">
                         Daily Impact Reports &amp; Market Insights
                       </div>
@@ -1296,7 +1300,7 @@ function Home() {
                       <div className="diamond-feature-descriptions">
                         <div className="track-up-to">Track up to 500 stocks</div>
                         <div className="ideal-for-beginners">
-                          Ideal for beginners and casual investors
+                          {index % 2 === 0 ? "Ideal for beginners and casual investors" : "Ideal for Traders and Fund Managers"}
                         </div>
                       </div>
                     </div>
@@ -1350,7 +1354,7 @@ function Home() {
                       <div className="diamond-feature-descriptions">
                         <div className="languages">Multilingual</div>
                         <div className="ideal-for-beginners">
-                          Enjoy news and charts in English and Other Languages
+                          Available in 9 languages
                         </div>
                       </div>
                     </div>
@@ -1481,6 +1485,7 @@ function Home() {
                   loading="lazy"
                   alt=""
                   src="./public/home/vector-4.svg"
+                  onClick={handleTwitterRedirect}
                 />
               </div>
             </div>

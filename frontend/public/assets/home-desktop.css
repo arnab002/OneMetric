@@ -962,7 +962,8 @@
   color: rgba(138, 141, 158, 0.9);
   display: flex;
   align-items: flex-end;
-  max-width: 100%;
+  width: 128% !important;
+  margin-left: -38px;
 }
 
 .frame-parent10,
@@ -1182,7 +1183,7 @@
 
 .desktop-stocks {
   flex: 1;
-  padding: var(--padding-mini-5) 0 var(--padding-3xs-5);
+  padding: var(--padding-mini-5) 0 0;
   box-sizing: border-box;
   gap: var(--gap-5xs);
   min-width: 515px;
@@ -3964,6 +3965,13 @@
   white-space: nowrap;
 }
 
+.start-now-wrapper:hover,
+.continue:hover,
+.refer-now-button:hover,
+.sign-in-button-container:hover {
+  background-color: #13d4191b;
+}
+
 .close-button {
   flex: 1;
   background: linear-gradient(#161923, #161923),
@@ -4033,7 +4041,6 @@
   position: relative;
   font-size: var(--font-size-sm);
   line-height: 130%;
-  text-transform: capitalize;
   color: var(--color-lightslategray-100);
 }
 

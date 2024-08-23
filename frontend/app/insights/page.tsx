@@ -20,7 +20,7 @@ function Insights() {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [editingStockId, setEditingStockId] = useState<string | null>(null);
     const [isRemoving, setIsRemoving] = useState<{ [key: string]: boolean }>({});
-    const postsPerPage = 4;
+    const postsPerPage = 16;
     const [stockData, setStockData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [newsLoading, setNewsLoading] = useState<boolean>(true);
@@ -30,7 +30,8 @@ function Insights() {
     const [noNewsDataFound, setNoNewsDataFound] = useState<boolean>(false);
     const [selectedFilter, setSelectedFilter] = useState('all');
     const [buttonStates, setButtonStates] = useState<{ [key: string]: ButtonState }>({});
-    const [displayCount, setDisplayCount] = useState(30);
+    const [displayCount, setDisplayCount] = useState(20);
+    const [displayNewsCount, setDisplayNewsCount] = useState(4);
     const [isPlanValid, setIsPlanValid] = useState<boolean>(false);
     const [planStatus, setPlanStatus] = useState<string>('');
     const [daysUntilExpiry, setDaysUntilExpiry] = useState<number>(0);
@@ -101,7 +102,11 @@ function Insights() {
     };
 
     const showMore = () => {
-        setDisplayCount(prevCount => prevCount + 30);
+        setDisplayCount(prevCount => prevCount + 8);
+    };
+
+    const showNewsMore = () => {
+        setDisplayNewsCount(prevCount => prevCount + 8);
     };
 
     const checkPlanValidity = async () => {
@@ -180,19 +185,25 @@ function Insights() {
     const fetchNewsData = async () => {
         setNewsLoading(true);
         setNoNewsDataFound(false);
-
+    
         try {
             const response = await axios.get(`${baseApiURL()}/news`);
             const result = await response.data.data;
-
-            // Assign images to news items
+    
+            // Function to modify the subtitle
+            const modifySubtitle = (subtitle: string) => {
+                return subtitle.replace(/\s-\s\d+\s-\s/, ' - ');
+            };
+    
+            // Assign images to news items and modify subtitles
             const newsWithImages = result.map((newsItem: any, index: number) => ({
                 ...newsItem,
-                imageUrl: newsImages[index % newsImages.length]
+                imageUrl: newsImages[index % newsImages.length],
+                subtitle: modifySubtitle(newsItem.news_sub)
             }));
-
+    
             setNewsData(newsWithImages);
-
+    
             if (newsWithImages.length === 0) {
                 setNoNewsDataFound(true);
             } else {
@@ -312,8 +323,8 @@ function Insights() {
     };
 
     const [newsImages, setNewsImages] = useState<string[]>([
-        "./public/insights/Stock_Market.jpg",
-        "./public/insights/Stock_1.jpg",
+        "./public/insights/Stock_3.jpg",
+        "./public/insights/Stock_3.jpg",
         "./public/insights/Stock_2.jpg",
         "./public/insights/Stock_3.jpg",
     ]);
@@ -563,7 +574,7 @@ function Insights() {
                                     )}
                                     <br />
                                     {!loading && stockData.length > displayCount && (
-                                        <button onClick={showMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px" }}>
+                                        <button onClick={showMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px", cursor: 'pointer' }}>
                                             Show More
                                         </button>
                                     )}
@@ -580,7 +591,7 @@ function Insights() {
                                 ) : noNewsDataFound ? (
                                     <div style={{ color: 'white', margin: 'auto' }}>No data found</div>
                                 ) : (
-                                    currentPosts.map((news) => (
+                                    currentPosts.slice(0, displayNewsCount).map((news) => (
                                         <div className="newsfeed1" key={news.id}>
                                             <div className="news-content">
                                                 <img
@@ -593,7 +604,7 @@ function Insights() {
                                             <div className="news-details">
                                                 <div className="watchlist-filters">
                                                     <div className="reliance-industries">{news.stock_long_name}</div>
-                                                    <div className="reliance-gets-us">{news.news_sub}</div>
+                                                    <div className="reliance-gets-us">{news.subtitle}</div>
                                                     <div className="news-time">
                                                         <div className="jul-23-2024">{new Date(news.news_date_time).toLocaleString()}</div>
                                                         <div className="read-parent">
@@ -635,13 +646,11 @@ function Insights() {
                                 )
                                 }
                             </div>
-                            {/* <div className="pagination">
-                                {Array.from({ length: Math.ceil(newsData.length / postsPerPage) }, (_, index) => (
-                                    <button key={index} onClick={() => paginate(index + 1)}>
-                                        {index + 1}
-                                    </button>
-                                ))}
-                            </div> */}
+                            {!newsLoading && currentPosts.length > displayNewsCount && (
+                                <button onClick={showNewsMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px", cursor: 'pointer' }}>
+                                    Show More
+                                </button>
+                            )}
                         </div>
                     </section>
                 </main>

@@ -104,6 +104,14 @@ const OTPVerify: React.FC = () => {
         }, 30000);
     };
 
+    const handleTermsRedirect = () => {
+        window.open('/terms', '_blank');
+    };
+
+    const handlePrivacyRedirect = () => {
+        window.open('/privacy', '_blank');
+    };
+
     return (
         <div>
             <div className="otp">
@@ -225,7 +233,7 @@ const OTPVerify: React.FC = () => {
                                 {isVerifying && (
                                     <div className="verifying-container">
                                         <div className="spinner"></div>
-                                        <p style={{color: 'white'}}>OTP verifying</p>
+                                        <p style={{ color: 'white' }}>OTP verifying</p>
                                     </div>
                                 )}
                                 {isOtpInvalid && !isVerifying && (
@@ -242,9 +250,8 @@ const OTPVerify: React.FC = () => {
                                         Resend OTP
                                     </button>
                                     <div className="it-may-take-container">
-                                        <span>It may take up to </span>
+                                        <span>We deliver 99% news in less than </span>
                                         <span className="secs">{remainingTime} secs</span>
-                                        <span> to receive OTP </span>
                                     </div>
                                 </div>
                             </div>
@@ -253,12 +260,12 @@ const OTPVerify: React.FC = () => {
                                     <div className="by-verifying-otp-container">
                                         <span>
                                             <span>By verifying OTP you will be Agreed to our </span>
-                                            <span className="terms-and-conditions">
+                                            <span className="terms-and-conditions" style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={handleTermsRedirect}>
                                                 Terms and conditions
                                             </span>
                                             <span className="and"> and </span>
                                         </span>
-                                        <span className="privacy-policy">Privacy policy</span>
+                                        <span className="privacy-policy" style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={handlePrivacyRedirect}>Privacy policy</span>
                                     </div>
                                 </div>
                             </div>
