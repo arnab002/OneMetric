@@ -74,7 +74,7 @@ function AdminProfile() {
                                                 <li className="d-flex align-items-center gap-1 mb-12">
                                                     <span className="w-30 text-md fw-semibold text-primary-light">
                                                         {" "}
-                                                        Phone Number
+                                                        Phone
                                                     </span>
                                                     <span className="w-70 text-secondary-light fw-medium">
                                                         : (1) 2536 2561 2365
@@ -83,38 +83,37 @@ function AdminProfile() {
                                                 <li className="d-flex align-items-center gap-1 mb-12">
                                                     <span className="w-30 text-md fw-semibold text-primary-light">
                                                         {" "}
-                                                        Department
+                                                        User ID
                                                     </span>
                                                     <span className="w-70 text-secondary-light fw-medium">
-                                                        : Design
+                                                        : 23w12hb
                                                     </span>
                                                 </li>
                                                 <li className="d-flex align-items-center gap-1 mb-12">
                                                     <span className="w-30 text-md fw-semibold text-primary-light">
                                                         {" "}
-                                                        Designation
+                                                        Plan Status
                                                     </span>
                                                     <span className="w-70 text-secondary-light fw-medium">
-                                                        : UI UX Designer
+                                                        : Active
                                                     </span>
                                                 </li>
                                                 <li className="d-flex align-items-center gap-1 mb-12">
                                                     <span className="w-30 text-md fw-semibold text-primary-light">
                                                         {" "}
-                                                        Languages
+                                                        Plan Expiry Date
                                                     </span>
                                                     <span className="w-70 text-secondary-light fw-medium">
-                                                        : English
+                                                        : 28/08/2024
                                                     </span>
                                                 </li>
-                                                <li className="d-flex align-items-center gap-1">
+                                                <li className="d-flex align-items-center gap-1 mb-12">
                                                     <span className="w-30 text-md fw-semibold text-primary-light">
                                                         {" "}
-                                                        Bio
+                                                        Description
                                                     </span>
                                                     <span className="w-70 text-secondary-light fw-medium">
-                                                        : Lorem Ipsum&nbsp;is simply dummy text of the printing and
-                                                        typesetting industry.
+                                                        : Lorem ipsum dolor sit amet consectetur adipisicing elit.
                                                     </span>
                                                 </li>
                                             </ul>
@@ -183,11 +182,12 @@ function AdminProfile() {
                                                 aria-labelledby="pills-edit-profile-tab"
                                                 tabIndex={0}
                                             >
-                                                <h6 className="text-md text-primary-light mb-16">
+                                                <br /><br />
+                                                {/* <h6 className="text-md text-primary-light mb-16">
                                                     Profile Image
-                                                </h6>
+                                                </h6> */}
                                                 {/* Upload Image Start */}
-                                                <div className="mb-24 mt-16">
+                                                {/* <div className="mb-24 mt-16">
                                                     <div className="avatar-upload">
                                                         <div className="avatar-edit position-absolute bottom-0 end-0 me-24 mt-16 z-1 cursor-pointer">
                                                             <input
@@ -210,7 +210,7 @@ function AdminProfile() {
                                                             <div id="imagePreview"></div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> */}
                                                 {/* Upload Image End */}
                                                 <form action="#">
                                                     <div className="row">
@@ -256,7 +256,8 @@ function AdminProfile() {
                                                                     Phone
                                                                 </label>
                                                                 <input
-                                                                    type="email"
+                                                                    type="text"
+                                                                    inputMode='numeric'
                                                                     className="form-control radius-8"
                                                                     id="number"
                                                                     placeholder="Enter phone number"
@@ -266,59 +267,51 @@ function AdminProfile() {
                                                         <div className="col-sm-6">
                                                             <div className="mb-20">
                                                                 <label
+                                                                    htmlFor="number"
+                                                                    className="form-label fw-semibold text-primary-light text-sm mb-8"
+                                                                >
+                                                                    User ID
+                                                                </label>
+                                                                <input
+                                                                    type="text"
+                                                                    className="form-control radius-8"
+                                                                    id="number"
+                                                                    placeholder="Enter User ID"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-sm-6">
+                                                            <div className="mb-20">
+                                                                <label
                                                                     htmlFor="depart"
                                                                     className="form-label fw-semibold text-primary-light text-sm mb-8"
                                                                 >
-                                                                    Department
+                                                                    Plan Status
                                                                     <span className="text-danger-600">*</span>{" "}
                                                                 </label>
                                                                 <select
                                                                     className="form-control radius-8 form-select"
                                                                     id="depart"
                                                                 >
-                                                                    <option>Enter Event Title </option>
-                                                                    <option>Enter Event Title One </option>
-                                                                    <option>Enter Event Title Two</option>
+                                                                    <option>Active</option>
+                                                                    <option>Deactive</option>
                                                                 </select>
                                                             </div>
                                                         </div>
                                                         <div className="col-sm-6">
                                                             <div className="mb-20">
                                                                 <label
-                                                                    htmlFor="desig"
+                                                                    htmlFor="number"
                                                                     className="form-label fw-semibold text-primary-light text-sm mb-8"
                                                                 >
-                                                                    Designation
-                                                                    <span className="text-danger-600">*</span>{" "}
+                                                                    Plan Expiry Date
                                                                 </label>
-                                                                <select
-                                                                    className="form-control radius-8 form-select"
-                                                                    id="desig"
-                                                                >
-                                                                    <option>Enter Designation Title </option>
-                                                                    <option>Enter Designation Title One </option>
-                                                                    <option>Enter Designation Title Two</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-sm-6">
-                                                            <div className="mb-20">
-                                                                <label
-                                                                    htmlFor="Language"
-                                                                    className="form-label fw-semibold text-primary-light text-sm mb-8"
-                                                                >
-                                                                    Language
-                                                                    <span className="text-danger-600">*</span>{" "}
-                                                                </label>
-                                                                <select
-                                                                    className="form-control radius-8 form-select"
-                                                                    id="Language"
-                                                                >
-                                                                    <option> English</option>
-                                                                    <option> Bangla </option>
-                                                                    <option> Hindi</option>
-                                                                    <option> Arabic</option>
-                                                                </select>
+                                                                <input
+                                                                    type="date"
+                                                                    className="form-control radius-8"
+                                                                    id="number"
+                                                                    placeholder="Enter Plan Expiry Date"
+                                                                />
                                                             </div>
                                                         </div>
                                                         <div className="col-sm-12">
@@ -330,6 +323,7 @@ function AdminProfile() {
                                                                     Description
                                                                 </label>
                                                                 <textarea
+                                                                    rows={4}
                                                                     name="#0"
                                                                     className="form-control radius-8"
                                                                     id="desc"
@@ -387,7 +381,7 @@ function AdminProfile() {
                                                         htmlFor="confirm-password"
                                                         className="form-label fw-semibold text-primary-light text-sm mb-8"
                                                     >
-                                                        Confirmed Password <span className="text-danger-600">*</span>
+                                                        Confirm Password <span className="text-danger-600">*</span>
                                                     </label>
                                                     <div className="position-relative">
                                                         <input

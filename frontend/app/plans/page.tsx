@@ -291,7 +291,7 @@ function Home() {
                       <div className="diamond-feature-descriptions">
                         <div className="track-up-to">Track up to 500 stocks</div>
                         <div className="ideal-for-beginners">
-                          Ideal for beginners and casual investors
+                          {index % 2 === 0 ? "Ideal for beginners and casual investors" : "Ideal for Traders and Fund Managers"}
                         </div>
                       </div>
                     </div>
@@ -345,7 +345,7 @@ function Home() {
                       <div className="diamond-feature-descriptions">
                         <div className="languages">Multilingual</div>
                         <div className="ideal-for-beginners">
-                          Enjoy news and charts in English and Other Languages
+                          Available in 9 languages
                         </div>
                       </div>
                     </div>

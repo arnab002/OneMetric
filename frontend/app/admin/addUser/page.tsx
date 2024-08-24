@@ -37,10 +37,9 @@ function AddUser() {
                                     <div className="col-xxl-6 col-xl-8 col-lg-10">
                                         <div className="card border">
                                             <div className="card-body">
-                                                <h6 className="text-md text-primary-light mb-16">
+                                                {/* <h6 className="text-md text-primary-light mb-16">
                                                     Profile Image
                                                 </h6>
-                                                {/* Upload Image Start */}
                                                 <div className="mb-24 mt-16">
                                                     <div className="avatar-upload">
                                                         <div className="avatar-edit position-absolute bottom-0 end-0 me-24 mt-16 z-1 cursor-pointer">
@@ -64,8 +63,7 @@ function AddUser() {
                                                             <div id="imagePreview"> </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                {/* Upload Image End */}
+                                                </div> */}
                                                 <form action="#">
                                                     <div className="mb-20">
                                                         <label
@@ -111,22 +109,49 @@ function AddUser() {
                                                     </div>
                                                     <div className="mb-20">
                                                         <label
+                                                            htmlFor="name"
+                                                            className="form-label fw-semibold text-primary-light text-sm mb-8"
+                                                        >
+                                                            User ID <span className="text-danger-600">*</span>
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control radius-8"
+                                                            id="name"
+                                                            placeholder="Enter User ID"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-20">
+                                                        <label
                                                             htmlFor="depart"
                                                             className="form-label fw-semibold text-primary-light text-sm mb-8"
                                                         >
-                                                            Department
+                                                            Plans Status
                                                             <span className="text-danger-600">*</span>{" "}
                                                         </label>
                                                         <select
                                                             className="form-control radius-8 form-select"
                                                             id="depart"
                                                         >
-                                                            <option>Enter Event Title </option>
-                                                            <option>Enter Event Title One </option>
-                                                            <option>Enter Event Title Two</option>
+                                                            <option>Active</option>
+                                                            <option>Deactive</option>
                                                         </select>
                                                     </div>
                                                     <div className="mb-20">
+                                                        <label
+                                                            htmlFor="name"
+                                                            className="form-label fw-semibold text-primary-light text-sm mb-8"
+                                                        >
+                                                            Plan Expiry Date <span className="text-danger-600">*</span>
+                                                        </label>
+                                                        <input
+                                                            type="date"
+                                                            className="form-control radius-8"
+                                                            id="name"
+                                                            placeholder="Enter User ID"
+                                                        />
+                                                    </div>
+                                                    {/* <div className="mb-20">
                                                         <label
                                                             htmlFor="desig"
                                                             className="form-label fw-semibold text-primary-light text-sm mb-8"
@@ -142,7 +167,7 @@ function AddUser() {
                                                             <option>Enter Designation Title One </option>
                                                             <option>Enter Designation Title Two</option>
                                                         </select>
-                                                    </div>
+                                                    </div> */}
                                                     <div className="mb-20">
                                                         <label
                                                             htmlFor="desc"

@@ -4,7 +4,7 @@ import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import Footer from '../components/Footer'
 
-function UsersList() {
+function BlockUser() {
     return (
         <div>
             <>
@@ -13,7 +13,7 @@ function UsersList() {
                     <Header />
                     <div className="dashboard-main-body">
                         <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
-                            <h6 className="fw-semibold mb-0">Users Grid</h6>
+                            <h6 className="fw-semibold mb-0">Block Users</h6>
                             <ul className="d-flex align-items-center gap-2">
                                 <li className="fw-medium">
                                     <a
@@ -28,7 +28,7 @@ function UsersList() {
                                     </a>
                                 </li>
                                 <li>-</li>
-                                <li className="fw-medium">Users Grid</li>
+                                <li className="fw-medium">Block Users</li>
                             </ul>
                         </div>
                         <div className="card h-100 p-0 radius-12">
@@ -60,20 +60,10 @@ function UsersList() {
                                     </form>
                                     <select className="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">
                                         <option>Status</option>
-                                        <option>Active</option>
-                                        <option>Inactive</option>
+                                        <option>Block</option>
+                                        <option>Unblock</option>
                                     </select>
                                 </div>
-                                <a
-                                    href="/admin/addUser"
-                                    className="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2"
-                                >
-                                    <Icon
-                                        icon="ic:baseline-plus"
-                                        className="icon text-xl line-height-1"
-                                    />
-                                    Add New User
-                                </a>
                             </div>
                             <div className="card-body p-24">
                                 <div className="table-responsive scroll-sm">
@@ -93,11 +83,9 @@ function UsersList() {
                                                         S.L
                                                     </div>
                                                 </th>
-                                                <th scope="col">Join Date</th>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Email</th>
-                                                <th scope="col">Department</th>
-                                                <th scope="col">Designation</th>
+                                                <th scope="col">Create Date</th>
+                                                <th scope="col">Role </th>
+                                                <th scope="col">Description</th>
                                                 <th scope="col" className="text-center">
                                                     Status
                                                 </th>
@@ -121,43 +109,20 @@ function UsersList() {
                                                     </div>
                                                 </td>
                                                 <td>25 Jan 2024</td>
+                                                <td>Test</td>
                                                 <td>
-                                                    <div className="d-flex align-items-center">
-                                                        <img
-                                                            src="/assets/assets/images/user-list/user-list1.png"
-                                                            alt=""
-                                                            className="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden"
-                                                        />
-                                                        <div className="flex-grow-1">
-                                                            <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                                Kathryn Murphy
-                                                            </span>
-                                                        </div>
-                                                    </div>
+                                                    <p className="max-w-500-px">
+                                                        Lorem Ipsum is simply dummy text of the printing and
+                                                        typesetting
+                                                    </p>
                                                 </td>
-                                                <td>
-                                                    <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                        osgoodwy@gmail.com
-                                                    </span>
-                                                </td>
-                                                <td>HR</td>
-                                                <td>Manager</td>
                                                 <td className="text-center">
                                                     <span className="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">
-                                                        Active
+                                                        Block
                                                     </span>
                                                 </td>
                                                 <td className="text-center">
                                                     <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                        <button
-                                                            type="button"
-                                                            className="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon
-                                                                icon="majesticons:eye-line"
-                                                                className="icon text-xl"
-                                                            />
-                                                        </button>
                                                         <button
                                                             type="button"
                                                             className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
@@ -190,43 +155,20 @@ function UsersList() {
                                                     </div>
                                                 </td>
                                                 <td>25 Jan 2024</td>
+                                                <td>Waiter</td>
                                                 <td>
-                                                    <div className="d-flex align-items-center">
-                                                        <img
-                                                            src="/assets/assets/images/user-list/user-list2.png"
-                                                            alt=""
-                                                            className="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden"
-                                                        />
-                                                        <div className="flex-grow-1">
-                                                            <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                                Annette Black
-                                                            </span>
-                                                        </div>
-                                                    </div>
+                                                    <p className="max-w-500-px">
+                                                        Lorem Ipsum is simply dummy text of the printing and
+                                                        typesetting
+                                                    </p>
                                                 </td>
-                                                <td>
-                                                    <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                        redaniel@gmail.com
-                                                    </span>
-                                                </td>
-                                                <td>Design</td>
-                                                <td>UI UX Designer</td>
                                                 <td className="text-center">
-                                                    <span className="bg-neutral-200 text-neutral-600 border border-neutral-400 px-24 py-4 radius-4 fw-medium text-sm">
-                                                        Inactive
+                                                    <span className="bg-danger-focus text-danger-600 border border-danger-main px-24 py-4 radius-4 fw-medium text-sm">
+                                                        Unblock
                                                     </span>
                                                 </td>
                                                 <td className="text-center">
                                                     <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                        <button
-                                                            type="button"
-                                                            className="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon
-                                                                icon="majesticons:eye-line"
-                                                                className="icon text-xl"
-                                                            />
-                                                        </button>
                                                         <button
                                                             type="button"
                                                             className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
@@ -259,43 +201,20 @@ function UsersList() {
                                                     </div>
                                                 </td>
                                                 <td>10 Feb 2024</td>
+                                                <td>Manager</td>
                                                 <td>
-                                                    <div className="d-flex align-items-center">
-                                                        <img
-                                                            src="/assets/assets/images/user-list/user-list3.png"
-                                                            alt=""
-                                                            className="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden"
-                                                        />
-                                                        <div className="flex-grow-1">
-                                                            <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                                Ronald Richards
-                                                            </span>
-                                                        </div>
-                                                    </div>
+                                                    <p className="max-w-500-px">
+                                                        Lorem Ipsum is simply dummy text of the printing and
+                                                        typesetting
+                                                    </p>
                                                 </td>
-                                                <td>
-                                                    <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                        seannand@mail.ru
-                                                    </span>
-                                                </td>
-                                                <td>Design</td>
-                                                <td>UI UX Designer</td>
                                                 <td className="text-center">
                                                     <span className="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">
-                                                        Active
+                                                        Block
                                                     </span>
                                                 </td>
                                                 <td className="text-center">
                                                     <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                        <button
-                                                            type="button"
-                                                            className="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon
-                                                                icon="majesticons:eye-line"
-                                                                className="icon text-xl"
-                                                            />
-                                                        </button>
                                                         <button
                                                             type="button"
                                                             className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
@@ -328,43 +247,20 @@ function UsersList() {
                                                     </div>
                                                 </td>
                                                 <td>10 Feb 2024</td>
+                                                <td>Project Manager</td>
                                                 <td>
-                                                    <div className="d-flex align-items-center">
-                                                        <img
-                                                            src="/assets/assets/images/user-list/user-list4.png"
-                                                            alt=""
-                                                            className="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden"
-                                                        />
-                                                        <div className="flex-grow-1">
-                                                            <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                                Eleanor Pena
-                                                            </span>
-                                                        </div>
-                                                    </div>
+                                                    <p className="max-w-500-px">
+                                                        Lorem Ipsum is simply dummy text of the printing and
+                                                        typesetting
+                                                    </p>
                                                 </td>
-                                                <td>
-                                                    <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                        miyokoto@mail.ru
-                                                    </span>
-                                                </td>
-                                                <td>Design</td>
-                                                <td>UI UX Designer</td>
                                                 <td className="text-center">
                                                     <span className="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">
-                                                        Active
+                                                        Block
                                                     </span>
                                                 </td>
                                                 <td className="text-center">
                                                     <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                        <button
-                                                            type="button"
-                                                            className="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon
-                                                                icon="majesticons:eye-line"
-                                                                className="icon text-xl"
-                                                            />
-                                                        </button>
                                                         <button
                                                             type="button"
                                                             className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
@@ -397,43 +293,20 @@ function UsersList() {
                                                     </div>
                                                 </td>
                                                 <td>15 March 2024</td>
+                                                <td>Game Developer</td>
                                                 <td>
-                                                    <div className="d-flex align-items-center">
-                                                        <img
-                                                            src="/assets/assets/images/user-list/user-list5.png"
-                                                            alt=""
-                                                            className="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden"
-                                                        />
-                                                        <div className="flex-grow-1">
-                                                            <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                                Leslie Alexander
-                                                            </span>
-                                                        </div>
-                                                    </div>
+                                                    <p className="max-w-500-px">
+                                                        Lorem Ipsum is simply dummy text of the printing and
+                                                        typesetting
+                                                    </p>
                                                 </td>
-                                                <td>
-                                                    <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                        icadahli@gmail.com
-                                                    </span>
-                                                </td>
-                                                <td>Design</td>
-                                                <td>UI UX Designer</td>
                                                 <td className="text-center">
-                                                    <span className="bg-neutral-200 text-neutral-600 border border-neutral-400 px-24 py-4 radius-4 fw-medium text-sm">
-                                                        Inactive
+                                                    <span className="bg-danger-focus text-danger-600 border border-danger-main px-24 py-4 radius-4 fw-medium text-sm">
+                                                        Unblock
                                                     </span>
                                                 </td>
                                                 <td className="text-center">
                                                     <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                        <button
-                                                            type="button"
-                                                            className="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon
-                                                                icon="majesticons:eye-line"
-                                                                className="icon text-xl"
-                                                            />
-                                                        </button>
                                                         <button
                                                             type="button"
                                                             className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
@@ -466,43 +339,20 @@ function UsersList() {
                                                     </div>
                                                 </td>
                                                 <td>15 March 2024</td>
+                                                <td>Head</td>
                                                 <td>
-                                                    <div className="d-flex align-items-center">
-                                                        <img
-                                                            src="/assets/assets/images/user-list/user-list6.png"
-                                                            alt=""
-                                                            className="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden"
-                                                        />
-                                                        <div className="flex-grow-1">
-                                                            <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                                Albert Flores
-                                                            </span>
-                                                        </div>
-                                                    </div>
+                                                    <p className="max-w-500-px">
+                                                        Lorem Ipsum is simply dummy text of the printing and
+                                                        typesetting
+                                                    </p>
                                                 </td>
-                                                <td>
-                                                    <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                        warn@mail.ru
-                                                    </span>
-                                                </td>
-                                                <td>Design</td>
-                                                <td>UI UX Designer</td>
                                                 <td className="text-center">
                                                     <span className="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">
-                                                        Active
+                                                        Block
                                                     </span>
                                                 </td>
                                                 <td className="text-center">
                                                     <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                        <button
-                                                            type="button"
-                                                            className="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon
-                                                                icon="majesticons:eye-line"
-                                                                className="icon text-xl"
-                                                            />
-                                                        </button>
                                                         <button
                                                             type="button"
                                                             className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
@@ -535,43 +385,20 @@ function UsersList() {
                                                     </div>
                                                 </td>
                                                 <td>27 April 2024</td>
+                                                <td>Management</td>
                                                 <td>
-                                                    <div className="d-flex align-items-center">
-                                                        <img
-                                                            src="/assets/assets/images/user-list/user-list7.png"
-                                                            alt=""
-                                                            className="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden"
-                                                        />
-                                                        <div className="flex-grow-1">
-                                                            <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                                Jacob Jones
-                                                            </span>
-                                                        </div>
-                                                    </div>
+                                                    <p className="max-w-500-px">
+                                                        Lorem Ipsum is simply dummy text of the printing and
+                                                        typesetting
+                                                    </p>
                                                 </td>
-                                                <td>
-                                                    <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                        zitka@mail.ru
-                                                    </span>
-                                                </td>
-                                                <td>Development</td>
-                                                <td>Frontend developer</td>
                                                 <td className="text-center">
                                                     <span className="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">
-                                                        Active
+                                                        Block
                                                     </span>
                                                 </td>
                                                 <td className="text-center">
                                                     <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                        <button
-                                                            type="button"
-                                                            className="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon
-                                                                icon="majesticons:eye-line"
-                                                                className="icon text-xl"
-                                                            />
-                                                        </button>
                                                         <button
                                                             type="button"
                                                             className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
@@ -603,44 +430,21 @@ function UsersList() {
                                                         08
                                                     </div>
                                                 </td>
-                                                <td>25 Jan 2024</td>
+                                                <td>27 April 2024</td>
+                                                <td>Waiter</td>
                                                 <td>
-                                                    <div className="d-flex align-items-center">
-                                                        <img
-                                                            src="/assets/assets/images/user-list/user-list8.png"
-                                                            alt=""
-                                                            className="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden"
-                                                        />
-                                                        <div className="flex-grow-1">
-                                                            <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                                Jerome Bell
-                                                            </span>
-                                                        </div>
-                                                    </div>
+                                                    <p className="max-w-500-px">
+                                                        Lorem Ipsum is simply dummy text of the printing and
+                                                        typesetting
+                                                    </p>
                                                 </td>
-                                                <td>
-                                                    <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                        igerrin@gmail.com
-                                                    </span>
-                                                </td>
-                                                <td>Development</td>
-                                                <td>Frontend developer</td>
                                                 <td className="text-center">
-                                                    <span className="bg-neutral-200 text-neutral-600 border border-neutral-400 px-24 py-4 radius-4 fw-medium text-sm">
-                                                        Inactive
+                                                    <span className="bg-danger-focus text-danger-600 border border-danger-main px-24 py-4 radius-4 fw-medium text-sm">
+                                                        Unblock
                                                     </span>
                                                 </td>
                                                 <td className="text-center">
                                                     <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                        <button
-                                                            type="button"
-                                                            className="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon
-                                                                icon="majesticons:eye-line"
-                                                                className="icon text-xl"
-                                                            />
-                                                        </button>
                                                         <button
                                                             type="button"
                                                             className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
@@ -673,43 +477,20 @@ function UsersList() {
                                                     </div>
                                                 </td>
                                                 <td>30 April 2024</td>
+                                                <td>Waiter</td>
                                                 <td>
-                                                    <div className="d-flex align-items-center">
-                                                        <img
-                                                            src="/assets/assets/images/user-list/user-list2.png"
-                                                            alt=""
-                                                            className="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden"
-                                                        />
-                                                        <div className="flex-grow-1">
-                                                            <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                                Marvin McKinney
-                                                            </span>
-                                                        </div>
-                                                    </div>
+                                                    <p className="max-w-500-px">
+                                                        Lorem Ipsum is simply dummy text of the printing and
+                                                        typesetting
+                                                    </p>
                                                 </td>
-                                                <td>
-                                                    <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                        maka@yandex.ru
-                                                    </span>
-                                                </td>
-                                                <td>Development</td>
-                                                <td>Frontend developer</td>
                                                 <td className="text-center">
                                                     <span className="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">
-                                                        Active
+                                                        Block
                                                     </span>
                                                 </td>
                                                 <td className="text-center">
                                                     <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                        <button
-                                                            type="button"
-                                                            className="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon
-                                                                icon="majesticons:eye-line"
-                                                                className="icon text-xl"
-                                                            />
-                                                        </button>
                                                         <button
                                                             type="button"
                                                             className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
@@ -742,43 +523,20 @@ function UsersList() {
                                                     </div>
                                                 </td>
                                                 <td>30 April 2024</td>
+                                                <td>Waiter</td>
                                                 <td>
-                                                    <div className="d-flex align-items-center">
-                                                        <img
-                                                            src="/assets/assets/images/user-list/user-list10.png"
-                                                            alt=""
-                                                            className="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden"
-                                                        />
-                                                        <div className="flex-grow-1">
-                                                            <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                                Cameron Williamson
-                                                            </span>
-                                                        </div>
-                                                    </div>
+                                                    <p className="max-w-500-px">
+                                                        Lorem Ipsum is simply dummy text of the printing and
+                                                        typesetting
+                                                    </p>
                                                 </td>
-                                                <td>
-                                                    <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                        danten@mail.ru
-                                                    </span>
-                                                </td>
-                                                <td>Development</td>
-                                                <td>Frontend developer</td>
                                                 <td className="text-center">
                                                     <span className="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">
-                                                        Active
+                                                        Block
                                                     </span>
                                                 </td>
                                                 <td className="text-center">
                                                     <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                        <button
-                                                            type="button"
-                                                            className="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon
-                                                                icon="majesticons:eye-line"
-                                                                className="icon text-xl"
-                                                            />
-                                                        </button>
                                                         <button
                                                             type="button"
                                                             className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
@@ -865,12 +623,11 @@ function UsersList() {
                             </div>
                         </div>
                     </div>
-
-                    <Footer />
+                    <Footer/>
                 </main>
             </>
         </div>
     )
 }
 
-export default UsersList
+export default BlockUser

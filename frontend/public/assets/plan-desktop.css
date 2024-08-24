@@ -4067,6 +4067,13 @@
   border-radius: 5%;
 }
 
+.start-now-wrapper:hover,
+.continue:hover,
+.refer-now-button:hover,
+.sign-in-button-container:hover {
+  background-color: #13d4191b;
+}
+
 @media (max-width: 768px) {
   .plan-card {
     width: 100%;

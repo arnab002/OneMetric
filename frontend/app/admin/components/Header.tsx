@@ -602,7 +602,7 @@ function Header() {
                                     <li>
                                         <a
                                             className="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3"
-                                            href="view-profile.html"
+                                            href="/admin/profile"
                                         >
                                             <Icon
                                                 icon="solar:user-linear"
@@ -611,7 +611,7 @@ function Header() {
                                             My Profile
                                         </a>
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         <a
                                             className="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3"
                                             href="email.html"
@@ -622,8 +622,8 @@ function Header() {
                                             />{" "}
                                             Inbox
                                         </a>
-                                    </li>
-                                    <li>
+                                    </li> */}
+                                    {/* <li>
                                         <a
                                             className="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3"
                                             href="company.html"
@@ -634,11 +634,11 @@ function Header() {
                                             />
                                             Setting
                                         </a>
-                                    </li>
+                                    </li> */}
                                     <li>
                                         <a
                                             className="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-danger d-flex align-items-center gap-3"
-                                            href="javascript:void(0)"
+                                            href="/admin"
                                         >
                                             <Icon
                                                 icon="lucide:power"

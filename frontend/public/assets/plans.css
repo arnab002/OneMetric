@@ -3528,6 +3528,12 @@
   font-weight: bold;
 }
 
+.start-now-wrapper:hover,
+.refer-now-button:hover,
+.sign-in-button-container:hover {
+  background-color: #13d4191b;
+}
+
 
 @media only screen and (min-width: 320px) and (max-width: 768px) {
   .homepage {

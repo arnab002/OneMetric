@@ -8,19 +8,20 @@ function Sidebar() {
                 <Icon icon="radix-icons:cross-2" />
             </button>
             <div>
-                <a href="index.html" className="sidebar-logo">
+                <a href="/admin/dashboard" className="sidebar-logo">
                     <img
-                        src="/assets/assets/images/logo.png"
+                        src="/public/home/OneMetric_Transparent.png"
                         alt="site logo"
                         className="light-logo"
                     />
+                    <span style={{color: 'black', fontSize: '24px'}}>OneMetric</span>
                     <img
-                        src="/assets/assets/images/logo-light.png"
+                        src="/public/home/OneMetric_Transparent.png"
                         alt="site logo"
                         className="dark-logo"
                     />
                     <img
-                        src="/assets/assets/images/logo-icon.png"
+                        src="/public/home/OneMetric_Transparent.png"
                         alt="site logo"
                         className="logo-icon"
                     />
@@ -28,54 +29,16 @@ function Sidebar() {
             </div>
             <div className="sidebar-menu-area">
                 <ul className="sidebar-menu" id="sidebar-menu">
-                    <li className="dropdown">
-                        <a href="javascript:void(0)">
+                    <li>
+                        <a href="/admin/dashboard">
                             <Icon
                                 icon="solar:home-smile-angle-outline"
                                 className="menu-icon"
                             />
                             <span>Dashboard</span>
                         </a>
-                        <ul className="sidebar-submenu">
-                            <li>
-                                <a href="index.html">
-                                    <i className="ri-circle-fill circle-icon text-primary-600 w-auto" />{" "}
-                                    AI
-                                </a>
-                            </li>
-                            <li>
-                                <a href="index-2.html">
-                                    <i className="ri-circle-fill circle-icon text-warning-main w-auto" />{" "}
-                                    CRM
-                                </a>
-                            </li>
-                            <li>
-                                <a href="index-3.html">
-                                    <i className="ri-circle-fill circle-icon text-info-main w-auto" />{" "}
-                                    eCommerce
-                                </a>
-                            </li>
-                            <li>
-                                <a href="index-4.html">
-                                    <i className="ri-circle-fill circle-icon text-danger-main w-auto" />
-                                    Cryptocurrency
-                                </a>
-                            </li>
-                            <li>
-                                <a href="index-5.html">
-                                    <i className="ri-circle-fill circle-icon text-success-main w-auto" />{" "}
-                                    Investment
-                                </a>
-                            </li>
-                            <li>
-                                <a href="index-6.html">
-                                    <i className="ri-circle-fill circle-icon text-purple w-auto" />{" "}
-                                    LMS
-                                </a>
-                            </li>
-                        </ul>
                     </li>
-                    <li className="sidebar-menu-group-title">Application</li>
+                    {/* <li className="sidebar-menu-group-title">Application</li>
                     <li>
                         <a href="email.html">
                             <Icon icon="mage:email" className="menu-icon" />
@@ -102,8 +65,8 @@ function Sidebar() {
                             />
                             <span>Kanban</span>
                         </a>
-                    </li>
-                    <li className="dropdown">
+                    </li> */}
+                    {/* <li className="dropdown">
                         <a href="javascript:void(0)">
                             <Icon icon="hugeicons:invoice-03" className="menu-icon" />
                             <span>Invoice</span>
@@ -204,9 +167,9 @@ function Sidebar() {
                                 </a>
                             </li>
                         </ul>
-                    </li>
-                    <li className="sidebar-menu-group-title">UI Elements</li>
-                    <li className="dropdown">
+                    </li> */}
+                    <li className="sidebar-menu-group-title">Users Area</li>
+                    {/* <li className="dropdown">
                         <a href="javascript:void(0)">
                             <Icon
                                 icon="solar:document-text-outline"
@@ -342,8 +305,8 @@ function Sidebar() {
                                 </a>
                             </li>
                         </ul>
-                    </li>
-                    <li className="dropdown">
+                    </li> */}
+                    {/* <li className="dropdown">
                         <a href="javascript:void(0)">
                             <Icon icon="heroicons:document" className="menu-icon" />
                             <span>Forms</span>
@@ -423,13 +386,13 @@ function Sidebar() {
                                 </a>
                             </li>
                         </ul>
-                    </li>
-                    <li>
+                    </li> */}
+                    {/* <li>
                         <a href="widgets.html">
                             <Icon icon="fe:vector" className="menu-icon" />
                             <span>Widgets</span>
                         </a>
-                    </li>
+                    </li> */}
                     <li className="dropdown">
                         <a href="javascript:void(0)">
                             <Icon
@@ -440,37 +403,37 @@ function Sidebar() {
                         </a>
                         <ul className="sidebar-submenu">
                             <li>
-                                <a href="users-list.html">
+                                <a href="/admin/users">
                                     <i className="ri-circle-fill circle-icon text-primary-600 w-auto" />{" "}
                                     Users List
                                 </a>
                             </li>
-                            <li>
+                            {/* <li>
                                 <a href="users-grid.html">
                                     <i className="ri-circle-fill circle-icon text-warning-main w-auto" />{" "}
                                     Users Grid
                                 </a>
-                            </li>
+                            </li> */}
                             <li>
-                                <a href="add-user.html">
+                                <a href="/admin/addUser">
                                     <i className="ri-circle-fill circle-icon text-info-main w-auto" />{" "}
                                     Add User
                                 </a>
                             </li>
                             <li>
-                                <a href="view-profile.html">
+                                <a href="/admin/profile">
                                     <i className="ri-circle-fill circle-icon text-danger-main w-auto" />{" "}
                                     View Profile
                                 </a>
                             </li>
                         </ul>
                     </li>
-                    <li className="dropdown">
-                        <a href="javascript:void(0)">
+                    <li>
+                        <a href="/admin/blockUser">
                             <i className="ri-user-settings-line" />
-                            <span>Role &amp; Access</span>
+                            <span>Block User</span>
                         </a>
-                        <ul className="sidebar-submenu">
+                        {/* <ul className="sidebar-submenu">
                             <li>
                                 <a href="role-access.html">
                                     <i className="ri-circle-fill circle-icon text-primary-600 w-auto" />{" "}
@@ -483,9 +446,33 @@ function Sidebar() {
                                     Assign Role
                                 </a>
                             </li>
+                        </ul> */}
+                    </li>
+                    <li className="sidebar-menu-group-title">Plans Area</li>
+                    <li className="dropdown">
+                        <a href="javascript:void(0)">
+                            <Icon
+                                icon="flowbite:users-group-outline"
+                                className="menu-icon"
+                            />
+                            <span>Plans</span>
+                        </a>
+                        <ul className="sidebar-submenu">
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <i className="ri-circle-fill circle-icon text-primary-600 w-auto" />{" "}
+                                    Plans List
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <i className="ri-circle-fill circle-icon text-info-main w-auto" />{" "}
+                                    Add Plan
+                                </a>
+                            </li>
                         </ul>
                     </li>
-                    <li className="sidebar-menu-group-title">Application</li>
+                    {/* <li className="sidebar-menu-group-title">Application</li>
                     <li className="dropdown">
                         <a href="javascript:void(0)">
                             <Icon
@@ -609,7 +596,7 @@ function Sidebar() {
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li> */}
                 </ul>
             </div>
         </aside>
