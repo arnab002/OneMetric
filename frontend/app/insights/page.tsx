@@ -185,25 +185,25 @@ function Insights() {
     const fetchNewsData = async () => {
         setNewsLoading(true);
         setNoNewsDataFound(false);
-    
+
         try {
             const response = await axios.get(`${baseApiURL()}/news`);
             const result = await response.data.data;
-    
+
             // Function to modify the subtitle
             const modifySubtitle = (subtitle: string) => {
                 return subtitle.replace(/\s-\s\d+\s-\s/, ' - ');
             };
-    
+
             // Assign images to news items and modify subtitles
             const newsWithImages = result.map((newsItem: any, index: number) => ({
                 ...newsItem,
                 imageUrl: newsImages[index % newsImages.length],
                 subtitle: modifySubtitle(newsItem.news_sub)
             }));
-    
+
             setNewsData(newsWithImages);
-    
+
             if (newsWithImages.length === 0) {
                 setNoNewsDataFound(true);
             } else {
@@ -328,6 +328,15 @@ function Insights() {
         "./public/insights/Stock_3.jpg",
     ]);
 
+    const handleHomeClick = () => {
+        window.location.href = '/'
+    };
+
+    const handleTwitterRedirect = () => {
+        window.open('https://x.com/Onemetric_in', '_blank');
+    };
+
+
     if (!isTokenChecked) {
         return null; // Render nothing until the token is checked
     }
@@ -356,7 +365,7 @@ function Insights() {
                         alt=""
                         src="./public/insights/OneMetric_Transparent.png"
                     />
-                    <div className="main-inner">
+                    <div className="main-inner" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                         <div className="main-inner">
                             <a className="onemetric">OneMetric</a>
                         </div>
@@ -422,7 +431,7 @@ function Insights() {
                 </header>
                 <div className="frame-parent4">
                     <input className="frame-input" type="checkbox" />
-                    <div className="search-stock">Search Stock</div>
+                    <div className="search-stock">Search Stocks</div>
                 </div>
                 <div className="insights-header-wrapper">
                     <div className="stock-search" id="stockSearchContainer">
@@ -664,7 +673,7 @@ function Insights() {
                             src="./public/insights/OneMetric_Transparent.png"
                         />
                         <div className="main-inner">
-                            <div className="main-inner">
+                            <div className="main-inner" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                                 <b className="onemetric1">OneMetric</b>
                             </div>
                         </div>
@@ -683,6 +692,8 @@ function Insights() {
                                 loading="lazy"
                                 alt=""
                                 src="./public/insights/vector-1.svg"
+                                onClick={handleTwitterRedirect}
+                                style={{cursor: 'pointer'}}
                             />
                         </div>
                     </div>

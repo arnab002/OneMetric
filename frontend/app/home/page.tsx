@@ -1546,7 +1546,7 @@ function HomeDesktop() {
                                 <h3 className="refer-and-get-container">
                                     <span>Refer and get a </span>
                                     <span className="free-month">
-                                        <span className="free-month1">FREE monthly</span>
+                                        <span className="free-month1">FREE Monthly</span>
                                     </span>
                                     <span>
                                         <span className="free-month"> </span>
