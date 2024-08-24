@@ -1097,6 +1097,9 @@
     margin: 0px -85px;
     padding: 0 60px 40px;
   }
+  .custom-selection-checkbox{
+    margin-top: 0.6%;
+  }
 }
 
 @media only screen and (min-width: 375px) and (max-width: 667px){
@@ -1119,5 +1122,11 @@
   .indices-names2 {
     font-size: 16px;
     padding: 12px;
+  }
+  .custom-selection-checkbox{
+    margin-top: 5.5%;
+  }
+  .adani-group{
+    margin-top: 1.5%;
   }
 }

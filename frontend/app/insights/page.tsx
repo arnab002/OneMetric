@@ -255,7 +255,6 @@ function Insights() {
                 },
             });
 
-            alert("Stock Deleted Successfully!!!");
             setEditingStockId(null); // Reset editing state
             fetchStockData();
         } catch (error) {
@@ -355,7 +354,7 @@ function Insights() {
                         className="image-18-icon"
                         loading="lazy"
                         alt=""
-                        src="./public/insights/image-18@2x.png"
+                        src="./public/insights/OneMetric_Transparent.png"
                     />
                     <div className="main-inner">
                         <div className="main-inner">
@@ -454,7 +453,8 @@ function Insights() {
                     <section className="watchlist">
                         <div className="trial-info">
                             <div className="add-your-favourite-container">
-                                <span style={{ color: 'white', fontSize: '14px' }}>Add your favourite stocks to watch list and </span>
+                                <span className='favourite-stock'>Add your favourite stocks to watch list and </span>
+                                <br />
                                 {isCheckingPlan ? (
                                     <span style={{ color: 'white', fontSize: '14px' }}>Checking plan status...</span>
                                 ) : isPlanValid && planStatus === 'active' && !isPlanExpired ? (
@@ -661,7 +661,7 @@ function Insights() {
                             className="image-18-icon1"
                             loading="lazy"
                             alt=""
-                            src="./public/insights/image-18@2x.png"
+                            src="./public/insights/OneMetric_Transparent.png"
                         />
                         <div className="main-inner">
                             <div className="main-inner">

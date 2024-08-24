@@ -13,7 +13,7 @@ function About() {
                                     className="image-18-icon"
                                     loading="lazy"
                                     alt=""
-                                    src="./public/about/image-18@2x.png"
+                                    src="./public/about/OneMetric_Transparent.png"
                                 />
                                 <a className="onemetric">OneMetric</a>
                             </div>

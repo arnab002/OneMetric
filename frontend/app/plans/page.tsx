@@ -193,7 +193,7 @@ function Home() {
                       className="image-18-icon"
                       loading="lazy"
                       alt=""
-                      src="./public/home/image-18@2x.png"
+                      src="./public/home/OneMetric_Transparent.png"
                     />
                     <div className="sign-in-button-wrapper">
                       <div className="sign-in-button-wrapper">

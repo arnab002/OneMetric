@@ -691,7 +691,7 @@ function HomeDesktop() {
                                 className="image-18-icon"
                                 loading="lazy"
                                 alt=""
-                                src="./public/home-desktop/image-18-1@2x.png"
+                                src="./public/home-desktop/OneMetric_Transparent.png"
                             />
                             <div className="one-metric-sign-in-container">
                                 <div className="one-metric-sign-in-logo-contai">
@@ -1593,7 +1593,7 @@ function HomeDesktop() {
                                 <img
                                     className="image-18-icon1"
                                     alt=""
-                                    src="./public/home-desktop/image-18-1@2x.png"
+                                    src="./public/home-desktop/OneMetric_Transparent.png"
                                 />
                                 <div className="one-metric-footer">
                                     <div className="one-metric-title-container">

@@ -29,6 +29,8 @@ function AddStocks() {
     const [userWatchlist, setUserWatchlist] = useState<number[]>([]);
     const [isTokenChecked, setIsTokenChecked] = useState(false);
     const [isCheckingPlan, setIsCheckingPlan] = useState(false);
+    const [selectedStocks, setSelectedStocks] = useState<number[]>([]);
+    const [addedStocksCount, setAddedStocksCount] = useState<number>(0);
     const [token, setToken] = useState<string | null>(null);
 
     useEffect(() => {
@@ -74,7 +76,9 @@ function AddStocks() {
                     Authorization: `${token}`,
                 },
             });
-            setUserWatchlist(response.data.data.map((stock: any) => stock.scrip_cd));
+            const watchlist = response.data.data.map((stock: any) => stock.scrip_cd);
+            setUserWatchlist(watchlist);
+            setAddedStocksCount(watchlist.length);
         } catch (error) {
             console.error('Error fetching user watchlist:', error);
         }
@@ -103,6 +107,14 @@ function AddStocks() {
         setIsLoggedIn(false);
         setShowDropdown(false);
         window.location.href = '/';
+    };
+
+    const handleSelectStock = (scrip_cd: number) => {
+        setSelectedStocks(prev =>
+            prev.includes(scrip_cd)
+                ? prev.filter(id => id !== scrip_cd)
+                : [...prev, scrip_cd]
+        );
     };
 
     const toggleDropdown = () => {
@@ -209,7 +221,61 @@ function AddStocks() {
         setDisplayCount(prevCount => prevCount + 30);
     };
 
+    const handleAddSelected = async () => {
+        if (addedStocksCount + selectedStocks.length > 10) {
+            alert("You can't add more than 10 stocks to your watchlist.");
+            return;
+        }
+
+        for (const scrip_cd of selectedStocks) {
+            try {
+                await axios.post(`${baseApiURL()}/add-stock-to-watchlist`, {
+                    scrip_cd: scrip_cd
+                }, {
+                    headers: {
+                        Authorization: `${token}`,
+                    },
+                });
+
+                setUserWatchlist(prev => [...prev, scrip_cd]);
+                setAddedStocksCount(prev => prev + 1);
+            } catch (error) {
+                console.error('Error adding stock:', error);
+            }
+        }
+
+        setSelectedStocks([]);
+        fetchUserWatchlist();
+    };
+
+    const handleDeleteSelected = async () => {
+        for (const scrip_cd of selectedStocks) {
+            try {
+                await axios.post(`${baseApiURL()}/delete-stock-from-watchlist`, {
+                    scrip_cd: scrip_cd
+                }, {
+                    headers: {
+                        Authorization: `${token}`,
+                    },
+                });
+
+                setUserWatchlist(prev => prev.filter(id => id !== scrip_cd));
+                setAddedStocksCount(prev => prev - 1);
+            } catch (error) {
+                console.error('Error deleting stock:', error);
+            }
+        }
+
+        setSelectedStocks([]);
+        fetchUserWatchlist();
+    };
+
     const handlePlusClick = async (isin_code: string, index: number) => {
+        if (addedStocksCount >= 10) {
+            alert("You can't add more than 10 stocks to your watchlist.");
+            return;
+        }
+
         const selectedStock = sortedStockData[index];
         const scrip_cd = selectedStock.scrip_cd;
 
@@ -230,15 +296,12 @@ function AddStocks() {
             console.log(`Stock ${scrip_cd} added!!`);
 
             setUserWatchlist((prev) => [...prev, scrip_cd]);
+            setAddedStocksCount(prev => prev + 1);
 
-            alert("Stock Added Successfully!!");
-
-            setTimeout(() => {
-                setButtonStates((prevState) => ({
-                    ...prevState,
-                    [isin_code]: 'edit',
-                }));
-            }, 1000);
+            setButtonStates((prevState) => ({
+                ...prevState,
+                [isin_code]: 'edit',
+            }));
 
         } catch (error) {
             console.error('Error adding stock:', error);
@@ -285,8 +348,6 @@ function AddStocks() {
                 },
             });
 
-            alert("Stock Deleted Successfully!!!");
-
             setUserWatchlist((prev) => prev.filter(id => id !== scrip_cd));
 
             setTimeout(() => {
@@ -311,7 +372,6 @@ function AddStocks() {
                 ...prevState,
                 [index]: false,
             }));
-            alert("Failed to delete stock. Please try again.");
         }
     };
 
@@ -384,7 +444,7 @@ function AddStocks() {
                         />
                         <div className="main-inner">
                             <div className="main-inner">
-                                <a className="onemetric">OneMetric</a>
+                                <a className="onemetric" href='/'>OneMetric</a>
                             </div>
                         </div>
                         <div className="frame-container">
@@ -474,6 +534,7 @@ function AddStocks() {
                     <div className="trial-info">
                         <div className="add-your-favourite-container">
                             <span style={{ color: 'white' }}>Add your favourite stocks to watch list and </span>
+                            <br />
                             {isCheckingPlan ? (
                                 <span>Checking plan status...</span>
                             ) : isPlanValid && planStatus === 'active' && !isPlanExpired ? (
@@ -537,6 +598,21 @@ function AddStocks() {
                                 </div>
                             </div>
                         </div>
+                        <div className="action-buttons">
+                            <button
+                                onClick={handleAddSelected}
+                                disabled={selectedStocks.length === 0 || addedStocksCount >= 10}
+                            >
+                                Add Selected ({selectedStocks.length})
+                            </button>
+                            &nbsp;&nbsp;&nbsp;
+                            <button
+                                onClick={handleDeleteSelected}
+                                disabled={selectedStocks.length === 0}
+                            >
+                                Delete Selected ({selectedStocks.length})
+                            </button>
+                        </div>
                         <div className="stocks-list">
                             {loading ? (
                                 <div style={{ color: 'white', margin: 'auto' }}>Loading...</div>
@@ -545,10 +621,12 @@ function AddStocks() {
                             ) : (
                                 sortedStockData.slice(0, displayCount).map((stock, index) => (
                                     <div key={index} className="select-stocks">
-                                        <div className="select-stocks-inner">
-                                            <div className="vector-wrapper">
-                                                <img className="vector-icon" alt="" />
-                                            </div>
+                                        <div className='custom-selection-checkbox'>
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedStocks.includes(stock.scrip_cd)}
+                                                onChange={() => handleSelectStock(stock.scrip_cd)}
+                                            />
                                         </div>
                                         <div className="adani-group-wrapper">
                                             <div className="adani-group" style={{ color: 'white' }}>{stock.stock_long_name}</div>

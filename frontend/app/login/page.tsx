@@ -87,7 +87,7 @@ function Login(): JSX.Element {
       <div className="login">
         <img className="login-child" alt="" src="./public/login/group-1000001016.svg" />
         <header className="main">
-          <img className="image-18-icon" loading="lazy" alt="" src="./public/login/image-18@2x.png" />
+          <img className="image-18-icon" loading="lazy" alt="" src="./public/login/OneMetric_Transparent.png" />
           <div className="content">
             <div className="content">
               <a className="onemetric">OneMetric</a>

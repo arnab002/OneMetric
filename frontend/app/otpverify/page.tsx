@@ -120,7 +120,7 @@ const OTPVerify: React.FC = () => {
                         className="image-18-icon"
                         loading="lazy"
                         alt=""
-                        src="./public/OTP/image-18@2x.png"
+                        src="./public/OTP/OneMetric_Transparent.png"
                     />
                     <div className="frame-wrapper">
                         <div className="frame-wrapper">

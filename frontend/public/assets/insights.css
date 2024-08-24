@@ -1760,6 +1760,26 @@
   }
 }
 
+@media (max-width: 376px) {
+  .favourite-stock{
+    color: white;
+    font-size: 14px;
+  }
+  .plan-expiring{
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 345px){
+  .favourite-stock{
+    color: white;
+    font-size: 13px;
+  }
+  .plan-expiring{
+    font-size: 16px;
+  }
+}
+
 @media (max-width: 768px) {
   .filter-names {
     font-size: 16px;
@@ -1775,15 +1795,23 @@
   }
 }
 
-@media screen and (max-width: 362px){
-  .trial-info{
-    font-size: 11px;
+@media screen and (min-width: 768px) and (max-width: 1920px){
+  .favourite-stock{
+    color: white;
+    font-size: 19px;
+  }
+  .plan-expiring{
+    font-size: 19px;
   }
 }
 
-@media only screen and (min-width: 375px) and (max-width: 667px){
+@media only screen and (min-width: 377px) and (max-width: 667px){
+  .favourite-stock{
+    color: white;
+    font-size: 16px;
+  }
   .plan-expiring{
-    font-size: 18px;
+    font-size: 17px;
   }
 }
 

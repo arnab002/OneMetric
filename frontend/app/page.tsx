@@ -416,7 +416,6 @@ function Home() {
           }
         }
 
-        alert('Stocks added to watchlist successfully!');
         window.location.href = '/insights'
         // Clear selected stocks from session storage
         sessionStorage.removeItem('selectedStocks');
@@ -530,7 +529,7 @@ function Home() {
                       className="image-18-icon"
                       loading="lazy"
                       alt=""
-                      src="./public/home/image-18@2x.png"
+                      src="./public/home/OneMetric_Transparent.png"
                     />
                     <div className="sign-in-button-wrapper">
                       <div className="sign-in-button-wrapper">
@@ -1463,7 +1462,7 @@ function Home() {
                 className="image-18-icon1"
                 loading="lazy"
                 alt=""
-                src="./public/home/image-18-1@2x.png"
+                src="./public/home/OneMetric_Transparent.png"
               />
               <div className="footer-branding">
                 <div className="sign-in-button-wrapper">
