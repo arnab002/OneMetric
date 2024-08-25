@@ -17,15 +17,16 @@ function AddUser() {
                         <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
                             <h6 className="fw-semibold mb-0">Add User</h6>
                             <div className="d-flex align-items-center gap-2">
-                                
+
                                 <div>
                                     <button
                                         type="button"
                                         className="btn btn-secondary"
-                                        onClick={() => document.getElementById('bulkImport').click()}
+                                        onClick={() => document.getElementById('bulkImport')?.click()}
                                     >
                                         Bulk Import
                                     </button>
+
                                     <input
                                         type="file"
                                         id="bulkImport"
