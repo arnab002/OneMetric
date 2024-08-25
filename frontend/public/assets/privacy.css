@@ -377,14 +377,7 @@
   .vector-icon2 {
     min-height: 29px;
   }
-  .frame-parent4{
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: var(--gap-base);
-  }
-  .frame-parent7-mobile, .frame-parent7 {
+  .frame-parent4, .frame-parent7{
     display: flex;
     flex-direction: row;
     align-items: flex-start;
@@ -500,7 +493,7 @@
     color: var(--color-lightslategray-100);
   }
   .footer {
-    height: 260px;
+    height: 300px;
     background-color: var(--color-gray-200);
     overflow: hidden;
     flex-shrink: 0;
@@ -588,12 +581,6 @@
     }
   }
 
-  @media (max-width: 1280px) {
-    .frame-parent7 {
-      display: none;
-    }
-  }
-
   @media only screen and (min-width: 1280px) and (max-width: 1920px){
     .icons-parent{
       padding: 25px 80px;
@@ -603,9 +590,6 @@
     }
     .footer{
       padding: 0 82px 40px;
-    }
-    .frame-parent7-mobile{
-      display: none;
     }
   }
   

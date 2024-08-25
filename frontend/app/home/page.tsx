@@ -468,6 +468,10 @@ function HomeDesktop() {
         window.open('https://x.com/Onemetric_in', '_blank');
     };
 
+    const handleWhatsAppRedirect = () => {
+        window.open('https://api.whatsapp.com/send?phone=917204946777&text=Hi', '_blank');
+    };
+
     if (loadingPlanValidity) {
         return null;
     }
@@ -527,7 +531,7 @@ function HomeDesktop() {
                                                 <div className="frame-wrapper2">
                                                     <div className="onemetric-parent">
                                                         <div className="onemetric">OneMetric</div>
-                                                        <div className="onemetricai">@OneMetricAi</div>
+                                                        <div className="onemetricai">@OneMetric.in</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -696,10 +700,10 @@ function HomeDesktop() {
                                 loading="lazy"
                                 alt=""
                                 src="./public/home-desktop/OneMetric_Transparent.png"
-                                onClick={handleHomeClick} style={{cursor: 'pointer'}}
+                                onClick={handleHomeClick} style={{ cursor: 'pointer' }}
                             />
                             <div className="one-metric-sign-in-container">
-                                <div className="one-metric-sign-in-logo-contai" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
+                                <div className="one-metric-sign-in-logo-contai" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                                     <a className="onemetric1">OneMetric</a>
                                 </div>
                             </div>
@@ -1027,6 +1031,10 @@ function HomeDesktop() {
                                                         <div className="add-stocks-to">Add stocks to watchlist</div>
                                                     </div>
                                                 </div>
+
+                                            </div>
+                                            <div className="select-stocks-subscribe">
+                                                Select stocks that you follow or subscribe to our list
                                             </div>
                                             <div className="line-parent12">
                                                 <div className="frame-child55" />
@@ -1145,6 +1153,9 @@ function HomeDesktop() {
                                         <div className="get-instant-whatsapp">
                                             Get instant WhatsApp insights
                                         </div>
+                                        <div className="news-deliver-in-seconds">
+                                            We deliver 99% news in less that 60 seconds
+                                        </div>
                                         <div className="post-item">
                                             <div className="post-background" />
                                             <div className="post-image-parent">
@@ -1171,7 +1182,7 @@ function HomeDesktop() {
                                                         <div className="frame-wrapper17">
                                                             <div className="onemetric-group">
                                                                 <div className="onemetric2">OneMetric</div>
-                                                                <div className="onemetricai1">@OneMetricAi</div>
+                                                                <div className="onemetricai1">@OneMetric.in</div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1409,7 +1420,7 @@ function HomeDesktop() {
                     <div className="homepage-inner2">
                         <div className="frame-parent47">
                             <div className="affordable-plans-wrapper">
-                                <h1 className="affordable-plans">Affordable plans!</h1>
+                                <h1 className="affordable-plans">Affordable plans</h1>
                             </div>
                             {loading ? 'Loading...' : (
                                 <div className="plans-container">
@@ -1598,12 +1609,31 @@ function HomeDesktop() {
                                     className="image-18-icon1"
                                     alt=""
                                     src="./public/home-desktop/OneMetric_Transparent.png"
-                                    onClick={handleHomeClick} style={{cursor: 'pointer'}}
+                                    onClick={handleHomeClick} style={{ cursor: 'pointer' }}
                                 />
                                 <div className="one-metric-footer">
-                                    <div className="one-metric-title-container" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
+                                    <div className="one-metric-title-container" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                                         <b className="onemetric3">OneMetric</b>
                                     </div>
+                                </div>
+                                <div className="social-icons" style={{ cursor: 'pointer' }}>
+                                    <div className="icon-background-parent">
+                                        <div className="icon-background1" />
+                                        <img
+                                            className="social-icon"
+                                            loading="lazy"
+                                            alt=""
+                                            src="./public/home-desktop/vector.svg"
+                                            onClick={handleWhatsAppRedirect} style={{ cursor: 'pointer' }}
+                                        />
+                                    </div>
+                                    <img
+                                        className="social-icon1"
+                                        loading="lazy"
+                                        alt=""
+                                        src="./public/home-desktop/vector-1.svg"
+                                        onClick={handleTwitterRedirect}
+                                    />
                                 </div>
                             </div>
                             <div className="links-wrapper">
@@ -1617,33 +1647,15 @@ function HomeDesktop() {
                                     <div className="link-containers">
                                         <div className="policy-links">
                                             <a href='/about' className="about-us" style={{ textDecoration: "none", color: "inherit" }}>About Us</a>
-                                            <a href='/contact' className="contact-us" style={{ textDecoration: "none", color: "inherit" }}>Contact Us</a>
+                                            <a href='/disclaimer' className="contact-us" style={{ textDecoration: "none", color: "inherit" }}>Disclaimer</a>
                                             <a href='/refund' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Refund Policy</a>
                                             <a href='/plan' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Pricing</a>
                                         </div>
                                         <div className="terms-links">
-                                            <a href='/privacy' className="terms-conditions" style={{ textDecoration: "none", color: "inherit" }}>Privacy &amp; Policy</a>
-                                            <a href='/terms' className="terms-conditions" style={{ textDecoration: "none", color: "inherit" }}>Terms &amp; conditions</a>
+                                            <a href='/privacy' className="terms-conditions" style={{ textDecoration: "none", color: "inherit" }}>Privacy Policy</a>
+                                            <a href='/terms' className="terms-conditions" style={{ textDecoration: "none", color: "inherit" }}>Terms &amp; Conditions</a>
                                             <a href='/referral' className="referral-policy" style={{ textDecoration: "none", color: "inherit" }}>Referral Policy</a>
-                                            <div className="social-icons" style={{ cursor: 'pointer' }}>
-                                                <div className="icon-background-parent">
-                                                    <div className="icon-background1" />
-                                                    <img
-                                                        className="social-icon"
-                                                        loading="lazy"
-                                                        alt=""
-                                                        src="./public/home-desktop/vector.svg"
-                                                    />
-                                                </div>
-                                                <img
-                                                    className="social-icon1"
-                                                    loading="lazy"
-                                                    alt=""
-                                                    src="./public/home-desktop/vector-1.svg"
-                                                    onClick={handleTwitterRedirect}
-                                                />
-                                            </div>
-                                            <div className="faqs">FAQs</div>
+                                            <a href='/contact' className="referral-policy" style={{ textDecoration: "none", color: "inherit" }}>Contact Us</a>
                                         </div>
                                     </div>
                                     <img className="links-item" alt="" src="./public/home-desktop/vector-172.svg" />

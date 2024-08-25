@@ -476,6 +476,10 @@ function Home() {
     window.open('https://x.com/Onemetric_in', '_blank');
   };
 
+  const handleWhatsAppRedirect = () => {
+    window.open('https://api.whatsapp.com/send?phone=917204946777&text=Hi', '_blank');
+  };
+
   if (loadingPlanValidity) {
     return null;
   }
@@ -1067,7 +1071,7 @@ function Home() {
                 <div className="trial-days">
                   <div className="one-metric-title">
                     <div className="onemetric1">OneMetric</div>
-                    <div className="onemetricai">@OneMetricAi</div>
+                    <div className="onemetricai">@OneMetric.in</div>
                   </div>
                 </div>
               </div>
@@ -1483,6 +1487,7 @@ function Home() {
                     loading="lazy"
                     alt=""
                     src="./public/home/vector-3.svg"
+                    onClick={handleWhatsAppRedirect} style={{ cursor: 'pointer' }}
                   />
                 </div>
                 <img
@@ -1490,7 +1495,7 @@ function Home() {
                   loading="lazy"
                   alt=""
                   src="./public/home/vector-4.svg"
-                  onClick={handleTwitterRedirect}
+                  onClick={handleTwitterRedirect} style={{ cursor: 'pointer' }}
                 />
               </div>
             </div>
@@ -1504,15 +1509,15 @@ function Home() {
                 <div className="link-columns-parent">
                   <div className="link-columns">
                     <a href='/about' style={{ textDecoration: "none", color: "inherit" }} className="about-us">About Us</a>
-                    <a href='/contact' style={{ textDecoration: "none", color: "inherit" }} className="contact-us">Contact Us</a>
+                    <a href='/disclaimer' style={{ textDecoration: "none", color: "inherit" }} className="contact-us">Disclaimer</a>
                     <a href='/refund' style={{ textDecoration: "none", color: "inherit" }} className="refund-policy">Refund Policy</a>
                     <a href='/plans' style={{ textDecoration: "none", color: "inherit" }} className="refund-policy">Pricing</a>
                   </div>
                   <div className="link-columns1">
-                    <a href='/privacy' style={{ textDecoration: "none", color: "inherit" }} className="terms-conditions">Privacy &amp; Policy</a>
+                    <a href='/privacy' style={{ textDecoration: "none", color: "inherit" }} className="terms-conditions">Privacy Policy</a>
                     <a href='/terms' style={{ textDecoration: "none", color: "inherit" }} className="terms-conditions">Terms &amp; conditions</a>
                     <a href='/referral' style={{ textDecoration: "none", color: "inherit" }} className="referral-policy">Referral Policy</a>
-                    <a href='#' style={{ textDecoration: "none", color: "inherit" }} className="faqs">FAQs</a>
+                    <a href='/contact' style={{ textDecoration: "none", color: "inherit" }} className="referral-policy">Contact Us</a>
                   </div>
                 </div>
                 <img

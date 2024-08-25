@@ -92,9 +92,9 @@ function OTPSuccess() {
                             </div>
                         </div>
                         <div className="successfully-verified-parent">
-                            <div className="successfully-verified">Successfully Verified!</div>
+                            {/* <div className="successfully-verified">Successfully Verified!</div> */}
                             <div className="placeholder-wrapper">
-                                <div className="placeholder">Thank You</div>
+                                <div className="placeholder">Start Your <span style={{color: 'yellow'}}>Epic</span> journey</div>
                             </div>
                         </div>
                     </div>

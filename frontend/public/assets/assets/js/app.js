@@ -58,17 +58,17 @@
   * Fall back to light mode.
   */
   function calculateSettingAsThemeString({ localStorageTheme }) {
-    if (localStorageTheme !== null) {
-      return localStorageTheme;
-    }
-    return "light";
+    // if (localStorageTheme !== null) {
+    //   return localStorageTheme;
+    // }
+    return "dark";
   }
 
   /**
   * Utility function to update the button text and aria-label.
   */
   function updateButton({ buttonEl, isDark }) {
-    const newCta = isDark ? "dark" : "light";
+    const newCta = "dark";
     // use an aria-label if you are omitting text on the button
     // and using a sun/moon icon, for example
     // buttonEl.setAttribute("aria-label", newCta);
@@ -97,14 +97,14 @@
   * 3. Update the theme setting and button text accoridng to current settings
   */
   updateButton({ buttonEl: button, isDark: currentThemeSetting === "dark" });
-  updateThemeOnHtmlEl({ theme: currentThemeSetting });
+  updateThemeOnHtmlEl({ theme: "dark" });
 
   /**
   * 4. Add an event listener to toggle the theme
   */
   if (button) {
     button.addEventListener("click", (event) => {
-      const newTheme = currentThemeSetting === "dark" ? "light" : "dark";
+      const newTheme = currentThemeSetting === "dark";
 
       localStorage.setItem("theme", newTheme);
       updateButton({ buttonEl: button, isDark: newTheme === "dark" });

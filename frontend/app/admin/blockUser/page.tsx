@@ -1,8 +1,8 @@
-import React from 'react'
-import { Icon } from '@iconify/react'
-import Header from '../components/Header'
-import Sidebar from '../components/Sidebar'
-import Footer from '../components/Footer'
+import React from 'react';
+import { Icon } from '@iconify/react';
+import Header from '../components/Header';
+import Sidebar from '../components/Sidebar';
+import Footer from '../components/Footer';
 
 function BlockUser() {
     return (
@@ -14,22 +14,7 @@ function BlockUser() {
                     <div className="dashboard-main-body">
                         <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
                             <h6 className="fw-semibold mb-0">Block Users</h6>
-                            <ul className="d-flex align-items-center gap-2">
-                                <li className="fw-medium">
-                                    <a
-                                        href="index.html"
-                                        className="d-flex align-items-center gap-1 hover-text-primary"
-                                    >
-                                        <Icon
-                                            icon="solar:home-smile-angle-outline"
-                                            className="icon text-lg"
-                                        />
-                                        Dashboard
-                                    </a>
-                                </li>
-                                <li>-</li>
-                                <li className="fw-medium">Block Users</li>
-                            </ul>
+                            
                         </div>
                         <div className="card h-100 p-0 radius-12">
                             <div className="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
@@ -39,15 +24,6 @@ function BlockUser() {
                                     </span>
                                     <select className="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">
                                         <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                        <option>6</option>
-                                        <option>7</option>
-                                        <option>8</option>
-                                        <option>9</option>
-                                        <option>10</option>
                                     </select>
                                     <form className="navbar-search">
                                         <input
@@ -70,464 +46,21 @@ function BlockUser() {
                                     <table className="table bordered-table sm-table mb-0">
                                         <thead>
                                             <tr>
-                                                <th scope="col">
-                                                    <div className="d-flex align-items-center gap-10">
-                                                        <div className="form-check style-check d-flex align-items-center">
-                                                            <input
-                                                                className="form-check-input radius-4 border input-form-dark"
-                                                                type="checkbox"
-                                                                name="checkbox"
-                                                                id="selectAll"
-                                                            />
-                                                        </div>
-                                                        S.L
-                                                    </div>
-                                                </th>
                                                 <th scope="col">Create Date</th>
-                                                <th scope="col">Role </th>
+                                                <th scope="col">Role</th>
                                                 <th scope="col">Description</th>
-                                                <th scope="col" className="text-center">
-                                                    Status
-                                                </th>
-                                                <th scope="col" className="text-center">
-                                                    Action
-                                                </th>
+                                                <th scope="col" className="text-center">Status</th>
+                                                <th scope="col" className="text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>
-                                                    <div className="d-flex align-items-center gap-10">
-                                                        <div className="form-check style-check d-flex align-items-center">
-                                                            <input
-                                                                className="form-check-input radius-4 border border-neutral-400"
-                                                                type="checkbox"
-                                                                name="checkbox"
-                                                            />
-                                                        </div>
-                                                        01
-                                                    </div>
-                                                </td>
                                                 <td>25 Jan 2024</td>
                                                 <td>Test</td>
                                                 <td>
                                                     <p className="max-w-500-px">
                                                         Lorem Ipsum is simply dummy text of the printing and
-                                                        typesetting
-                                                    </p>
-                                                </td>
-                                                <td className="text-center">
-                                                    <span className="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">
-                                                        Block
-                                                    </span>
-                                                </td>
-                                                <td className="text-center">
-                                                    <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                        <button
-                                                            type="button"
-                                                            className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon icon="lucide:edit" className="menu-icon" />
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon
-                                                                icon="fluent:delete-24-regular"
-                                                                className="menu-icon"
-                                                            />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="d-flex align-items-center gap-10">
-                                                        <div className="form-check style-check d-flex align-items-center">
-                                                            <input
-                                                                className="form-check-input radius-4 border border-neutral-400"
-                                                                type="checkbox"
-                                                                name="checkbox"
-                                                            />
-                                                        </div>
-                                                        02
-                                                    </div>
-                                                </td>
-                                                <td>25 Jan 2024</td>
-                                                <td>Waiter</td>
-                                                <td>
-                                                    <p className="max-w-500-px">
-                                                        Lorem Ipsum is simply dummy text of the printing and
-                                                        typesetting
-                                                    </p>
-                                                </td>
-                                                <td className="text-center">
-                                                    <span className="bg-danger-focus text-danger-600 border border-danger-main px-24 py-4 radius-4 fw-medium text-sm">
-                                                        Unblock
-                                                    </span>
-                                                </td>
-                                                <td className="text-center">
-                                                    <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                        <button
-                                                            type="button"
-                                                            className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon icon="lucide:edit" className="menu-icon" />
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon
-                                                                icon="fluent:delete-24-regular"
-                                                                className="menu-icon"
-                                                            />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="d-flex align-items-center gap-10">
-                                                        <div className="form-check style-check d-flex align-items-center">
-                                                            <input
-                                                                className="form-check-input radius-4 border border-neutral-400"
-                                                                type="checkbox"
-                                                                name="checkbox"
-                                                            />
-                                                        </div>
-                                                        03
-                                                    </div>
-                                                </td>
-                                                <td>10 Feb 2024</td>
-                                                <td>Manager</td>
-                                                <td>
-                                                    <p className="max-w-500-px">
-                                                        Lorem Ipsum is simply dummy text of the printing and
-                                                        typesetting
-                                                    </p>
-                                                </td>
-                                                <td className="text-center">
-                                                    <span className="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">
-                                                        Block
-                                                    </span>
-                                                </td>
-                                                <td className="text-center">
-                                                    <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                        <button
-                                                            type="button"
-                                                            className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon icon="lucide:edit" className="menu-icon" />
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon
-                                                                icon="fluent:delete-24-regular"
-                                                                className="menu-icon"
-                                                            />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="d-flex align-items-center gap-10">
-                                                        <div className="form-check style-check d-flex align-items-center">
-                                                            <input
-                                                                className="form-check-input radius-4 border border-neutral-400"
-                                                                type="checkbox"
-                                                                name="checkbox"
-                                                            />
-                                                        </div>
-                                                        04
-                                                    </div>
-                                                </td>
-                                                <td>10 Feb 2024</td>
-                                                <td>Project Manager</td>
-                                                <td>
-                                                    <p className="max-w-500-px">
-                                                        Lorem Ipsum is simply dummy text of the printing and
-                                                        typesetting
-                                                    </p>
-                                                </td>
-                                                <td className="text-center">
-                                                    <span className="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">
-                                                        Block
-                                                    </span>
-                                                </td>
-                                                <td className="text-center">
-                                                    <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                        <button
-                                                            type="button"
-                                                            className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon icon="lucide:edit" className="menu-icon" />
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon
-                                                                icon="fluent:delete-24-regular"
-                                                                className="menu-icon"
-                                                            />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="d-flex align-items-center gap-10">
-                                                        <div className="form-check style-check d-flex align-items-center">
-                                                            <input
-                                                                className="form-check-input radius-4 border border-neutral-400"
-                                                                type="checkbox"
-                                                                name="checkbox"
-                                                            />
-                                                        </div>
-                                                        05
-                                                    </div>
-                                                </td>
-                                                <td>15 March 2024</td>
-                                                <td>Game Developer</td>
-                                                <td>
-                                                    <p className="max-w-500-px">
-                                                        Lorem Ipsum is simply dummy text of the printing and
-                                                        typesetting
-                                                    </p>
-                                                </td>
-                                                <td className="text-center">
-                                                    <span className="bg-danger-focus text-danger-600 border border-danger-main px-24 py-4 radius-4 fw-medium text-sm">
-                                                        Unblock
-                                                    </span>
-                                                </td>
-                                                <td className="text-center">
-                                                    <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                        <button
-                                                            type="button"
-                                                            className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon icon="lucide:edit" className="menu-icon" />
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon
-                                                                icon="fluent:delete-24-regular"
-                                                                className="menu-icon"
-                                                            />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="d-flex align-items-center gap-10">
-                                                        <div className="form-check style-check d-flex align-items-center">
-                                                            <input
-                                                                className="form-check-input radius-4 border border-neutral-400"
-                                                                type="checkbox"
-                                                                name="checkbox"
-                                                            />
-                                                        </div>
-                                                        06
-                                                    </div>
-                                                </td>
-                                                <td>15 March 2024</td>
-                                                <td>Head</td>
-                                                <td>
-                                                    <p className="max-w-500-px">
-                                                        Lorem Ipsum is simply dummy text of the printing and
-                                                        typesetting
-                                                    </p>
-                                                </td>
-                                                <td className="text-center">
-                                                    <span className="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">
-                                                        Block
-                                                    </span>
-                                                </td>
-                                                <td className="text-center">
-                                                    <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                        <button
-                                                            type="button"
-                                                            className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon icon="lucide:edit" className="menu-icon" />
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon
-                                                                icon="fluent:delete-24-regular"
-                                                                className="menu-icon"
-                                                            />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="d-flex align-items-center gap-10">
-                                                        <div className="form-check style-check d-flex align-items-center">
-                                                            <input
-                                                                className="form-check-input radius-4 border border-neutral-400"
-                                                                type="checkbox"
-                                                                name="checkbox"
-                                                            />
-                                                        </div>
-                                                        07
-                                                    </div>
-                                                </td>
-                                                <td>27 April 2024</td>
-                                                <td>Management</td>
-                                                <td>
-                                                    <p className="max-w-500-px">
-                                                        Lorem Ipsum is simply dummy text of the printing and
-                                                        typesetting
-                                                    </p>
-                                                </td>
-                                                <td className="text-center">
-                                                    <span className="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">
-                                                        Block
-                                                    </span>
-                                                </td>
-                                                <td className="text-center">
-                                                    <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                        <button
-                                                            type="button"
-                                                            className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon icon="lucide:edit" className="menu-icon" />
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon
-                                                                icon="fluent:delete-24-regular"
-                                                                className="menu-icon"
-                                                            />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="d-flex align-items-center gap-10">
-                                                        <div className="form-check style-check d-flex align-items-center">
-                                                            <input
-                                                                className="form-check-input radius-4 border border-neutral-400"
-                                                                type="checkbox"
-                                                                name="checkbox"
-                                                            />
-                                                        </div>
-                                                        08
-                                                    </div>
-                                                </td>
-                                                <td>27 April 2024</td>
-                                                <td>Waiter</td>
-                                                <td>
-                                                    <p className="max-w-500-px">
-                                                        Lorem Ipsum is simply dummy text of the printing and
-                                                        typesetting
-                                                    </p>
-                                                </td>
-                                                <td className="text-center">
-                                                    <span className="bg-danger-focus text-danger-600 border border-danger-main px-24 py-4 radius-4 fw-medium text-sm">
-                                                        Unblock
-                                                    </span>
-                                                </td>
-                                                <td className="text-center">
-                                                    <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                        <button
-                                                            type="button"
-                                                            className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon icon="lucide:edit" className="menu-icon" />
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon
-                                                                icon="fluent:delete-24-regular"
-                                                                className="menu-icon"
-                                                            />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="d-flex align-items-center gap-10">
-                                                        <div className="form-check style-check d-flex align-items-center">
-                                                            <input
-                                                                className="form-check-input radius-4 border border-neutral-400"
-                                                                type="checkbox"
-                                                                name="checkbox"
-                                                            />
-                                                        </div>
-                                                        09
-                                                    </div>
-                                                </td>
-                                                <td>30 April 2024</td>
-                                                <td>Waiter</td>
-                                                <td>
-                                                    <p className="max-w-500-px">
-                                                        Lorem Ipsum is simply dummy text of the printing and
-                                                        typesetting
-                                                    </p>
-                                                </td>
-                                                <td className="text-center">
-                                                    <span className="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">
-                                                        Block
-                                                    </span>
-                                                </td>
-                                                <td className="text-center">
-                                                    <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                        <button
-                                                            type="button"
-                                                            className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon icon="lucide:edit" className="menu-icon" />
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                        >
-                                                            <Icon
-                                                                icon="fluent:delete-24-regular"
-                                                                className="menu-icon"
-                                                            />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="d-flex align-items-center gap-10">
-                                                        <div className="form-check style-check d-flex align-items-center">
-                                                            <input
-                                                                className="form-check-input radius-4 border border-neutral-400"
-                                                                type="checkbox"
-                                                                name="checkbox"
-                                                            />
-                                                        </div>
-                                                        10
-                                                    </div>
-                                                </td>
-                                                <td>30 April 2024</td>
-                                                <td>Waiter</td>
-                                                <td>
-                                                    <p className="max-w-500-px">
-                                                        Lorem Ipsum is simply dummy text of the printing and
-                                                        typesetting
+                                                        typesetting.
                                                     </p>
                                                 </td>
                                                 <td className="text-center">
@@ -559,7 +92,7 @@ function BlockUser() {
                                     </table>
                                 </div>
                                 <div className="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-24">
-                                    <span>Showing 1 to 10 of 12 entries</span>
+                                    <span>Showing 1 to 12 entries</span>
                                     <ul className="pagination d-flex flex-wrap align-items-center gap-2 justify-content-center">
                                         <li className="page-item">
                                             <a
@@ -627,7 +160,7 @@ function BlockUser() {
                 </main>
             </>
         </div>
-    )
+    );
 }
 
-export default BlockUser
+export default BlockUser;

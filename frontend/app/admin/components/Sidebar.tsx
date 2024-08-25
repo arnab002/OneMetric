@@ -14,7 +14,6 @@ function Sidebar() {
                         alt="site logo"
                         className="light-logo"
                     />
-                    <span style={{color: 'black', fontSize: '24px'}}>OneMetric</span>
                     <img
                         src="/public/home/OneMetric_Transparent.png"
                         alt="site logo"
@@ -467,7 +466,7 @@ function Sidebar() {
                             <li>
                                 <a href="javascript:void(0)">
                                     <i className="ri-circle-fill circle-icon text-info-main w-auto" />{" "}
-                                    Add Plan
+                                    Edit Plan
                                 </a>
                             </li>
                         </ul>

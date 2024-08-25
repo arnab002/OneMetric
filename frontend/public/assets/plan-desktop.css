@@ -3808,7 +3808,7 @@
   font-family: var(--font-montserrat);
 }
 .frame-parent55 {
-  width: 360px;
+  width: 100%;
   background-color: var(--color-gray-400);
   overflow: hidden;
   flex-wrap: wrap;

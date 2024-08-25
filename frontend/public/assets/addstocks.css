@@ -840,21 +840,14 @@
 .vector-icon1 {
   min-height: 29px;
 }
-.footer-content{
+.footer-content, .footer-social{
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
   gap: var(--gap-base);
-  margin-top: 2%;
 }
-.footer-social-mobile {
-  display: none;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: var(--gap-base);
-}
+
 .footer-content {
   align-self: stretch;
   background-color: var(--color-gray-400);
@@ -1107,13 +1100,6 @@
   .custom-selection-checkbox{
     margin-top: 0.6%;
   }
-  .footer-social {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: var(--gap-base);
-  }
 }
 
 @media only screen and (min-width: 375px) and (max-width: 667px){
@@ -1142,15 +1128,5 @@
   }
   .adani-group{
     margin-top: 1.5%;
-  }
-  .footer-social-mobile {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: var(--gap-base);
-  }
-  .footer-social{
-    display: none;
   }
 }

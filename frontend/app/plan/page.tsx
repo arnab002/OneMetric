@@ -45,6 +45,10 @@ function PlanDesktop() {
         window.open('https://x.com/Onemetric_in', '_blank');
     };
 
+    const handleWhatsAppRedirect = () => {
+        window.open('https://api.whatsapp.com/send?phone=917204946777&text=Hi', '_blank');
+    };
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (showDropdown && !(event.target as Element).closest('.user-icon-wrapper')) {
@@ -193,9 +197,9 @@ function PlanDesktop() {
                             loading="lazy"
                             alt=""
                             src="./public/home-desktop/OneMetric_Transparent.png"
-                            onClick={handleHomeClick} style={{cursor: 'pointer'}}
+                            onClick={handleHomeClick} style={{ cursor: 'pointer' }}
                         />
-                        <div className="one-metric-sign-in-container" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
+                        <div className="one-metric-sign-in-container" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                             <div className="one-metric-sign-in-logo-contai">
                                 <a className="onemetric1">OneMetric</a>
                             </div>
@@ -253,7 +257,7 @@ function PlanDesktop() {
                     <div className="homepage-inner2">
                         <div className="frame-parent47">
                             <div className="affordable-plans-wrapper">
-                                <h1 className="affordable-plans">Affordable plans!</h1>
+                                <h1 className="affordable-plans">Affordable Plans</h1>
                             </div>
                             {loading ? 'Loading...' : (
                                 <div className="plans-container">
@@ -388,12 +392,31 @@ function PlanDesktop() {
                                     className="image-18-icon1"
                                     alt=""
                                     src="./public/home-desktop/image-18-1@2x.png"
-                                    onClick={handleHomeClick} style={{cursor: 'pointer'}}
+                                    onClick={handleHomeClick} style={{ cursor: 'pointer' }}
                                 />
                                 <div className="one-metric-footer">
-                                    <div className="one-metric-title-container" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
+                                    <div className="one-metric-title-container" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                                         <b className="onemetric3">OneMetric</b>
                                     </div>
+                                </div>
+                                <div className="social-icons">
+                                    <div className="icon-background-parent">
+                                        <div className="icon-background1" />
+                                        <img
+                                            className="social-icon"
+                                            loading="lazy"
+                                            alt=""
+                                            src="./public/home-desktop/vector.svg"
+                                            onClick={handleWhatsAppRedirect} style={{ cursor: 'pointer' }}
+                                        />
+                                    </div>
+                                    <img
+                                        className="social-icon1"
+                                        loading="lazy"
+                                        alt=""
+                                        src="./public/home-desktop/vector-1.svg"
+                                        onClick={handleTwitterRedirect} style={{ cursor: 'pointer' }}
+                                    />
                                 </div>
                             </div>
                             <div className="links-wrapper">
@@ -407,33 +430,15 @@ function PlanDesktop() {
                                     <div className="link-containers">
                                         <div className="policy-links">
                                             <a href='/about' className="about-us" style={{ textDecoration: "none", color: "inherit" }}>About Us</a>
-                                            <a href='/contact' className="contact-us" style={{ textDecoration: "none", color: "inherit" }}>Contact Us</a>
+                                            <a href='/disclaimer' className="contact-us" style={{ textDecoration: "none", color: "inherit" }}>Disclaimer</a>
                                             <a href='/refund' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Refund Policy</a>
                                             <a href='/plan' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Pricing</a>
                                         </div>
                                         <div className="terms-links">
-                                            <a href='/privacy' className="terms-conditions" style={{ textDecoration: "none", color: "inherit" }}>Privacy &amp; Policy</a>
+                                            <a href='/privacy' className="terms-conditions" style={{ textDecoration: "none", color: "inherit" }}>Privacy Policy</a>
                                             <a href='/terms' className="terms-conditions" style={{ textDecoration: "none", color: "inherit" }}>Terms &amp; conditions</a>
                                             <a href='/referral' className="referral-policy" style={{ textDecoration: "none", color: "inherit" }}>Referral Policy</a>
-                                            <div className="social-icons">
-                                                <div className="icon-background-parent">
-                                                    <div className="icon-background1" />
-                                                    <img
-                                                        className="social-icon"
-                                                        loading="lazy"
-                                                        alt=""
-                                                        src="./public/home-desktop/vector.svg"
-                                                    />
-                                                </div>
-                                                <img
-                                                    className="social-icon1"
-                                                    loading="lazy"
-                                                    alt=""
-                                                    src="./public/home-desktop/vector-1.svg"
-                                                    onClick={handleTwitterRedirect} style={{cursor: 'pointer'}}
-                                                />
-                                            </div>
-                                            <div className="faqs">FAQs</div>
+                                            <a href='/contact' className="referral-policy" style={{ textDecoration: "none", color: "inherit" }}>Contact Us</a>
                                         </div>
                                     </div>
                                     <img className="links-item" alt="" src="./public/home-desktop/vector-172.svg" />

@@ -28,32 +28,40 @@ const Referral: React.FC = () => {
 
   const sections: SectionContent[] = [
     {
-      title: "Information We Collect",
-      content: "We may collect personal information that you voluntarily provide to us, such as your name, email address, and phone number, when you register an account or subscribe to our services. Additionally, we may automatically collect certain information about your device and usage patterns, such as your IP address and pages visited, to improve the Platform's functionality and user experience."
+      title: "Information We Collect and How We Use It",
+      content: "When you sign up for OneMetric, we ask for certain details, such as your phone number, to set up your account. We also gather information on your stock preferences and how you use our platform. This data helps us tailor our service to your needs, providing you with timely and relevant stock market alerts."
     },
     {
-      title: " Use of Information",
-      content: "We use the information we collect to provide and improve the Platform, personalise your experience, communicate with you about our services, analyse usage trends, and comply with legal obligations."
+      title: "Reliable Sources of Information",
+      content: "OneMetric pulls stock announcements from credible sources like BSE/NSE, ensuring you receive accurate and up-to-date information. Please be aware that the updates we provide are for informational purposes only and do not constitute trading advice."
     },
     {
-      title: "Sharing of Information",
-      content: "We DO NOT share your personal information with third-party service providers and partners but we may also disclose your information in response to legal process or to protect our rights and the safety of our users."
+      title: "Automated Data Processing",
+      content: "Our processes are fully automated, meaning no human intervention is involved in selecting or sending out updates. We use advanced AI to summarise data from trusted stock exchanges and deliver concise updates directly to your WhatsApp."
     },
     {
-      title: "Your Choices",
-      content: "You may choose not to provide certain personal information, but this may limit your ability to access certain features of the Platform. You can opt out of receiving promotional communications from us at any time."
+      title: "How We Protect Your Personal Information",
+      content: "Your privacy is our priority. We use advanced security measures to safeguard your personal information from unauthorised access or misuse. Rest assured, we never share, sell, or trade your data with third parties for commercial gain."
     },
     {
-      title: "Children's Privacy",
-      content: "The Platform is not intended for children under the age of 18, and we do not knowingly collect personal information from children under 18 years of age."
+      title: "Data Retention Policy",
+      content: "We retain your information only for as long as necessary to provide our services or as required by law. You have full control over your data and can request its deletion or update at any time."
     },
     {
-      title: "Changes to this Privacy Policy",
-      content: "We may update this Privacy Policy from time to time. Any changes will be posted on the Platform, and your continued use of the Platform after such changes constitutes acceptance of the revised Privacy Policy."
+      title: "Your Rights as a User",
+      content: "You can access and manage your personal information through our platform. If you wish to stop receiving updates, simply follow the instructions provided in our communications to unsubscribe."
+    },
+    {
+      title: "No Trading Recommendations",
+      content: "While OneMetric provides valuable stock market news and alerts, it’s important to note that we do not offer any trading recommendations. Our service is designed to inform, not advise. Users should perform their own research or consult with financial experts before making any investment decisions."
+    },
+    {
+      title: "Updates to This Disclaimer",
+      content: "As we evolve, our practices may change. We will update this disclaimer to reflect any new developments, so please review it regularly."
     },
     {
       title: "Contact Us",
-      content: "If you have any questions or concerns about this Privacy Policy, please contact us at <b>contact@onemetric.in</b>"
+      content: "If you have any questions or concerns about this disclaimer or how we handle your data, feel free to reach out to us at <b>contact@onemetric.in</b>"
     }
   ];
 
@@ -105,12 +113,12 @@ const Referral: React.FC = () => {
         </header>
         <section className="about-us-inner">
           <div className="referral-policy-parent">
-            <h3 className="referral-policy">Privacy Policy</h3>
+            <h3 className="referral-policy">Disclaimer</h3>
             <div className="at-wegro-we-container">
               <span>Welcome to </span>
               <b>OneMetric,</b>
               <span>
-                &nbsp;We are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, and protect your information when you use our stock market news app platform.
+                &nbsp;We are committed to protecting your privacy and ensuring the security of your personal information. This Disclaimer explains how we collect, use, and protect your information when you use our stock market news app platform.
               </span>
             </div>
             <div className="frame-parent1">
@@ -214,7 +222,7 @@ const Referral: React.FC = () => {
               <div className="frame-parent8">
                 <div className="about-us-parent">
                   <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us1">About Us</a>
-                  <a href='/disclaimer' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us1">Disclaimer</a>
+                  <a href='/disclaimer' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us1">Disclaimer</a>
                   <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">Refund Policy</a>
                   <a href='/plans' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Pricing</a>
                 </div>

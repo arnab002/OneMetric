@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react'
 import { Icon } from '@iconify/react'
 import Sidebar from '../components/Sidebar'
@@ -14,22 +16,25 @@ function AddUser() {
                     <div className="dashboard-main-body">
                         <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
                             <h6 className="fw-semibold mb-0">Add User</h6>
-                            <ul className="d-flex align-items-center gap-2">
-                                <li className="fw-medium">
-                                    <a
-                                        href="index.html"
-                                        className="d-flex align-items-center gap-1 hover-text-primary"
+                            <div className="d-flex align-items-center gap-2">
+                                
+                                <div>
+                                    <button
+                                        type="button"
+                                        className="btn btn-secondary"
+                                        onClick={() => document.getElementById('bulkImport').click()}
                                     >
-                                        <Icon
-                                            icon="solar:home-smile-angle-outline"
-                                            className="icon text-lg"
-                                        />
-                                        Dashboard
-                                    </a>
-                                </li>
-                                <li>-</li>
-                                <li className="fw-medium">Add User</li>
-                            </ul>
+                                        Bulk Import
+                                    </button>
+                                    <input
+                                        type="file"
+                                        id="bulkImport"
+                                        accept=".csv"
+                                        multiple
+                                        style={{ display: 'none' }}
+                                    />
+                                </div>
+                            </div>
                         </div>
                         <div className="card h-100 p-0 radius-12">
                             <div className="card-body p-24">
@@ -37,33 +42,6 @@ function AddUser() {
                                     <div className="col-xxl-6 col-xl-8 col-lg-10">
                                         <div className="card border">
                                             <div className="card-body">
-                                                {/* <h6 className="text-md text-primary-light mb-16">
-                                                    Profile Image
-                                                </h6>
-                                                <div className="mb-24 mt-16">
-                                                    <div className="avatar-upload">
-                                                        <div className="avatar-edit position-absolute bottom-0 end-0 me-24 mt-16 z-1 cursor-pointer">
-                                                            <input
-                                                                type="file"
-                                                                id="imageUpload"
-                                                                accept=".png, .jpg, .jpeg"
-                                                                hidden
-                                                            />
-                                                            <label
-                                                                htmlFor="imageUpload"
-                                                                className="w-32-px h-32-px d-flex justify-content-center align-items-center bg-primary-50 text-primary-600 border border-primary-600 bg-hover-primary-100 text-lg rounded-circle"
-                                                            >
-                                                                <Icon
-                                                                    icon="solar:camera-outline"
-                                                                    className="icon"
-                                                                />
-                                                            </label>
-                                                        </div>
-                                                        <div className="avatar-preview">
-                                                            <div id="imagePreview"> </div>
-                                                        </div>
-                                                    </div>
-                                                </div> */}
                                                 <form action="#">
                                                     <div className="mb-20">
                                                         <label
@@ -95,93 +73,32 @@ function AddUser() {
                                                     </div>
                                                     <div className="mb-20">
                                                         <label
-                                                            htmlFor="number"
+                                                            htmlFor="phone"
                                                             className="form-label fw-semibold text-primary-light text-sm mb-8"
                                                         >
-                                                            Phone
+                                                            Phone <span className="text-danger-600">*</span>
                                                         </label>
                                                         <input
-                                                            type="email"
+                                                            type="text"
                                                             className="form-control radius-8"
-                                                            id="number"
+                                                            id="phone"
                                                             placeholder="Enter phone number"
                                                         />
                                                     </div>
                                                     <div className="mb-20">
                                                         <label
-                                                            htmlFor="name"
+                                                            htmlFor="planName"
                                                             className="form-label fw-semibold text-primary-light text-sm mb-8"
                                                         >
-                                                            User ID <span className="text-danger-600">*</span>
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            className="form-control radius-8"
-                                                            id="name"
-                                                            placeholder="Enter User ID"
-                                                        />
-                                                    </div>
-                                                    <div className="mb-20">
-                                                        <label
-                                                            htmlFor="depart"
-                                                            className="form-label fw-semibold text-primary-light text-sm mb-8"
-                                                        >
-                                                            Plans Status
-                                                            <span className="text-danger-600">*</span>{" "}
+                                                            Plan Name <span className="text-danger-600">*</span>
                                                         </label>
                                                         <select
                                                             className="form-control radius-8 form-select"
-                                                            id="depart"
+                                                            id="planName"
                                                         >
-                                                            <option>Active</option>
-                                                            <option>Deactive</option>
+                                                            <option value="Diamond">Diamond</option>
+                                                            <option value="Gold">Gold</option>
                                                         </select>
-                                                    </div>
-                                                    <div className="mb-20">
-                                                        <label
-                                                            htmlFor="name"
-                                                            className="form-label fw-semibold text-primary-light text-sm mb-8"
-                                                        >
-                                                            Plan Expiry Date <span className="text-danger-600">*</span>
-                                                        </label>
-                                                        <input
-                                                            type="date"
-                                                            className="form-control radius-8"
-                                                            id="name"
-                                                            placeholder="Enter User ID"
-                                                        />
-                                                    </div>
-                                                    {/* <div className="mb-20">
-                                                        <label
-                                                            htmlFor="desig"
-                                                            className="form-label fw-semibold text-primary-light text-sm mb-8"
-                                                        >
-                                                            Designation
-                                                            <span className="text-danger-600">*</span>{" "}
-                                                        </label>
-                                                        <select
-                                                            className="form-control radius-8 form-select"
-                                                            id="desig"
-                                                        >
-                                                            <option>Enter Designation Title </option>
-                                                            <option>Enter Designation Title One </option>
-                                                            <option>Enter Designation Title Two</option>
-                                                        </select>
-                                                    </div> */}
-                                                    <div className="mb-20">
-                                                        <label
-                                                            htmlFor="desc"
-                                                            className="form-label fw-semibold text-primary-light text-sm mb-8"
-                                                        >
-                                                            Description
-                                                        </label>
-                                                        <textarea
-                                                            name="#0"
-                                                            className="form-control radius-8"
-                                                            id="desc"
-                                                            placeholder="Write description..."
-                                                            defaultValue={""}
-                                                        />
                                                     </div>
                                                     <div className="d-flex align-items-center justify-content-center gap-3">
                                                         <button

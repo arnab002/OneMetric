@@ -4,7 +4,6 @@ import '../../public/assets/assets/css/remixicon.css'
 import '../../public/assets/assets/css/lib/bootstrap.min.css'
 import '../../public/assets/assets/css/lib/apexcharts.css'
 import '../../public/assets/assets/css/lib/dataTables.min.css'
-// import '../../public/assets/assets/css/lib/editor-katex.min.css'
 import '../../public/assets/assets/css/lib/editor.atom-one-dark.min.css'
 import '../../public/assets/assets/css/lib/editor.quill.snow.css'
 import '../../public/assets/assets/css/lib/flatpickr.min.css'
@@ -35,7 +34,6 @@ export default function RootLayout({
             <body className={inter.className}>{children}</body>
             <Script src="/assets/assets/js/lib/jquery-3.7.1.min.js"></Script>
             <Script src="/assets/assets/js/lib/bootstrap.bundle.min.js"></Script>
-            <Script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.52.0/apexcharts.min.js"></Script>
             <Script src="/assets/assets/js/lib/dataTables.min.js"></Script>
             <Script src="/assets/assets/js/lib/iconify-icon.min.js"></Script>
             <Script src="/assets/assets/js/lib/jquery-ui.min.js"></Script>
@@ -47,7 +45,6 @@ export default function RootLayout({
             <Script src="/assets/assets/js/lib/file-upload.js"></Script>
             <Script src="/assets/assets/js/lib/audioplayer.js"></Script>
             <Script src="/assets/assets/js/app.js" defer></Script>
-            <Script src="/assets/assets/js/homeTwoChart.js"></Script>
         </html>
     );
 }

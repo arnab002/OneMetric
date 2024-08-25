@@ -1550,7 +1550,8 @@
 }
 
 .frame-child55 {
-  height: 242px;
+  height: 294px;
+  margin-top: -36%;
   width: 1px;
   position: relative;
   border-right: 1px dashed var(--color-darkslategray-100);
@@ -1574,6 +1575,7 @@
   position: relative;
   line-height: 124%;
   font-weight: 500;
+  margin-bottom: -5%;
   display: inline-block;
 }
 
@@ -1581,6 +1583,25 @@
   width: 265px;
   position: relative;
   display: inline-block;
+}
+
+.select-stocks-subscribe {
+  width: 226px;
+  font-size: 15px;
+  color: #8A8D9E;
+  position: relative;
+  display: inline-block;
+  margin-top: 2%;
+  margin-bottom: 7%;
+}
+
+.news-deliver-in-seconds {
+  width: 226px;
+  font-size: 15px;
+  color: #8A8D9E;
+  position: relative;
+  display: inline-block;
+  margin-top: -4%;
 }
 
 .frame-child56,
@@ -2034,6 +2055,7 @@
   position: relative;
   line-height: 124%;
   font-weight: 500;
+  font-size: 18px;
   display: inline-block;
 }
 
@@ -2498,6 +2520,7 @@
   white-space: nowrap;
   max-width: 100%;
   margin-left: 5%;
+  margin-top: 10%;
 }
 
 .frame-parent29 {
@@ -2528,7 +2551,7 @@
 }
 
 .insights-separator {
-  height: 241.9px;
+  height: 294px;
   width: 0.9px;
   position: relative;
   border-right: 0.9px dashed var(--color-darkslategray-100);
@@ -3130,7 +3153,7 @@
 }
 
 .content-preview {
-  width: 231px;
+  width: 178px;
   overflow: hidden;
   gap: 15.6px;
   z-index: 3;
@@ -3139,7 +3162,7 @@
 
 .post-image-parent {
   height: 200.9px;
-  width: 264px;
+  width: 209px;
   border-radius: 11.68px 11.68px 0 0;
   background-color: var(--color-gray-500);
   padding: 12.4px var(--padding-mini-5) 9.7px var(--padding-base-5);
@@ -3166,7 +3189,7 @@
 }
 
 .post-item {
-  width: 100%;
+  width: 80%;
   height: 100%;
   box-shadow: 0 1.9px 2.92px #3b4aac inset,
     0 3.9px 11.68px rgba(36, 56, 192, 0.25) inset;
@@ -4337,7 +4360,7 @@
 }
 
 .frame-parent55 {
-  width: 360px;
+  width: 100%;
   background-color: var(--color-gray-400);
   overflow: hidden;
   flex-wrap: wrap;

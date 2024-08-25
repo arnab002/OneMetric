@@ -18,6 +18,10 @@ const Refund: React.FC = () => {
     window.open('https://x.com/Onemetric_in', '_blank');
   };
 
+  const handleWhatsAppRedirect = () => {
+    window.open('https://api.whatsapp.com/send?phone=917204946777&text=Hi', '_blank');
+  };
+
   const toggleSection = (index: number) => {
     setOpenSection(openSection === index ? null : index);
   };
@@ -58,13 +62,13 @@ const Refund: React.FC = () => {
     {
       title: "Disclaimers",
       content: [
-        "THE PLATFORM IS PROVIDED AS IS AND AS AVAILABLE WITHOUT ANY WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED. TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, THE COMPANY DISCLAIMS ALL WARRANTIES, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON INFRINGEMENT."
+        "The platform is provided and available without any warranties of any kind, express or implied. To the fullest extent permitted by applicable law, the company disclaims all warranties, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement."
       ]
     },
     {
       title: "Limitation of Liability",
       content: [
-        "TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL THE COMPANY OR ITS AFFILIATES, PARTNERS, LICENSORS, OR SERVICE PROVIDERS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, DATA, OR GOODWILL, ARISING OUT OF OR IN CONNECTION WITH YOUR USE OF THE PLATFORM.",
+        "To the maximum extent permitted by applicable law, in no event shall the company or its affiliates, partners, licensors, or service providers be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or goodwill, arising out of or in connection with your use of the platform.",
       ]
     },
     {
@@ -82,7 +86,7 @@ const Refund: React.FC = () => {
     {
       title: "Contact Us",
       content: [
-        " If you have any questions or concerns about these Terms, please contact us at admin@onemetric.in",
+        "If you have any questions or concerns about these Terms, please contact us at <b>contact@onemetric.in</b>",
       ]
     }
   ];
@@ -181,7 +185,7 @@ const Refund: React.FC = () => {
           </section>
         </main>
         <div className="footer">
-          <div className="footer-container" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
+          <div className="footer-container">
             <div className="frame-parent">
               <img
                 className="frame-item"
@@ -207,13 +211,14 @@ const Refund: React.FC = () => {
               loading="lazy"
               alt=""
               src="./public/refund/image-18-1@2x.png"
+              onClick={handleHomeClick} style={{cursor: 'pointer'}}
             />
             <div className="footer-brand-container-wrapper">
-              <div className="top-navigation-inner">
+              <div className="top-navigation-inner" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
                 <b className="onemetric1">OneMetric</b>
               </div>
             </div>
-            <div className="frame-parent25-mobile">
+            <div className="frame-parent25">
               <div className="social-icon-background-parent">
                 <div className="social-icon-background" />
                 <img
@@ -221,6 +226,7 @@ const Refund: React.FC = () => {
                   loading="lazy"
                   alt=""
                   src="./public/refund/vector.svg"
+                  onClick={handleWhatsAppRedirect} style={{ cursor: 'pointer' }}
                 />
               </div>
               <img
@@ -243,32 +249,15 @@ const Refund: React.FC = () => {
               <div className="footer-links-content">
                 <div className="about-us-parent">
                   <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us1">About Us</a>
-                  <a href='/contact' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Contact Us</a>
+                  <a href='/disclaimer' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Disclaimer</a>
                   <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy1">Refund Policy</a>
                   <a href='/plans' className="refund-policy1" style={{ textDecoration: "none", color: "inherit" }}>Pricing</a>
                 </div>
                 <div className="terms-conditions-parent">
                   <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy Policy</a>
-                  <a href='/terms' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
+                  <a href='/terms' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; Conditions</a>
                   <a href='/referral' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Referral Policy</a>
-                  <div className="frame-parent25">
-                    <div className="social-icon-background-parent">
-                      <div className="social-icon-background" />
-                      <img
-                        className="social-icon-shape"
-                        loading="lazy"
-                        alt=""
-                        src="./public/refund/vector.svg"
-                      />
-                    </div>
-                    <img
-                      className="social-icon-shape1"
-                      loading="lazy"
-                      alt=""
-                      src="./public/refund/vector-1.svg"
-                      onClick={handleTwitterRedirect} style={{cursor: 'pointer'}}
-                    />
-                  </div>
+                  <a href='/contact' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Contact Us</a>
                 </div>
               </div>
               <img

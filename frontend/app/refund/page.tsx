@@ -45,7 +45,7 @@ const Refund: React.FC = () => {
     {
       title: "Refund Request Process",
       content: [
-        "To request a refund, please contact our customer support team at <b>support@onemetric.co.in</b> within <b>7days</b> of your purchase.",
+        "To request a refund, please contact our customer support team at <b>contact@onemetric.in</b> within <b>7days</b> of your purchase.",
         "Please provide detailed information regarding the reason for your refund request, along with any relevant documentation or evidence."
       ]
     },
@@ -67,7 +67,7 @@ const Refund: React.FC = () => {
     {
       title: "Contact Information",
       content: [
-        "If you have any questions or concerns regarding our refund policy, please contact us at <b>support@onemetric.co.in</b>"
+        "If you have any questions or concerns regarding our refund policy, please contact us at <b>contact@onemetric.in</b>"
       ]
     },
     {
@@ -217,7 +217,7 @@ const Refund: React.FC = () => {
                 <b className="onemetric1">OneMetric</b>
               </div>
             </div>
-            <div className="frame-parent25-mobile">
+            <div className="frame-parent25">
               <div className="social-icon-background-parent">
                 <div className="social-icon-background" />
                 <img
@@ -248,7 +248,7 @@ const Refund: React.FC = () => {
               <div className="footer-links-content">
                 <div className="about-us-parent">
                   <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us1">About Us</a>
-                  <a href='/contact' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Contact Us</a>
+                  <a href='/disclaimer' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Disclaimer</a>
                   <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy1">Refund Policy</a>
                   <a href='/plans' className="refund-policy1" style={{ textDecoration: "none", color: "inherit" }}>Pricing</a>
                 </div>
@@ -256,25 +256,7 @@ const Refund: React.FC = () => {
                   <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy Policy</a>
                   <a href='/terms' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
                   <a href='/referral' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Referral Policy</a>
-                  <div className="frame-parent25">
-                    <div className="social-icon-background-parent">
-                      <div className="social-icon-background" />
-                      <img
-                        className="social-icon-shape"
-                        loading="lazy"
-                        alt=""
-                        src="./public/refund/vector.svg"
-                        onClick={handleWhatsAppRedirect} style={{cursor: 'pointer'}}
-                      />
-                    </div>
-                    <img
-                      className="social-icon-shape1"
-                      loading="lazy"
-                      alt=""
-                      src="./public/refund/vector-1.svg"
-                      onClick={handleTwitterRedirect} style={{cursor: 'pointer'}}
-                    />
-                  </div>
+                  <a href='/contact' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Contact Us</a>
                 </div>
               </div>
               <img

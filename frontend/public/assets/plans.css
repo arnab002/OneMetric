@@ -3398,7 +3398,7 @@
 }
 
 .footer {
-  height: 245px;
+  height: 280px;
   background-color: var(--color-gray-400);
   overflow: hidden;
   flex-shrink: 0;

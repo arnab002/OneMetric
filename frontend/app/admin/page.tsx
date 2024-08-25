@@ -4,24 +4,37 @@ import { Icon } from '@iconify/react'
 function AdminLogin() {
     return (
         <div>
-            <section className="auth bg-base d-flex flex-wrap">
-                <div className="auth-left d-lg-block d-none">
-                    <div className="d-flex align-items-center flex-column h-100 justify-content-center">
-                        <img src="/assets/assets/images/auth/auth-img.png" alt="" />
-                    </div>
-                </div>
-                <div className="auth-right py-32 px-24 d-flex flex-column justify-content-center">
+            <section className="auth bg-base d-flex flex-center">
+
+                <div className="auth-right py-32 px-24 d-flex flex-column justify-content-center m-auto">
                     <div className="max-w-464-px mx-auto w-100">
                         <div>
-                            <a href="index.html" className="mb-40 max-w-290-px">
-                                <img src="/assets/assets/images/logo.png" alt="" />
+                            <a href="/admin/dashboard" className="sidebar-logo">
+                                <img
+                                    src="/public/home/OneMetric_Transparent.png"
+                                    alt="site logo"
+                                    className="light-logo"
+                                />
+                                <img
+                                    src="/public/home/OneMetric_Transparent.png"
+                                    alt="site logo"
+                                    className="dark-logo"
+                                /> 
+                                <span><b>OneMetric</b></span>
+                                <img
+                                    src="/public/home/OneMetric_Transparent.png"
+                                    alt="site logo"
+                                    className="logo-icon"
+                                />
                             </a>
-                            <h4 className="mb-12">Sign In to your Account</h4>
-                            <p className="mb-32 text-secondary-light text-lg">
+                            <br />
+                            <h4 className="mb-12">Welcome Admin</h4>
+                            {/* <p className="mb-32 text-secondary-light text-lg">
                                 Welcome back! please enter your detail
-                            </p>
+                            </p> */}
                         </div>
-                        <form action="#">
+                        <br />
+                        <form action="/admin/dashboard">
                             <div className="icon-field mb-16">
                                 <span className="icon top-50 translate-middle-y">
                                     <Icon icon="mage:email" />
@@ -74,21 +87,11 @@ function AdminLogin() {
                                 {" "}
                                 Sign In
                             </button>
-                            <div className="mt-32 center-border-horizontal text-center">
+                            {/* <div className="mt-32 center-border-horizontal text-center">
                                 <span className="bg-base z-1 px-4">Or sign in with</span>
-                            </div>
-                            <div className="mt-32 d-flex align-items-center gap-3">
-                                <button
-                                    type="button"
-                                    className="fw-semibold text-primary-light py-16 px-24 w-50 border radius-12 text-md d-flex align-items-center justify-content-center gap-12 line-height-1 bg-hover-primary-50"
-                                >
-                                    <Icon
-                                        icon="ic:baseline-facebook"
-                                        className="text-primary-600 text-xl line-height-1"
-                                    />
-                                    Google
-                                </button>
-                                <button
+                            </div> */}
+                            <div className="mt-32 d-flex align-items-center">
+                                {/* <button
                                     type="button"
                                     className="fw-semibold text-primary-light py-16 px-24 w-50 border radius-12 text-md d-flex align-items-center justify-content-center gap-12 line-height-1 bg-hover-primary-50"
                                 >
@@ -97,16 +100,16 @@ function AdminLogin() {
                                         className="text-primary-600 text-xl line-height-1"
                                     />
                                     Google
-                                </button>
+                                </button> */}
                             </div>
-                            <div className="mt-32 text-center text-sm">
+                            {/* <div className="mt-32 text-center text-sm">
                                 <p className="mb-0">
                                     Don’t have an account?{" "}
                                     <a href="sign-up.html" className="text-primary-600 fw-semibold">
                                         Sign Up
                                     </a>
                                 </p>
-                            </div>
+                            </div> */}
                         </form>
                     </div>
                 </div>
@@ -115,5 +118,4 @@ function AdminLogin() {
         </div>
     )
 }
-
 export default AdminLogin

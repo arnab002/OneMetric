@@ -33,6 +33,7 @@ function AddStocks() {
     const [isTokenChecked, setIsTokenChecked] = useState(false);
     const [isCheckingPlan, setIsCheckingPlan] = useState(false);
     const [token, setToken] = useState<string | null>(null);
+    const MAX_WATCHLIST_STOCKS = 40;
 
     useEffect(() => {
         const checkToken = () => {
@@ -165,8 +166,8 @@ function AddStocks() {
             const allStockIds = sortedStockData.map(stock => stock.scrip_cd);
             setSelectedStocks(new Set(allStockIds));
 
-            if (watchlistCount >= 40) {
-                alert("You've reached the maximum limit of 40 stocks in your watchlist. No further stocks will be added.");
+            if (watchlistCount >= MAX_WATCHLIST_STOCKS) {
+                alert(`You've reached the maximum limit of ${MAX_WATCHLIST_STOCKS} stocks in your watchlist.`);
                 return;
             }
 
@@ -174,8 +175,8 @@ function AddStocks() {
             let addedCount = 0;
 
             for (const scrip_cd of allStockIds) {
-                if (watchlistCount + addedCount >= 40) {
-                    alert("You've reached the maximum limit of 40 stocks in your watchlist. No further stocks will be added.");
+                if (watchlistCount + addedCount >= MAX_WATCHLIST_STOCKS) {
+                    alert(`You've reached the maximum limit of ${MAX_WATCHLIST_STOCKS} stocks in your watchlist.`);
                     break;
                 }
 
@@ -303,8 +304,8 @@ function AddStocks() {
     };
 
     const handlePlusClick = async (isin_code: string, index: number) => {
-        if (watchlistCount >= 40) {
-            alert("You've reached the maximum limit of 40 stocks in your watchlist.");
+        if (watchlistCount >= MAX_WATCHLIST_STOCKS) {
+            alert(`You've reached the maximum limit of ${MAX_WATCHLIST_STOCKS} stocks in your watchlist.`);
             return;
         }
 
@@ -465,6 +466,10 @@ function AddStocks() {
 
     const handleTwitterRedirect = () => {
         window.open('https://x.com/Onemetric_in', '_blank');
+    };
+
+    const handleWhatsAppRedirect = () => {
+        window.open('https://api.whatsapp.com/send?phone=917204946777&text=Hi', '_blank');
     };
 
     if (!isTokenChecked) {
@@ -777,7 +782,7 @@ function AddStocks() {
                                     <b className="onemetric1">OneMetric</b>
                                 </div>
                             </div>
-                            <div className="footer-social-mobile">
+                            <div className="footer-social">
                                 <div className="rectangle-parent">
                                     <div className="rectangle-div" />
                                     <img
@@ -785,6 +790,7 @@ function AddStocks() {
                                         loading="lazy"
                                         alt=""
                                         src="./public/insights/vector.svg"
+                                        onClick={handleWhatsAppRedirect} style={{ cursor: 'pointer' }}
                                     />
                                 </div>
                                 <img
@@ -792,6 +798,7 @@ function AddStocks() {
                                     loading="lazy"
                                     alt=""
                                     src="./public/insights/vector-1.svg"
+                                    onClick={handleTwitterRedirect} style={{ cursor: 'pointer' }}
                                 />
                             </div>
                         </div>
@@ -806,7 +813,7 @@ function AddStocks() {
                                 <div className="link-items">
                                     <div className="link-names">
                                         <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us">About Us</a>
-                                        <a href='/contact' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Contact Us</a>
+                                        <a href='/disclaimer' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Disclaimer</a>
                                         <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">Refund Policy</a>
                                         <a href='/plans' className="refund-policy" style={{ textDecoration: "none", color: "#8A8D9E" }}>Pricing</a>
                                     </div>
@@ -814,25 +821,7 @@ function AddStocks() {
                                         <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy Policy</a>
                                         <a href='/terms' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
                                         <a href='/referral' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Referral Policy</a>
-                                        <div className="footer-social">
-                                            <div className="rectangle-parent">
-                                                <div className="rectangle-div" />
-                                                <img
-                                                    className="social-icon"
-                                                    loading="lazy"
-                                                    alt=""
-                                                    src="./public/insights/vector.svg"
-                                                />
-                                            </div>
-                                            <img
-                                                className="vector-icon1"
-                                                loading="lazy"
-                                                alt=""
-                                                src="./public/insights/vector-1.svg"
-                                                onClick={handleTwitterRedirect}
-                                                style={{ cursor: 'pointer' }}
-                                            />
-                                        </div>
+                                        <a href='/contact' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Contact Us</a>
                                     </div>
                                 </div>
                                 <img

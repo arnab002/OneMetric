@@ -1351,7 +1351,7 @@
 
 .input-components {
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   position: relative;
   gap: var(--gap-xl);
   font-size: var(--font-size-3xs);
@@ -3422,7 +3422,7 @@
 }
 
 .footer {
-  height: 245px;
+  height: 275px;
   background-color: var(--color-gray-400);
   overflow: hidden;
   flex-shrink: 0;

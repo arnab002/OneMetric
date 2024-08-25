@@ -75,7 +75,7 @@ function Contact() {
                                 informed decisions.
                             </span>
                             <br /><br /><br />
-                            <span>For Contacting us, Our Mobile Number is <b>9035141333</b> and email is <b>admin@onemetric.ai</b></span>
+                            <span>For Contacting us, Our Mobile Number is <b>9035141333</b> and email is <b>contact@onemetric.in</b></span>
                         </div>
                     </div>
                 </section>
@@ -113,7 +113,7 @@ function Contact() {
                                 <b className="onemetric1">OneMetric</b>
                             </div>
                         </div>
-                        <div className="footer-actions-mobile">
+                        <div className="footer-actions">
                             <div className="icon-background-parent">
                                 <div className="icon-background" />
                                 <img
@@ -144,33 +144,15 @@ function Contact() {
                             <div className="link-columns">
                                 <div className="link-column">
                                     <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us2">About Us</a>
-                                    <a href='/contact' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Contact Us</a>
+                                    <a href='/disclaimer' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Disclaimer</a>
                                     <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">Refund Policy</a>
                                     <a href='/plans' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Pricing</a>
                                 </div>
                                 <div className="link-column1">
                                     <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy Policy</a>
-                                    <a href='/terms' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
+                                    <a href='/terms' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; Conditions</a>
                                     <a href='/referral' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Referral Policy</a>
-                                    <div className="footer-actions">
-                                        <div className="icon-background-parent">
-                                            <div className="icon-background" />
-                                            <img
-                                                className="social-icon-shape"
-                                                loading="lazy"
-                                                alt=""
-                                                src="./public/about/vector.svg"
-                                                onClick={handleWhatsAppRedirect} style={{cursor: 'pointer'}}
-                                            />
-                                        </div>
-                                        <img
-                                            className="social-icon-shape1"
-                                            loading="lazy"
-                                            alt=""
-                                            src="./public/about/vector-1.svg"
-                                            onClick={handleTwitterRedirect} style={{ cursor: 'pointer' }}
-                                        />
-                                    </div>
+                                    <a href='/contact' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Contact Us</a>
                                 </div>
                             </div>
                             <img
