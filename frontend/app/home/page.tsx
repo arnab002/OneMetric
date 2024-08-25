@@ -1554,7 +1554,7 @@ function HomeDesktop() {
                                     </span>
                                     <span>
                                         <span className="free-month"> </span>
-                                        <span>Plan</span>
+                                        <span>plan</span>
                                         <span className="span3"> </span>
                                     </span>
                                 </h3>

@@ -19,6 +19,10 @@ const Referral: React.FC = () => {
     window.open('https://x.com/Onemetric_in', '_blank');
   };
 
+  const handleWhatsAppRedirect = () => {
+    window.open('https://api.whatsapp.com/send?phone=917204946777&text=Hi', '_blank');
+  };
+
   const toggleSection = (index: number) => {
     setOpenSection(openSection === index ? null : index);
   };
@@ -217,6 +221,7 @@ const Referral: React.FC = () => {
                   loading="lazy"
                   alt=""
                   src="./public/referral/vector.svg"
+                  onClick={handleWhatsAppRedirect} style={{cursor: 'pointer'}}
                 />
               </div>
               <img
@@ -255,6 +260,7 @@ const Referral: React.FC = () => {
                         loading="lazy"
                         alt=""
                         src="./public/referral/vector.svg"
+                        onClick={handleWhatsAppRedirect} style={{cursor: 'pointer'}}
                       />
                     </div>
                     <img

@@ -336,6 +336,10 @@ function Insights() {
         window.open('https://x.com/Onemetric_in', '_blank');
     };
 
+    const handleWhatsAppRedirect = () => {
+        window.open('https://api.whatsapp.com/send?phone=917204946777&text=Hi', '_blank');
+    };
+
 
     if (!isTokenChecked) {
         return null; // Render nothing until the token is checked
@@ -658,7 +662,7 @@ function Insights() {
                                 }
                             </div>
                             {!newsLoading && newsData.length > displayNewsCount && (
-                                <button onClick={showNewsMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px", cursor: 'pointer' }}>
+                                <button onClick={showNewsMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px", cursor: 'pointer', backgroundColor: 'greenyellow' }}>
                                     Show More
                                 </button>
                             )}
@@ -689,6 +693,7 @@ function Insights() {
                                     loading="lazy"
                                     alt=""
                                     src="./public/insights/vector.svg"
+                                    onClick={handleWhatsAppRedirect} style={{cursor: 'pointer'}}
                                 />
                             </div>
                             <img
@@ -728,6 +733,7 @@ function Insights() {
                                                 loading="lazy"
                                                 alt=""
                                                 src="./public/insights/vector.svg"
+                                                onClick={handleWhatsAppRedirect} style={{cursor: 'pointer'}}
                                             />
                                         </div>
                                         <img

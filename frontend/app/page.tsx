@@ -1180,7 +1180,7 @@ function Home() {
           </section>
           <section className="simply-grow-content-wrapper">
             <div className="simply-grow-content">
-              <h3 className="why-simply-grow">Why One Metric?</h3>
+              <h3 className="why-simply-grow">Why Onemetric?</h3>
               <div className="simply-grow-features">
                 <div className="feature-containers">
                   <div className="feature-items">
@@ -1424,7 +1424,7 @@ function Home() {
                   </span>
                   <span>
                     <span className="free-month"> </span>
-                    <span>Plan</span>
+                    <span>plan</span>
                     <span className="span3"> </span>
                   </span>
                 </div>

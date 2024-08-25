@@ -165,8 +165,8 @@ function AddStocks() {
             const allStockIds = sortedStockData.map(stock => stock.scrip_cd);
             setSelectedStocks(new Set(allStockIds));
 
-            if (watchlistCount >= 15) {
-                alert("You've reached the maximum limit of 15 stocks in your watchlist. No further stocks will be added.");
+            if (watchlistCount >= 40) {
+                alert("You've reached the maximum limit of 40 stocks in your watchlist. No further stocks will be added.");
                 return;
             }
 
@@ -174,8 +174,8 @@ function AddStocks() {
             let addedCount = 0;
 
             for (const scrip_cd of allStockIds) {
-                if (watchlistCount + addedCount >= 15) {
-                    alert("You've reached the maximum limit of 15 stocks in your watchlist. No further stocks will be added.");
+                if (watchlistCount + addedCount >= 40) {
+                    alert("You've reached the maximum limit of 40 stocks in your watchlist. No further stocks will be added.");
                     break;
                 }
 
@@ -303,8 +303,8 @@ function AddStocks() {
     };
 
     const handlePlusClick = async (isin_code: string, index: number) => {
-        if (watchlistCount >= 15) {
-            alert("You've reached the maximum limit of 15 stocks in your watchlist.");
+        if (watchlistCount >= 40) {
+            alert("You've reached the maximum limit of 40 stocks in your watchlist.");
             return;
         }
 
@@ -653,7 +653,7 @@ function AddStocks() {
                                     )}
                                     {sortedStockData.slice(0, displayCount).map((stock, index) => (
                                         <div key={index} className="select-stocks">
-                                            {(selectedFilter === 'bankNifty' || selectedFilter === 'nifty50') && (
+                                            {/* {(selectedFilter === 'bankNifty' || selectedFilter === 'nifty50') && (
                                                 <input
                                                     className='custom-selection-checkbox'
                                                     type="checkbox"
@@ -677,7 +677,7 @@ function AddStocks() {
                                                     style={{ marginRight: '10px' }}
                                                     disabled={isAddingMultiple}
                                                 />
-                                            )}
+                                            )} */}
                                             <div className="select-stocks-inner">
                                                 <div className="vector-wrapper">
                                                     <img className="vector-icon" alt="" />

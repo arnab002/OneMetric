@@ -18,6 +18,10 @@ const Refund: React.FC = () => {
     window.open('https://x.com/Onemetric_in', '_blank');
   };
 
+  const handleWhatsAppRedirect = () => {
+    window.open('https://api.whatsapp.com/send?phone=917204946777&text=Hi', '_blank');
+  };
+
   const toggleSection = (index: number) => {
     setOpenSection(openSection === index ? null : index);
   };
@@ -221,6 +225,7 @@ const Refund: React.FC = () => {
                   loading="lazy"
                   alt=""
                   src="./public/refund/vector.svg"
+                  onClick={handleWhatsAppRedirect} style={{cursor: 'pointer'}}
                 />
               </div>
               <img
@@ -259,6 +264,7 @@ const Refund: React.FC = () => {
                         loading="lazy"
                         alt=""
                         src="./public/refund/vector.svg"
+                        onClick={handleWhatsAppRedirect} style={{cursor: 'pointer'}}
                       />
                     </div>
                     <img

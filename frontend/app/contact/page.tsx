@@ -10,13 +10,19 @@ function Contact() {
     const handleTwitterRedirect = () => {
         window.open('https://x.com/Onemetric_in', '_blank');
     };
+
+    const handleWhatsAppRedirect = () => {
+        window.open('https://api.whatsapp.com/send?phone=917204946777&text=Hi', '_blank');
+    };
+
+
     return (
         <div>
             <div className="about-us">
                 <header className="navigation">
                     <div className="hero">
                         <div className="iconback-arrow">
-                            <div className="image-18-parent" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
+                            <div className="image-18-parent" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                                 <img
                                     className="image-18-icon"
                                     loading="lazy"
@@ -100,10 +106,10 @@ function Contact() {
                             loading="lazy"
                             alt=""
                             src="./public/about/OneMetric_Transparent.png"
-                            onClick={handleHomeClick} style={{cursor: 'pointer'}}
+                            onClick={handleHomeClick} style={{ cursor: 'pointer' }}
                         />
                         <div className="footer-metrics">
-                            <div className="hero" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
+                            <div className="hero" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                                 <b className="onemetric1">OneMetric</b>
                             </div>
                         </div>
@@ -115,6 +121,7 @@ function Contact() {
                                     loading="lazy"
                                     alt=""
                                     src="./public/about/vector.svg"
+                                    onClick={handleWhatsAppRedirect} style={{cursor: 'pointer'}}
                                 />
                             </div>
                             <img
@@ -122,7 +129,7 @@ function Contact() {
                                 loading="lazy"
                                 alt=""
                                 src="./public/about/vector-1.svg"
-                                onClick={handleTwitterRedirect} style={{cursor: 'pointer'}}
+                                onClick={handleTwitterRedirect} style={{ cursor: 'pointer' }}
                             />
                         </div>
                     </div>
@@ -153,6 +160,7 @@ function Contact() {
                                                 loading="lazy"
                                                 alt=""
                                                 src="./public/about/vector.svg"
+                                                onClick={handleWhatsAppRedirect} style={{cursor: 'pointer'}}
                                             />
                                         </div>
                                         <img
@@ -160,7 +168,7 @@ function Contact() {
                                             loading="lazy"
                                             alt=""
                                             src="./public/about/vector-1.svg"
-                                            onClick={handleTwitterRedirect} style={{cursor: 'pointer'}}
+                                            onClick={handleTwitterRedirect} style={{ cursor: 'pointer' }}
                                         />
                                     </div>
                                 </div>

@@ -11,6 +11,10 @@ function About() {
         window.open('https://x.com/Onemetric_in', '_blank');
     };
 
+    const handleWhatsAppRedirect = () => {
+        window.open('https://api.whatsapp.com/send?phone=917204946777&text=Hi', '_blank');
+    };
+
     return (
         <div>
             <div className="about-us">
@@ -134,6 +138,7 @@ function About() {
                                     loading="lazy"
                                     alt=""
                                     src="./public/about/vector.svg"
+                                    onClick={handleWhatsAppRedirect} style={{cursor: 'pointer'}}
                                 />
                             </div>
                             <img
@@ -172,6 +177,7 @@ function About() {
                                                 loading="lazy"
                                                 alt=""
                                                 src="./public/about/vector.svg"
+                                                onClick={handleWhatsAppRedirect} style={{cursor: 'pointer'}}
                                             />
                                         </div>
                                         <img
