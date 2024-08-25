@@ -1,14 +1,22 @@
+'use client'
 import React from 'react'
 import '../../public/assets/contact.css'
 
-function About() {
+function Contact() {
+    const handleHomeClick = () => {
+        window.location.href = '/'
+    };
+
+    const handleTwitterRedirect = () => {
+        window.open('https://x.com/Onemetric_in', '_blank');
+    };
     return (
         <div>
             <div className="about-us">
                 <header className="navigation">
                     <div className="hero">
                         <div className="iconback-arrow">
-                            <div className="image-18-parent">
+                            <div className="image-18-parent" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
                                 <img
                                     className="image-18-icon"
                                     loading="lazy"
@@ -91,14 +99,15 @@ function About() {
                             className="image-18-icon"
                             loading="lazy"
                             alt=""
-                            src="./public/about/image-18-1@2x.png"
+                            src="./public/about/OneMetric_Transparent.png"
+                            onClick={handleHomeClick} style={{cursor: 'pointer'}}
                         />
                         <div className="footer-metrics">
-                            <div className="hero">
+                            <div className="hero" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
                                 <b className="onemetric1">OneMetric</b>
                             </div>
                         </div>
-                        <div className="footer-actions">
+                        <div className="footer-actions-mobile">
                             <div className="icon-background-parent">
                                 <div className="icon-background" />
                                 <img
@@ -113,6 +122,7 @@ function About() {
                                 loading="lazy"
                                 alt=""
                                 src="./public/about/vector-1.svg"
+                                onClick={handleTwitterRedirect} style={{cursor: 'pointer'}}
                             />
                         </div>
                     </div>
@@ -135,7 +145,24 @@ function About() {
                                     <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy Policy</a>
                                     <a href='/terms' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
                                     <a href='/referral' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Referral Policy</a>
-                                    <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="faqs">FAQs</a>
+                                    <div className="footer-actions">
+                                        <div className="icon-background-parent">
+                                            <div className="icon-background" />
+                                            <img
+                                                className="social-icon-shape"
+                                                loading="lazy"
+                                                alt=""
+                                                src="./public/about/vector.svg"
+                                            />
+                                        </div>
+                                        <img
+                                            className="social-icon-shape1"
+                                            loading="lazy"
+                                            alt=""
+                                            src="./public/about/vector-1.svg"
+                                            onClick={handleTwitterRedirect} style={{cursor: 'pointer'}}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             <img
@@ -175,4 +202,4 @@ function About() {
     )
 }
 
-export default About
+export default Contact

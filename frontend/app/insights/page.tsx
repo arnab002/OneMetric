@@ -106,7 +106,7 @@ function Insights() {
     };
 
     const showNewsMore = () => {
-        setDisplayNewsCount(prevCount => prevCount + 8);
+        setDisplayNewsCount(prevCount => prevCount + 4);
     };
 
     const checkPlanValidity = async () => {
@@ -156,7 +156,7 @@ function Insights() {
 
         try {
             const endpoint = isSearching
-                ? `https://yzeab2y3rxgoogdsnt3552dlcy0luxco.lambda-url.us-east-1.on.aws`
+                ? `${baseApiURL()}/search-stocks`
                 : `${baseApiURL()}/stock-watchlist`;
 
             const response = await axios.get(endpoint, {
@@ -364,6 +364,8 @@ function Insights() {
                         loading="lazy"
                         alt=""
                         src="./public/insights/OneMetric_Transparent.png"
+                        onClick={handleHomeClick}
+                        style={{ cursor: 'pointer' }}
                     />
                     <div className="main-inner" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                         <div className="main-inner">
@@ -600,7 +602,7 @@ function Insights() {
                                 ) : noNewsDataFound ? (
                                     <div style={{ color: 'white', margin: 'auto' }}>No data found</div>
                                 ) : (
-                                    currentPosts.slice(0, displayNewsCount).map((news) => (
+                                    newsData.slice(0, displayNewsCount).map((news) => (
                                         <div className="newsfeed1" key={news.id}>
                                             <div className="news-content">
                                                 <img
@@ -655,7 +657,7 @@ function Insights() {
                                 )
                                 }
                             </div>
-                            {!newsLoading && currentPosts.length > displayNewsCount && (
+                            {!newsLoading && newsData.length > displayNewsCount && (
                                 <button onClick={showNewsMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px", cursor: 'pointer' }}>
                                     Show More
                                 </button>
@@ -671,13 +673,15 @@ function Insights() {
                             loading="lazy"
                             alt=""
                             src="./public/insights/OneMetric_Transparent.png"
+                            onClick={handleHomeClick}
+                            style={{ cursor: 'pointer' }}
                         />
                         <div className="main-inner">
                             <div className="main-inner" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                                 <b className="onemetric1">OneMetric</b>
                             </div>
                         </div>
-                        <div className="footer-social">
+                        <div className="footer-social-mobile">
                             <div className="rectangle-parent">
                                 <div className="rectangle-div" />
                                 <img
@@ -693,7 +697,7 @@ function Insights() {
                                 alt=""
                                 src="./public/insights/vector-1.svg"
                                 onClick={handleTwitterRedirect}
-                                style={{cursor: 'pointer'}}
+                                style={{ cursor: 'pointer' }}
                             />
                         </div>
                     </div>
@@ -716,6 +720,25 @@ function Insights() {
                                     <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy &amp; Policy</a>
                                     <a href='/terms' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
                                     <a href='/referral' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Referral Policy</a>
+                                    <div className="footer-social">
+                                        <div className="rectangle-parent">
+                                            <div className="rectangle-div" />
+                                            <img
+                                                className="social-icon"
+                                                loading="lazy"
+                                                alt=""
+                                                src="./public/insights/vector.svg"
+                                            />
+                                        </div>
+                                        <img
+                                            className="vector-icon1"
+                                            loading="lazy"
+                                            alt=""
+                                            src="./public/insights/vector-1.svg"
+                                            onClick={handleTwitterRedirect}
+                                            style={{ cursor: 'pointer' }}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             <img

@@ -2,14 +2,22 @@
 import React, { useState } from 'react';
 import '../../public/assets/referral.css';
 
-//Content Screen
+
 interface SectionContent {
   title: string;
-  content: string;
+  content: string[];
 }
 
 const Referral: React.FC = () => {
   const [openSection, setOpenSection] = useState<number | null>(null);
+
+  const handleHomeClick = () => {
+    window.location.href = '/'
+  };
+
+  const handleTwitterRedirect = () => {
+    window.open('https://x.com/Onemetric_in', '_blank');
+  };
 
   const toggleSection = (index: number) => {
     setOpenSection(openSection === index ? null : index);
@@ -18,41 +26,62 @@ const Referral: React.FC = () => {
   const sections: SectionContent[] = [
     {
       title: "Referral Program Overview",
-      content: "At <b>OneMetric</b>, we value our users and appreciate their support in helping us grow our community. Our referral program is designed to reward both referrers and referees for spreading the word about our platform."
+      content: [
+        "💡 At OneMetric, we value our users and appreciate their support in helping us grow our community. Our referral program is designed to reward both referrers and referees for spreading the word about our platform."
+      ]
     },
     {
-      title: "How it works",
-      content: "Describe how the referral program works here."
+      title: "How It Works",
+      content: [
+        "💡 <b>Referral Code/Link:</b> Each user is provided with a unique referral code or link that they can share with friends, family, or colleagues.",
+        "💡 <b>Referee Benefits:</b> When a new user (referee) signs up using a referral code or link and subscribes(buys) to a paid plan, they are  rewarded with a 1 month free extension.",
+        "💡 <b>Referrer Benefits:</b> The user who referred the new user will receive a one-month free subscription extension as a token of our appreciation once the new user subscribes for a paid plan."
+      ]
     },
     {
       title: "Eligibility Criteria",
-      content: "List the eligibility criteria for the referral program here."
+      content: [
+        "💡 <b>New Users:</b> To be eligible for the referral benefits, the referee must be a new user who has never signed up for OneMetric before.",
+        "💡 <b>Subscription Status:</b> Both the referrer and referee must have active accounts at the time of referral and reward redemption."
+      ]
     },
     {
       title: "Referral Redemption Process",
-      content: "Explain the referral redemption process here."
+      content: [
+        "💡 <b>Referee Redemption:</b> Upon signing up using a referral code or link and subscribing(buys) to a paid plan, they are rewarded with a 1 month free extension.",
+        "💡 <b>Referrer Redemption:</b> Once the referee's buys a subscription , the referrer will receive a one-month free subscription extension credited to their account."
+      ]
     },
     {
       title: "Additional Terms and Conditions",
-      content: "List any additional terms and conditions for the referral program here."
+      content: [
+        "💡 <b>Multiple Referrals:</b> Users may refer multiple friends and earn rewards for each successful referral.",
+        "💡 <b>Fair Usage Policy:</b> OneMetric reserves the right to monitor and review referral activity to prevent abuse of the referral program.",
+        "💡 <b>Changes to the Program:</b> We reserve the right to modify or terminate the referral program at any time without prior notice.",
+        "💡 <b>Fraudulent Activity:</b> Any attempt to manipulate or exploit the referral program through fraudulent activity will result in immediate disqualification and may lead to account suspension."
+      ]
     },
     {
       title: "Contact Us",
-      content: "Provide contact information for referral program inquiries here."
+      content: [
+        "💡 If you have any questions or concerns regarding our referral program, please don't hesitate to contact our support team at <b>support@onemetric.in</b>"
+      ]
     },
     {
       title: "Agreement",
-      content: "Include any agreement terms related to the referral program here."
+      content: [
+        "💡 By participating in our referral program, you agree to abide by the terms and conditions outlined in this policy."
+      ]
     }
   ];
 
   return (
     <div>
       <div className="about-us">
-        <header className="icons-parent">
-          <div className="frame-wrapper">
+        <header className="top-navigation">
+          <div className="top-navigation-inner">
             <div className="iconback-arrow">
-              <div className="image-18-parent">
+              <div className="refund-title-container" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
                 <img
                   className="image-18-icon"
                   loading="lazy"
@@ -68,21 +97,21 @@ const Referral: React.FC = () => {
             <img className="frame-inner" alt="" src="./public/referral/group-1000000966.svg" />
           </div>
           <div className="frame-group">
-            <div className="frame-div">
+            <div className="frame-wrapper">
               <img
                 className="group-icon"
                 alt=""
                 src="./public/referral/group-1000000977.svg"
               />
             </div>
-            <div className="frame-wrapper1">
+            <div className="frame-container">
               <img
                 className="frame-child1"
                 alt=""
                 src="./public/referral/group-1000000998@2x.png"
               />
             </div>
-            <div className="union-wrapper">
+            <div className="refund-content-container">
               <img
                 className="union-icon"
                 loading="lazy"
@@ -92,64 +121,62 @@ const Referral: React.FC = () => {
             </div>
           </div>
         </header>
-        <section className="about-us-inner">
-          <div className="referral-policy-parent">
-            <h3 className="referral-policy">Referral Policy</h3>
+        <main className="about-us-inner">
+          <section className="refund-policy-parent">
+            <h3 className="refund-policy">Referral Policy</h3>
             <div className="at-wegro-we-container">
               <span>At </span>
               <b>OneMetric</b>
               <span>
-                , we value our users and their support in growing our community.
-                Our referral program is designed to reward both referrers and
-                referees. Please review the following referral policy carefully:
+                , we value our users and their support in growing our community. Our referral program is designed to reward both referrers and referees. Please review the following referral policy carefully:
               </span>
             </div>
-            <div className="frame-parent1">
+            <div className="frame-div">
               {sections.map((section, index) => (
-                <div key={index} className="frame-wrapper3">
+                <div key={index} className="contact-container-parent">
                   <div
-                    className="referral-program-overview-parent"
+                    className="refund-eligibility-parent"
                     onClick={() => toggleSection(index)}
                     style={{ cursor: 'pointer' }}
                   >
-                    <div className="referral-program-overview">{section.title}</div>
-                    <div className="referral-menu-icons-wrapper">
-                      <img
-                        className="referral-menu-icons"
-                        alt=""
-                        src="./public/referral/referral-menu-icons.svg"
-                        style={{ transform: openSection === index ? 'rotate(180deg)' : 'none' }}
-                      />
-                    </div>
+                    <div className="refund-eligibility">{section.title}</div>
+                    <img
+                      className="refund-bullet-points-container"
+                      loading="lazy"
+                      alt=""
+                      src={`./public/referral/frame-1000001009@2x.png`}
+                      style={{ transform: openSection === index ? 'rotate(180deg)' : 'none' }}
+                    />
                   </div>
                   {openSection === index && (
-                    <div className="frame-wrapper2">
-                      <div className="frame-parent3">
-                        <div className="ellipse-wrapper">
-                          <div className="ellipse-div" />
+                    <div className="refund-bullet-point-rows">
+                      {section.content.map((item, itemIndex) => (
+                        <div key={itemIndex} className="refund-bullet-point-items">
+                          <div className="refund-bullet-point-details">
+                            <div className="bullet-point-icons" />
+                          </div>
+                          <div
+                            className="refunds-are-generally-container"
+                            dangerouslySetInnerHTML={{ __html: item }}
+                          />
                         </div>
-                        <div
-                          className="at-wegro-we-container1"
-                          dangerouslySetInnerHTML={{ __html: section.content }}
-                        />
-                      </div>
+                      ))}
                     </div>
                   )}
                 </div>
               ))}
             </div>
             <div className="by-making-a-container">
-              <span>By participating in the referral program on </span>
+              <span>By participating in the referral program on</span>
               <b>OneMetric</b>
               <span>
-                , you acknowledge that you have read, understood, and agreed to the
-                terms of this referral policy.
+                , you acknowledge that you have read, understood, and agreed to the terms of this referral policy.
               </span>
             </div>
-          </div>
-        </section>
-        <section className="footer">
-          <div className="frame-parent4">
+          </section>
+        </main>
+        <div className="footer">
+          <div className="footer-container">
             <div className="frame-parent">
               <img
                 className="frame-item"
@@ -162,9 +189,9 @@ const Referral: React.FC = () => {
                 src="./public/referral/group-1000000966.svg"
               />
             </div>
-            <div className="frame-parent6">
+            <div className="frame-parent24">
               <img
-                className="frame-child8"
+                className="frame-child18"
                 alt=""
                 src="./public/referral/group-1000001000.svg"
               />
@@ -175,50 +202,69 @@ const Referral: React.FC = () => {
               loading="lazy"
               alt=""
               src="./public/referral/image-18-1@2x.png"
+              onClick={handleHomeClick} style={{cursor: 'pointer'}}
             />
-            <div className="frame-wrapper9">
-              <div className="frame-wrapper">
+            <div className="footer-brand-container-wrapper">
+              <div className="top-navigation-inner" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
                 <b className="onemetric1">OneMetric</b>
               </div>
             </div>
-            <div className="frame-parent7">
-              <div className="rectangle-parent">
-                <div className="rectangle-div" />
+            <div className="frame-parent25-mobile">
+              <div className="social-icon-background-parent">
+                <div className="social-icon-background" />
                 <img
-                  className="vector-icon1"
+                  className="social-icon-shape"
                   loading="lazy"
                   alt=""
                   src="./public/referral/vector.svg"
                 />
               </div>
               <img
-                className="vector-icon2"
+                className="social-icon-shape1"
                 loading="lazy"
                 alt=""
                 src="./public/referral/vector-1.svg"
+                onClick={handleTwitterRedirect} style={{cursor: 'pointer'}}
               />
             </div>
           </div>
-          <div className="footer-inner">
-            <div className="footer-link-icons-parent">
+          <div className="footer-links-container-wrapper">
+            <div className="footer-links-container">
               <img
                 className="footer-link-icons"
                 loading="lazy"
                 alt=""
                 src="./public/referral/vector-172.svg"
               />
-              <div className="frame-parent8">
+              <div className="footer-links-content">
                 <div className="about-us-parent">
                   <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us1">About Us</a>
-                  <a href='/contact' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us1">Contact Us</a>
-                  <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">Refund Policy</a>
-                  <a href='/plans' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Pricing</a>
+                  <a href='/contact' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Contact Us</a>
+                  <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy1">Refund Policy</a>
+                  <a href='/plans' className="refund-policy1" style={{ textDecoration: "none", color: "inherit" }}>Pricing</a>
                 </div>
                 <div className="terms-conditions-parent">
                   <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy Policy</a>
                   <a href='/terms' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
-                  <a href='/referral' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy1">Referral Policy</a>
-                  <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="faqs">FAQs</a>
+                  <a href='/referral' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Referral Policy</a>
+                  <div className="frame-parent25">
+                    <div className="social-icon-background-parent">
+                      <div className="social-icon-background" />
+                      <img
+                        className="social-icon-shape"
+                        loading="lazy"
+                        alt=""
+                        src="./public/referral/vector.svg"
+                      />
+                    </div>
+                    <img
+                      className="social-icon-shape1"
+                      loading="lazy"
+                      alt=""
+                      src="./public/referral/vector-1.svg"
+                      onClick={handleTwitterRedirect} style={{cursor: 'pointer'}}
+                    />
+                  </div>
                 </div>
               </div>
               <img
@@ -229,22 +275,22 @@ const Referral: React.FC = () => {
               />
             </div>
           </div>
-        </section>
-        <div className="about-us-child">
-          <div className="simply-grow-all-right-reserve-parent">
+        </div>
+        <div className="copyright-container-wrapper">
+          <div className="copyright-container">
             <div className="simply-grow-all">
               OneMetric, All Right reserved © 2024
             </div>
-            <div className="frame-wrapper10">
-              <div className="vector-parent">
+            <div className="social-icons-container-wrapper">
+              <div className="social-icons-container">
                 <img
-                  className="vector-icon3"
+                  className="social-icon-shape2"
                   loading="lazy"
                   alt=""
                   src="./public/referral/vector-2.svg"
                 />
                 <img
-                  className="frame-child9"
+                  className="social-icons-container-child"
                   loading="lazy"
                   alt=""
                   src="./public/referral/group-219911503.svg"

@@ -94,7 +94,7 @@ function OTPSuccess() {
                         <div className="successfully-verified-parent">
                             <div className="successfully-verified">Successfully Verified!</div>
                             <div className="placeholder-wrapper">
-                                <div className="placeholder">{mobile}</div>
+                                <div className="placeholder">Thank You</div>
                             </div>
                         </div>
                     </div>

@@ -460,6 +460,10 @@ function HomeDesktop() {
         window.location.href = '/insights'
     };
 
+    const handleHomeClick = () => {
+        window.location.href = '/'
+    };
+
     const handleTwitterRedirect = () => {
         window.open('https://x.com/Onemetric_in', '_blank');
     };
@@ -692,10 +696,11 @@ function HomeDesktop() {
                                 loading="lazy"
                                 alt=""
                                 src="./public/home-desktop/OneMetric_Transparent.png"
+                                onClick={handleHomeClick} style={{cursor: 'pointer'}}
                             />
                             <div className="one-metric-sign-in-container">
-                                <div className="one-metric-sign-in-logo-contai">
-                                    <a className="onemetric1" href='/'>OneMetric</a>
+                                <div className="one-metric-sign-in-logo-contai" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
+                                    <a className="onemetric1">OneMetric</a>
                                 </div>
                             </div>
                             {isLoggedIn ? (
@@ -757,7 +762,7 @@ function HomeDesktop() {
                                         <h1 className="add-to-your">Add to your watchlist</h1>
                                     </div>
                                     <div className="select-your-stocks">
-                                        Select stocks that you follow or subscribe to our list.
+                                        Select your stocks to get latest news now.
                                     </div>
                                 </div>
                             </div>
@@ -783,7 +788,7 @@ function HomeDesktop() {
                                         </div>
                                     </div>
                                     <div className="desktop-stocks">
-                                        <div className="adani-group" style={{ position: 'relative'}}>
+                                        <div className="adani-group" style={{ position: 'relative' }}>
                                             {loading ? (
                                                 'Loading...'
                                             ) : (
@@ -917,8 +922,7 @@ function HomeDesktop() {
                                         </div>
                                         <div className="enter-your-whatsapp-receive-a-parent">
                                             <div className="enter-your-whatsapp1">
-                                                Enter Your WhatsApp, receive a code via WhatsApp for
-                                                verification.
+                                                Enter OTP received on WhatsApp to signup
                                             </div>
                                             <div className="frame-wrapper13">
                                                 <div className="frame-parent24">
@@ -1309,7 +1313,7 @@ function HomeDesktop() {
                     </div>
                     <div className="homepage-inner1">
                         <section className="why-simply-grow-parent">
-                            <h1 className="how-it-works">Why OneMetric?</h1>
+                            <h1 className="how-it-works">Why Onemetric?</h1>
                             <div className="benefits-container">
                                 <div className="benefits-row">
                                     <div className="benefit-item-parent">
@@ -1594,9 +1598,10 @@ function HomeDesktop() {
                                     className="image-18-icon1"
                                     alt=""
                                     src="./public/home-desktop/OneMetric_Transparent.png"
+                                    onClick={handleHomeClick} style={{cursor: 'pointer'}}
                                 />
                                 <div className="one-metric-footer">
-                                    <div className="one-metric-title-container">
+                                    <div className="one-metric-title-container" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
                                         <b className="onemetric3">OneMetric</b>
                                     </div>
                                 </div>
@@ -1620,7 +1625,7 @@ function HomeDesktop() {
                                             <a href='/privacy' className="terms-conditions" style={{ textDecoration: "none", color: "inherit" }}>Privacy &amp; Policy</a>
                                             <a href='/terms' className="terms-conditions" style={{ textDecoration: "none", color: "inherit" }}>Terms &amp; conditions</a>
                                             <a href='/referral' className="referral-policy" style={{ textDecoration: "none", color: "inherit" }}>Referral Policy</a>
-                                            <div className="social-icons" style={{cursor: 'pointer'}}>
+                                            <div className="social-icons" style={{ cursor: 'pointer' }}>
                                                 <div className="icon-background-parent">
                                                     <div className="icon-background1" />
                                                     <img

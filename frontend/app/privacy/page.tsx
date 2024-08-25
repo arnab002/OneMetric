@@ -10,6 +10,14 @@ interface SectionContent {
 const Referral: React.FC = () => {
   const [openSection, setOpenSection] = useState<number | null>(null);
 
+  const handleHomeClick = () => {
+    window.location.href = '/'
+  };
+
+  const handleTwitterRedirect = () => {
+    window.open('https://x.com/Onemetric_in', '_blank');
+  };
+
   const toggleSection = (index: number) => {
     setOpenSection(openSection === index ? null : index);
   };
@@ -51,7 +59,7 @@ const Referral: React.FC = () => {
         <header className="icons-parent">
           <div className="frame-wrapper">
             <div className="iconback-arrow">
-              <div className="image-18-parent">
+              <div className="image-18-parent" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
                 <img
                   className="image-18-icon"
                   loading="lazy"
@@ -164,13 +172,14 @@ const Referral: React.FC = () => {
               loading="lazy"
               alt=""
               src="./public/referral/image-18-1@2x.png"
+              onClick={handleHomeClick} style={{cursor: 'pointer'}}
             />
             <div className="frame-wrapper9">
-              <div className="frame-wrapper">
+              <div className="frame-wrapper" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
                 <b className="onemetric1">OneMetric</b>
               </div>
             </div>
-            <div className="frame-parent7">
+            <div className="frame-parent7-mobile">
               <div className="rectangle-parent">
                 <div className="rectangle-div" />
                 <img
@@ -185,6 +194,7 @@ const Referral: React.FC = () => {
                 loading="lazy"
                 alt=""
                 src="./public/referral/vector-1.svg"
+                onClick={handleTwitterRedirect} style={{cursor: 'pointer'}}
               />
             </div>
           </div>
@@ -204,10 +214,27 @@ const Referral: React.FC = () => {
                   <a href='/plans' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Pricing</a>
                 </div>
                 <div className="terms-conditions-parent">
-                  <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy &amp; Policy</a>
+                  <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy Policy</a>
                   <a href='/terms' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
                   <a href='/referral' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy1">Referral Policy</a>
-                  <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="faqs">FAQs</a>
+                  <div className="frame-parent7">
+                    <div className="rectangle-parent">
+                      <div className="rectangle-div" />
+                      <img
+                        className="vector-icon1"
+                        loading="lazy"
+                        alt=""
+                        src="./public/referral/vector.svg"
+                      />
+                    </div>
+                    <img
+                      className="vector-icon2"
+                      loading="lazy"
+                      alt=""
+                      src="./public/referral/vector-1.svg"
+                      onClick={handleTwitterRedirect} style={{cursor: 'pointer'}}
+                    />
+                  </div>
                 </div>
               </div>
               <img

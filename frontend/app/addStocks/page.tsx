@@ -27,6 +27,9 @@ function AddStocks() {
     const [daysUntilExpiry, setDaysUntilExpiry] = useState<number>(0);
     const [isPlanExpired, setIsPlanExpired] = useState<boolean>(false);
     const [userWatchlist, setUserWatchlist] = useState<number[]>([]);
+    const [watchlistCount, setWatchlistCount] = useState(0);
+    const [selectedStocks, setSelectedStocks] = useState<Set<number>>(new Set());
+    const [isAddingMultiple, setIsAddingMultiple] = useState(false);
     const [isTokenChecked, setIsTokenChecked] = useState(false);
     const [isCheckingPlan, setIsCheckingPlan] = useState(false);
     const [token, setToken] = useState<string | null>(null);
@@ -57,6 +60,7 @@ function AddStocks() {
         if (isTokenChecked && token) {
             fetchStockData(selectedFilter);
             fetchUserWatchlist();
+            fetchWatchlistCount();
         }
     }, [isTokenChecked, token, searchQuery, isSearching, selectedFilter]);
 
@@ -77,6 +81,19 @@ function AddStocks() {
             setUserWatchlist(response.data.data.map((stock: any) => stock.scrip_cd));
         } catch (error) {
             console.error('Error fetching user watchlist:', error);
+        }
+    };
+
+    const fetchWatchlistCount = async () => {
+        try {
+            const response = await axios.get(`${baseApiURL()}/stock-watchlist`, {
+                headers: {
+                    Authorization: `${token}`,
+                },
+            });
+            setWatchlistCount(response.data.data.length);
+        } catch (error) {
+            console.error('Error fetching watchlist count:', error);
         }
     };
 
@@ -109,9 +126,85 @@ function AddStocks() {
         setShowDropdown(!showDropdown);
     };
 
+    const SelectAllButton = ({ stocks, onSelectAll }: { stocks: any[], onSelectAll: (selected: boolean) => void }) => {
+        const [isAllSelected, setIsAllSelected] = useState(false);
+
+        const handleSelectAll = () => {
+            const newState = !isAllSelected;
+            setIsAllSelected(newState);
+            onSelectAll(newState);
+        };
+
+        return (
+            <button
+                onClick={handleSelectAll}
+                disabled={isAddingMultiple}
+                style={{
+                    backgroundColor: isAllSelected ? '#4CAF50' : '#f0f0f0',
+                    color: isAllSelected ? 'white' : 'black',
+                    border: 'none',
+                    padding: '10px 15px',
+                    borderRadius: '5px',
+                    cursor: isAddingMultiple ? 'not-allowed' : 'pointer',
+                    marginBottom: '10px'
+                }}
+            >
+                {isAddingMultiple ? 'Adding...' : (isAllSelected ? 'Deselect All' : 'Select All')}
+            </button>
+        );
+    };
+
     const handleFilterChange = (filter: string) => {
         setSelectedFilter(filter);
+        setSelectedStocks(new Set());
         fetchStockData(filter);
+    };
+
+    const handleSelectAll = async (selected: boolean) => {
+        if (selected) {
+            const allStockIds = sortedStockData.map(stock => stock.scrip_cd);
+            setSelectedStocks(new Set(allStockIds));
+
+            if (watchlistCount >= 15) {
+                alert("You've reached the maximum limit of 15 stocks in your watchlist. No further stocks will be added.");
+                return;
+            }
+
+            setIsAddingMultiple(true);
+            let addedCount = 0;
+
+            for (const scrip_cd of allStockIds) {
+                if (watchlistCount + addedCount >= 15) {
+                    alert("You've reached the maximum limit of 15 stocks in your watchlist. No further stocks will be added.");
+                    break;
+                }
+
+                if (!userWatchlist.includes(scrip_cd)) {
+                    try {
+                        await axios.post(`${baseApiURL()}/add-stock-to-watchlist`, {
+                            scrip_cd: scrip_cd
+                        }, {
+                            headers: {
+                                Authorization: `${token}`,
+                            },
+                        });
+
+                        setUserWatchlist(prev => [...prev, scrip_cd]);
+                        addedCount++;
+                    } catch (error) {
+                        console.error('Error adding stock:', error);
+                    }
+                }
+            }
+
+            setWatchlistCount(prevCount => prevCount + addedCount);
+            setIsAddingMultiple(false);
+
+            // Redirect to insights page after adding stocks
+            window.location.href = '/insights';
+        } else {
+            setSelectedStocks(new Set());
+        }
     };
 
     const fetchStockData = async (filter: string = 'all') => {
@@ -121,7 +214,7 @@ function AddStocks() {
         try {
             let endpoint = `${baseApiURL()}/stocks`;
             if (isSearching) {
-                endpoint = `https://yzeab2y3rxgoogdsnt3552dlcy0luxco.lambda-url.us-east-1.on.aws`;
+                endpoint = `${baseApiURL()}/search-stocks`;
             } else {
                 switch (filter) {
                     case 'bankNifty':
@@ -210,6 +303,11 @@ function AddStocks() {
     };
 
     const handlePlusClick = async (isin_code: string, index: number) => {
+        if (watchlistCount >= 15) {
+            alert("You've reached the maximum limit of 15 stocks in your watchlist.");
+            return;
+        }
+
         const selectedStock = sortedStockData[index];
         const scrip_cd = selectedStock.scrip_cd;
 
@@ -227,16 +325,13 @@ function AddStocks() {
                 },
             });
 
-            console.log(`Stock ${scrip_cd} added!!`);
-
             setUserWatchlist((prev) => [...prev, scrip_cd]);
+            setWatchlistCount((prevCount) => prevCount + 1); // Increment the count
 
-            setTimeout(() => {
-                setButtonStates((prevState) => ({
-                    ...prevState,
-                    [isin_code]: 'edit',
-                }));
-            }, 1000);
+            setButtonStates((prevState) => ({
+                ...prevState,
+                [isin_code]: 'edit',
+            }));
 
         } catch (error) {
             console.error('Error adding stock:', error);
@@ -279,13 +374,12 @@ function AddStocks() {
                 scrip_cd: scrip_cd
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `${token}`,
                 },
             });
 
-            alert("Stock Deleted Successfully!!!");
-
             setUserWatchlist((prev) => prev.filter(id => id !== scrip_cd));
+            setWatchlistCount((prevCount) => prevCount - 1); // Decrement the count
 
             setTimeout(() => {
                 setButtonStates((prevState) => ({
@@ -365,6 +459,14 @@ function AddStocks() {
         }
     };
 
+    const handleHomeClick = () => {
+        window.location.href = '/'
+    };
+
+    const handleTwitterRedirect = () => {
+        window.open('https://x.com/Onemetric_in', '_blank');
+    };
+
     if (!isTokenChecked) {
         return null; // Render nothing until the token is checked
     }
@@ -378,9 +480,11 @@ function AddStocks() {
                             className="image-18-icon"
                             loading="lazy"
                             alt=""
-                            src="./public/insights/image-18@2x.png"
+                            src="./public/insights/OneMetric_Transparent.png"
+                            onClick={handleHomeClick}
+                            style={{ cursor: 'pointer' }}
                         />
-                        <div className="main-inner">
+                        <div className="main-inner" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                             <div className="main-inner">
                                 <a className="onemetric">OneMetric</a>
                             </div>
@@ -437,9 +541,40 @@ function AddStocks() {
                             )}
                         </div>
                     </header>
+                    <div className="add-stocks2">Add Stocks</div>
+                    <div className="trial-info">
+                        <div className="add-your-favourite-container">
+                            <span style={{ color: 'white' }}>Add your favourite stocks to watch list and </span>
+                            <br />
+                            {isCheckingPlan ? (
+                                <span>Checking plan status...</span>
+                            ) : isPlanValid && planStatus === 'active' && !isPlanExpired ? (
+                                <span className="plan-expiring">Your Plan is expiring in {daysUntilExpiry} days</span>
+                            ) : isPlanExpired ? (
+                                <>
+                                    <span className="plan-expired">Your Plan has expired&nbsp;&nbsp;</span>
+                                    <button className="renew-plan-button" onClick={handleAddToWatchlist}>
+                                        Renew Plan
+                                    </button>
+                                </>
+                            ) : planStatus === 'newuser' ? (
+                                <>
+                                    <span className="enjoy-your-30">Enjoy your free 30 days trial</span>
+                                    <button className="purchase-plan-button" onClick={handleAddToWatchlist}>
+                                        Purchase Plan
+                                    </button>
+                                </>
+                            ) : (
+                                <span>Check your plan status</span>
+                            )}
+                        </div>
+                        {/* <div className="no-card-information">
+                            No card information is required for the free trial
+                        </div> */}
+                    </div>
                     <div className="add-stocks1">
                         <div className="icons-back">
-                            <div className="add-stocks2">Add Stocks</div>
+                            {/* <div className="add-stocks2">Add Stocks</div> */}
                             {/* <div className="frame-parent">
                                 <img
                                     className="frame-child"
@@ -468,35 +603,6 @@ function AddStocks() {
                                 />
                             </div>
                         </div>
-                    </div>
-                    <div className="trial-info">
-                        <div className="add-your-favourite-container">
-                            <span style={{ color: 'white' }}>Add your favourite stocks to watch list and </span>
-                            {isCheckingPlan ? (
-                                <span>Checking plan status...</span>
-                            ) : isPlanValid && planStatus === 'active' && !isPlanExpired ? (
-                                <span className="plan-expiring">Your Plan is expiring in {daysUntilExpiry} days</span>
-                            ) : isPlanExpired ? (
-                                <>
-                                    <span className="plan-expired">Your Plan has expired&nbsp;&nbsp;</span>
-                                    <button className="renew-plan-button" onClick={handleAddToWatchlist}>
-                                        Renew Plan
-                                    </button>
-                                </>
-                            ) : planStatus === 'newuser' ? (
-                                <>
-                                    <span className="enjoy-your-30">Enjoy your free 30 days trial</span>
-                                    <button className="purchase-plan-button" onClick={handleAddToWatchlist}>
-                                        Purchase Plan
-                                    </button>
-                                </>
-                            ) : (
-                                <span>Check your plan status</span>
-                            )}
-                        </div>
-                        {/* <div className="no-card-information">
-                            No card information is required for the free trial
-                        </div> */}
                     </div>
                     <div className="indices-options-parent">
                         <div className="indices-options">
@@ -541,31 +647,97 @@ function AddStocks() {
                             ) : noDataFound ? (
                                 <div style={{ color: 'white', margin: 'auto' }}>No data found</div>
                             ) : (
-                                sortedStockData.slice(0, displayCount).map((stock, index) => (
-                                    <div key={index} className="select-stocks">
-                                        <div className="select-stocks-inner">
-                                            <div className="vector-wrapper">
-                                                <img className="vector-icon" alt="" />
+                                <>
+                                    {(selectedFilter === 'bankNifty' || selectedFilter === 'nifty50') && (
+                                        <SelectAllButton stocks={sortedStockData} onSelectAll={handleSelectAll} />
+                                    )}
+                                    {sortedStockData.slice(0, displayCount).map((stock, index) => (
+                                        <div key={index} className="select-stocks">
+                                            {(selectedFilter === 'bankNifty' || selectedFilter === 'nifty50') && (
+                                                <input
+                                                    className='custom-selection-checkbox'
+                                                    type="checkbox"
+                                                    checked={selectedStocks.has(stock.scrip_cd)}
+                                                    onChange={() => {
+                                                        setSelectedStocks(prev => {
+                                                            const newSet = new Set(prev);
+                                                            if (newSet.has(stock.scrip_cd)) {
+                                                                newSet.delete(stock.scrip_cd);
+                                                            } else {
+                                                                if (watchlistCount < 15) {
+                                                                    newSet.add(stock.scrip_cd);
+                                                                    handlePlusClick(stock.isin_code, index);
+                                                                } else {
+                                                                    alert("You've reached the maximum limit of 15 stocks in your watchlist. No further stocks will be added.");
+                                                                }
+                                                            }
+                                                            return newSet;
+                                                        });
+                                                    }}
+                                                    style={{ marginRight: '10px' }}
+                                                    disabled={isAddingMultiple}
+                                                />
+                                            )}
+                                            <div className="select-stocks-inner">
+                                                <div className="vector-wrapper">
+                                                    <img className="vector-icon" alt="" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="adani-group-wrapper">
-                                            <div className="adani-group" style={{ color: 'white' }}>{stock.stock_long_name}</div>
-                                        </div>
-                                        <div className="edit-delete-options-wrapper">
-                                            {userWatchlist.includes(stock.scrip_cd) ? (
-                                                buttonStates[stock.isin_code] === 'edit' || !buttonStates[stock.isin_code] ? (
-                                                    <Edit3
-                                                        onClick={() => handleEditClick(stock.isin_code)}
-                                                        style={{
-                                                            transition: 'opacity 2s',
-                                                            opacity: 1,
-                                                            cursor: 'pointer',
-                                                            color: 'white'
-                                                        }}
-                                                    />
-                                                ) : buttonStates[stock.isin_code] === 'trash' ? (
+                                            <div className="adani-group-wrapper">
+                                                <div className="adani-group" style={{ color: 'white' }}>{stock.stock_long_name}</div>
+                                            </div>
+                                            <div className="edit-delete-options-wrapper">
+                                                {userWatchlist.includes(stock.scrip_cd) ? (
+                                                    buttonStates[stock.isin_code] === 'edit' || !buttonStates[stock.isin_code] ? (
+                                                        <Edit3
+                                                            onClick={() => handleEditClick(stock.isin_code)}
+                                                            style={{
+                                                                transition: 'opacity 2s',
+                                                                opacity: 1,
+                                                                cursor: 'pointer',
+                                                                color: 'white'
+                                                            }}
+                                                        />
+                                                    ) : buttonStates[stock.isin_code] === 'trash' ? (
+                                                        <div
+                                                            onClick={() => handleRemoveClick(stock.isin_code, index)}
+                                                            style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                backgroundColor: 'red',
+                                                                padding: '10px',
+                                                                transition: 'opacity 2s',
+                                                                opacity: 1,
+                                                                cursor: 'pointer',
+                                                            }}
+                                                        >
+                                                            <Trash style={{ color: 'white' }} />
+                                                            <span style={{ marginLeft: '4px', marginTop: '4px', color: 'white' }}>
+                                                                {isRemoving[index] ? 'Removing...' : 'Remove'}
+                                                            </span>
+                                                        </div>
+                                                    ) : null
+                                                ) : (
+                                                    buttonStates[stock.isin_code] === 'plus' || !buttonStates[stock.isin_code] ? (
+                                                        <Plus
+                                                            onClick={() => handlePlusClick(stock.isin_code, index)}
+                                                            style={{ cursor: 'pointer', color: 'white' }}
+                                                        />
+                                                    ) : buttonStates[stock.isin_code] === 'check' ? (
+                                                        <Check
+                                                            style={{
+                                                                transition: 'opacity 2s',
+                                                                opacity: 1,
+                                                                backgroundColor: 'green',
+                                                                color: 'white',
+                                                                borderRadius: '50%',
+                                                                padding: '1%'
+                                                            }}
+                                                        />
+                                                    ) : null
+                                                )}
+                                                {buttonStates[stock.isin_code] === 'removing' && (
                                                     <div
-                                                        onClick={() => handleRemoveClick(stock.isin_code, index)}
                                                         style={{
                                                             display: 'flex',
                                                             alignItems: 'center',
@@ -577,49 +749,13 @@ function AddStocks() {
                                                         }}
                                                     >
                                                         <Trash style={{ color: 'white' }} />
-                                                        <span style={{ marginLeft: '4px', marginTop: '4px', color: 'white' }}>
-                                                            {isRemoving[index] ? 'Removing...' : 'Remove'}
-                                                        </span>
+                                                        <span style={{ marginLeft: '4px', marginTop: '4px', color: 'white' }}>Removing...</span>
                                                     </div>
-                                                ) : null
-                                            ) : (
-                                                buttonStates[stock.isin_code] === 'plus' || !buttonStates[stock.isin_code] ? (
-                                                    <Plus
-                                                        onClick={() => handlePlusClick(stock.isin_code, index)}
-                                                        style={{ cursor: 'pointer', color: 'white' }}
-                                                    />
-                                                ) : buttonStates[stock.isin_code] === 'check' ? (
-                                                    <Check
-                                                        style={{
-                                                            transition: 'opacity 2s',
-                                                            opacity: 1,
-                                                            backgroundColor: 'green',
-                                                            color: 'white',
-                                                            borderRadius: '50%',
-                                                            padding: '1%'
-                                                        }}
-                                                    />
-                                                ) : null
-                                            )}
-                                            {buttonStates[stock.isin_code] === 'removing' && (
-                                                <div
-                                                    style={{
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        backgroundColor: 'red',
-                                                        padding: '10px',
-                                                        transition: 'opacity 2s',
-                                                        opacity: 1,
-                                                        cursor: 'pointer',
-                                                    }}
-                                                >
-                                                    <Trash style={{ color: 'white' }} />
-                                                    <span style={{ marginLeft: '4px', marginTop: '4px', color: 'white' }}>Removing...</span>
-                                                </div>
-                                            )}
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                ))
+                                    ))}
+                                </>
                             )}
                         </div>
                         {!loading && sortedStockData.length > displayCount && (
@@ -632,14 +768,16 @@ function AddStocks() {
                                 className="image-18-icon1"
                                 loading="lazy"
                                 alt=""
-                                src="./public/insights/image-18@2x.png"
+                                src="./public/insights/OneMetric_Transparent.png"
+                                onClick={handleHomeClick}
+                                style={{ cursor: 'pointer' }}
                             />
                             <div className="main-inner">
-                                <div className="main-inner">
+                                <div className="main-inner" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                                     <b className="onemetric1">OneMetric</b>
                                 </div>
                             </div>
-                            <div className="footer-social">
+                            <div className="footer-social-mobile">
                                 <div className="rectangle-parent">
                                     <div className="rectangle-div" />
                                     <img
@@ -673,10 +811,28 @@ function AddStocks() {
                                         <a href='/plans' className="refund-policy" style={{ textDecoration: "none", color: "#8A8D9E" }}>Pricing</a>
                                     </div>
                                     <div className="link-names1">
-                                        <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy &amp; Policy</a>
+                                        <a href='/privacy' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Privacy Policy</a>
                                         <a href='/terms' style={{ textDecoration: "none", color: "#8A8D9E" }} className="terms-conditions">Terms &amp; conditions</a>
                                         <a href='/referral' style={{ textDecoration: "none", color: "#8A8D9E" }} className="referral-policy">Referral Policy</a>
-                                        <a href='#' style={{ textDecoration: "none", color: "#8A8D9E" }} className="faqs">FAQs</a>
+                                        <div className="footer-social">
+                                            <div className="rectangle-parent">
+                                                <div className="rectangle-div" />
+                                                <img
+                                                    className="social-icon"
+                                                    loading="lazy"
+                                                    alt=""
+                                                    src="./public/insights/vector.svg"
+                                                />
+                                            </div>
+                                            <img
+                                                className="vector-icon1"
+                                                loading="lazy"
+                                                alt=""
+                                                src="./public/insights/vector-1.svg"
+                                                onClick={handleTwitterRedirect}
+                                                style={{ cursor: 'pointer' }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                                 <img

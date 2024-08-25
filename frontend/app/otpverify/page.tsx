@@ -15,6 +15,10 @@ const OTPVerify: React.FC = () => {
     const [remainingTime, setRemainingTime] = useState<number>(60);
     const [isVerifying, setIsVerifying] = useState<boolean>(false);
 
+    const handleHomeClick = () => {
+        window.location.href = '/'
+    };
+
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         setMobile(params.get('mobile'));
@@ -121,9 +125,10 @@ const OTPVerify: React.FC = () => {
                         loading="lazy"
                         alt=""
                         src="./public/OTP/OneMetric_Transparent.png"
+                        onClick={handleHomeClick} style={{cursor: 'pointer'}}
                     />
                     <div className="frame-wrapper">
-                        <div className="frame-wrapper">
+                        <div className="frame-wrapper" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
                             <a className="onemetric">OneMetric</a>
                         </div>
                     </div>
@@ -249,9 +254,10 @@ const OTPVerify: React.FC = () => {
                                     >
                                         Resend OTP
                                     </button>
+                                    <span className="secs">{remainingTime} secs</span>
                                     <div className="it-may-take-container">
-                                        <span>We deliver 99% news in less than </span>
-                                        <span className="secs">{remainingTime} secs</span>
+                                        <span>We deliver 99% OTP in less than 60 secs</span>
+                                        {/* <span className="secs">{remainingTime} secs</span> */}
                                     </div>
                                 </div>
                             </div>

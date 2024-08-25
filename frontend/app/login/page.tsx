@@ -19,6 +19,10 @@ function Login(): JSX.Element {
   const [countryCodes, setCountryCodes] = useState<CountryOption[]>([]);
   const router = useRouter();
 
+  const handleHomeClick = () => {
+    window.location.href = '/'
+  };
+
   useEffect(() => {
     const codes: CountryOption[] = getCountries().map((country) => ({
       code: country,
@@ -87,9 +91,9 @@ function Login(): JSX.Element {
       <div className="login">
         <img className="login-child" alt="" src="./public/login/group-1000001016.svg" />
         <header className="main">
-          <img className="image-18-icon" loading="lazy" alt="" src="./public/login/OneMetric_Transparent.png" />
+          <img className="image-18-icon" loading="lazy" alt="" src="./public/login/OneMetric_Transparent.png" onClick={handleHomeClick} style={{cursor: 'pointer'}}/>
           <div className="content">
-            <div className="content">
+            <div className="content" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
               <a className="onemetric">OneMetric</a>
             </div>
           </div>

@@ -36,6 +36,14 @@ function Home() {
     };
   }, []);
 
+  const handleHomeClick = () => {
+    window.location.href = '/'
+  };
+
+  const handleTwitterRedirect = () => {
+    window.open('https://x.com/Onemetric_in', '_blank');
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (showDropdown && !(event.target as Element).closest('.user-icon-wrapper')) {
@@ -194,10 +202,11 @@ function Home() {
                       loading="lazy"
                       alt=""
                       src="./public/home/OneMetric_Transparent.png"
+                      onClick={handleHomeClick} style={{cursor: 'pointer'}}
                     />
                     <div className="sign-in-button-wrapper">
-                      <div className="sign-in-button-wrapper">
-                        <a className="onemetric" href='/'>OneMetric</a>
+                      <div className="sign-in-button-wrapper" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
+                        <a className="onemetric">OneMetric</a>
                       </div>
                     </div>
                     {isLoggedIn ? (
@@ -384,9 +393,10 @@ function Home() {
                 loading="lazy"
                 alt=""
                 src="./public/home/image-18-1@2x.png"
+                onClick={handleHomeClick} style={{cursor: 'pointer'}}
               />
               <div className="footer-branding">
-                <div className="sign-in-button-wrapper">
+                <div className="sign-in-button-wrapper" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
                   <b className="onemetric2">OneMetric</b>
                 </div>
               </div>
@@ -405,6 +415,7 @@ function Home() {
                   loading="lazy"
                   alt=""
                   src="./public/home/vector-4.svg"
+                  onClick={handleTwitterRedirect} style={{cursor: 'pointer'}}
                 />
               </div>
             </div>

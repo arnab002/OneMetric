@@ -468,6 +468,10 @@ function Home() {
     window.location.href = '/login'
   };
 
+  const handleHomeClick = () => {
+    window.location.href = '/'
+  };
+
   const handleTwitterRedirect = () => {
     window.open('https://x.com/Onemetric_in', '_blank');
   };
@@ -487,7 +491,7 @@ function Home() {
             <div className="add-to-your-watchlist-parent">
               <h3 className="add-to-your">Add to your watchlist</h3>
               <div className="select-your-stocks">
-                Select stocks that you follow or subscribe to our list.
+                Select your stocks to get latest news now
               </div>
             </div>
             <div className="nifty-trio-parent">
@@ -530,10 +534,11 @@ function Home() {
                       loading="lazy"
                       alt=""
                       src="./public/home/OneMetric_Transparent.png"
+                      onClick={handleHomeClick} style={{ cursor: 'pointer' }}
                     />
                     <div className="sign-in-button-wrapper">
-                      <div className="sign-in-button-wrapper">
-                        <a className="onemetric" href='/'>OneMetric</a>
+                      <div className="sign-in-button-wrapper" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
+                        <a className="onemetric">OneMetric</a>
                       </div>
                     </div>
                     {isLoggedIn ? (
@@ -1463,9 +1468,10 @@ function Home() {
                 loading="lazy"
                 alt=""
                 src="./public/home/OneMetric_Transparent.png"
+                onClick={handleHomeClick} style={{ cursor: 'pointer' }}
               />
               <div className="footer-branding">
-                <div className="sign-in-button-wrapper">
+                <div className="sign-in-button-wrapper" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                   <b className="onemetric2">OneMetric</b>
                 </div>
               </div>

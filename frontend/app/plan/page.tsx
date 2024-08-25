@@ -37,6 +37,14 @@ function PlanDesktop() {
         };
     }, []);
 
+    const handleHomeClick = () => {
+        window.location.href = '/'
+    };
+
+    const handleTwitterRedirect = () => {
+        window.open('https://x.com/Onemetric_in', '_blank');
+    };
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (showDropdown && !(event.target as Element).closest('.user-icon-wrapper')) {
@@ -185,8 +193,9 @@ function PlanDesktop() {
                             loading="lazy"
                             alt=""
                             src="./public/home-desktop/OneMetric_Transparent.png"
+                            onClick={handleHomeClick} style={{cursor: 'pointer'}}
                         />
-                        <div className="one-metric-sign-in-container">
+                        <div className="one-metric-sign-in-container" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
                             <div className="one-metric-sign-in-logo-contai">
                                 <a className="onemetric1">OneMetric</a>
                             </div>
@@ -379,9 +388,10 @@ function PlanDesktop() {
                                     className="image-18-icon1"
                                     alt=""
                                     src="./public/home-desktop/image-18-1@2x.png"
+                                    onClick={handleHomeClick} style={{cursor: 'pointer'}}
                                 />
                                 <div className="one-metric-footer">
-                                    <div className="one-metric-title-container">
+                                    <div className="one-metric-title-container" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
                                         <b className="onemetric3">OneMetric</b>
                                     </div>
                                 </div>
@@ -420,6 +430,7 @@ function PlanDesktop() {
                                                     loading="lazy"
                                                     alt=""
                                                     src="./public/home-desktop/vector-1.svg"
+                                                    onClick={handleTwitterRedirect} style={{cursor: 'pointer'}}
                                                 />
                                             </div>
                                             <div className="faqs">FAQs</div>
