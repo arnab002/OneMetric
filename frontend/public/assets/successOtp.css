@@ -245,6 +245,7 @@
   display: inline-block;
   min-width: 126px;
   white-space: nowrap;
+  font-size: 24px;
 }
 .placeholder-wrapper,
 .successfully-verified-parent {

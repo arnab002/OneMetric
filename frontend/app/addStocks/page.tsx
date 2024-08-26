@@ -227,9 +227,14 @@ function AddStocks() {
                 }
             }
 
-            const response = await axios.get(endpoint, {
-                params: isSearching ? { query: searchQuery } : {},
-            });
+            let response;
+            const headers = { Authorization: `${token}` };
+
+            if (isSearching) {
+                response = await axios.post(endpoint, { query: searchQuery }, { headers });
+            } else {
+                response = await axios.get(endpoint);
+            }
 
             let data = response.data.data || response.data.data;
 
@@ -243,12 +248,7 @@ function AddStocks() {
             const sortedData = sortStocksAlphabetically(data);
 
             setStockData(sortedData);
-
-            if (sortedData.length === 0) {
-                setNoDataFound(true);
-            } else {
-                setNoDataFound(false);
-            }
+            setNoDataFound(sortedData.length === 0);
         } catch (error) {
             console.error('Error fetching stock data:', error);
             setNoDataFound(true);
@@ -573,9 +573,6 @@ function AddStocks() {
                                 <span>Check your plan status</span>
                             )}
                         </div>
-                        {/* <div className="no-card-information">
-                            No card information is required for the free trial
-                        </div> */}
                     </div>
                     <div className="add-stocks1">
                         <div className="icons-back">
@@ -764,7 +761,7 @@ function AddStocks() {
                             )}
                         </div>
                         {!loading && sortedStockData.length > displayCount && (
-                            <button onClick={showMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px" }}>Show More</button>
+                            <button onClick={showMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px", cursor: 'pointer' }}>Show More</button>
                         )}
                     </div>
                     <div className="footer">

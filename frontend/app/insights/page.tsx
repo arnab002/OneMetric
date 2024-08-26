@@ -153,27 +153,31 @@ function Insights() {
     const fetchStockData = async () => {
         setLoading(true);
         setNoDataFound(false);
-
+    
         try {
             const endpoint = isSearching
                 ? `${baseApiURL()}/search-stocks`
                 : `${baseApiURL()}/stock-watchlist`;
-
-            const response = await axios.get(endpoint, {
-                params: isSearching ? { query: searchQuery } : {},
-                headers: !isSearching ? { Authorization: `${token}` } : {},
-            });
-
-            const data = response.data.data || response.data.data;
-
+    
+            let response;
+    
+            if (isSearching) {
+                response = await axios.post(endpoint, 
+                    { query: searchQuery },
+                    { headers: { Authorization: `${token}` } }
+                );
+            } else {
+                response = await axios.get(endpoint, {
+                    headers: { Authorization: `${token}` }
+                });
+            }
+    
+            const data = response.data.data;
+    
             const sortedData = sortStocksAlphabetically(data);
             setStockData(sortedData);
-
-            if (sortedData.length === 0) {
-                setNoDataFound(true);
-            } else {
-                setNoDataFound(false);
-            }
+    
+            setNoDataFound(sortedData.length === 0);
         } catch (error) {
             console.error('Error fetching stock data:', error);
             setNoDataFound(true);

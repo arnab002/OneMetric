@@ -1069,9 +1069,19 @@
   }
 }
 
-@media screen and (max-width: 362px){
-  .trial-info{
-    font-size: 11px;
+@media only screen and (min-width: 320px) and (max-width: 1024px){
+  .add-your-favourite-container{
+    font-size: 14px;
+  }
+  .plan-expiring{
+    font-size: 18px;
+  }
+
+  .plan-expired{
+    font-size: 15px;
+  }
+  .enjoy-your-30{
+    font-size: 17px;
   }
 }
 

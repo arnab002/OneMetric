@@ -239,6 +239,7 @@
   position: relative;
   line-height: 160%;
   font-weight: 600;
+  font-size: 20px;
 }
 .placeholder {
   line-height: 26px;
@@ -295,18 +296,3 @@
   line-height: normal;
   letter-spacing: normal;
 }
-
-/* @media only screen and (min-width: 375px) and (max-width: 667px){
-  .successfully-verified-parent{
-    padding-left: 4%;
-  }
-  .delete-wrapper{
-    padding: 0px 85px;
-  }
-}
-
-@media only screen and (min-width: 430px) and (max-width: 932px){
-  .deletion-container{
-    padding: 0 94px;
-  }
-} */

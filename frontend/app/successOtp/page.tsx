@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import "../../public/assets/otpSuccessful.css"
+import "../../public/assets/successOtp.css"
 
 function OTPSuccess() {
     const [mobile, setMobile] = useState<string | null>(null);
@@ -23,6 +23,10 @@ function OTPSuccess() {
 
         return () => clearTimeout(timer);
     }, []);
+
+    const handleHomeClick = () => {
+        window.location.href = '/'
+    };
 
     return (
         <div>
@@ -59,9 +63,10 @@ function OTPSuccess() {
                             loading="lazy"
                             alt=""
                             src="./public/otpSuccess/image-18@2x.png"
+                            onClick={handleHomeClick} style={{ cursor: 'pointer' }}
                         />
                         <div className="image-and-verification-inner">
-                            <div className="image-and-verification-inner">
+                            <div className="image-and-verification-inner" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                                 <a className="onemetric">OneMetric</a>
                             </div>
                         </div>

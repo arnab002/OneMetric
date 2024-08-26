@@ -4,17 +4,17 @@ import "../../public/assets/otpSuccessful.css"
 
 function OTPSuccess() {
     const [paymentDetails, setPaymentDetails] = useState({
-        transaction_id: 'ABCD',
-        order_id: 'PQR',
-        payment_id: 'FDC',
+        transaction_id: '',
+        order_id: '',
+        payment_id: '',
     });
 
     useEffect(() => {
         // Client-side fetching of query parameters
         const searchParams = new URLSearchParams(window.location.search);
-        const transaction_id = searchParams.get('transaction_id') || 'ABCD';
-        const order_id = searchParams.get('order_id') || 'PQR';
-        const payment_id = searchParams.get('payment_id') || 'FDC';
+        const transaction_id = searchParams.get('transaction_id') || 'ABCDEFGHIJHBNbjhbjb';
+        const order_id = searchParams.get('order_id') || 'PQRJNJNJNKJNKJNMNN';
+        const payment_id = searchParams.get('payment_id') || 'FDC677777jnjhbjhbjhbhj';
 
         // Set the payment details
         setPaymentDetails({ transaction_id, order_id, payment_id });
@@ -25,6 +25,10 @@ function OTPSuccess() {
 
         return () => clearTimeout(timer);
     }, []);
+
+    const handleHomeClick = () => {
+        window.location.href = '/'
+    };
 
     return (
         <div>
@@ -61,9 +65,10 @@ function OTPSuccess() {
                             loading="lazy"
                             alt=""
                             src="./public/otpSuccess/image-18@2x.png"
+                            onClick={handleHomeClick} style={{ cursor: 'pointer' }}
                         />
                         <div className="image-and-verification-inner">
-                            <div className="image-and-verification-inner">
+                            <div className="image-and-verification-inner" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                                 <a className="onemetric">OneMetric</a>
                             </div>
                         </div>
