@@ -1,10 +1,166 @@
-import React from "react";
+'use client'
+import React, { useState, useRef, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 
+interface User {
+  phone: string;
+  name: string;
+  email: string;
+  planName: string;
+  startDate: string;
+  endDate: string;
+  planStatus: string;
+}
+
+interface UserModalProps {
+  user: User | null;
+  onClose: () => void;
+}
+
+const UserModal: React.FC<UserModalProps> = ({ user, onClose }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
+
+  if (!user) return null;
+
+  return (
+    <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+      <div className="modal-dialog" ref={modalRef}>
+        <div className="modal-content">
+          <div className="modal-header d-flex justify-content-between align-items-center">
+            <h6 className="modal-title mb-0">User Details</h6>
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              onClick={onClose}
+            ></button>
+          </div>
+          <div className="modal-body">
+            <div className="pb-24 ms-16 mb-4 me-16 mt--100">
+              <div className="text-center border border-top-0 border-start-0 border-end-0 pt-120">
+                <h6 className="mb-0 mt-16">{user.name}</h6>
+                <span className="text-secondary-light mb-16">
+                  {user.phone}
+                </span>
+              </div>
+              <div className="mt-40">
+                <ul>
+                  <li className="d-flex align-items-center gap-1 mb-12">
+                    <span className="w-30 text-md fw-semibold text-primary-light">
+                      Full Name
+                    </span>
+                    <span className="w-70 text-secondary-light fw-medium">
+                      : &nbsp;&nbsp;&nbsp;&nbsp;{user.name}
+                    </span>
+                  </li>
+                  <li className="d-flex align-items-center gap-1 mb-12">
+                    <span className="w-30 text-md fw-semibold text-primary-light">
+                      Email
+                    </span>
+                    <span className="w-70 text-secondary-light fw-medium">
+                      : &nbsp;&nbsp;&nbsp;&nbsp;{user.email}
+                    </span>
+                  </li>
+                  <li className="d-flex align-items-center gap-1 mb-12">
+                    <span className="w-30 text-md fw-semibold text-primary-light">
+                      Phone
+                    </span>
+                    <span className="w-70 text-secondary-light fw-medium">
+                      : &nbsp;&nbsp;&nbsp;&nbsp;{user.phone}
+                    </span>
+                  </li>
+                  <li className="d-flex align-items-center gap-1 mb-12">
+                    <span className="w-30 text-md fw-semibold text-primary-light">
+                      Plan Name
+                    </span>
+                    <span className="w-70 text-secondary-light fw-medium">
+                      : &nbsp;&nbsp;&nbsp;&nbsp;{user.planName}
+                    </span>
+                  </li>
+                  <li className="d-flex align-items-center gap-1 mb-12">
+                    <span className="w-30 text-md fw-semibold text-primary-light">
+                      Plan Status
+                    </span>
+                    <span className="w-70 text-secondary-light fw-medium">
+                      : &nbsp;&nbsp;&nbsp;&nbsp;{user.planStatus}
+                    </span>
+                  </li>
+                  <li className="d-flex align-items-center gap-1 mb-12">
+                    <span className="w-30 text-md fw-semibold text-primary-light">
+                      Plan Start Date
+                    </span>
+                    <span className="w-70 text-secondary-light fw-medium">
+                      : &nbsp;&nbsp;&nbsp;&nbsp;{user.startDate}
+                    </span>
+                  </li>
+                  <li className="d-flex align-items-center gap-1 mb-12">
+                    <span className="w-30 text-md fw-semibold text-primary-light">
+                      Plan Expiry Date
+                    </span>
+                    <span className="w-70 text-secondary-light fw-medium">
+                      : &nbsp;&nbsp;&nbsp;&nbsp;{user.endDate}
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function UsersList() {
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  const handlePhoneClick = (user: User) => {
+    setSelectedUser(user);
+  };
+
+  const closeModal = () => {
+    setSelectedUser(null);
+  };
+
+  // Sample user data (you would typically fetch this from an API)
+  const users: User[] = [
+    {
+      phone: "9865786551",
+      name: "Kathryn Murphy",
+      email: "osgoodwy@gmail.com",
+      planName: "Diamond",
+      startDate: "01 Aug 2024",
+      endDate: "31 July 2025",
+      planStatus: "Active"
+    },
+    {
+      phone: "9748996248",
+      name: "Rounak Saha",
+      email: "saharounak013@gmail.com",
+      planName: "Gold",
+      startDate: "05 Aug 2024",
+      endDate: "01 Aug 2025",
+      planStatus: "Active"
+    }
+    // Add more users as needed
+  ];
   return (
     <div>
       <>
@@ -20,16 +176,9 @@ function UsersList() {
                     Show
                   </span>
                   <select className="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                    <option>7</option>
-                    <option>8</option>
-                    <option>9</option>
-                    <option>10</option>
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
+                      <option key={num}>{num}</option>
+                    ))}
                   </select>
                   <form className="navbar-search">
                     <input
@@ -95,69 +244,76 @@ function UsersList() {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>
-                          <div className="d-flex align-items-center gap-10">
-                            <div className="form-check style-check d-flex align-items-center">
-                              <input
-                                className="form-check-input radius-4 border border-neutral-400"
-                                type="checkbox"
-                                name="checkbox"
-                              />
+                      {users.map((user, index) => (
+                        <tr key={index}>
+                          <td>
+                            <div className="d-flex align-items-center gap-10">
+                              <div className="form-check style-check d-flex align-items-center">
+                                <input
+                                  className="form-check-input radius-4 border border-neutral-400"
+                                  type="checkbox"
+                                  name="checkbox"
+                                />
+                              </div>
+                              <span
+                                style={{ cursor: 'pointer', textDecoration: 'none' }}
+                                onClick={() => handlePhoneClick(user)}
+                              >
+                                {user.phone}
+                              </span>
                             </div>
-                            9865786551
-                          </div>
-                        </td>
-                        <td>
-                          <span className="text-md mb-0 fw-normal text-secondary-light">
-                            Kathryn Murphy
-                          </span>
-                        </td>
-                        <td>
-                          <span className="text-md mb-0 fw-normal text-secondary-light">
-                            osgoodwy@gmail.com
-                          </span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-md mb-0 fw-normal text-secondary-light">
-                            Diamond
-                          </span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-md mb-0 fw-normal text-secondary-light">
-                            01 Aug 2024
-                          </span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-md mb-0 fw-normal text-secondary-light">
-                            31 July 2025
-                          </span>
-                        </td>
-                        <td className="text-center">
-                          <span className="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">
-                            Active
-                          </span>
-                        </td>
-                        <td className="text-center">
-                          <div className="d-flex align-items-center gap-10 justify-content-center">
-                            <button
-                              type="button"
-                              className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                            >
-                              <Icon icon="lucide:edit" className="menu-icon" />
-                            </button>
-                            <button
-                              type="button"
-                              className="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                            >
-                              <Icon
-                                icon="fluent:delete-24-regular"
-                                className="menu-icon"
-                              />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
+                          </td>
+                          <td>
+                            <span className="text-md mb-0 fw-normal text-secondary-light">
+                              {user.name}
+                            </span>
+                          </td>
+                          <td>
+                            <span className="text-md mb-0 fw-normal text-secondary-light">
+                              {user.email}
+                            </span>
+                          </td>
+                          <td className="text-center">
+                            <span className="text-md mb-0 fw-normal text-secondary-light">
+                              {user.planName}
+                            </span>
+                          </td>
+                          <td className="text-center">
+                            <span className="text-md mb-0 fw-normal text-secondary-light">
+                              {user.startDate}
+                            </span>
+                          </td>
+                          <td className="text-center">
+                            <span className="text-md mb-0 fw-normal text-secondary-light">
+                              {user.endDate}
+                            </span>
+                          </td>
+                          <td className="text-center">
+                            <span className="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">
+                              {user.planStatus}
+                            </span>
+                          </td>
+                          <td className="text-center">
+                            <div className="d-flex align-items-center gap-10 justify-content-center">
+                              <button
+                                type="button"
+                                className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                              >
+                                <Icon icon="lucide:edit" className="menu-icon" />
+                              </button>
+                              <button
+                                type="button"
+                                className="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                              >
+                                <Icon
+                                  icon="fluent:delete-24-regular"
+                                  className="menu-icon"
+                                />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
@@ -203,6 +359,7 @@ function UsersList() {
           </div>
         </main>
         <Footer />
+        <UserModal user={selectedUser} onClose={closeModal} />
       </>
     </div>
   );

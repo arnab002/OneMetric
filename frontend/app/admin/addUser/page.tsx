@@ -1,7 +1,5 @@
 "use client";
-
 import React from 'react'
-import { Icon } from '@iconify/react'
 import Sidebar from '../components/Sidebar'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -16,7 +14,7 @@ function AddUser() {
                     <div className="dashboard-main-body">
                         <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
                             <h6 className="fw-semibold mb-0">Add User</h6>
-                            <div className="d-flex align-items-center gap-2">
+                            {/* <div className="d-flex align-items-center gap-2">
 
                                 <div>
                                     <button
@@ -35,7 +33,7 @@ function AddUser() {
                                         style={{ display: 'none' }}
                                     />
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="card h-100 p-0 radius-12">
                             <div className="card-body p-24">
@@ -97,8 +95,8 @@ function AddUser() {
                                                             className="form-control radius-8 form-select"
                                                             id="planName"
                                                         >
-                                                            <option value="Diamond">Diamond</option>
-                                                            <option value="Gold">Gold</option>
+                                                            <option value="1">Gold</option>
+                                                            <option value="2">Diamond</option>
                                                         </select>
                                                     </div>
                                                     <div className="d-flex align-items-center justify-content-center gap-3">

@@ -13,16 +13,11 @@ function AdminProfile() {
                     <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
                         <h6 className="fw-semibold mb-0">View Profile</h6>
                     </div>
-                    <div className="row gy-4">
-                        <div className="col-lg-4">
+                    <div className="row">
+                        <div className="col-lg-8 m-auto">
                             <div className="user-grid-card position-relative border radius-16 overflow-hidden bg-base h-100">
-                                <img
-                                    src="/assets/assets/images/user-grid/user-grid-bg1.png"
-                                    alt=""
-                                    className="w-100 object-fit-cover"
-                                />
                                 <div className="pb-24 ms-16 mb-24 me-16 mt--100">
-                                    <div className="text-center border border-top-0 border-start-0 border-end-0">
+                                    <div className="text-center border border-top-0 border-start-0 border-end-0 pt-120">
                                         <h6 className="mb-0 mt-16">Kathryn Murphy</h6>
                                         <span className="text-secondary-light mb-16">
                                             9865786551
@@ -36,7 +31,7 @@ function AdminProfile() {
                                                     Full Name
                                                 </span>
                                                 <span className="w-70 text-secondary-light fw-medium">
-                                                    : Kathryn Murphy
+                                                    : &nbsp;&nbsp;&nbsp;&nbsp;Kathryn Murphy
                                                 </span>
                                             </li>
                                             <li className="d-flex align-items-center gap-1 mb-12">
@@ -44,7 +39,7 @@ function AdminProfile() {
                                                     Email
                                                 </span>
                                                 <span className="w-70 text-secondary-light fw-medium">
-                                                    : kathryn.murphy@example.com
+                                                    : &nbsp;&nbsp;&nbsp;&nbsp;kathryn.murphy@example.com
                                                 </span>
                                             </li>
                                             <li className="d-flex align-items-center gap-1 mb-12">
@@ -52,7 +47,7 @@ function AdminProfile() {
                                                     Phone
                                                 </span>
                                                 <span className="w-70 text-secondary-light fw-medium">
-                                                    : 9865786551
+                                                    : &nbsp;&nbsp;&nbsp;&nbsp;9865786551
                                                 </span>
                                             </li>
                                             <li className="d-flex align-items-center gap-1 mb-12">
@@ -60,7 +55,7 @@ function AdminProfile() {
                                                     Plan Name
                                                 </span>
                                                 <span className="w-70 text-secondary-light fw-medium">
-                                                    : Gold
+                                                    : &nbsp;&nbsp;&nbsp;&nbsp;Gold
                                                 </span>
                                             </li>
                                             <li className="d-flex align-items-center gap-1 mb-12">
@@ -68,7 +63,7 @@ function AdminProfile() {
                                                     Plan Status
                                                 </span>
                                                 <span className="w-70 text-secondary-light fw-medium">
-                                                    : Active
+                                                    : &nbsp;&nbsp;&nbsp;&nbsp;Active
                                                 </span>
                                             </li>
                                             <li className="d-flex align-items-center gap-1 mb-12">
@@ -76,7 +71,7 @@ function AdminProfile() {
                                                     Plan Start Date
                                                 </span>
                                                 <span className="w-70 text-secondary-light fw-medium">
-                                                    : 01/08/2024
+                                                    : &nbsp;&nbsp;&nbsp;&nbsp;01/08/2024
                                                 </span>
                                             </li>
                                             <li className="d-flex align-items-center gap-1 mb-12">
@@ -84,7 +79,7 @@ function AdminProfile() {
                                                     Plan Expiry Date
                                                 </span>
                                                 <span className="w-70 text-secondary-light fw-medium">
-                                                    : 28/08/2024
+                                                    : &nbsp;&nbsp;&nbsp;&nbsp;28/08/2024
                                                 </span>
                                             </li>
                                         </ul>
@@ -92,7 +87,7 @@ function AdminProfile() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-lg-8">
+                        {/* <div className="col-lg-8">
                             <div className="card h-100">
                                 <div className="card-body p-24">
                                     <ul
@@ -433,7 +428,7 @@ function AdminProfile() {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <Footer />
