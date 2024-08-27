@@ -29,6 +29,7 @@ function AddStocks() {
     const [userWatchlist, setUserWatchlist] = useState<number[]>([]);
     const [watchlistCount, setWatchlistCount] = useState(0);
     const [selectedStocks, setSelectedStocks] = useState<Set<number>>(new Set());
+    const [showSearchResults, setShowSearchResults] = useState(false);
     const [isAddingMultiple, setIsAddingMultiple] = useState(false);
     const [lastSuccessfulSearchQuery, setLastSuccessfulSearchQuery] = useState<string>('');
     const [isSearchActive, setIsSearchActive] = useState<boolean>(false);
@@ -219,6 +220,7 @@ function AddStocks() {
     const fetchStockData = async (filter: string = 'all') => {
         setLoading(true);
         setNoDataFound(false);
+        setShowSearchResults(false); // Reset this at the start of each fetch
     
         try {
             let endpoint = `${baseApiURL()}/stocks`;
@@ -275,6 +277,7 @@ function AddStocks() {
             setNoDataFound(true);
         } finally {
             setLoading(false);
+            setShowSearchResults(true); // Set this to true after loading is complete
         }
     };
 
@@ -315,6 +318,14 @@ function AddStocks() {
         }
     };
 
+    const debounce = (func: Function, delay: number) => {
+        let timeoutId: NodeJS.Timeout;
+        return (...args: any[]) => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => func(...args), delay);
+        };
+    };
+
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newQuery = event.target.value;
         setSearchQuery(newQuery);
@@ -324,7 +335,8 @@ function AddStocks() {
             // Reset to the original list when search is cleared
             fetchStockData(selectedFilter);
         } else {
-            fetchStockData();
+            // Use debounce to delay the API call
+            debounce(() => fetchStockData(), 300);
         }
     };
 
@@ -677,7 +689,7 @@ function AddStocks() {
                                 <div style={{ color: 'white', margin: 'auto' }}>Loading...</div>
                             ) : noDataFound ? (
                                 <div style={{ color: 'white', margin: 'auto' }}>No data found</div>
-                            ) : (
+                            ) : showSearchResults || !isSearchActive ? (
                                 <>
                                     {(selectedFilter === 'bankNifty' || selectedFilter === 'nifty50') && (
                                         <SelectAllButton stocks={stockData} onSelectAll={handleSelectAll} />
@@ -787,7 +799,7 @@ function AddStocks() {
                                         </div>
                                     ))}
                                 </>
-                            )}
+                            ): null}
                         </div>
                         {!loading && stockData.length > displayCount && (
                             <button onClick={showMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px", cursor: 'pointer' }}>Show More</button>
