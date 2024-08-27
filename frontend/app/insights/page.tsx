@@ -246,7 +246,6 @@ function Insights() {
             fetchStockData();
         } catch (error) {
             console.error('Error deleting stock:', error);
-            alert("Failed to delete stock. Please try again.");
         } finally {
             setIsRemoving((prevState) => ({
                 ...prevState,

@@ -76,7 +76,7 @@ function AddStocks() {
 
     const sortStocksAlphabetically = (stocks: any[]) => {
         return [...stocks].sort((a, b) =>
-            a.stock_long_name.localeCompare(b.stock_long_name, undefined, { sensitivity: 'base' })
+            a.stock_long_name.localeCompare(b.stock_long_name, undefined)
         );
     };
 
