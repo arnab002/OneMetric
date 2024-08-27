@@ -5,7 +5,7 @@ import baseApiURL from '@/baseUrl';
 import logo from "../../public/public/home/image-18@2x.png";
 import '../../public/assets/plan-global.css';
 import '../../public/assets/plan-desktop.css';
-import { User, LogOut } from 'react-feather';
+import { User } from 'react-feather';
 import PlanDesktopView from '@/middlewares/plan/PlanDesktopView';
 
 interface RazorpayResponse {
@@ -67,11 +67,8 @@ function PlanDesktop() {
         setIsLoggedIn(!!token);
     }, []);
 
-    const handleLogout = () => {
-        sessionStorage.removeItem('authToken');
-        setIsLoggedIn(false);
-        setShowDropdown(false);
-        window.location.href = '/';
+    const handleUserAccountClick = () => {
+        window.location.href = '/userAccount'
     };
 
     const toggleDropdown = () => {
@@ -221,7 +218,7 @@ function PlanDesktop() {
                                         }}
                                     >
                                         <button
-                                            onClick={handleLogout}
+                                            onClick={handleUserAccountClick}
                                             style={{
                                                 display: 'flex',
                                                 alignItems: 'center',
@@ -230,8 +227,8 @@ function PlanDesktop() {
                                                 cursor: 'pointer',
                                             }}
                                         >
-                                            <LogOut size={16} style={{ marginRight: '5px' }} />
-                                            Logout
+                                            <User size={16} style={{ marginRight: '5px' }} />
+                                            Profile
                                         </button>
                                     </div>
                                 )}

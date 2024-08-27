@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
 import '../../public/assets/plans.css'
-import { User, LogOut } from 'react-feather';
+import { User } from 'react-feather';
 import logo from "../../public/public/home/image-18@2x.png";
 import PlanMobileView from '@/middlewares/plan/PlanMobileView';
 
@@ -66,11 +66,8 @@ function Home() {
     setIsLoggedIn(!!token);
   }, []);
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('authToken');
-    setIsLoggedIn(false);
-    setShowDropdown(false);
-    window.location.href = '/';
+  const handleUserAccountClick = () => {
+    window.location.href = '/userAccount'
   };
 
   const toggleDropdown = () => {
@@ -230,7 +227,7 @@ function Home() {
                             }}
                           >
                             <button
-                              onClick={handleLogout}
+                              onClick={handleUserAccountClick}
                               style={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -239,8 +236,8 @@ function Home() {
                                 cursor: 'pointer',
                               }}
                             >
-                              <LogOut size={16} style={{ marginRight: '5px' }} />
-                              Logout
+                              <User size={16} style={{ marginRight: '5px' }} />
+                              Profile
                             </button>
                           </div>
                         )}

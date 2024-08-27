@@ -6,7 +6,7 @@ import baseApiURL from '@/baseUrl';
 import logo from "../../public/public/home/image-18@2x.png";
 import '../../public/assets/home-global.css';
 import '../../public/assets/home-desktop.css';
-import { User, LogOut } from 'react-feather';
+import { User } from 'react-feather';
 import statsData from '../../public/json/stats.json';
 import HomeDesktopView from '@/middlewares/home/HomeDesktopView';
 
@@ -91,11 +91,8 @@ function HomeDesktop() {
         setIsLoggedIn(!!token);
     }, []);
 
-    const handleLogout = () => {
-        sessionStorage.removeItem('authToken');
-        setIsLoggedIn(false);
-        setShowDropdown(false);
-        window.location.href = '/';
+    const handleUserAccountClick = () => {
+        window.location.href = '/userAccount'
     };
 
     const toggleDropdown = () => {
@@ -724,7 +721,7 @@ function HomeDesktop() {
                                             }}
                                         >
                                             <button
-                                                onClick={handleLogout}
+                                                onClick={handleUserAccountClick}
                                                 style={{
                                                     display: 'flex',
                                                     alignItems: 'center',
@@ -733,8 +730,8 @@ function HomeDesktop() {
                                                     cursor: 'pointer',
                                                 }}
                                             >
-                                                <LogOut size={16} style={{ marginRight: '5px' }} />
-                                                Logout
+                                                <User size={16} style={{ marginRight: '5px' }} />
+                                                Profile
                                             </button>
                                         </div>
                                     )}

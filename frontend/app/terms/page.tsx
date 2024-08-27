@@ -116,11 +116,8 @@ const Refund: React.FC = () => {
     setIsLoggedIn(!!token);
   }, []);
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('authToken');
-    setIsLoggedIn(false);
-    setShowDropdown(false);
-    window.location.href = '/';
+  const handleUserAccountClick = () => {
+    window.location.href = '/userAccount'
   };
 
   const toggleDropdown = () => {
@@ -180,7 +177,7 @@ const Refund: React.FC = () => {
                     }}
                   >
                     <button
-                      onClick={handleLogout}
+                      onClick={handleUserAccountClick}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -189,8 +186,8 @@ const Refund: React.FC = () => {
                         cursor: 'pointer',
                       }}
                     >
-                      <LogOut size={16} style={{ marginRight: '5px' }} />
-                      Logout
+                      <User size={16} style={{ marginRight: '5px' }} />
+                      Profile
                     </button>
                   </div>
                 )}

@@ -6,6 +6,7 @@ import baseApiURL from '@/baseUrl';
 
 function Registration() {
     const [isTokenChecked, setIsTokenChecked] = useState(false);
+    const [isRegistering, setIsRegistering] = useState(false);
     const [token, setToken] = useState<string | null>(null);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -14,6 +15,8 @@ function Registration() {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
+        setIsRegistering(true);
+
         try {
             const response = await axios.post(`${baseApiURL()}/userRegistration`, {
                 name,
@@ -23,12 +26,13 @@ function Registration() {
             },
                 {
                     headers: {
-                        Authorization: `${token}`, // Passing the token in the Authorization header
+                        Authorization: `${token}`,
                     },
                 });
             window.location.href = '/successRegister'
         } catch (error) {
             console.error('Error creating user:', error);
+            setIsRegistering(false);
         }
     };
 
@@ -48,6 +52,10 @@ function Registration() {
         }
     }, []);
 
+    const handleHomeClick = () => {
+        window.location.href = '/'
+    };
+
     if (!isTokenChecked) {
         return null; // Render nothing until the token is checked
     }
@@ -61,9 +69,10 @@ function Registration() {
                         loading="lazy"
                         alt=""
                         src="./public/register/image-18@2x.png"
+                        onClick={handleHomeClick} style={{ cursor: 'pointer' }}
                     />
                     <div className="main">
-                        <div className="main">
+                        <div className="main" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                             <a className="onemetric">OneMetric</a>
                         </div>
                     </div>
@@ -171,8 +180,8 @@ function Registration() {
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="submit" className="finish-wrapper">
-                                        Register
+                                    <button type="submit" className="finish-wrapper" disabled={isRegistering}>
+                                        {isRegistering ? "Registering" : "Register"}
                                     </button>
                                 </form>
                             </div>

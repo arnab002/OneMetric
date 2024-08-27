@@ -3,7 +3,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import '../../public/assets/addstocks.css';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
-import { User, LogOut } from 'react-feather';
+import { User } from 'react-feather';
 import { Plus, Check, Edit3, Trash } from 'react-feather';
 
 type ButtonState = 'plus' | 'check' | 'edit' | 'trash' | 'removing';
@@ -125,11 +125,8 @@ function AddStocks() {
         setIsLoggedIn(!!token);
     }, []);
 
-    const handleLogout = () => {
-        sessionStorage.removeItem('authToken');
-        setIsLoggedIn(false);
-        setShowDropdown(false);
-        window.location.href = '/';
+    const handleUserAccountClick = () => {
+        window.location.href = '/userAccount'
     };
 
     const toggleDropdown = () => {
@@ -560,7 +557,7 @@ function AddStocks() {
                                             }}
                                         >
                                             <button
-                                                onClick={handleLogout}
+                                                onClick={handleUserAccountClick}
                                                 style={{
                                                     display: 'flex',
                                                     alignItems: 'center',
@@ -569,8 +566,8 @@ function AddStocks() {
                                                     cursor: 'pointer',
                                                 }}
                                             >
-                                                <LogOut size={16} style={{ marginRight: '5px' }} />
-                                                Logout
+                                                <User size={16} style={{ marginRight: '5px' }} />
+                                                Profile
                                             </button>
                                         </div>
                                     )}

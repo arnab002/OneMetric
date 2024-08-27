@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import '../../public/assets/contact.css'
-import { User, LogOut } from 'react-feather';
+import { User } from 'react-feather';
 
 function Contact() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -41,11 +41,8 @@ function Contact() {
         setIsLoggedIn(!!token);
     }, []);
 
-    const handleLogout = () => {
-        sessionStorage.removeItem('authToken');
-        setIsLoggedIn(false);
-        setShowDropdown(false);
-        window.location.href = '/';
+    const handleUserAccountClick = () => {
+        window.location.href = '/userAccount'
     };
 
     const toggleDropdown = () => {
@@ -106,7 +103,7 @@ function Contact() {
                                         }}
                                     >
                                         <button
-                                            onClick={handleLogout}
+                                            onClick={handleUserAccountClick}
                                             style={{
                                                 display: 'flex',
                                                 alignItems: 'center',
@@ -115,8 +112,8 @@ function Contact() {
                                                 cursor: 'pointer',
                                             }}
                                         >
-                                            <LogOut size={16} style={{ marginRight: '5px' }} />
-                                            Logout
+                                            <User size={16} style={{ marginRight: '5px' }} />
+                                            Profile
                                         </button>
                                     </div>
                                 )}

@@ -6,7 +6,7 @@ import baseApiURL from '@/baseUrl';
 import '../public/assets/index.css'
 import logo from "../public/public/home/image-18@2x.png";
 import { Edit3, Plus, Trash, Check } from 'react-feather';
-import { User, LogOut } from 'react-feather';
+import { User } from 'react-feather';
 import statsData from '../public/json/stats.json';
 import HomeMobileView from '@/middlewares/home/HomeMobileView';
 
@@ -172,11 +172,8 @@ function Home() {
     }));
   };
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('authToken');
-    setIsLoggedIn(false);
-    setShowDropdown(false);
-    window.location.href = '/';
+  const handleUserAccountClick = () => {
+    window.location.href = '/userAccount'
   };
 
   const toggleDropdown = () => {
@@ -562,7 +559,7 @@ function Home() {
                             }}
                           >
                             <button
-                              onClick={handleLogout}
+                              onClick={handleUserAccountClick}
                               style={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -571,8 +568,8 @@ function Home() {
                                 cursor: 'pointer',
                               }}
                             >
-                              <LogOut size={16} style={{ marginRight: '5px' }} />
-                              Logout
+                              <User size={16} style={{ marginRight: '5px' }} />
+                              Profile
                             </button>
                           </div>
                         )}

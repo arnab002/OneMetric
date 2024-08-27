@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { User, LogOut } from 'react-feather';
+import { User } from 'react-feather';
 import { Edit3, Trash } from 'react-feather';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
@@ -87,13 +87,6 @@ function Insights() {
         const token = sessionStorage.getItem('authToken');
         setIsLoggedIn(!!token);
     }, []);
-
-    const handleLogout = () => {
-        sessionStorage.removeItem('authToken');
-        setIsLoggedIn(false);
-        setShowDropdown(false);
-        window.location.href = '/';
-    };
 
     const toggleDropdown = () => {
         setShowDropdown(!showDropdown);
@@ -318,6 +311,10 @@ function Insights() {
         window.location.href = '/'
     };
 
+    const handleUserAccountClick = () => {
+        window.location.href = '/userAccount'
+    };
+
     const handleTwitterRedirect = () => {
         window.open('https://x.com/Onemetric_in', '_blank');
     };
@@ -394,7 +391,7 @@ function Insights() {
                                         }}
                                     >
                                         <button
-                                            onClick={handleLogout}
+                                            onClick={handleUserAccountClick}
                                             style={{
                                                 display: 'flex',
                                                 alignItems: 'center',
@@ -403,8 +400,8 @@ function Insights() {
                                                 cursor: 'pointer',
                                             }}
                                         >
-                                            <LogOut size={16} style={{ marginRight: '5px' }} />
-                                            Logout
+                                            <User size={16} style={{ marginRight: '5px' }} />
+                                            Profile
                                         </button>
                                     </div>
                                 )}
