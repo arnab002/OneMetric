@@ -218,18 +218,18 @@ function AddStocks() {
         setLoading(true);
         setNoDataFound(false);
         setShowSearchResults(false); // Reset this at the start of each fetch
-    
+
         try {
             let endpoint = `${baseApiURL()}/stocks`;
             let data;
-    
+
             if (isSearchActive && searchQuery.trim() !== '') {
                 endpoint = `${baseApiURL()}/search-stocks`;
                 const response = await axios.post(endpoint, { query: searchQuery }, {
                     headers: { Authorization: `${token}` }
                 });
                 data = response.data.data || [];
-    
+
                 if (data.length > 0) {
                     setLastSuccessfulSearchQuery(searchQuery);
                 }
@@ -247,13 +247,13 @@ function AddStocks() {
                 });
                 data = response.data.data || [];
             }
-    
+
             // Apply the filtration
             data = data.filter((stock: { stock_long_name: string }) => {
                 const regexPattern = /^[\dA-Z]+$/;
                 return !regexPattern.test(stock.stock_long_name);
             });
-    
+
             if (isSearchActive && searchQuery.trim() !== '') {
                 const exactMatch = data.find((stock: { stock_long_name: string }) =>
                     stock.stock_long_name.toLowerCase() === searchQuery.toLowerCase()
@@ -266,7 +266,7 @@ function AddStocks() {
             } else {
                 data = sortStocksAlphabetically(data);
             }
-    
+
             setStockData(data);
             setNoDataFound(data.length === 0);
         } catch (error) {
@@ -327,7 +327,7 @@ function AddStocks() {
         const newQuery = event.target.value;
         setSearchQuery(newQuery);
         setIsSearchActive(newQuery.trim() !== '');
-    
+
         if (newQuery.trim() === '') {
             // Reset to the original list when search is cleared
             fetchStockData(selectedFilter);
@@ -502,6 +502,10 @@ function AddStocks() {
         window.location.href = '/'
     };
 
+    const handlePricingPageClick = () => {
+        window.location.href = '/plans'
+    };
+
     const handleTwitterRedirect = () => {
         window.open('https://x.com/Onemetric_in', '_blank');
     };
@@ -590,25 +594,34 @@ function AddStocks() {
                             <span style={{ color: 'white' }}>Add your favourite stocks to watch list and </span>
                             <br />
                             {isCheckingPlan ? (
-                                <span>Checking plan status...</span>
+                                <span style={{ color: 'white', fontSize: '14px' }}>Checking plan status...</span>
                             ) : isPlanValid && planStatus === 'active' && !isPlanExpired ? (
-                                <span className="plan-expiring">Your Plan is expiring in {daysUntilExpiry} days</span>
+                                daysUntilExpiry <= 5 ? (
+                                    <>
+                                        <span className="plan-expiring" style={{ color: 'red' }}>Your Plan is expiring in {daysUntilExpiry} days</span>&nbsp;&nbsp;
+                                        <button className="renew-plan-button" style={{cursor: 'pointer'}} onClick={handlePricingPageClick}>
+                                            Renew Plan
+                                        </button>
+                                    </>
+                                ) : (
+                                    <span className="plan-expiring">Your Plan is expiring in {daysUntilExpiry} days</span>
+                                )
                             ) : isPlanExpired ? (
                                 <>
-                                    <span className="plan-expired">Your Plan has expired&nbsp;&nbsp;</span>
-                                    <button className="renew-plan-button" onClick={handleAddToWatchlist}>
+                                    <span className="plan-expired" style={{ color: 'white' }}>Your Plan has expired&nbsp;&nbsp;</span>
+                                    <button className="renew-plan-button" style={{cursor: 'pointer'}} onClick={handlePricingPageClick}>
                                         Renew Plan
                                     </button>
                                 </>
                             ) : planStatus === 'newuser' ? (
                                 <>
-                                    <span className="enjoy-your-30">Enjoy your free 30 days trial</span>
+                                    <span className="enjoy-your-30">Enjoy your free 30 days trial&nbsp;&nbsp;</span>
                                     <button className="purchase-plan-button" onClick={handleAddToWatchlist}>
                                         Purchase Plan
                                     </button>
                                 </>
                             ) : (
-                                <span>Check your plan status</span>
+                                <span style={{ color: 'white' }}>Checking your plan status...</span>
                             )}
                         </div>
                     </div>
@@ -796,7 +809,7 @@ function AddStocks() {
                                         </div>
                                     ))}
                                 </>
-                            ): null}
+                            ) : null}
                         </div>
                         {!loading && stockData.length > displayCount && (
                             <button onClick={showMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px", cursor: 'pointer' }}>Show More</button>

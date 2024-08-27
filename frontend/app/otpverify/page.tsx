@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState, ChangeEvent } from 'react';
+import React, { useEffect, useState, ChangeEvent, KeyboardEvent } from 'react';
 import '../../public/assets/otpverify.css';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
@@ -75,15 +75,27 @@ const OTPVerify: React.FC = () => {
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
         const value = e.target.value.replace(/[^0-9]/g, '');
-        if (value) {
+        const newOtp = [...otp];
+        newOtp[index] = value;
+        setOtp(newOtp);
+        setError('');
+        setIsOtpInvalid(false);
+
+        if (value && index < 5) {
+            (document.getElementById(`otp-${index + 1}`) as HTMLInputElement)?.focus();
+        }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, index: number) => {
+        if (e.key === 'Backspace' && index > 0 && !otp[index]) {
             const newOtp = [...otp];
-            newOtp[index] = value;
+            newOtp[index - 1] = '';
             setOtp(newOtp);
-            setError('');
-            setIsOtpInvalid(false);
-            if (index < 5) {
-                (document.getElementById(`otp-${index + 1}`) as HTMLInputElement)?.focus();
-            }
+            (document.getElementById(`otp-${index - 1}`) as HTMLInputElement)?.focus();
+        } else if (e.key === 'ArrowLeft' && index > 0) {
+            (document.getElementById(`otp-${index - 1}`) as HTMLInputElement)?.focus();
+        } else if (e.key === 'ArrowRight' && index < 5) {
+            (document.getElementById(`otp-${index + 1}`) as HTMLInputElement)?.focus();
         }
     };
 
@@ -125,10 +137,10 @@ const OTPVerify: React.FC = () => {
                         loading="lazy"
                         alt=""
                         src="./public/OTP/OneMetric_Transparent.png"
-                        onClick={handleHomeClick} style={{cursor: 'pointer'}}
+                        onClick={handleHomeClick} style={{ cursor: 'pointer' }}
                     />
                     <div className="frame-wrapper">
-                        <div className="frame-wrapper" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
+                        <div className="frame-wrapper" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                             <a className="onemetric">OneMetric</a>
                         </div>
                     </div>
@@ -232,7 +244,9 @@ const OTPVerify: React.FC = () => {
                                             pattern="[0-9]"
                                             value={value}
                                             onChange={(e) => handleChange(e, index)}
+                                            onKeyDown={(e) => handleKeyDown(e, index)}
                                         />
+
                                     ))}
                                 </div>
                                 {isVerifying && (

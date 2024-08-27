@@ -315,6 +315,10 @@ function Insights() {
         window.location.href = '/userAccount'
     };
 
+    const handlePricingPageClick = () => {
+        window.location.href = '/plans'
+    };
+
     const handleTwitterRedirect = () => {
         window.open('https://x.com/Onemetric_in', '_blank');
     };
@@ -456,11 +460,20 @@ function Insights() {
                                 {isCheckingPlan ? (
                                     <span style={{ color: 'white', fontSize: '14px' }}>Checking plan status...</span>
                                 ) : isPlanValid && planStatus === 'active' && !isPlanExpired ? (
-                                    <span className="plan-expiring">Your Plan is expiring in {daysUntilExpiry} days</span>
+                                    daysUntilExpiry <= 5 ? (
+                                        <>
+                                            <span className="plan-expiring" style={{ color: 'red' }}>Your Plan is expiring in {daysUntilExpiry} days</span>&nbsp;&nbsp;
+                                            <button className="renew-plan-button" style={{cursor: 'pointer'}} onClick={handlePricingPageClick}>
+                                                Renew Plan
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <span className="plan-expiring">Your Plan is expiring in {daysUntilExpiry} days</span>
+                                    )
                                 ) : isPlanExpired ? (
                                     <>
                                         <span className="plan-expired" style={{ color: 'white' }}>Your Plan has expired&nbsp;&nbsp;</span>
-                                        <button className="renew-plan-button" onClick={handleAddToWatchlist}>
+                                        <button className="renew-plan-button" style={{cursor: 'pointer'}} onClick={handlePricingPageClick}>
                                             Renew Plan
                                         </button>
                                     </>
@@ -472,7 +485,7 @@ function Insights() {
                                         </button>
                                     </>
                                 ) : (
-                                    <span style={{ color: 'white' }}>Checking your plan status........</span>
+                                    <span style={{ color: 'white' }}>Checking your plan status...</span>
                                 )}
                             </div>
                         </div>
