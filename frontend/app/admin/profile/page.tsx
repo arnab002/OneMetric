@@ -50,7 +50,7 @@ function AdminProfile() {
                                                     : &nbsp;&nbsp;&nbsp;&nbsp;9865786551
                                                 </span>
                                             </li>
-                                            <li className="d-flex align-items-center gap-1 mb-12">
+                                            {/* <li className="d-flex align-items-center gap-1 mb-12">
                                                 <span className="w-30 text-md fw-semibold text-primary-light">
                                                     Plan Name
                                                 </span>
@@ -81,7 +81,7 @@ function AdminProfile() {
                                                 <span className="w-70 text-secondary-light fw-medium">
                                                     : &nbsp;&nbsp;&nbsp;&nbsp;28/08/2024
                                                 </span>
-                                            </li>
+                                            </li> */}
                                         </ul>
                                     </div>
                                 </div>

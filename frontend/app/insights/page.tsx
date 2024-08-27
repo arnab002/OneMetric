@@ -17,10 +17,8 @@ type ButtonState = 'plus' | 'check' | 'edit' | 'trash';
 
 function Insights() {
     const [newsData, setNewsData] = useState<Array<{ [key: string]: any }>>([]);
-    const [currentPage, setCurrentPage] = useState<number>(1);
     const [editingStockId, setEditingStockId] = useState<string | null>(null);
     const [isRemoving, setIsRemoving] = useState<{ [key: string]: boolean }>({});
-    const postsPerPage = 16;
     const [stockData, setStockData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [newsLoading, setNewsLoading] = useState<boolean>(true);
@@ -70,7 +68,7 @@ function Insights() {
             fetchStockData();
             fetchNewsData();
         }
-    }, [isTokenChecked, token, searchQuery, isSearching]);
+    }, [isTokenChecked, token, searchQuery]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -153,30 +151,24 @@ function Insights() {
     const fetchStockData = async () => {
         setLoading(true);
         setNoDataFound(false);
-    
+
         try {
-            const endpoint = isSearching
-                ? `${baseApiURL()}/search-stocks`
-                : `${baseApiURL()}/stock-watchlist`;
-    
-            let response;
-    
-            if (isSearching) {
-                response = await axios.post(endpoint, 
-                    { query: searchQuery },
-                    { headers: { Authorization: `${token}` } }
-                );
-            } else {
-                response = await axios.get(endpoint, {
-                    headers: { Authorization: `${token}` }
-                });
-            }
-    
+            const endpoint = `${baseApiURL()}/stock-watchlist`;
+
+            const response = await axios.get(endpoint, {
+                headers: { Authorization: `${token}` }
+            });
+
             const data = response.data.data;
-    
-            const sortedData = sortStocksAlphabetically(data);
+
+            // Filter the data based on the search query
+            const filteredData = data.filter((stock: any) =>
+                stock.stock_long_name.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+
+            const sortedData = sortStocksAlphabetically(filteredData);
             setStockData(sortedData);
-    
+
             setNoDataFound(sortedData.length === 0);
         } catch (error) {
             console.error('Error fetching stock data:', error);
@@ -223,7 +215,6 @@ function Insights() {
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value);
-        setIsSearching(event.target.value.length > 0);
     };
 
     const handleFilterChange = (filter: string) => {
@@ -231,14 +222,6 @@ function Insights() {
         setIsSearching(false);
         setSearchQuery('');
     };
-
-    // Calculate pagination
-    const indexOfLastPost = currentPage * postsPerPage;
-    const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = newsData.slice(indexOfFirstPost, indexOfLastPost);
-
-    // Handle pagination
-    // const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
     const handleEditClick = (id: string) => {
         setEditingStockId(currentId => currentId === id ? null : id);
@@ -454,7 +437,7 @@ function Insights() {
                         </div>
                         <input
                             className="search-placeholder"
-                            placeholder="Search stocks"
+                            placeholder="Search stocks in watchlist"
                             type="text"
                             value={searchQuery}
                             onChange={handleSearchChange}
@@ -496,9 +479,6 @@ function Insights() {
                                     <span style={{ color: 'white' }}>Checking your plan status........</span>
                                 )}
                             </div>
-                            {/* <div className="no-card-information">
-                                No card information is required for the free trial
-                            </div> */}
                         </div>
                         <div className="watchlist-header">
                             <div className="alert-list-items">
@@ -697,7 +677,7 @@ function Insights() {
                                     loading="lazy"
                                     alt=""
                                     src="./public/insights/vector.svg"
-                                    onClick={handleWhatsAppRedirect} style={{cursor: 'pointer'}}
+                                    onClick={handleWhatsAppRedirect} style={{ cursor: 'pointer' }}
                                 />
                             </div>
                             <img

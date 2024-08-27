@@ -30,6 +30,8 @@ function AddStocks() {
     const [watchlistCount, setWatchlistCount] = useState(0);
     const [selectedStocks, setSelectedStocks] = useState<Set<number>>(new Set());
     const [isAddingMultiple, setIsAddingMultiple] = useState(false);
+    const [lastSuccessfulSearchQuery, setLastSuccessfulSearchQuery] = useState<string>('');
+    const [isSearchActive, setIsSearchActive] = useState<boolean>(false);
     const [isTokenChecked, setIsTokenChecked] = useState(false);
     const [isCheckingPlan, setIsCheckingPlan] = useState(false);
     const [token, setToken] = useState<string | null>(null);
@@ -54,16 +56,22 @@ function AddStocks() {
     useEffect(() => {
         if (isTokenChecked && token) {
             checkPlanValidity();
+            fetchUserWatchlist();
+            fetchWatchlistCount();
         }
     }, [isTokenChecked, token]);
 
     useEffect(() => {
         if (isTokenChecked && token) {
-            fetchStockData(selectedFilter);
-            fetchUserWatchlist();
-            fetchWatchlistCount();
+            if (isSearchActive) {
+                if (searchQuery !== lastSuccessfulSearchQuery) {
+                    fetchStockData();
+                }
+            } else {
+                fetchStockData(selectedFilter);
+            }
         }
-    }, [isTokenChecked, token, searchQuery, isSearching, selectedFilter]);
+    }, [isTokenChecked, token, isSearchActive, searchQuery, selectedFilter, lastSuccessfulSearchQuery]);
 
 
     const sortStocksAlphabetically = (stocks: any[]) => {
@@ -163,7 +171,7 @@ function AddStocks() {
 
     const handleSelectAll = async (selected: boolean) => {
         if (selected) {
-            const allStockIds = sortedStockData.map(stock => stock.scrip_cd);
+            const allStockIds = stockData.map(stock => stock.scrip_cd);
             setSelectedStocks(new Set(allStockIds));
 
             if (watchlistCount >= MAX_WATCHLIST_STOCKS) {
@@ -211,11 +219,21 @@ function AddStocks() {
     const fetchStockData = async (filter: string = 'all') => {
         setLoading(true);
         setNoDataFound(false);
-
+    
         try {
             let endpoint = `${baseApiURL()}/stocks`;
-            if (isSearching) {
+            let data;
+    
+            if (isSearchActive && searchQuery.trim() !== '') {
                 endpoint = `${baseApiURL()}/search-stocks`;
+                const response = await axios.post(endpoint, { query: searchQuery }, {
+                    headers: { Authorization: `${token}` }
+                });
+                data = response.data.data || [];
+    
+                if (data.length > 0) {
+                    setLastSuccessfulSearchQuery(searchQuery);
+                }
             } else {
                 switch (filter) {
                     case 'bankNifty':
@@ -225,30 +243,33 @@ function AddStocks() {
                         endpoint = `${baseApiURL()}/nifty50`;
                         break;
                 }
+                const response = await axios.get(endpoint, {
+                    headers: { Authorization: `${token}` }
+                });
+                data = response.data.data || [];
             }
-
-            let response;
-            const headers = { Authorization: `${token}` };
-
-            if (isSearching) {
-                response = await axios.post(endpoint, { query: searchQuery }, { headers });
-            } else {
-                response = await axios.get(endpoint);
-            }
-
-            let data = response.data.data || response.data.data;
-
-            // Apply the filtration with type assertion
+    
+            // Apply the filtration
             data = data.filter((stock: { stock_long_name: string }) => {
-                const regexPattern = /^[\dA-Z]+$/; // Match any string that consists only of digits and uppercase letters
+                const regexPattern = /^[\dA-Z]+$/;
                 return !regexPattern.test(stock.stock_long_name);
             });
-
-            // Sort the data alphabetically
-            const sortedData = sortStocksAlphabetically(data);
-
-            setStockData(sortedData);
-            setNoDataFound(sortedData.length === 0);
+    
+            if (isSearchActive && searchQuery.trim() !== '') {
+                const exactMatch = data.find((stock: { stock_long_name: string }) =>
+                    stock.stock_long_name.toLowerCase() === searchQuery.toLowerCase()
+                );
+                if (exactMatch) {
+                    data = [exactMatch, ...data.filter((stock: { stock_long_name: string }) =>
+                        stock.stock_long_name.toLowerCase() !== searchQuery.toLowerCase()
+                    )];
+                }
+            } else {
+                data = sortStocksAlphabetically(data);
+            }
+    
+            setStockData(data);
+            setNoDataFound(data.length === 0);
         } catch (error) {
             console.error('Error fetching stock data:', error);
             setNoDataFound(true);
@@ -257,7 +278,7 @@ function AddStocks() {
         }
     };
 
-    const sortedStockData = useMemo(() => sortStocksAlphabetically(stockData), [stockData]);
+    // const sortedStockData = useMemo(() => sortStocksAlphabetically(stockData), [stockData]);
 
     const checkPlanValidity = async () => {
         setIsCheckingPlan(true);
@@ -295,8 +316,16 @@ function AddStocks() {
     };
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(event.target.value);
-        setIsSearching(event.target.value.length > 0);
+        const newQuery = event.target.value;
+        setSearchQuery(newQuery);
+        setIsSearchActive(newQuery.trim() !== '');
+    
+        if (newQuery.trim() === '') {
+            // Reset to the original list when search is cleared
+            fetchStockData(selectedFilter);
+        } else {
+            fetchStockData();
+        }
     };
 
     const showMore = () => {
@@ -309,7 +338,7 @@ function AddStocks() {
             return;
         }
 
-        const selectedStock = sortedStockData[index];
+        const selectedStock = stockData[index];
         const scrip_cd = selectedStock.scrip_cd;
 
         setButtonStates((prevState) => ({
@@ -357,7 +386,7 @@ function AddStocks() {
     };
 
     const handleRemoveClick = async (isin_code: string, index: number) => {
-        const selectedStock = sortedStockData[index];
+        const selectedStock = stockData[index];
         const scrip_cd = selectedStock.scrip_cd;
 
         setButtonStates((prevState) => ({
@@ -651,9 +680,9 @@ function AddStocks() {
                             ) : (
                                 <>
                                     {(selectedFilter === 'bankNifty' || selectedFilter === 'nifty50') && (
-                                        <SelectAllButton stocks={sortedStockData} onSelectAll={handleSelectAll} />
+                                        <SelectAllButton stocks={stockData} onSelectAll={handleSelectAll} />
                                     )}
-                                    {sortedStockData.slice(0, displayCount).map((stock, index) => (
+                                    {stockData.slice(0, displayCount).map((stock, index) => (
                                         <div key={index} className="select-stocks">
                                             {/* {(selectedFilter === 'bankNifty' || selectedFilter === 'nifty50') && (
                                                 <input
@@ -760,7 +789,7 @@ function AddStocks() {
                                 </>
                             )}
                         </div>
-                        {!loading && sortedStockData.length > displayCount && (
+                        {!loading && stockData.length > displayCount && (
                             <button onClick={showMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px", cursor: 'pointer' }}>Show More</button>
                         )}
                     </div>

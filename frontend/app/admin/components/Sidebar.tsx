@@ -97,8 +97,7 @@ function Sidebar() {
                                 icon="eos-icons:admin"
                                 className="menu-icon"
                             />
-                            &nbsp;
-                            Profile
+                            <span>&nbsp;Profile</span>
                         </a>
                     </li>
                 </ul>

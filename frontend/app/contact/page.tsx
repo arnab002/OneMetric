@@ -1,10 +1,18 @@
 'use client'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import '../../public/assets/contact.css'
+import { User, LogOut } from 'react-feather';
 
 function Contact() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [showDropdown, setShowDropdown] = useState(false);
+
     const handleHomeClick = () => {
         window.location.href = '/'
+    };
+
+    const handleLoginClick = () => {
+        window.location.href = '/login'
     };
 
     const handleTwitterRedirect = () => {
@@ -13,6 +21,35 @@ function Contact() {
 
     const handleWhatsAppRedirect = () => {
         window.open('https://api.whatsapp.com/send?phone=917204946777&text=Hi', '_blank');
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (showDropdown && !(event.target as Element).closest('.user-icon-wrapper')) {
+                setShowDropdown(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showDropdown]);
+
+    useEffect(() => {
+        const token = sessionStorage.getItem('authToken');
+        setIsLoggedIn(!!token);
+    }, []);
+
+    const handleLogout = () => {
+        sessionStorage.removeItem('authToken');
+        setIsLoggedIn(false);
+        setShowDropdown(false);
+        window.location.href = '/';
+    };
+
+    const toggleDropdown = () => {
+        setShowDropdown(!showDropdown);
     };
 
 
@@ -52,14 +89,48 @@ function Contact() {
                                 src="./public/about/group-1000000998@2x.png"
                             />
                         </div>
-                        <div className="content">
-                            <img
-                                className="union-icon"
-                                loading="lazy"
-                                alt=""
-                                src="./public/about/union.svg"
-                            />
-                        </div>
+                        {isLoggedIn ? (
+                            <div className="user-icon-wrapper" style={{ position: 'relative' }}>
+                                <User onClick={toggleDropdown} style={{ cursor: 'pointer' }} />
+                                {showDropdown && (
+                                    <div
+                                        style={{
+                                            position: 'absolute',
+                                            top: '100%',
+                                            right: 0,
+                                            backgroundColor: '#fff',
+                                            border: '1px solid #ddd',
+                                            borderRadius: '4px',
+                                            padding: '0px',
+                                            zIndex: 1000,
+                                        }}
+                                    >
+                                        <button
+                                            onClick={handleLogout}
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                background: 'none',
+                                                border: 'none',
+                                                cursor: 'pointer',
+                                            }}
+                                        >
+                                            <LogOut size={16} style={{ marginRight: '5px' }} />
+                                            Logout
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <div className="content" onClick={handleLoginClick} style={{ cursor: 'pointer' }}>
+                                <img
+                                    className="union-icon"
+                                    loading="lazy"
+                                    alt=""
+                                    src="./public/about/union.svg"
+                                />
+                            </div>
+                        )}
                     </div>
                 </header>
                 <section className="about">
@@ -121,7 +192,7 @@ function Contact() {
                                     loading="lazy"
                                     alt=""
                                     src="./public/about/vector.svg"
-                                    onClick={handleWhatsAppRedirect} style={{cursor: 'pointer'}}
+                                    onClick={handleWhatsAppRedirect} style={{ cursor: 'pointer' }}
                                 />
                             </div>
                             <img

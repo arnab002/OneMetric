@@ -1,6 +1,7 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'
 import '../../public/assets/refund.css';
+import { User, LogOut } from 'react-feather';
 
 interface SectionContent {
   title: string;
@@ -9,9 +10,15 @@ interface SectionContent {
 
 const Refund: React.FC = () => {
   const [openSection, setOpenSection] = useState<number | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const handleHomeClick = () => {
     window.location.href = '/'
+  };
+
+  const handleLoginClick = () => {
+    window.location.href = '/login'
   };
 
   const handleTwitterRedirect = () => {
@@ -79,13 +86,42 @@ const Refund: React.FC = () => {
     }
   ];
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showDropdown && !(event.target as Element).closest('.user-icon-wrapper')) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showDropdown]);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('authToken');
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('authToken');
+    setIsLoggedIn(false);
+    setShowDropdown(false);
+    window.location.href = '/';
+  };
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
   return (
     <div>
       <div className="about-us">
         <header className="top-navigation">
           <div className="top-navigation-inner">
             <div className="iconback-arrow">
-              <div className="refund-title-container" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
+              <div className="refund-title-container" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                 <img
                   className="image-18-icon"
                   loading="lazy"
@@ -115,14 +151,48 @@ const Refund: React.FC = () => {
                 src="./public/refund/group-1000000998@2x.png"
               />
             </div>
-            <div className="refund-content-container">
-              <img
-                className="union-icon"
-                loading="lazy"
-                alt=""
-                src="./public/refund/union.svg"
-              />
-            </div>
+            {isLoggedIn ? (
+              <div className="user-icon-wrapper" style={{ position: 'relative' }}>
+                <User onClick={toggleDropdown} style={{ cursor: 'pointer' }} />
+                {showDropdown && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '100%',
+                      right: 0,
+                      backgroundColor: '#fff',
+                      border: '1px solid #ddd',
+                      borderRadius: '4px',
+                      padding: '0px',
+                      zIndex: 1000,
+                    }}
+                  >
+                    <button
+                      onClick={handleLogout}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <LogOut size={16} style={{ marginRight: '5px' }} />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="refund-content-container" onClick={handleLoginClick} style={{ cursor: 'pointer' }}>
+                <img
+                  className="union-icon"
+                  loading="lazy"
+                  alt=""
+                  src="./public/refund/union.svg"
+                />
+              </div>
+            )}
           </div>
         </header>
         <main className="about-us-inner">
@@ -210,10 +280,10 @@ const Refund: React.FC = () => {
               loading="lazy"
               alt=""
               src="./public/refund/image-18-1@2x.png"
-              onClick={handleHomeClick} style={{cursor: 'pointer'}}
+              onClick={handleHomeClick} style={{ cursor: 'pointer' }}
             />
             <div className="footer-brand-container-wrapper">
-              <div className="top-navigation-inner" onClick={handleHomeClick} style={{cursor: 'pointer'}}>
+              <div className="top-navigation-inner" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                 <b className="onemetric1">OneMetric</b>
               </div>
             </div>
@@ -225,7 +295,7 @@ const Refund: React.FC = () => {
                   loading="lazy"
                   alt=""
                   src="./public/refund/vector.svg"
-                  onClick={handleWhatsAppRedirect} style={{cursor: 'pointer'}}
+                  onClick={handleWhatsAppRedirect} style={{ cursor: 'pointer' }}
                 />
               </div>
               <img
@@ -233,7 +303,7 @@ const Refund: React.FC = () => {
                 loading="lazy"
                 alt=""
                 src="./public/refund/vector-1.svg"
-                onClick={handleTwitterRedirect} style={{cursor: 'pointer'}}
+                onClick={handleTwitterRedirect} style={{ cursor: 'pointer' }}
               />
             </div>
           </div>

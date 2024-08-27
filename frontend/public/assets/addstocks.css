@@ -545,9 +545,7 @@
 .stocks-list {
   width: 100%;
   height: 100%;
-  overflow-y: auto;
   flex-shrink: 0;
-  /* padding: 0 var(--padding-xl) var(--padding-mini) 0; */
   box-sizing: border-box;
   gap: var(--gap-5xs);
   max-width: 100%;
