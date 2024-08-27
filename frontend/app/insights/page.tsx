@@ -380,35 +380,7 @@ function Insights() {
                         </div>
                         {isLoggedIn ? (
                             <div className="user-icon-wrapper" style={{ position: 'relative' }}>
-                                <User onClick={toggleDropdown} style={{ cursor: 'pointer', color: 'white' }} />
-                                {showDropdown && (
-                                    <div
-                                        style={{
-                                            position: 'absolute',
-                                            top: '100%',
-                                            right: 0,
-                                            backgroundColor: '#fff',
-                                            border: '1px solid #ddd',
-                                            borderRadius: '4px',
-                                            padding: '0px',
-                                            zIndex: 1000,
-                                        }}
-                                    >
-                                        <button
-                                            onClick={handleUserAccountClick}
-                                            style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                background: 'none',
-                                                border: 'none',
-                                                cursor: 'pointer',
-                                            }}
-                                        >
-                                            <User size={16} style={{ marginRight: '5px' }} />
-                                            Profile
-                                        </button>
-                                    </div>
-                                )}
+                                <User onClick={handleUserAccountClick} style={{ cursor: 'pointer', color: 'white' }} />
                             </div>
                         ) : (
                             <div className="union-wrapper">
@@ -463,8 +435,8 @@ function Insights() {
                                     daysUntilExpiry <= 5 ? (
                                         <>
                                             <span className="plan-expiring" style={{ color: 'red' }}>Your Plan is expiring in {daysUntilExpiry} days</span>&nbsp;&nbsp;
-                                            <button className="renew-plan-button" style={{cursor: 'pointer'}} onClick={handlePricingPageClick}>
-                                                Renew Plan
+                                            <button className="add-icon-parent" style={{ width: '120px', fontSize: '12px', cursor: 'pointer' }} onClick={handlePricingPageClick}>
+                                                <span className='add'>Renew Plan</span>
                                             </button>
                                         </>
                                     ) : (
@@ -473,8 +445,8 @@ function Insights() {
                                 ) : isPlanExpired ? (
                                     <>
                                         <span className="plan-expired" style={{ color: 'white' }}>Your Plan has expired&nbsp;&nbsp;</span>
-                                        <button className="renew-plan-button" style={{cursor: 'pointer'}} onClick={handlePricingPageClick}>
-                                            Renew Plan
+                                        <button className="add-icon-parent" style={{ cursor: 'pointer' }} onClick={handlePricingPageClick}>
+                                            <span className='add'>Renew Plan</span>
                                         </button>
                                     </>
                                 ) : planStatus === 'newuser' ? (

@@ -270,7 +270,7 @@ const OTPVerify: React.FC = () => {
                                     </button>
                                     <span className="secs">{remainingTime} secs</span>
                                     <div className="it-may-take-container">
-                                        <span>98% of users receive OTP in less than 60 secs</span>
+                                        <span style={{fontSize: '16px'}}>98% of users receive OTP in less than 60 secs</span>
                                         {/* <span className="secs">{remainingTime} secs</span> */}
                                     </div>
                                 </div>

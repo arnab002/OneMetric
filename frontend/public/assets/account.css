@@ -477,6 +477,13 @@
   letter-spacing: normal;
 }
 
+@media only screen and (min-width: 768px) and (max-width: 1024px){
+  .otp{
+    height: 100vh;
+  }
+}
+
+
 @media only screen and (min-width: 1280px) and (max-width: 1920px){
   .personal-info{
     width: 500px;

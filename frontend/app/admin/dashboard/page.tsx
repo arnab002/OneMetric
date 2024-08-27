@@ -1,10 +1,56 @@
-import React from 'react'
+'use client'
+import React, {useEffect, useState} from 'react'
 import { Icon } from '@iconify/react'
+import axios from 'axios'
+import baseApiURL from '@/baseUrl'
 import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import Footer from '../components/Footer'
 
 function AdminHome() {
+    const [userStats, setUserStats] = useState({
+        totalUsers: 0,
+        paidUsers: 0
+    });
+
+    const [revenueStats, setRevenueStats] = useState({
+        totalRevenue: 0
+    });
+
+    // Fetch user statistics from the API
+    useEffect(() => {
+        const fetchUserStats = async () => {
+            try {
+                const response = await axios.get(`${baseApiURL()}/user-stats`);
+                const data = await response.data;
+                setUserStats({
+                    totalUsers: data.totalUsers,
+                    paidUsers: data.paidUsers
+                });
+            } catch (error) {
+                console.error('Error fetching user statistics:', error);
+            }
+        };
+
+        fetchUserStats();
+    }, []);
+
+    useEffect(() => {
+        const fetchRevenueStats = async () => {
+            try {
+                const response = await axios.get(`${baseApiURL()}/total-revenue`);
+                const data = await response.data;
+                setRevenueStats({
+                    totalRevenue: data.totalRevenue
+                });
+            } catch (error) {
+                console.error('Error fetching user statistics:', error);
+            }
+        };
+
+        fetchRevenueStats();
+    }, []);
+
     return (
         <div>
             <>
@@ -14,22 +60,6 @@ function AdminHome() {
                     <div className="dashboard-main-body">
                         <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
                             <h6 className="fw-semibold mb-0">Dashboard</h6>
-                            {/* <ul className="d-flex align-items-center gap-2">
-                                <li className="fw-medium">
-                                    <a
-                                        href="index.html"
-                                        className="d-flex align-items-center gap-1 hover-text-primary"
-                                    >
-                                        <Icon
-                                            icon="solar:home-smile-angle-outline"
-                                            className="icon text-lg"
-                                        />
-                                        Dashboard
-                                    </a>
-                                </li>
-                                <li>-</li>
-                                <li className="fw-medium">CRM</li>
-                            </ul> */}
                         </div>
                         <div className="row gy-4">
                             <div className="col-xxl-12">
@@ -49,21 +79,10 @@ function AdminHome() {
                                                             <span className="mb-2 fw-medium text-secondary-light text-sm">
                                                                 Total No of Users
                                                             </span>
-                                                            <h6 className="fw-semibold">15,000</h6>
+                                                            <h6 className="fw-semibold">{userStats.totalUsers}</h6>
                                                         </div>
                                                     </div>
-                                                    {/* <div
-                                                        id="new-user-chart"
-                                                        className="remove-tooltip-title rounded-tooltip-value"
-                                                    /> */}
                                                 </div>
-                                                {/* <p className="text-sm mb-0">
-                                                    Increase by{" "}
-                                                    <span className="bg-success-focus px-1 rounded-2 fw-medium text-success-main text-sm">
-                                                        +200
-                                                    </span>{" "}
-                                                    this week
-                                                </p> */}
                                             </div>
                                         </div>
                                     </div>
@@ -82,21 +101,10 @@ function AdminHome() {
                                                             <span className="mb-2 fw-medium text-secondary-light text-sm">
                                                                 Total Paid Users
                                                             </span>
-                                                            <h6 className="fw-semibold">8,000</h6>
+                                                            <h6 className="fw-semibold">{userStats.paidUsers}</h6>
                                                         </div>
                                                     </div>
-                                                    {/* <div
-                                                        id="active-user-chart"
-                                                        className="remove-tooltip-title rounded-tooltip-value"
-                                                    /> */}
                                                 </div>
-                                                {/* <p className="text-sm mb-0">
-                                                    Increase by{" "}
-                                                    <span className="bg-success-focus px-1 rounded-2 fw-medium text-success-main text-sm">
-                                                        +200
-                                                    </span>{" "}
-                                                    this week
-                                                </p> */}
                                             </div>
                                         </div>
                                     </div>
@@ -115,21 +123,10 @@ function AdminHome() {
                                                             <span className="mb-2 fw-medium text-secondary-light text-sm">
                                                                 Total Revenue
                                                             </span>
-                                                            <h6 className="fw-semibold">$5,00,000</h6>
+                                                            <h6 className="fw-semibold">₹{revenueStats.totalRevenue}</h6>
                                                         </div>
                                                     </div>
-                                                    {/* <div
-                                                        id="total-sales-chart"
-                                                        className="remove-tooltip-title rounded-tooltip-value"
-                                                    /> */}
                                                 </div>
-                                                {/* <p className="text-sm mb-0">
-                                                    Increase by{" "}
-                                                    <span className="bg-danger-focus px-1 rounded-2 fw-medium text-danger-main text-sm">
-                                                        -$10k
-                                                    </span>{" "}
-                                                    this week
-                                                </p> */}
                                             </div>
                                         </div>
                                     </div>
@@ -209,9 +206,6 @@ function AdminHome() {
                                                             <th scope="col" className="text-center">
                                                                 Plan Status
                                                             </th>
-                                                            {/* <th scope="col" className="text-center">
-                                                                Action
-                                                            </th> */}
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -258,25 +252,6 @@ function AdminHome() {
                                                                     Active
                                                                 </span>
                                                             </td>
-                                                            {/* <td className="text-center">
-                                                                <div className="d-flex align-items-center gap-10 justify-content-center">
-                                                                    <button
-                                                                        type="button"
-                                                                        className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                                    >
-                                                                        <Icon icon="lucide:edit" className="menu-icon" />
-                                                                    </button>
-                                                                    <button
-                                                                        type="button"
-                                                                        className="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                                                                    >
-                                                                        <Icon
-                                                                            icon="fluent:delete-24-regular"
-                                                                            className="menu-icon"
-                                                                        />
-                                                                    </button>
-                                                                </div>
-                                                            </td> */}
                                                         </tr>
                                                     </tbody>
                                                 </table>

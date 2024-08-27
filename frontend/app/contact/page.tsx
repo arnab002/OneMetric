@@ -88,35 +88,7 @@ function Contact() {
                         </div>
                         {isLoggedIn ? (
                             <div className="user-icon-wrapper" style={{ position: 'relative' }}>
-                                <User onClick={toggleDropdown} style={{ cursor: 'pointer' }} />
-                                {showDropdown && (
-                                    <div
-                                        style={{
-                                            position: 'absolute',
-                                            top: '100%',
-                                            right: 0,
-                                            backgroundColor: '#fff',
-                                            border: '1px solid #ddd',
-                                            borderRadius: '4px',
-                                            padding: '0px',
-                                            zIndex: 1000,
-                                        }}
-                                    >
-                                        <button
-                                            onClick={handleUserAccountClick}
-                                            style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                background: 'none',
-                                                border: 'none',
-                                                cursor: 'pointer',
-                                            }}
-                                        >
-                                            <User size={16} style={{ marginRight: '5px' }} />
-                                            Profile
-                                        </button>
-                                    </div>
-                                )}
+                                <User onClick={handleUserAccountClick} style={{ cursor: 'pointer' }} />
                             </div>
                         ) : (
                             <div className="content" onClick={handleLoginClick} style={{ cursor: 'pointer' }}>

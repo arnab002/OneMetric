@@ -6,7 +6,7 @@ import baseApiURL from '@/baseUrl';
 import { Modal } from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
 import ReactCountryFlag from 'react-country-flag';
-import { DollarSign, Info, Phone, ShoppingCart, User, X } from 'react-feather';
+import { DollarSign, Info, Phone, ShoppingCart, User } from 'react-feather';
 
 function Registration() {
     const [isTokenChecked, setIsTokenChecked] = useState(false);
@@ -174,7 +174,7 @@ function Registration() {
                                         <div className="input-labels">
                                             <div className="input-boxes">
                                                 <div className="nested-input-boxes" onClick={handlePricingClick} style={{ cursor: 'pointer' }}>
-                                                    <div className="email-id"><DollarSign /></div>
+                                                    <div className="email-id"><span style={{fontSize: '25px'}}>₹</span></div>
                                                     <span>Manage Subscriptions</span>
                                                 </div>
                                             </div>

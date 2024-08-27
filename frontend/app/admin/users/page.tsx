@@ -1,18 +1,22 @@
 'use client'
 import React, { useState, useRef, useEffect } from "react";
+import axios from "axios";
+import baseApiURL from "@/baseUrl";
 import { Icon } from "@iconify/react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 
 interface User {
-  phone: string;
   name: string;
   email: string;
-  planName: string;
-  startDate: string;
-  endDate: string;
-  planStatus: string;
+  mobile: string;
+  created_at: string;
+  registeredPlan: {
+    plan_id: number;
+    expire_date: string;
+    created_at: string;
+  };
 }
 
 interface UserModalProps {
@@ -57,7 +61,7 @@ const UserModal: React.FC<UserModalProps> = ({ user, onClose }) => {
               <div className="text-center border border-top-0 border-start-0 border-end-0 pt-120">
                 <h6 className="mb-0 mt-16">{user.name}</h6>
                 <span className="text-secondary-light mb-16">
-                  {user.phone}
+                  {user.mobile}
                 </span>
               </div>
               <div className="mt-40">
@@ -83,7 +87,7 @@ const UserModal: React.FC<UserModalProps> = ({ user, onClose }) => {
                       Phone
                     </span>
                     <span className="w-70 text-secondary-light fw-medium">
-                      : &nbsp;&nbsp;&nbsp;&nbsp;{user.phone}
+                      : &nbsp;&nbsp;&nbsp;&nbsp;{user.mobile}
                     </span>
                   </li>
                   <li className="d-flex align-items-center gap-1 mb-12">
@@ -91,7 +95,7 @@ const UserModal: React.FC<UserModalProps> = ({ user, onClose }) => {
                       Plan Name
                     </span>
                     <span className="w-70 text-secondary-light fw-medium">
-                      : &nbsp;&nbsp;&nbsp;&nbsp;{user.planName}
+                      : &nbsp;&nbsp;&nbsp;&nbsp;{user.registeredPlan.plan_id}
                     </span>
                   </li>
                   <li className="d-flex align-items-center gap-1 mb-12">
@@ -99,7 +103,7 @@ const UserModal: React.FC<UserModalProps> = ({ user, onClose }) => {
                       Plan Status
                     </span>
                     <span className="w-70 text-secondary-light fw-medium">
-                      : &nbsp;&nbsp;&nbsp;&nbsp;{user.planStatus}
+                      : &nbsp;&nbsp;&nbsp;&nbsp;{new Date(user.registeredPlan.expire_date) > new Date() ? "Active" : "Expired"}
                     </span>
                   </li>
                   <li className="d-flex align-items-center gap-1 mb-12">
@@ -107,7 +111,7 @@ const UserModal: React.FC<UserModalProps> = ({ user, onClose }) => {
                       Plan Start Date
                     </span>
                     <span className="w-70 text-secondary-light fw-medium">
-                      : &nbsp;&nbsp;&nbsp;&nbsp;{user.startDate}
+                      : &nbsp;&nbsp;&nbsp;&nbsp;{new Date(user.registeredPlan.created_at).toLocaleDateString()}
                     </span>
                   </li>
                   <li className="d-flex align-items-center gap-1 mb-12">
@@ -115,7 +119,7 @@ const UserModal: React.FC<UserModalProps> = ({ user, onClose }) => {
                       Plan Expiry Date
                     </span>
                     <span className="w-70 text-secondary-light fw-medium">
-                      : &nbsp;&nbsp;&nbsp;&nbsp;{user.endDate}
+                      : &nbsp;&nbsp;&nbsp;&nbsp;{new Date(user.registeredPlan.expire_date).toLocaleDateString()}
                     </span>
                   </li>
                 </ul>
@@ -129,7 +133,23 @@ const UserModal: React.FC<UserModalProps> = ({ user, onClose }) => {
 }
 
 function UsersList() {
+  const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    // Fetch user data from the API
+    fetchUserData();
+  }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.get(`${baseApiURL()}/user-details`);
+      const data = await response.data;
+      setUsers([data]); // Wrap the single user object in an array
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   const handlePhoneClick = (user: User) => {
     setSelectedUser(user);
@@ -139,28 +159,6 @@ function UsersList() {
     setSelectedUser(null);
   };
 
-  // Sample user data (you would typically fetch this from an API)
-  const users: User[] = [
-    {
-      phone: "9865786551",
-      name: "Kathryn Murphy",
-      email: "osgoodwy@gmail.com",
-      planName: "Diamond",
-      startDate: "01 Aug 2024",
-      endDate: "31 July 2025",
-      planStatus: "Active"
-    },
-    {
-      phone: "9748996248",
-      name: "Rounak Saha",
-      email: "saharounak013@gmail.com",
-      planName: "Gold",
-      startDate: "05 Aug 2024",
-      endDate: "01 Aug 2025",
-      planStatus: "Active"
-    }
-    // Add more users as needed
-  ];
   return (
     <div>
       <>
@@ -259,7 +257,7 @@ function UsersList() {
                                 style={{ cursor: 'pointer', textDecoration: 'none' }}
                                 onClick={() => handlePhoneClick(user)}
                               >
-                                {user.phone}
+                                {user.mobile}
                               </span>
                             </div>
                           </td>
@@ -275,22 +273,22 @@ function UsersList() {
                           </td>
                           <td className="text-center">
                             <span className="text-md mb-0 fw-normal text-secondary-light">
-                              {user.planName}
+                              {user.registeredPlan.plan_id}
                             </span>
                           </td>
                           <td className="text-center">
                             <span className="text-md mb-0 fw-normal text-secondary-light">
-                              {user.startDate}
+                              {new Date(user.registeredPlan.created_at).toLocaleDateString()}
                             </span>
                           </td>
                           <td className="text-center">
                             <span className="text-md mb-0 fw-normal text-secondary-light">
-                              {user.endDate}
+                              {new Date(user.registeredPlan.expire_date).toLocaleDateString()}
                             </span>
                           </td>
                           <td className="text-center">
                             <span className="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">
-                              {user.planStatus}
+                              {new Date(user.registeredPlan.expire_date) > new Date() ? "Active" : "Expired"}
                             </span>
                           </td>
                           <td className="text-center">

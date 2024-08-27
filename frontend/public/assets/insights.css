@@ -1733,6 +1733,7 @@
   padding: var(--padding-base);
   gap: var(--gap-base);
   font-size: var(--font-size-base);
+  height: 102px;
 }
 
 @media (max-width: 1920px) {

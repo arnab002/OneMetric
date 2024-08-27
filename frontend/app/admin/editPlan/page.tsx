@@ -4,7 +4,7 @@ import Sidebar from '../components/Sidebar'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
-function AddUser() {
+function EditPlan() {
     return (
         <div>
             <>
@@ -88,4 +88,4 @@ function AddUser() {
     )
 }
 
-export default AddUser
+export default EditPlan
