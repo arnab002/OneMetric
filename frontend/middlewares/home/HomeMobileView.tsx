@@ -7,7 +7,7 @@ interface HomeMobileViewProps {
 
 const HomeMobileView: React.FC<HomeMobileViewProps> = ({ children }) => {
     const isMobile = useMediaQuery({ maxWidth: 767 });
-    const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1024 });
+    const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1200 });
     const [shouldRender, setShouldRender] = useState(true);
 
     useEffect(() => {

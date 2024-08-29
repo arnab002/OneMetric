@@ -291,7 +291,7 @@ function Home() {
                       <div className="diamond-feature-descriptions">
                         <div className="track-up-to">Real-time updates</div>
                         <div className="ideal-for-beginners">
-                          Get instant alerts and insights without any delay.
+                          Get instant alerts and insights <br /> without any delay.
                         </div>
                       </div>
                     </div>

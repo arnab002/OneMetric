@@ -394,40 +394,16 @@ function Insights() {
                         )}
                     </div>
                 </header>
-                <div className="frame-parent4">
+                {/* <div className="frame-parent4">
                     <input className="frame-input" type="checkbox" />
                     <div className="search-stock">Search Stocks</div>
-                </div>
-                <div className="insights-header-wrapper">
-                    <div className="stock-search" id="stockSearchContainer">
-                        <div className="search-input">
-                            <img
-                                className="search-input-child"
-                                alt=""
-                                src="./public/insights/group-1000000977-2.svg"
-                            />
-                        </div>
-                        <input
-                            className="search-placeholder"
-                            placeholder="Search stocks in watchlist"
-                            type="text"
-                            value={searchQuery}
-                            onChange={handleSearchChange}
-                        />
-                        <div className="price-wrapper">
-                            <div className="price">Price</div>
-                        </div>
-                        <div className="delete-wrapper">
-                            <div className="delete">Delete</div>
-                        </div>
-                    </div>
-                </div>
+                </div> */}
                 <div className="simply-grow-all">OneMetric, All Right reserved © 2024</div>
                 <main className="watchlist-wrapper">
                     <section className="watchlist">
                         <div className="trial-info">
                             <div className="add-your-favourite-container">
-                                <span className='favourite-stock'>Add your favourite stocks to watch list and </span>
+                                <span className='favourite-stock'>Add your favourite stocks to watch list</span>
                                 <br />
                                 {isCheckingPlan ? (
                                     <span style={{ color: 'white', fontSize: '14px' }}>Checking plan status...</span>
@@ -459,6 +435,30 @@ function Insights() {
                                 ) : (
                                     <span style={{ color: 'white' }}>Checking your plan status...</span>
                                 )}
+                            </div>
+                        </div>
+                        <div className="insights-header-wrapper">
+                            <div className="stock-search" id="stockSearchContainer">
+                                <div className="search-input">
+                                    <img
+                                        className="search-input-child"
+                                        alt=""
+                                        src="./public/insights/group-1000000977-2.svg"
+                                    />
+                                </div>
+                                <input
+                                    className="search-placeholder"
+                                    placeholder="Search stocks in watchlist"
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={handleSearchChange}
+                                />
+                                <div className="price-wrapper">
+                                    <div className="price">Price</div>
+                                </div>
+                                <div className="delete-wrapper">
+                                    <div className="delete">Delete</div>
+                                </div>
                             </div>
                         </div>
                         <div className="watchlist-header">
@@ -554,8 +554,8 @@ function Insights() {
                                     )}
                                     <br />
                                     {!loading && stockData.length > displayCount && (
-                                        <button onClick={showMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px", cursor: 'pointer' }}>
-                                            Show More
+                                        <button className="add-icon-parent" onClick={showMore} style={{ width: "120px", margin: "auto", borderRadius: "8px", padding: "10px", cursor: 'pointer' }}>
+                                            <span className='add' style={{ margin: 'auto' }}>Show More</span>
                                         </button>
                                     )}
                                 </div>
@@ -627,8 +627,8 @@ function Insights() {
                                 }
                             </div>
                             {!newsLoading && newsData.length > displayNewsCount && (
-                                <button onClick={showNewsMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px", cursor: 'pointer' }}>
-                                    Show More
+                                <button className="add-icon-parent" onClick={showNewsMore} style={{ width: "120px", margin: "auto", borderRadius: "8px", padding: "10px", cursor: 'pointer' }}>
+                                    <span className='add' style={{ margin: 'auto' }}>Show More</span>
                                 </button>
                             )}
                         </div>

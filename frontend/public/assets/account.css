@@ -477,9 +477,26 @@
   letter-spacing: normal;
 }
 
+@media only screen and (min-width: 320px) and (max-width: 767px){
+  .enter-your-whatsapp{
+    margin-left: 38%;
+  }
+  .back-button{
+    margin-left: -47%;
+    margin-top: 2.5%;
+  }
+}
+
 @media only screen and (min-width: 768px) and (max-width: 1024px){
   .otp{
     height: 100vh;
+  }
+  .enter-your-whatsapp{
+    margin-left: 38%;
+  }
+  .back-button{
+    margin-left: -47%;
+    margin-top: 2.5%;
   }
 }
 
@@ -487,5 +504,12 @@
 @media only screen and (min-width: 1280px) and (max-width: 1920px){
   .personal-info{
     width: 500px;
+  }
+  .enter-your-whatsapp{
+    margin-left: 88%;
+  }
+  .back-button{
+    margin-left: -100%;
+    margin-top: 2.5%;
   }
 }

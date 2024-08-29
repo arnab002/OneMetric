@@ -3,12 +3,13 @@ import React, { useEffect, useState, useMemo } from 'react';
 import '../../public/assets/addstocks.css';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
-import { User } from 'react-feather';
+import { ArrowLeft, User } from 'react-feather';
 import { Plus, Check, Edit3, Trash } from 'react-feather';
 
 type ButtonState = 'plus' | 'check' | 'edit' | 'trash' | 'removing';
 
 function AddStocks() {
+    const [cachedStockData, setCachedStockData] = useState<any[]>([]);
     const [stockData, setStockData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [searchQuery, setSearchQuery] = useState<string>('');
@@ -64,16 +65,37 @@ function AddStocks() {
 
     useEffect(() => {
         if (isTokenChecked && token) {
-            if (isSearchActive) {
-                if (searchQuery !== lastSuccessfulSearchQuery) {
-                    fetchStockData();
-                }
-            } else {
-                fetchStockData(selectedFilter);
-            }
+            fetchStockData(selectedFilter);
         }
-    }, [isTokenChecked, token, isSearchActive, searchQuery, selectedFilter, lastSuccessfulSearchQuery]);
+    }, [isTokenChecked, token, selectedFilter]);
 
+    // Memoized search function
+    const searchStocks = useMemo(() => {
+        return (query: string, stocks: any[]) => {
+            const lowercaseQuery = query.toLowerCase().trim();
+            if (!lowercaseQuery) return stocks;
+
+            return stocks.reduce((acc, stock) => {
+                const stockName = stock.stock_long_name.toLowerCase();
+                if (stockName === lowercaseQuery) {
+                    acc.unshift(stock);
+                } else if (stockName.includes(lowercaseQuery)) {
+                    acc.push(stock);
+                }
+                return acc;
+            }, []);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (cachedStockData.length > 0) {
+            const searchResults = searchStocks(searchQuery, cachedStockData);
+            setStockData(searchResults);
+            setNoDataFound(searchResults.length === 0);
+            setShowSearchResults(true);
+            setLoading(false);
+        }
+    }, [searchQuery, cachedStockData, searchStocks]);
 
     const sortStocksAlphabetically = (stocks: any[]) => {
         return [...stocks].sort((a, b) =>
@@ -129,10 +151,6 @@ function AddStocks() {
         window.location.href = '/userAccount'
     };
 
-    const toggleDropdown = () => {
-        setShowDropdown(!showDropdown);
-    };
-
     const SelectAllButton = ({ stocks, onSelectAll }: { stocks: any[], onSelectAll: (selected: boolean) => void }) => {
         const [isAllSelected, setIsAllSelected] = useState(false);
 
@@ -144,19 +162,23 @@ function AddStocks() {
 
         return (
             <button
+                className="add-icon-parent"
                 onClick={handleSelectAll}
                 disabled={isAddingMultiple}
-                style={{
-                    backgroundColor: isAllSelected ? '#4CAF50' : '#f0f0f0',
-                    color: isAllSelected ? 'white' : 'black',
-                    border: 'none',
-                    padding: '10px 15px',
-                    borderRadius: '5px',
-                    cursor: isAddingMultiple ? 'not-allowed' : 'pointer',
-                    marginBottom: '10px'
-                }}
+                style={{ width: "180px", borderRadius: "8px", padding: "10px", cursor: isAddingMultiple ? 'not-allowed' : 'pointer', marginBottom: '10px' }}
+            // style={{
+            //     backgroundColor: isAllSelected ? '#4CAF50' : '#f0f0f0',
+            //     color: isAllSelected ? 'white' : 'black',
+            //     border: 'none',
+            //     padding: '10px 15px',
+            //     borderRadius: '5px',
+            //     cursor: isAddingMultiple ? 'not-allowed' : 'pointer',
+            //     marginBottom: '10px'
+            // }}
             >
-                {isAddingMultiple ? 'Adding...' : (isAllSelected ? 'Deselect All' : 'Select All')}
+                <span className='add' style={{ margin: 'auto' }}>
+                    {isAddingMultiple ? 'Adding...' : (isAllSelected ? 'Deselect All' : 'Add all to watchlist')}
+                </span>
             </button>
         );
     };
@@ -179,6 +201,8 @@ function AddStocks() {
 
             setIsAddingMultiple(true);
             let addedCount = 0;
+            let newUserWatchlist = [...userWatchlist];
+            let newButtonStates = { ...buttonStates };
 
             for (const scrip_cd of allStockIds) {
                 if (watchlistCount + addedCount >= MAX_WATCHLIST_STOCKS) {
@@ -186,7 +210,7 @@ function AddStocks() {
                     break;
                 }
 
-                if (!userWatchlist.includes(scrip_cd)) {
+                if (!newUserWatchlist.includes(scrip_cd)) {
                     try {
                         await axios.post(`${baseApiURL()}/add-stock-to-watchlist`, {
                             scrip_cd: scrip_cd
@@ -196,7 +220,11 @@ function AddStocks() {
                             },
                         });
 
-                        setUserWatchlist(prev => [...prev, scrip_cd]);
+                        newUserWatchlist.push(scrip_cd);
+                        const stock = stockData.find(s => s.scrip_cd === scrip_cd);
+                        if (stock) {
+                            newButtonStates[stock.isin_code] = 'edit';
+                        }
                         addedCount++;
                     } catch (error) {
                         console.error('Error adding stock:', error);
@@ -204,11 +232,12 @@ function AddStocks() {
                 }
             }
 
+            setUserWatchlist(newUserWatchlist);
+            setButtonStates(newButtonStates);
             setWatchlistCount(prevCount => prevCount + addedCount);
             setIsAddingMultiple(false);
 
-            // Redirect to insights page after adding stocks
-            window.location.href = '/insights';
+            alert(`${addedCount} stock${addedCount !== 1 ? 's' : ''} added to your watchlist.`);
         } else {
             setSelectedStocks(new Set());
         }
@@ -217,56 +246,32 @@ function AddStocks() {
     const fetchStockData = async (filter: string = 'all') => {
         setLoading(true);
         setNoDataFound(false);
-        setShowSearchResults(false); // Reset this at the start of each fetch
+        setShowSearchResults(false);
 
         try {
             let endpoint = `${baseApiURL()}/stocks`;
-            let data;
-
-            if (isSearchActive && searchQuery.trim() !== '') {
-                endpoint = `${baseApiURL()}/search-stocks`;
-                const response = await axios.post(endpoint, { query: searchQuery }, {
-                    headers: { Authorization: `${token}` }
-                });
-                data = response.data.data || [];
-
-                if (data.length > 0) {
-                    setLastSuccessfulSearchQuery(searchQuery);
-                }
-            } else {
-                switch (filter) {
-                    case 'bankNifty':
-                        endpoint = `${baseApiURL()}/banknifty`;
-                        break;
-                    case 'nifty50':
-                        endpoint = `${baseApiURL()}/nifty50`;
-                        break;
-                }
-                const response = await axios.get(endpoint, {
-                    headers: { Authorization: `${token}` }
-                });
-                data = response.data.data || [];
+            switch (filter) {
+                case 'bankNifty':
+                    endpoint = `${baseApiURL()}/banknifty`;
+                    break;
+                case 'nifty50':
+                    endpoint = `${baseApiURL()}/nifty50`;
+                    break;
             }
 
-            // Apply the filtration
+            const response = await axios.get(endpoint);
+            let data = response.data.data || [];
+
+            // Apply the filtration to remove stocks with names containing only digits and uppercase letters
             data = data.filter((stock: { stock_long_name: string }) => {
                 const regexPattern = /^[\dA-Z]+$/;
                 return !regexPattern.test(stock.stock_long_name);
             });
 
-            if (isSearchActive && searchQuery.trim() !== '') {
-                const exactMatch = data.find((stock: { stock_long_name: string }) =>
-                    stock.stock_long_name.toLowerCase() === searchQuery.toLowerCase()
-                );
-                if (exactMatch) {
-                    data = [exactMatch, ...data.filter((stock: { stock_long_name: string }) =>
-                        stock.stock_long_name.toLowerCase() !== searchQuery.toLowerCase()
-                    )];
-                }
-            } else {
-                data = sortStocksAlphabetically(data);
-            }
+            // Sort alphabetically
+            data = sortStocksAlphabetically(data);
 
+            setCachedStockData(data);
             setStockData(data);
             setNoDataFound(data.length === 0);
         } catch (error) {
@@ -274,7 +279,7 @@ function AddStocks() {
             setNoDataFound(true);
         } finally {
             setLoading(false);
-            setShowSearchResults(true); // Set this to true after loading is complete
+            setShowSearchResults(true);
         }
     };
 
@@ -327,14 +332,6 @@ function AddStocks() {
         const newQuery = event.target.value;
         setSearchQuery(newQuery);
         setIsSearchActive(newQuery.trim() !== '');
-
-        if (newQuery.trim() === '') {
-            // Reset to the original list when search is cleared
-            fetchStockData(selectedFilter);
-        } else {
-            // Use debounce to delay the API call
-            debounce(() => fetchStockData(), 300);
-        }
     };
 
     const showMore = () => {
@@ -365,7 +362,7 @@ function AddStocks() {
             });
 
             setUserWatchlist((prev) => [...prev, scrip_cd]);
-            setWatchlistCount((prevCount) => prevCount + 1); // Increment the count
+            setWatchlistCount((prevCount) => prevCount + 1);
 
             setButtonStates((prevState) => ({
                 ...prevState,
@@ -502,6 +499,10 @@ function AddStocks() {
         window.location.href = '/'
     };
 
+    const handleInsightsClick = () => {
+        window.location.href = '/insights'
+    };
+
     const handlePricingPageClick = () => {
         window.location.href = '/plans'
     };
@@ -560,10 +561,13 @@ function AddStocks() {
                             )}
                         </div>
                     </header>
-                    <div className="add-stocks2">Add Stocks</div>
+                    <div className="add-stocks2">
+                        <span onClick={handleInsightsClick} style={{ cursor: 'pointer' }}><ArrowLeft /></span>
+                        &nbsp;&nbsp;<span style={{ paddingTop: '0.2%' }}>Add Stocks</span>
+                    </div>
                     <div className="trial-info">
                         <div className="add-your-favourite-container">
-                            <span style={{ color: 'white' }}>Add your favourite stocks to watch list and </span>
+                            <span style={{ color: 'white' }}>Add your favourite stocks to watch list</span>
                             <br />
                             {isCheckingPlan ? (
                                 <span style={{ color: 'white', fontSize: '14px' }}>Checking plan status...</span>
@@ -637,7 +641,7 @@ function AddStocks() {
                             >
                                 <div className="all-16">
                                     <b>All </b>
-                                    {/* <span className="span">{stockData.length}</span> */}
+                                    <span className="span">({stockData.length})</span>
                                 </div>
                             </div>
                             <div
@@ -717,10 +721,10 @@ function AddStocks() {
                                                         <Edit3
                                                             onClick={() => handleEditClick(stock.isin_code)}
                                                             style={{
-                                                                transition: 'opacity 2s',
+                                                                transition: 'opacity 0.3s',
                                                                 opacity: 1,
                                                                 cursor: 'pointer',
-                                                                color: 'white'
+                                                                color: 'green'
                                                             }}
                                                         />
                                                     ) : buttonStates[stock.isin_code] === 'trash' ? (
@@ -731,7 +735,7 @@ function AddStocks() {
                                                                 alignItems: 'center',
                                                                 backgroundColor: 'red',
                                                                 padding: '10px',
-                                                                transition: 'opacity 2s',
+                                                                transition: 'opacity 0.3s',
                                                                 opacity: 1,
                                                                 cursor: 'pointer',
                                                             }}
@@ -751,7 +755,7 @@ function AddStocks() {
                                                     ) : buttonStates[stock.isin_code] === 'check' ? (
                                                         <Check
                                                             style={{
-                                                                transition: 'opacity 2s',
+                                                                transition: 'opacity 0.3s',
                                                                 opacity: 1,
                                                                 backgroundColor: 'green',
                                                                 color: 'white',
@@ -768,7 +772,7 @@ function AddStocks() {
                                                             alignItems: 'center',
                                                             backgroundColor: 'red',
                                                             padding: '10px',
-                                                            transition: 'opacity 2s',
+                                                            transition: 'opacity 0.3s',
                                                             opacity: 1,
                                                             cursor: 'pointer',
                                                         }}
@@ -784,7 +788,9 @@ function AddStocks() {
                             ) : null}
                         </div>
                         {!loading && stockData.length > displayCount && (
-                            <button onClick={showMore} style={{ margin: "auto", borderRadius: "8px", padding: "10px", cursor: 'pointer' }}>Show More</button>
+                            <button className="add-icon-parent" onClick={showMore} style={{ width: "120px", margin: "auto", borderRadius: "8px", padding: "10px", cursor: 'pointer' }}>
+                                <span className='add' style={{ margin: 'auto' }}>Show More</span>
+                            </button>
                         )}
                     </div>
                     <div className="footer">

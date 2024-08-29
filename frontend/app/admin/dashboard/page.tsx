@@ -1,11 +1,12 @@
 'use client'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import { Icon } from '@iconify/react'
 import axios from 'axios'
 import baseApiURL from '@/baseUrl'
 import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import Footer from '../components/Footer'
+import { AuthContext } from '../utilities/AuthContext';
 
 function AdminHome() {
     const [userStats, setUserStats] = useState({
@@ -16,6 +17,14 @@ function AdminHome() {
     const [revenueStats, setRevenueStats] = useState({
         totalRevenue: 0
     });
+
+    const { isAuthenticated } = useContext(AuthContext);
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+            window.location.href = "/admin"
+        }
+    }, [isAuthenticated]);
 
     // Fetch user statistics from the API
     useEffect(() => {
@@ -50,6 +59,10 @@ function AdminHome() {
 
         fetchRevenueStats();
     }, []);
+
+    if (!isAuthenticated) {
+        return null;
+    }
 
     return (
         <div>

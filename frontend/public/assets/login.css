@@ -291,6 +291,12 @@
 }
 
 @media only screen and (min-width:320px) and (max-width: 767px){
+  .main{
+    padding: 20.5px var(--padding-xl);
+  }
+}
+
+@media only screen and (min-width:320px) and (max-width: 1024px){
   .country-code{
     width: 120px;
   }

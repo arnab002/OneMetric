@@ -187,8 +187,8 @@
   width: 55.9px;
   position: absolute;
   margin: 0 !important;
-  right: 50.6px;
-  bottom: -43.9px;
+  right: 71.6px;
+  bottom: -120.9px;
   z-index: 3;
 }
 
@@ -997,7 +997,7 @@
 }
 
 .step-items3 {
-  height: 239px;
+  height: 252px;
   justify-content: flex-end;
   padding: 0 var(--padding-lgi) 0 var(--padding-xl);
   box-sizing: border-box;
@@ -1016,6 +1016,14 @@
   position: relative;
   line-height: 20px;
   font-weight: 500;
+  margin-top: -2%;
+}
+
+.add-stocks1 {
+  position: relative;
+  line-height: 20px;
+  font-weight: 500;
+  margin-top: -2%;
 }
 
 .enter-your-whatsapp1 {
@@ -1023,6 +1031,25 @@
   position: relative;
   font-size: var(--font-size-sm);
   color: var(--color-lightslategray-100);
+}
+
+.select-stocks-subscribe {
+  align-self: stretch;
+  position: relative;
+  font-size: var(--font-size-sm);
+  color: var(--color-lightslategray-100);
+  width: 120%;
+  margin-top: -18px;
+}
+
+.get-insights-whatsapp {
+  align-self: stretch;
+  position: relative;
+  font-size: var(--font-size-sm);
+  color: var(--color-lightslategray-100);
+  width: 100%;
+  margin-top: 8px;
+  padding-left: 3px;
 }
 
 .number-fields {
@@ -1353,6 +1380,8 @@
   flex-direction: row;
   justify-content: space-around;
   position: relative;
+  margin-left: -15px;
+  margin-right: 15px;
   gap: var(--gap-xl);
   font-size: var(--font-size-3xs);
   color: var(--color-darkgray);
@@ -1793,6 +1822,7 @@
   flex-direction: row;
   padding: 0 var(--padding-11xs) 0 0;
   gap: var(--gap-base);
+  margin-top: 30px;
 }
 
 .hero-container,
@@ -2339,6 +2369,8 @@
 
 .one-metric-content-wrapper {
   width: 100%;
+  margin-top: 70px;
+  margin-left: -5px;
   justify-content: center;
   padding: 0 var(--padding-xl) var(--padding-xs);
   text-align: left;
@@ -2597,7 +2629,7 @@
   position: relative;
   line-height: 17px;
   display: inline-block;
-  min-width: 112px;
+  min-width: 88px;
 }
 
 .feature-containers4 {
@@ -3569,6 +3601,25 @@
 
   .span {
     font-size: 18px;
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+  .input-components {
+    flex-direction: row;
+    position: relative;
+    justify-content: center;
+    margin-left: -15px;
+    gap: 70px;
+    font-size: var(--font-size-3xs);
+    color: var(--color-darkgray);
+  }
+  .input-components-child{
+    right: 432px;
+  }
+  .chart-icon{
+    right: 440px;
+    bottom: 488.5px;
   }
 }
 

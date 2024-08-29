@@ -262,16 +262,16 @@ const OTPVerify: React.FC = () => {
                             <div className="frame-div">
                                 <div className="resend-container">
                                     <button
-                                        className="resend-otp"
+                                        className="add-icon-parent"
+                                        style={{ width: "120px", margin: "auto", borderRadius: "8px", padding: "10px", cursor: 'pointer' }}
                                         onClick={handleResend}
                                         disabled={resendDisabled}
                                     >
-                                        Resend OTP
+                                        <span className='add' style={{ margin: 'auto' }}>Resend OTP</span>
                                     </button>
                                     <span className="secs">{remainingTime} secs</span>
                                     <div className="it-may-take-container">
                                         <span style={{fontSize: '16px'}}>98% of users receive OTP in less than 60 secs</span>
-                                        {/* <span className="secs">{remainingTime} secs</span> */}
                                     </div>
                                 </div>
                             </div>

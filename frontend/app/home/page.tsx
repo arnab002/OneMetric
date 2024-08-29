@@ -680,7 +680,7 @@ function HomeDesktop() {
                             </div>
                         </div>
                         <div className="get-lighting-container">
-                            <p className="p">Get Lighting - Fast</p>
+                            <p className="p">Get Lightning - Fast</p>
                             <p className="stock-news-on">
                                 <span>
                                     <span className="stock-news">Stock news</span>
@@ -688,7 +688,7 @@ function HomeDesktop() {
                                 </span>
                             </p>
                             <p className="p">
-                                <b className="whats-app1">Whats App</b>
+                                <b className="whats-app1">WhatsApp</b>
                             </p>
                         </div>
                         <header className="image-18-parent">
@@ -735,7 +735,7 @@ function HomeDesktop() {
                                         <h1 className="add-to-your">Add to your watchlist</h1>
                                     </div>
                                     <div className="select-your-stocks">
-                                        Select your stocks to get latest news now.
+                                        Select your stocks now to get the latest news
                                     </div>
                                 </div>
                             </div>
@@ -1378,7 +1378,7 @@ function HomeDesktop() {
                                                 </div>
                                             </div>
                                             <div className="benefit-three-description-cont">
-                                                <i className="upgrade-available">Upgrade Available</i>
+                                                <i className="upgrade-available">Coming Soon</i>
                                             </div>
                                         </div>
                                     </div>
@@ -1499,7 +1499,7 @@ function HomeDesktop() {
                     </div>
                     <div className="homepage-inner3">
                         <section className="faq-parent">
-                            <h1 className="faq">FAQ</h1>
+                            <h1 className="faq">FAQs</h1>
                             <div className="f-a-q-container">
                                 {faqData.map((faq, index) => (
                                     <div key={index} className="what-is-simply-grow">
@@ -1528,15 +1528,18 @@ function HomeDesktop() {
                         <section className="referral-offer-parent">
                             <div className="referral-offer">
                                 <h3 className="refer-and-get-container">
-                                    <span>Refer and get a </span>
+                                    {/* <span>Refer and get a </span> */}
                                     <span className="free-month">
-                                        <span className="free-month1">FREE Monthly</span>
-                                    </span>
-                                    <span>
-                                        <span className="free-month"> </span>
-                                        <span>plan</span>
-                                        <span className="span3"> </span>
-                                    </span>
+                                        <span className="free-month1">Refer Now</span>
+                                    </span>&nbsp;
+                                    <span>to</span>&nbsp;
+                                    <span className="free-month">
+                                        <span className="free-month1">Unlock Rewards,</span>
+                                    </span>&nbsp;
+                                    <span>build your</span>&nbsp;
+                                    <span className="free-month">
+                                        <span className="free-month1">#OneMStreak</span>
+                                    </span>&nbsp;
                                 </h3>
                                 <button className="refer-now-button">
                                     <a className="refer-now" href='/login' style={{ textDecoration: 'none' }}>Refer now</a>

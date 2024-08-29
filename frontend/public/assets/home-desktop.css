@@ -962,7 +962,8 @@
   color: rgba(138, 141, 158, 0.9);
   display: flex;
   align-items: flex-end;
-  width: 100%;
+  margin-left: -16px;
+  width: 107%;
 }
 
 .frame-parent10,
@@ -3545,11 +3546,11 @@
   position: relative;
   line-height: 17px;
   display: inline-block;
-  min-width: 112px;
+  min-width: 88px;
 }
 
 .benefit-three-description-cont {
-  width: 112px;
+  width: 90px;
   height: 17px;
   margin: 0 !important;
   position: absolute;

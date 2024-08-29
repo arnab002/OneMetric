@@ -492,7 +492,7 @@ function Home() {
             <div className="add-to-your-watchlist-parent">
               <h3 className="add-to-your">Add to your watchlist</h3>
               <div className="select-your-stocks">
-                Select your stocks to get latest news now
+                Select your stocks now to get the latest news
               </div>
             </div>
             <div className="nifty-trio-parent">
@@ -570,7 +570,7 @@ function Home() {
                       <div className="promo-columns">
                         <div className="promo-column-one">
                           <div className="get-lighting-container">
-                            <p className="get-lighting-">Get Lighting - Fast</p>
+                            <p className="get-lighting-">Get Lightning - Fast</p>
                             <p className="stock-news-on">
                               <span>
                                 <span className="stock-news">Stock news</span>
@@ -579,7 +579,7 @@ function Home() {
                             </p>
                             <p className="get-lighting-">
                               <span>
-                                <b className="whats-app1">Whats App</b>
+                                <b className="whats-app1">WhatsApp</b>
                               </span>
                             </p>
                           </div>
@@ -822,8 +822,7 @@ function Home() {
                                 Get OTP on Whatsapp for verification
                               </div>
                               <div className="enter-your-whatsapp1">
-                                Enter Your WhatsApp, receive a code via WhatsApp for
-                                verification.
+                                Enter OTP received on WhatsApp to signup
                               </div>
                             </div>
                             <div className="input-components">
@@ -913,8 +912,11 @@ function Home() {
                             </div>
                           </div>
                           <div className="add-stocks-to-watchlist-parent">
-                            <div className="enter-your-whatsapp">
+                            <div className="add-stocks1">
                               Add stocks to watchlist
+                            </div>
+                            <div className="select-stocks-subscribe">
+                              Select stocks that you follow or subscribe to our list
                             </div>
                             <div className="watchlist-input">
                               <div className="search-bar">
@@ -1018,6 +1020,9 @@ function Home() {
                       <div className="input-fields">
                         <div className="enter-your-whatsapp">
                           Get instant WhatsApp insights
+                        </div>
+                        <div className="get-insights-whatsapp">
+                          We deliver 99% news in less that 60 seconds
                         </div>
                       </div>
                     </div>
@@ -1233,7 +1238,7 @@ function Home() {
                       </div>
                     </div>
                     <div className="coming-soon-wrapper1">
-                      <i className="upgrade-available">Upgrade Available</i>
+                      <i className="upgrade-available">Coming Soon</i>
                     </div>
                   </div>
                 </div>
@@ -1345,7 +1350,7 @@ function Home() {
           </section>
           <section className="f-a-q-container-wrapper">
             <div className="plan-options">
-              <h3 className="faq">FAQ</h3>
+              <h3 className="faq">FAQs</h3>
               <div className="questions">
                 {[
                   {
@@ -1391,14 +1396,16 @@ function Home() {
             <div className="referral-container">
               <div className="referral">
                 <div className="refer-and-get-container">
-                  <span>Refer and get a </span>
                   <span className="free-month">
-                    <span className="free-month1">FREE Monthly</span>
-                  </span>
-                  <span>
-                    <span className="free-month"> </span>
-                    <span>plan</span>
-                    <span className="span3"> </span>
+                    <span className="free-month1">Refer Now</span>
+                  </span>&nbsp;
+                  <span>to</span>&nbsp;
+                  <span className="free-month">
+                    <span className="free-month1">Unlock Rewards,</span>
+                  </span>&nbsp;
+                  <span>build your</span>&nbsp;
+                  <span className="free-month">
+                    <span className="free-month1">#OneMStreak</span>
                   </span>
                 </div>
                 <button className="referral-button" onClick={handleReferClick}>

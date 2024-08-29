@@ -3535,7 +3535,7 @@
 }
 
 
-@media only screen and (min-width: 320px) and (max-width: 768px) {
+@media only screen and (min-width: 320px) and (max-width: 767px) {
   .homepage {
     padding: 0 3px 23.9px;
   }
@@ -3567,10 +3567,29 @@
   } */
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .nifty-trio {
     font-size: 16px;
     padding: 12px;
     text-align: center;
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1024px){
+  .why-simply-grow{
+    display: none;
+  }
+  .affordable-plans{
+    margin-top: 0%;
+    margin: auto;
+  }
+  .plan-options{
+    flex-direction: row;
+  }
+}
+
+@media only screen and (min-width: 820px) and (max-width: 1024px){
+  .homepage{
+    height: 100vh;
   }
 }

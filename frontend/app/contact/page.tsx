@@ -115,7 +115,8 @@ function Contact() {
                                 informed decisions.
                             </span>
                             <br /><br /><br />
-                            <span>For Contacting us, Our Mobile Number is <b>9035141333</b> and email is <b>contact@onemetric.in</b></span>
+                            <span><b>Address :</b> Poorva Gounder Colony, Five Roads, Salem, Tamilnadu 636004</span><br /><br />
+                            <span>You can reachout to us @ <b>9035141333</b> or mail us at <b>contact@onemetric.in</b></span>
                         </div>
                     </div>
                 </section>

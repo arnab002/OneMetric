@@ -6,9 +6,9 @@ import baseApiURL from '@/baseUrl';
 import { Modal } from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
 import ReactCountryFlag from 'react-country-flag';
-import { DollarSign, Info, Phone, ShoppingCart, User } from 'react-feather';
+import { ArrowLeft, DollarSign, Info, Phone, ShoppingCart, User } from 'react-feather';
 
-function Registration() {
+function UserAccount() {
     const [isTokenChecked, setIsTokenChecked] = useState(false);
     const [token, setToken] = useState<string | null>(null);
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -148,6 +148,7 @@ function Registration() {
                             <div className="input-fields">
                                 <div className="number-input">
                                     <div className="number-field">
+                                        <span className='back-button' onClick={handleInsightsClick} style={{ cursor: 'pointer' }}><ArrowLeft /></span>
                                         <h3 className="enter-your-whatsapp">
                                             Hello, {userDetails.name}
                                         </h3>
@@ -174,7 +175,7 @@ function Registration() {
                                         <div className="input-labels">
                                             <div className="input-boxes">
                                                 <div className="nested-input-boxes" onClick={handlePricingClick} style={{ cursor: 'pointer' }}>
-                                                    <div className="email-id"><span style={{fontSize: '25px'}}>₹</span></div>
+                                                    <div className="email-id"><span style={{ fontSize: '25px' }}>₹</span></div>
                                                     <span>Manage Subscriptions</span>
                                                 </div>
                                             </div>
@@ -229,4 +230,4 @@ function Registration() {
     )
 }
 
-export default Registration
+export default UserAccount
