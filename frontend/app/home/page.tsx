@@ -482,7 +482,7 @@ function HomeDesktop() {
                             <div className="button-icon-wrapper">
                                 <img className="button-icon" alt="" src="./public/home-desktop/vector-3.svg" />
                             </div>
-                            <a className="started-30-days" href='/login' style={{ textDecoration: 'none' }}>Started 14 Days Free Trial</a>
+                            <a className="started-30-days" href='/login' style={{ textDecoration: 'none' }}>Start Free Trial</a>
                         </button>
                         <div className="frame-parent">
                             <img className="frame-child" alt="" src="./public/home-desktop/group-1000001019.svg" />
@@ -533,13 +533,12 @@ function HomeDesktop() {
                                                 </div>
                                             </div>
                                             <div className="vivamus-posuere-orci-container">
-                                                <span>Vivamus </span>
-                                                <span className="posuere">#posuere</span>
+                                                <span>Infibeam Avenues AI arm,&nbsp;</span>
+                                                <span className="posuere">http://Phronetic.AI</span>
                                                 <span>
-                                                    orci a leo sodales, sed aliquet arcu consequat. Ut molestie
-                                                    porttitor
+                                                    , secured two major contracts for its Theia Vision AI product, AI Facility Manager. The contracts, worth USD 1 million annually, are with five leading hospitals in India and a UAE-based gas station chain, for a five-year period
                                                 </span>
-                                                <span className="posuere">#sapien</span>
+                                                {/* <span className="posuere">#sapien</span> */}
                                             </div>
                                             <div className="rectangle-group">
                                                 <div className="frame-child1" />
@@ -895,7 +894,7 @@ function HomeDesktop() {
                                         </div>
                                         <div className="enter-your-whatsapp-receive-a-parent">
                                             <div className="enter-your-whatsapp1">
-                                                Enter OTP received on WhatsApp to signup
+                                                Enter the OTP sent to your WhatsApp to complete the signup process.
                                             </div>
                                             <div className="frame-wrapper13">
                                                 <div className="frame-parent24">
@@ -1003,7 +1002,7 @@ function HomeDesktop() {
 
                                             </div>
                                             <div className="select-stocks-subscribe">
-                                                Select stocks that you follow or subscribe to our list
+                                                Select stocks that you follow or add to our precurated lists    
                                             </div>
                                             <div className="line-parent12">
                                                 <div className="frame-child55" />
@@ -1106,7 +1105,7 @@ function HomeDesktop() {
                                         </div>
                                     </div>
                                     <button className="trial-button-container">
-                                        <a className="start-30-days" href='/login' style={{ textDecoration: 'none' }}>Start 14 Days Free Trial</a>
+                                        <a className="start-30-days" href='/login' style={{ textDecoration: 'none' }}>Start Free Trial</a>
                                     </button>
                                 </div>
                                 <div className="frame-parent35">
@@ -1156,13 +1155,12 @@ function HomeDesktop() {
                                                         </div>
                                                     </div>
                                                     <div className="vivamus-posuere-orci-container1">
-                                                        <span>Vivamus </span>
-                                                        <span className="posuere">#posuere</span>
+                                                        <span>Infibeam Avenues AI arm,</span>
+                                                        <span className="posuere">http://Phronetic.AI</span>
                                                         <span>
-                                                            orci a leo sodales, sed aliquet arcu consequat. Ut
-                                                            molestie porttitor
+                                                            , secured two major contracts for its Theia Vision AI product, AI Facility Manager. The contracts, worth USD 1 million annually, are with five leading hospitals in India and a UAE-based gas station chain, for a five-year period
                                                         </span>
-                                                        <span className="posuere">#sapien</span>
+                                                        {/* <span className="posuere">#sapien</span> */}
                                                     </div>
                                                     <div className="chart-container">
                                                         <div className="chart-background" />
@@ -1356,6 +1354,9 @@ function HomeDesktop() {
                                                     alt=""
                                                     src="./public/home-desktop/group-219911497@2x.png"
                                                 />
+                                            </div>
+                                            <div className="coming-soon-container2">
+                                                <i className="coming-soon2">Coming soon</i>
                                             </div>
                                             <div className="your-language-your">
                                                 Your Language, Your Choice

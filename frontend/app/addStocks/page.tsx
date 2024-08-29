@@ -9,6 +9,7 @@ import { Plus, Check, Edit3, Trash } from 'react-feather';
 type ButtonState = 'plus' | 'check' | 'edit' | 'trash' | 'removing';
 
 function AddStocks() {
+    const [showTabs, setShowTabs] = useState(true);
     const [cachedStockData, setCachedStockData] = useState<any[]>([]);
     const [stockData, setStockData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -165,16 +166,7 @@ function AddStocks() {
                 className="add-icon-parent"
                 onClick={handleSelectAll}
                 disabled={isAddingMultiple}
-                style={{ width: "180px", borderRadius: "8px", padding: "10px", cursor: isAddingMultiple ? 'not-allowed' : 'pointer', marginBottom: '10px' }}
-            // style={{
-            //     backgroundColor: isAllSelected ? '#4CAF50' : '#f0f0f0',
-            //     color: isAllSelected ? 'white' : 'black',
-            //     border: 'none',
-            //     padding: '10px 15px',
-            //     borderRadius: '5px',
-            //     cursor: isAddingMultiple ? 'not-allowed' : 'pointer',
-            //     marginBottom: '10px'
-            // }}
+                style={{ width: "165px", borderRadius: "8px", padding: "10px", cursor: isAddingMultiple ? 'not-allowed' : 'pointer', marginBottom: '10px' }}
             >
                 <span className='add' style={{ margin: 'auto' }}>
                     {isAddingMultiple ? 'Adding...' : (isAllSelected ? 'Deselect All' : 'Add all to watchlist')}
@@ -320,18 +312,19 @@ function AddStocks() {
         }
     };
 
-    const debounce = (func: Function, delay: number) => {
-        let timeoutId: NodeJS.Timeout;
-        return (...args: any[]) => {
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => func(...args), delay);
-        };
-    };
+    // const debounce = (func: Function, delay: number) => {
+    //     let timeoutId: NodeJS.Timeout;
+    //     return (...args: any[]) => {
+    //         clearTimeout(timeoutId);
+    //         timeoutId = setTimeout(() => func(...args), delay);
+    //     };
+    // };
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newQuery = event.target.value;
         setSearchQuery(newQuery);
         setIsSearchActive(newQuery.trim() !== '');
+        setShowTabs(newQuery.trim() === '');
     };
 
     const showMore = () => {
@@ -634,42 +627,44 @@ function AddStocks() {
                         </div>
                     </div>
                     <div className="indices-options-parent">
-                        <div className="indices-options">
-                            <div
-                                className={`indices-names ${selectedFilter === 'all' ? 'active' : ''}`}
-                                onClick={() => handleFilterChange('all')}
-                            >
-                                <div className="all-16">
-                                    <b>All </b>
-                                    <span className="span">({stockData.length})</span>
+                        {showTabs && (
+                            <div className="indices-options">
+                                <div
+                                    className={`indices-names ${selectedFilter === 'all' ? 'active' : ''}`}
+                                    onClick={() => handleFilterChange('all')}
+                                >
+                                    <div className="all-16">
+                                        <b>All </b>
+                                        <span className="span">({stockData.length})</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div
-                                className={`indices-names1 ${selectedFilter === 'bankNifty' ? 'active' : ''}`}
-                                onClick={() => handleFilterChange('bankNifty')}
-                            >
-                                <div className="bank-nifty-50-container">
-                                    <span>Bank Nifty </span>
-                                    {/* <span className="span1">(50)</span> */}
-                                    <span> </span>
-                                </div>
-                            </div>
-                            <div
-                                className={`indices-names2 ${selectedFilter === 'nifty50' ? 'active' : ''}`}
-                                onClick={() => handleFilterChange('nifty50')}
-                            >
-                                <div className="all-nifty-50-container">
-                                    <span>Nifty 50</span>
-                                    <span className="span1">
-                                        <b className="b"> </b>
-                                        {/* <span>(22)</span> */}
-                                    </span>
-                                    <span>
+                                <div
+                                    className={`indices-names1 ${selectedFilter === 'bankNifty' ? 'active' : ''}`}
+                                    onClick={() => handleFilterChange('bankNifty')}
+                                >
+                                    <div className="bank-nifty-50-container">
+                                        <span>Bank Nifty </span>
+                                        {/* <span className="span1">(50)</span> */}
                                         <span> </span>
-                                    </span>
+                                    </div>
+                                </div>
+                                <div
+                                    className={`indices-names2 ${selectedFilter === 'nifty50' ? 'active' : ''}`}
+                                    onClick={() => handleFilterChange('nifty50')}
+                                >
+                                    <div className="all-nifty-50-container">
+                                        <span>Nifty 50</span>
+                                        <span className="span1">
+                                            <b className="b"> </b>
+                                            {/* <span>(22)</span> */}
+                                        </span>
+                                        <span>
+                                            <span> </span>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
                         <div className="stocks-list">
                             {loading ? (
                                 <div style={{ color: 'white', margin: 'auto' }}>Loading...</div>
@@ -677,7 +672,7 @@ function AddStocks() {
                                 <div style={{ color: 'white', margin: 'auto' }}>No data found</div>
                             ) : showSearchResults || !isSearchActive ? (
                                 <>
-                                    {(selectedFilter === 'bankNifty' || selectedFilter === 'nifty50') && (
+                                    {(selectedFilter === 'bankNifty' || selectedFilter === 'nifty50') && showTabs && (
                                         <SelectAllButton stocks={stockData} onSelectAll={handleSelectAll} />
                                     )}
                                     {stockData.slice(0, displayCount).map((stock, index) => (
@@ -840,6 +835,7 @@ function AddStocks() {
                                     <div className="link-names">
                                         <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us">About Us</a>
                                         <a href='/disclaimer' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Disclaimer</a>
+                                        {/* <a href='/insights' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">News Feed</a> */}
                                         <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">Refund Policy</a>
                                         <a href='/plans' className="refund-policy" style={{ textDecoration: "none", color: "#8A8D9E" }}>Pricing</a>
                                     </div>

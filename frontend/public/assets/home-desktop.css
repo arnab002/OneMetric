@@ -2497,7 +2497,7 @@
   text-align: left;
   display: inline-block;
   box-sizing: border-box;
-  padding-left: var(--padding-xl);
+  padding-left: 46px;
   padding-right: var(--padding-xl);
 }
 
@@ -3439,6 +3439,33 @@
   color: var(--color-cornflowerblue-100);
 }
 
+.coming-soon2 {
+  position: relative;
+  line-height: 143%;
+  display: flex;
+  align-items: center;
+  min-width: 81px;
+}
+
+.coming-soon-container2 {
+  width: 81px;
+  height: 17px;
+  margin: 0 !important;
+  position: absolute;
+  top: -25px;
+  left: 51px;
+  padding: 2%;
+  border-radius: var(--br-5xs);
+  background-color: var(--color-darkslateblue);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  font-size: var(--font-size-xs);
+  color: var(--color-cornflowerblue-100);
+}
+
 .benefit-description-container-parent {
   flex: 1;
   display: flex;
@@ -3512,6 +3539,7 @@
 
 .benefit-item-two {
   align-items: center;
+  position: relative;
   gap: var(--gap-base);
 }
 

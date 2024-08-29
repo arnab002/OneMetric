@@ -209,7 +209,7 @@ const Referral: React.FC = () => {
               ))}
             </div>
             <div className="by-making-a-container">
-              <span>By participating in the referral program on</span>
+              <span>By participating in the referral program on &nbsp;</span>
               <b>OneMetric</b>
               <span>
                 , you acknowledge that you have read, understood, and agreed to the terms of this referral policy.

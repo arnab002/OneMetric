@@ -665,7 +665,7 @@ function Home() {
                           />
                         </div>
                         <div className="started-30-days">
-                          Start 14 Days Free Trial
+                          Start Free Trial
                         </div>
                       </button>
                     </div>
@@ -1050,12 +1050,12 @@ function Home() {
                 </div>
               </div>
               <div className="vivamus-posuere-orci-container">
-                <span>Vivamus </span>
-                <span className="posuere">#posuere</span>
+                <span>Infibeam Avenues AI arm </span>
+                <span className="posuere">http://Phronetic.AI</span>
                 <span>
-                  orci a leo sodales, sed aliquet arcu consequat. Ut molestie porttitor
+                  ,secured two major contracts for its Theia Vision AI product, AI Facility Manager. The contracts, worth USD 1 million annually, are with five leading hospitals in India and a UAE-based gas station chain, for a five-year period
                 </span>
-                <span className="posuere">#sapien</span>
+                {/* <span className="posuere">#sapien</span> */}
               </div>
               <div className="frame-parent11">
                 <div className="rectangle-parent4">
@@ -1153,7 +1153,7 @@ function Home() {
           </section>
           <section className="free-trial-button">
             <button className="trial-button-container" onClick={handleTrialClick}>
-              <div className="started-30-days">Start 14 Days Free Trial</div>
+              <div className="started-30-days">Start Free Trial</div>
             </button>
           </section>
           <section className="simply-grow-content-wrapper">
@@ -1212,7 +1212,7 @@ function Home() {
                     />
                   </div>
                   <div className="sub-feature-descriptions-parent">
-                    <div className="sub-feature-descriptions" style={{ marginTop: '2%' }}>
+                    <div className="sub-feature-descriptions">
                       <div className="effortless-tracking-seamless">
                         Daily Impact Reports &amp; Market Insights
                       </div>
@@ -1247,7 +1247,7 @@ function Home() {
           </section>
           <section className="affordable-plans">
             <div className="plan-options">
-              <h3 className="why-simply-grow">Affordable plans!</h3>
+              <h3 className="why-simply-grow1">Affordable plans!</h3>
               {loading ? 'Loading...' : planData.map((plan, index) => (
                 <div key={plan.id} className="diamond-plan">
                   <div className="diamond-details">

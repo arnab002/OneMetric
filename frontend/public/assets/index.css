@@ -518,7 +518,7 @@
   font-family: var(--font-poppins);
   color: var(--color-white);
   text-align: center;
-  margin: auto;
+  margin-left: 16%;
 }
 
 .trial-content {
@@ -2028,11 +2028,11 @@
 }
 
 .rectangle-parent4 {
-  height: 234px;
+  height: 274px;
   width: 194px;
   position: absolute;
   margin: 0 !important;
-  top: -142px;
+  top: -178px;
   left: -21px;
   box-shadow: 0 2px 3px #3b4aac inset, 0 4px 12px rgba(36, 56, 192, 0.25) inset;
   border-radius: var(--br-3xl) var(--br-3xl) 0 0;
@@ -2398,6 +2398,15 @@
 }
 
 .why-simply-grow {
+  margin: 0;
+  position: relative;
+  font-size: inherit;
+  line-height: 25px;
+  font-weight: 600;
+  font-family: inherit;
+}
+
+.why-simply-grow1 {
   margin: 0;
   position: relative;
   font-size: inherit;
@@ -3604,25 +3613,6 @@
   }
 }
 
-@media only screen and (min-width: 768px) and (max-width: 1024px) {
-  .input-components {
-    flex-direction: row;
-    position: relative;
-    justify-content: center;
-    margin-left: -15px;
-    gap: 70px;
-    font-size: var(--font-size-3xs);
-    color: var(--color-darkgray);
-  }
-  .input-components-child{
-    right: 432px;
-  }
-  .chart-icon{
-    right: 440px;
-    bottom: 488.5px;
-  }
-}
-
 @media (max-width: 1920px) {
   .nifty-trio-parent {
     flex-direction: row;
@@ -3646,5 +3636,86 @@
     font-size: 16px;
     padding: 12px;
     text-align: center;
+  }
+}
+
+@media only screen and (min-width: 820px) and (max-width: 821px) {
+  .promo-columns {
+    width: 98%;
+  }
+
+  .sent-subscribed {
+    justify-content: space-evenly;
+  }
+
+  .trial-days{
+    margin-left: 27%;
+  }
+
+  .trial-content {
+    max-width: 60%;
+    margin: auto;
+  }
+
+  .input-fields {
+    margin-top: 2%;
+  }
+
+  .how-it-works {
+    padding-left: 1%;
+  }
+
+  .input-components {
+    flex-direction: row;
+    position: relative;
+    justify-content: center;
+    margin-left: -15px;
+    gap: 70px;
+    font-size: var(--font-size-3xs);
+    color: var(--color-darkgray);
+  }
+
+  .input-components-child {
+    right: 329px;
+    bottom: 85px;
+  }
+
+  .chart-icon {
+    right: 330px;
+    bottom: 476.5px;
+  }
+
+  .rectangle-parent3 {
+    left: 235px;
+  }
+
+  .stock-categories {
+    left: 252px;
+  }
+
+  .content-child {
+    right: 310.6px;
+  }
+
+  .trial-button-container {
+    margin: auto;
+    width: 42%;
+  }
+  .hero-container-parent{
+    padding: 0 0 30px;
+  }
+  .affordable-plans{
+    align-self: auto;
+    margin: auto;
+  }
+  .why-simply-grow1{
+    margin-left: -30%;
+  }
+  .referral-container{
+    max-width: 75%;
+    margin: auto;
+  }
+  .started-30-days{
+    margin-left: 0%;
   }
 }
