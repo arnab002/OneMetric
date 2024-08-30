@@ -290,6 +290,7 @@ const Refund: React.FC = () => {
                   <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us1">About Us</a>
                   <a href='/disclaimer' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Disclaimer</a>
                   <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy1">Refund Policy</a>
+                  <a href='/insights' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy1">News Feed</a>
                   <a href='/plans' className="refund-policy1" style={{ textDecoration: "none", color: "inherit" }}>Pricing</a>
                 </div>
                 <div className="terms-conditions-parent">

@@ -22,43 +22,37 @@ function AdminHome() {
 
     useEffect(() => {
         if (!isAuthenticated) {
-            window.location.href = "/admin"
+            window.location.href = "/admin";
+        } else {
+            fetchUserStats();
+            fetchRevenueStats();
         }
     }, [isAuthenticated]);
 
-    // Fetch user statistics from the API
-    useEffect(() => {
-        const fetchUserStats = async () => {
-            try {
-                const response = await axios.get(`${baseApiURL()}/user-stats`);
-                const data = await response.data;
-                setUserStats({
-                    totalUsers: data.totalUsers,
-                    paidUsers: data.paidUsers
-                });
-            } catch (error) {
-                console.error('Error fetching user statistics:', error);
-            }
-        };
+    const fetchUserStats = async () => {
+        try {
+            const response = await axios.get(`${baseApiURL()}/user-stats`);
+            const data = await response.data;
+            setUserStats({
+                totalUsers: data.totalUsers,
+                paidUsers: data.paidUsers
+            });
+        } catch (error) {
+            console.error('Error fetching user statistics:', error);
+        }
+    };
 
-        fetchUserStats();
-    }, []);
-
-    useEffect(() => {
-        const fetchRevenueStats = async () => {
-            try {
-                const response = await axios.get(`${baseApiURL()}/total-revenue`);
-                const data = await response.data;
-                setRevenueStats({
-                    totalRevenue: data.totalRevenue
-                });
-            } catch (error) {
-                console.error('Error fetching user statistics:', error);
-            }
-        };
-
-        fetchRevenueStats();
-    }, []);
+    const fetchRevenueStats = async () => {
+        try {
+            const response = await axios.get(`${baseApiURL()}/total-revenue`);
+            const data = await response.data;
+            setRevenueStats({
+                totalRevenue: data.totalRevenue
+            });
+        } catch (error) {
+            console.error('Error fetching revenue statistics:', error);
+        }
+    };
 
     if (!isAuthenticated) {
         return null;

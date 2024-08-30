@@ -3375,6 +3375,7 @@
   margin: auto;
   display: inline-block;
   min-width: 78px;
+  margin-left: -32%;
 }
 .continue,
 .dots-horizontal {
@@ -3388,6 +3389,7 @@
   padding: var(--padding-xl) var(--padding-172xl);
   background-color: transparent;
   align-self: stretch;
+  width: 100%;
   height: 64px;
   flex-direction: row;
   align-items: center;
@@ -3478,6 +3480,7 @@
   background-color: transparent;
   align-self: stretch;
   height: 64px;
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -3954,10 +3957,9 @@
 }
 .footer {
   background-color: var(--color-gray-400);
-  overflow: hidden;
   padding: 0 190px var(--padding-21xl);
   box-sizing: border-box;
-  gap: var(--gap-21xl);
+  gap: 14px;
   text-align: left;
   font-size: var(--font-size-sm);
   color: var(--color-mediumseagreen-200);

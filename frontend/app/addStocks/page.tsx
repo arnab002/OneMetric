@@ -9,6 +9,8 @@ import { Plus, Check, Edit3, Trash } from 'react-feather';
 type ButtonState = 'plus' | 'check' | 'edit' | 'trash' | 'removing';
 
 function AddStocks() {
+    const [planId, setPlanId] = useState<string>('');
+    const [trialStartDate, setTrialStartDate] = useState<Date | null>(null);
     const [showTabs, setShowTabs] = useState(true);
     const [cachedStockData, setCachedStockData] = useState<any[]>([]);
     const [stockData, setStockData] = useState<any[]>([]);
@@ -289,21 +291,37 @@ function AddStocks() {
                     },
                 }
             );
-            setIsPlanValid(response.data.success);
-            setPlanStatus(response.data.status);
+            console.log("Plan validity response:", response.data);
 
-            if (response.data.success && response.data.status === 'active') {
-                const expiryDate = new Date(response.data.data.expire_date);
-                const currentDate = new Date(response.data.data.current_date);
+            const { success, status, data } = response.data;
+
+            setIsPlanValid(success);
+            setPlanStatus(status);
+            setPlanId(data.plan_id.toString());
+
+            if (success && status === 'active') {
+                const expiryDate = new Date(data.expire_date);
+                const currentDate = new Date(data.current_date);
                 const timeDifference = expiryDate.getTime() - currentDate.getTime();
                 const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
                 setDaysUntilExpiry(daysDifference);
                 setIsPlanExpired(daysDifference <= 0);
-            } else if (response.data.status === 'newuser') {
-                setIsPlanExpired(false);
+
+                if (data.plan_id === 1) {
+                    setTrialStartDate(new Date(data.current_date));
+                }
             } else {
                 setIsPlanExpired(true);
             }
+
+            console.log("Updated state:", {
+                isPlanValid: success,
+                planStatus: status,
+                planId: data.plan_id.toString(),
+                daysUntilExpiry: Math.ceil((new Date(data.expire_date).getTime() - new Date(data.current_date).getTime()) / (1000 * 3600 * 24)),
+                isPlanExpired: !success || status !== 'active'
+            });
+
         } catch (error) {
             console.error('Error checking plan validity:', error);
             setIsPlanExpired(true);
@@ -312,13 +330,69 @@ function AddStocks() {
         }
     };
 
-    // const debounce = (func: Function, delay: number) => {
-    //     let timeoutId: NodeJS.Timeout;
-    //     return (...args: any[]) => {
-    //         clearTimeout(timeoutId);
-    //         timeoutId = setTimeout(() => func(...args), delay);
-    //     };
-    // };
+    const renderPlanStatus = () => {
+
+        if (isCheckingPlan) {
+            return <span style={{ color: 'white', fontSize: '14px' }}>Checking plan status...</span>;
+        }
+
+        if (isPlanValid && planStatus === 'active') {
+            const expiryMessage = `Your Plan is expiring in ${daysUntilExpiry} days`;
+
+            if (planId === '1') {
+                // Free trial
+                return (
+                    <>
+                        <span className="plan-expiring">{expiryMessage}</span>&nbsp;&nbsp;
+                        <button className="add-icon-parent-subscribe" style={{ cursor: 'pointer' }} onClick={handlePricingPageClick}>
+                            <span className='add-subscribe'>Subscribe Now</span>
+                        </button>
+                    </>
+                );
+            } else {
+                // Paid plans
+                if (daysUntilExpiry <= 10) {
+                    return (
+                        <>
+                            <span className="plan-expiring" style={{ color: daysUntilExpiry <= 5 ? 'red' : 'white' }}>
+                                {expiryMessage}
+                            </span>&nbsp;&nbsp;
+                            <button className="add-icon-parent" style={{ width: '120px', fontSize: '12px', cursor: 'pointer' }} onClick={handlePricingPageClick}>
+                                <span className='add'>Renew Plan</span>
+                            </button>
+                        </>
+                    );
+                } else {
+                    return <span className="plan-expiring">{expiryMessage}</span>;
+                }
+            }
+        }
+
+        if (isPlanExpired) {
+            return (
+                <>
+                    <span className="plan-expired" style={{ color: 'white' }}>Your Plan has expired&nbsp;&nbsp;</span>
+                    <button className="add-icon-parent" style={{ cursor: 'pointer' }} onClick={handlePricingPageClick}>
+                        <span className='add'>Renew Plan</span>
+                    </button>
+                </>
+            );
+        }
+
+        if (planStatus === 'newuser') {
+            return (
+                <>
+                    <span className="enjoy-your-30">Start your free 14 days trial&nbsp;&nbsp;</span>
+                    <button className="purchase-plan-button" onClick={handleAddToWatchlist}>
+                        Start Trial
+                    </button>
+                </>
+            );
+        }
+
+        // Default case if none of the above conditions are met
+        return <span style={{ color: 'white' }}>Unable to determine plan status. Please contact support.</span>;
+    };
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newQuery = event.target.value;
@@ -562,50 +636,11 @@ function AddStocks() {
                         <div className="add-your-favourite-container">
                             <span style={{ color: 'white' }}>Add your favourite stocks to watch list</span>
                             <br />
-                            {isCheckingPlan ? (
-                                <span style={{ color: 'white', fontSize: '14px' }}>Checking plan status...</span>
-                            ) : isPlanValid && planStatus === 'active' && !isPlanExpired ? (
-                                daysUntilExpiry <= 5 ? (
-                                    <>
-                                        <span className="plan-expiring" style={{ color: 'red' }}>Your Plan is expiring in {daysUntilExpiry} days</span>&nbsp;&nbsp;
-                                        <button className="add-icon-parent" style={{ width: '120px', fontSize: '12px', cursor: 'pointer' }} onClick={handlePricingPageClick}>
-                                            <span className='add'>Renew Plan</span>
-                                        </button>
-                                    </>
-                                ) : (
-                                    <span className="plan-expiring">Your Plan is expiring in {daysUntilExpiry} days</span>
-                                )
-                            ) : isPlanExpired ? (
-                                <>
-                                    <span className="plan-expired" style={{ color: 'white' }}>Your Plan has expired&nbsp;&nbsp;</span>
-                                    <button className="add-icon-parent" style={{ cursor: 'pointer' }} onClick={handlePricingPageClick}>
-                                        <span className='add'>Renew Plan</span>
-                                    </button>
-                                </>
-                            ) : planStatus === 'newuser' ? (
-                                <>
-                                    <span className="enjoy-your-30">Enjoy your free 30 days trial&nbsp;&nbsp;</span>
-                                    <button className="purchase-plan-button" onClick={handleAddToWatchlist}>
-                                        Purchase Plan
-                                    </button>
-                                </>
-                            ) : (
-                                <span style={{ color: 'white' }}>Checking your plan status...</span>
-                            )}
+                            {renderPlanStatus()}
                         </div>
                     </div>
                     <div className="add-stocks1">
                         <div className="icons-back">
-                            {/* <div className="add-stocks2">Add Stocks</div> */}
-                            {/* <div className="frame-parent">
-                                <img
-                                    className="frame-child"
-                                    alt=""
-                                    src="./public/group-1000001006.svg"
-                                />
-
-                                <div className="import-cas-file">Import CAS file</div>
-                            </div> */}
                         </div>
                         <div className="icons-back1">
                             <div className="frame-group" id="frameContainer">
@@ -644,7 +679,6 @@ function AddStocks() {
                                 >
                                     <div className="bank-nifty-50-container">
                                         <span>Bank Nifty </span>
-                                        {/* <span className="span1">(50)</span> */}
                                         <span> </span>
                                     </div>
                                 </div>
@@ -656,7 +690,6 @@ function AddStocks() {
                                         <span>Nifty 50</span>
                                         <span className="span1">
                                             <b className="b"> </b>
-                                            {/* <span>(22)</span> */}
                                         </span>
                                         <span>
                                             <span> </span>
@@ -677,31 +710,6 @@ function AddStocks() {
                                     )}
                                     {stockData.slice(0, displayCount).map((stock, index) => (
                                         <div key={index} className="select-stocks">
-                                            {/* {(selectedFilter === 'bankNifty' || selectedFilter === 'nifty50') && (
-                                                <input
-                                                    className='custom-selection-checkbox'
-                                                    type="checkbox"
-                                                    checked={selectedStocks.has(stock.scrip_cd)}
-                                                    onChange={() => {
-                                                        setSelectedStocks(prev => {
-                                                            const newSet = new Set(prev);
-                                                            if (newSet.has(stock.scrip_cd)) {
-                                                                newSet.delete(stock.scrip_cd);
-                                                            } else {
-                                                                if (watchlistCount < 15) {
-                                                                    newSet.add(stock.scrip_cd);
-                                                                    handlePlusClick(stock.isin_code, index);
-                                                                } else {
-                                                                    alert("You've reached the maximum limit of 15 stocks in your watchlist. No further stocks will be added.");
-                                                                }
-                                                            }
-                                                            return newSet;
-                                                        });
-                                                    }}
-                                                    style={{ marginRight: '10px' }}
-                                                    disabled={isAddingMultiple}
-                                                />
-                                            )} */}
                                             <div className="select-stocks-inner">
                                                 <div className="vector-wrapper">
                                                     <img className="vector-icon" alt="" />
@@ -835,8 +843,8 @@ function AddStocks() {
                                     <div className="link-names">
                                         <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us">About Us</a>
                                         <a href='/disclaimer' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Disclaimer</a>
-                                        {/* <a href='/insights' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">News Feed</a> */}
                                         <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">Refund Policy</a>
+                                        <a href='/insights' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">News Feed</a>
                                         <a href='/plans' className="refund-policy" style={{ textDecoration: "none", color: "#8A8D9E" }}>Pricing</a>
                                     </div>
                                     <div className="link-names1">

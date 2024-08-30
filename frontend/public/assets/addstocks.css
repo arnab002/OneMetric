@@ -816,6 +816,31 @@
   gap: var(--gap-5xs);
 }
 
+.add-subscribe {
+  position: relative;
+  font-size: var(--font-size-sm);
+  font-family: var(--font-poppins);
+  color: var(--color-mediumseagreen-200);
+  text-align: left;
+  display: inline-block;
+  min-width: 29px;
+}
+
+.add-icon-parent-subscribe {
+  cursor: pointer;
+  border: 1px solid var(--color-mediumseagreen-200);
+  padding: var(--padding-9xs) var(--padding-4xl) var(--padding-9xs) var(--padding-mini);
+  background-color: transparent;
+  width: 93px;
+  border-radius: var(--br-5xs);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-5xs);
+}
+
 .import-elements-parent {
   width: 348px;
   padding: 0 var(--padding-xl) 0 0;
@@ -1017,7 +1042,7 @@
 
 .footer {
   margin: 0px -14px;
-  height: 260px;
+  height: 270px;
   background-color: var(--color-gray-400);
   overflow: hidden;
   flex-shrink: 0;
@@ -1147,8 +1172,18 @@
   .enjoy-your-30 {
     font-size: 17px;
   }
+
   .add-icon-parent {
     margin-left: 50%;
+  }
+
+  .add-icon-parent-subscribe {
+    width: 50%;
+    margin-top: 2%;
+  }
+
+  .add-subscribe {
+    margin: auto;
   }
 
 }
@@ -1159,20 +1194,20 @@
   }
 }
 
-@media only screen and (min-width: 768px) and (max-width: 819px){
-  .add-icon-parent{
+@media only screen and (min-width: 768px) and (max-width: 819px) {
+  .add-icon-parent {
     margin-left: 76.5%;
   }
 }
 
-@media only screen and (min-width: 820px) and (max-width: 1022px){
-  .add-icon-parent{
+@media only screen and (min-width: 820px) and (max-width: 1022px) {
+  .add-icon-parent {
     margin-left: 77%;
   }
 }
 
-@media only screen and (min-width: 1023px) and (max-width: 1024px){
-  .add-icon-parent{
+@media only screen and (min-width: 1023px) and (max-width: 1024px) {
+  .add-icon-parent {
     margin-left: 82%;
   }
 }
@@ -1198,7 +1233,7 @@
 
   .footer {
     margin: 0px -85px;
-    padding: 0 70px 40px;
+    padding: 0 70px 28px;
   }
 
   .custom-selection-checkbox {
@@ -1211,6 +1246,16 @@
 
   .add-icon-parent {
     margin-left: 87%;
+  }
+
+  .add-icon-parent-subscribe {
+    width: 12%;
+    margin-top: -2.5%;
+    margin-left: 86%;
+  }
+
+  .add-subscribe {
+    margin: auto;
   }
 }
 

@@ -521,6 +521,16 @@
   margin-left: 16%;
 }
 
+.start-30-days {
+  position: relative;
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  font-family: var(--font-poppins);
+  color: var(--color-white);
+  text-align: center;
+  margin-left: 16%;
+}
+
 .trial-content {
   cursor: pointer;
   border: 1px solid var(--color-mediumseagreen-200);
@@ -2415,6 +2425,15 @@
   font-family: inherit;
 }
 
+.why-simply-grow2 {
+  margin: 0;
+  position: relative;
+  font-size: inherit;
+  line-height: 25px;
+  font-weight: 600;
+  font-family: inherit;
+}
+
 .icon-background {
   position: absolute;
   top: 6px;
@@ -2450,6 +2469,12 @@
 .effortless-tracking-seamless {
   flex: 1;
   position: relative;
+}
+
+.effortless-tracking-seamless-1 {
+  flex: 1;
+  position: relative;
+  margin-top: 3.5%;
 }
 
 .feature-containers {
@@ -2514,9 +2539,9 @@
 }
 
 .feature-containers2 {
+  position: relative;
   align-self: stretch;
   border-radius: var(--br-5xs);
-  overflow: hidden;
   flex-direction: row;
   padding: var(--padding-base) 61px var(--padding-base) var(--padding-base);
   gap: var(--gap-base);
@@ -2537,6 +2562,15 @@
 }
 
 .sub-feature-descriptions {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10%;
+}
+
+.sub-feature-descriptions-1 {
   align-self: stretch;
   display: flex;
   flex-direction: row;
@@ -2577,6 +2611,40 @@
 }
 
 .coming-soon-wrapper1 {
+  margin: 0 !important;
+  position: absolute;
+  top: -1px;
+  left: -3px;
+  padding: 1.5%;
+  border-radius: var(--br-5xs);
+  background-color: var(--color-darkslateblue);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  font-size: var(--font-size-xs);
+  color: var(--color-cornflowerblue-100);
+}
+
+.coming-soon-wrapper2 {
+  margin: 0 !important;
+  position: absolute;
+  top: -1px;
+  left: -3px;
+  padding: 1.5%;
+  border-radius: var(--br-5xs);
+  background-color: var(--color-darkslateblue);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  font-size: var(--font-size-xs);
+  color: var(--color-cornflowerblue-100);
+}
+
+.coming-soon-wrapper3 {
   margin: 0 !important;
   position: absolute;
   top: -1px;
@@ -2913,7 +2981,8 @@
 
 .affordable-plans,
 .diamond-plan,
-.plan-options {
+.plan-options,
+.plan-options1 {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
@@ -2932,11 +3001,13 @@
 }
 
 .affordable-plans,
-.plan-options {
+.plan-options,
+.plan-options1 {
   max-width: 100%;
 }
 
-.plan-options {
+.plan-options,
+.plan-options1 {
   flex: 1;
   flex-direction: column;
   gap: var(--gap-5xl);
@@ -3463,7 +3534,7 @@
 }
 
 .footer {
-  height: 275px;
+  height: 290px;
   background-color: var(--color-gray-400);
   overflow: hidden;
   flex-shrink: 0;
@@ -3637,9 +3708,16 @@
     padding: 12px;
     text-align: center;
   }
+
+  .why-simply-grow2 {
+    display: none;
+  }
+  .coming-soon-wrapper3{
+    left: 60px;
+  }
 }
 
-@media only screen and (min-width: 820px) and (max-width: 821px) {
+@media only screen and (min-width: 820px) and (max-width: 822px) {
   .promo-columns {
     width: 98%;
   }
@@ -3648,7 +3726,7 @@
     justify-content: space-evenly;
   }
 
-  .trial-days{
+  .trial-days {
     margin-left: 27%;
   }
 
@@ -3701,21 +3779,230 @@
     margin: auto;
     width: 42%;
   }
-  .hero-container-parent{
+
+  .hero-container-parent {
     padding: 0 0 30px;
   }
-  .affordable-plans{
+
+  .affordable-plans {
     align-self: auto;
     margin: auto;
   }
-  .why-simply-grow1{
-    margin-left: -30%;
+
+  .why-simply-grow1 {
+    margin-left: -33%;
   }
-  .referral-container{
+
+  .why-simply-grow2 {
+    display: none;
+  }
+
+  .referral-container {
     max-width: 75%;
     margin: auto;
   }
-  .started-30-days{
+
+  .started-30-days {
     margin-left: 0%;
+  }
+
+  .all-nifty-50 {
+    margin-left: 34%;
+  }
+
+  .bank-nifty {
+    margin-left: 12%;
+  }
+
+  .sub-feature-descriptions-1 {
+    margin-top: 4%;
+  }
+
+  .coming-soon-wrapper2 {
+    top: -20px;
+  }
+
+  .coming-soon-wrapper1 {
+    top: 10px;
+  }
+
+  .sub-feature-descriptions {
+    margin-top: 2%;
+  }
+
+  .effortless-tracking-seamless-1 {
+    margin-top: 1.5%;
+  }
+
+  .feature-containers1 {
+    margin-bottom: 2%;
+  }
+
+  .feature-containers4 {
+    margin-top: -5%;
+  }
+
+  .coming-soon-wrapper3 {
+    top: -20px;
+    left: 55px;
+  }
+}
+
+@media only screen and (min-width: 1180px) and (max-width: 1182px) {
+  .promo-columns {
+    width: 100%;
+  }
+
+  .sent-subscribed {
+    justify-content: space-evenly;
+  }
+
+  .trial-content {
+    max-width: 50%;
+    margin: auto;
+  }
+
+  .trial-days {
+    margin-left: 34%;
+  }
+
+  .started-30-days {
+    margin-left: 0%;
+  }
+
+  .all-nifty-50 {
+    margin-left: 40%;
+  }
+
+  .bank-nifty {
+    min-width: 95%;
+  }
+
+  .number-fields {
+    margin-top: 0%;
+  }
+
+  .add-stocks-to-watchlist-parent {
+    margin-top: 2%;
+  }
+
+  .input-fields {
+    margin-top: 2%;
+  }
+
+  .content-child {
+    right: 42%;
+  }
+
+  .rectangle-parent3 {
+    left: 410px;
+    height: 110%;
+  }
+
+  .stock-categories {
+    left: 427px;
+  }
+
+  .input-components {
+    justify-content: center;
+    gap: 60px;
+  }
+
+  .input-components-child {
+    right: 47.4%;
+    bottom: 85.4px;
+  }
+
+  .chart-icon {
+    right: 516.5px;
+    bottom: 474.5px;
+  }
+
+  .free-trial-button {
+    width: 42%;
+    margin: auto;
+  }
+
+  .start-30-days {
+    margin-left: 30%;
+  }
+
+  .why-simply-grow1 {
+    display: none;
+  }
+
+  .plan-options {
+    flex-direction: row;
+  }
+
+  .affordable-plans {
+    margin: auto;
+  }
+
+  .why-simply-grow2 {
+    font-size: 22px;
+    margin-left: 20px;
+    color: white;
+  }
+
+  .f-a-q-container-wrapper {
+    margin-top: 5%;
+  }
+
+  .questions {
+    margin: 0 90px;
+  }
+
+  .referral-container {
+    margin: auto;
+    max-width: 54%;
+  }
+
+  .effortless-tracking-seamless {
+    margin-top: 0.5%;
+  }
+
+  .coming-soon-wrapper3 {
+    left: 63px;
+    bottom: 54px;
+    padding: 3%;
+  }
+
+  .coming-soon-wrapper1 {
+    left: -2px;
+    bottom: 96px;
+    padding: 4%;
+  }
+
+  .feature-containers2 {
+    align-self: start;
+    gap: 20px;
+  }
+
+  .feature-containers3 {
+    align-self: start;
+  }
+
+  .group-icon1 {
+    margin-top: -26px;
+  }
+
+  .sub-feature-descriptions {
+    margin-top: -5%;
+  }
+
+  .feature-containers4 {
+    align-self: start;
+  }
+
+  .coming-soon-wrapper2 {
+    top: -6px;
+  }
+
+  .feature-containers-child {
+    margin-top: -8px;
+  }
+  .footer{
+    height: 330px;
   }
 }

@@ -624,6 +624,11 @@
   font-family: var(--font-poppins);
 }
 
+@media only screen and (min-width: 820px) and (max-width: 822px){
+  .about-us{
+    height: 100vh;
+  }
+}
 @media only screen and (min-width: 900px) and (max-width: 1024px){
   .about-us{
     height: 100vh;
@@ -640,6 +645,6 @@
   }
 
   .footer {
-    padding: 0 82px 40px;
+    padding: 0 82px 20px;
   }
 }

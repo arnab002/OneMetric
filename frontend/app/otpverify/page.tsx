@@ -3,6 +3,7 @@ import React, { useEffect, useState, ChangeEvent, KeyboardEvent } from 'react';
 import '../../public/assets/otpverify.css';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
+import { Edit } from 'react-feather';
 
 const OTPVerify: React.FC = () => {
     const [mobile, setMobile] = useState<string | null>(null);
@@ -128,6 +129,10 @@ const OTPVerify: React.FC = () => {
         window.open('/privacy', '_blank');
     };
 
+    const handleLoginRedirect = () => {
+        window.location.href = "/login"
+    };
+
     return (
         <div>
             <div className="otp">
@@ -189,34 +194,7 @@ const OTPVerify: React.FC = () => {
                                             <div className="phone-number">{mobile}</div>
                                             <div className="edit-delet-wrapper">
                                                 <div className="edit-delet">
-                                                    <img
-                                                        className="edit-icon"
-                                                        loading="lazy"
-                                                        alt=""
-                                                        src="./public/OTP/edit.svg"
-                                                    />
-                                                    <img
-                                                        className="edit-icon"
-                                                        loading="lazy"
-                                                        alt=""
-                                                        src="./public/OTP/delete.svg"
-                                                    />
-                                                    <div className="delete">
-                                                        <img
-                                                            className="edit-2-icon"
-                                                            loading="lazy"
-                                                            alt=""
-                                                            src="./public/OTP/edit2.svg"
-                                                        />
-                                                    </div>
-                                                    <div className="delete1">
-                                                        <img
-                                                            className="edit-2-icon1"
-                                                            loading="lazy"
-                                                            alt=""
-                                                            src="./public/OTP/edit2-1.svg"
-                                                        />
-                                                    </div>
+                                                    <Edit onClick={handleLoginRedirect} style={{cursor: 'pointer'}}/>
                                                 </div>
                                             </div>
                                         </div>

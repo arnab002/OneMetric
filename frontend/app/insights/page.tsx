@@ -6,17 +6,29 @@ import axios from 'axios';
 import baseApiURL from '@/baseUrl';
 import '../../public/assets/insights.css'
 
-interface Stock {
-    id: string;
-    isin_code: string;
-    scrip_cd: string;
-    // Add other properties of your stock object here
+
+interface NewsItem {
+    scrip_cd: number;
+    summary: string;
+    chart_img: string;
+    announced_at: string;
+    stock_long_name: string;
+}
+
+interface NewsResponse {
+    success: boolean;
+    data: NewsItem[];
+    currentPage: number;
+    totalPages: number;
+    message: string;
 }
 
 type ButtonState = 'plus' | 'check' | 'edit' | 'trash';
 
 function Insights() {
-    const [newsData, setNewsData] = useState<Array<{ [key: string]: any }>>([]);
+    const [planId, setPlanId] = useState<string>('');
+    const [trialStartDate, setTrialStartDate] = useState<Date | null>(null);
+    const [newsData, setNewsData] = useState<NewsItem[]>([]);
     const [editingStockId, setEditingStockId] = useState<string | null>(null);
     const [isRemoving, setIsRemoving] = useState<{ [key: string]: boolean }>({});
     const [stockData, setStockData] = useState<any[]>([]);
@@ -27,15 +39,16 @@ function Insights() {
     const [noDataFound, setNoDataFound] = useState<boolean>(false);
     const [noNewsDataFound, setNoNewsDataFound] = useState<boolean>(false);
     const [selectedFilter, setSelectedFilter] = useState('all');
-    const [buttonStates, setButtonStates] = useState<{ [key: string]: ButtonState }>({});
     const [displayCount, setDisplayCount] = useState(20);
-    const [displayNewsCount, setDisplayNewsCount] = useState(4);
     const [isPlanValid, setIsPlanValid] = useState<boolean>(false);
     const [planStatus, setPlanStatus] = useState<string>('');
     const [daysUntilExpiry, setDaysUntilExpiry] = useState<number>(0);
     const [isPlanExpired, setIsPlanExpired] = useState<boolean>(false);
     const [isTokenChecked, setIsTokenChecked] = useState(false);
     const [isCheckingPlan, setIsCheckingPlan] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [error, setError] = useState<string | null>(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [token, setToken] = useState<string | null>(null);
@@ -66,9 +79,14 @@ function Insights() {
     useEffect(() => {
         if (isTokenChecked && token) {
             fetchStockData();
-            fetchNewsData();
         }
     }, [isTokenChecked, token, searchQuery]);
+
+    useEffect(() => {
+        if (isTokenChecked && token) {
+            fetchNewsData(1);
+        }
+    }, [isTokenChecked, token]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -88,17 +106,21 @@ function Insights() {
         setIsLoggedIn(!!token);
     }, []);
 
-    const toggleDropdown = () => {
-        setShowDropdown(!showDropdown);
-    };
-
     const showMore = () => {
         setDisplayCount(prevCount => prevCount + 8);
     };
 
-    const showNewsMore = () => {
-        setDisplayNewsCount(prevCount => prevCount + 4);
+    const handleShowMore = () => {
+        const nextPage = currentPage + 1;
+        if (nextPage <= totalPages) {
+            console.log(`Loading more news. Fetching page: ${nextPage}`); // Debug log
+            fetchNewsData(nextPage);
+        }
     };
+
+    if (error) {
+        return <div style={{ color: 'white', margin: 'auto' }}>{error}</div>;
+    }
 
     const checkPlanValidity = async () => {
         setIsCheckingPlan(true);
@@ -112,27 +134,106 @@ function Insights() {
                     },
                 }
             );
-            setIsPlanValid(response.data.success);
-            setPlanStatus(response.data.status);
+            console.log("Plan validity response:", response.data);
 
-            if (response.data.success && response.data.status === 'active') {
-                const expiryDate = new Date(response.data.data.expire_date);
-                const currentDate = new Date(response.data.data.current_date);
+            const { success, status, data } = response.data;
+
+            setIsPlanValid(success);
+            setPlanStatus(status);
+            setPlanId(data.plan_id.toString());
+
+            if (success && status === 'active') {
+                const expiryDate = new Date(data.expire_date);
+                const currentDate = new Date(data.current_date);
                 const timeDifference = expiryDate.getTime() - currentDate.getTime();
                 const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
                 setDaysUntilExpiry(daysDifference);
                 setIsPlanExpired(daysDifference <= 0);
-            } else if (response.data.status === 'newuser') {
-                setIsPlanExpired(false);
+
+                if (data.plan_id === 1) {
+                    setTrialStartDate(new Date(data.current_date));
+                }
             } else {
                 setIsPlanExpired(true);
             }
+
+            console.log("Updated state:", {
+                isPlanValid: success,
+                planStatus: status,
+                planId: data.plan_id.toString(),
+                daysUntilExpiry: Math.ceil((new Date(data.expire_date).getTime() - new Date(data.current_date).getTime()) / (1000 * 3600 * 24)),
+                isPlanExpired: !success || status !== 'active'
+            });
+
         } catch (error) {
             console.error('Error checking plan validity:', error);
             setIsPlanExpired(true);
         } finally {
             setIsCheckingPlan(false);
         }
+    };
+
+    const renderPlanStatus = () => {
+        if (isCheckingPlan) {
+            return <span style={{ color: 'white', fontSize: '14px' }}>Checking plan status...</span>;
+        }
+
+        if (isPlanValid && planStatus === 'active') {
+            const expiryMessage = `Your Plan is expiring in ${daysUntilExpiry} days`;
+
+            if (planId === '1') {
+                // Free trial
+                return (
+                    <>
+                        <span className="plan-expiring">{expiryMessage}</span>&nbsp;&nbsp;
+                        <button className="add-icon-parent-subscribe" style={{ cursor: 'pointer' }} onClick={handlePricingPageClick}>
+                            <span className='add-subscribe'>Subscribe Now</span>
+                        </button>
+                    </>
+                );
+            } else {
+                // Paid plans
+                if (daysUntilExpiry <= 10) {
+                    return (
+                        <>
+                            <span className="plan-expiring" style={{ color: daysUntilExpiry <= 5 ? 'red' : 'white' }}>
+                                {expiryMessage}
+                            </span>&nbsp;&nbsp;
+                            <button className="add-icon-parent" style={{ width: '120px', fontSize: '12px', cursor: 'pointer' }} onClick={handlePricingPageClick}>
+                                <span className='add'>Renew Plan</span>
+                            </button>
+                        </>
+                    );
+                } else {
+                    return <span className="plan-expiring">{expiryMessage}</span>;
+                }
+            }
+        }
+
+        if (isPlanExpired) {
+            return (
+                <>
+                    <span className="plan-expired" style={{ color: 'white' }}>Your Plan has expired&nbsp;&nbsp;</span>
+                    <button className="add-icon-parent" style={{ cursor: 'pointer' }} onClick={handlePricingPageClick}>
+                        <span className='add'>Renew Plan</span>
+                    </button>
+                </>
+            );
+        }
+
+        if (planStatus === 'newuser') {
+            return (
+                <>
+                    <span className="enjoy-your-30">Start your free 14 days trial&nbsp;&nbsp;</span>
+                    <button className="purchase-plan-button" onClick={handleAddToWatchlist}>
+                        Start Trial
+                    </button>
+                </>
+            );
+        }
+
+        // Default case if none of the above conditions are met
+        return <span style={{ color: 'white' }}>Unable to determine plan status. Please contact support.</span>;
     };
 
     const sortStocksAlphabetically = (stocks: any[]) => {
@@ -171,36 +272,24 @@ function Insights() {
         }
     };
 
-    const fetchNewsData = async () => {
+    const fetchNewsData = async (page: number) => {
         setNewsLoading(true);
-        setNoNewsDataFound(false);
-
         try {
-            const response = await axios.get(`${baseApiURL()}/news`);
-            const result = await response.data.data;
+            console.log(`Fetching news data for page: ${page}`); // Debug log
+            const response = await axios.get<NewsResponse>(`https://api-dev.onemetric.in/news?page=${page}`);
+            const result = response.data;
 
-            // Function to modify the subtitle
-            const modifySubtitle = (subtitle: string) => {
-                return subtitle.replace(/\s-\s\d+\s-\s/, ' - ');
-            };
-
-            // Assign images to news items and modify subtitles
-            const newsWithImages = result.map((newsItem: any, index: number) => ({
-                ...newsItem,
-                imageUrl: newsImages[index % newsImages.length],
-                subtitle: modifySubtitle(newsItem.news_sub)
-            }));
-
-            setNewsData(newsWithImages);
-
-            if (newsWithImages.length === 0) {
-                setNoNewsDataFound(true);
+            if (result.success) {
+                setNewsData(prevData => (page === 1 ? result.data : [...prevData, ...result.data]));
+                setCurrentPage(page);
+                setTotalPages(result.totalPages);
+                console.log(`Fetched page ${page} successfully. Total pages: ${result.totalPages}`); // Debug log
             } else {
-                setNoNewsDataFound(false);
+                setError('Failed to fetch news data');
             }
         } catch (error) {
             console.error('Error fetching the news data:', error);
-            setNoNewsDataFound(true);
+            setError('An error occurred while fetching news');
         } finally {
             setNewsLoading(false);
         }
@@ -286,7 +375,7 @@ function Insights() {
                 if (isPlanValid && planStatus === 'active') {
                     alert(`Your plan is now active and will expire in ${daysUntilExpiry} days.`);
                 } else if (planStatus === 'newuser') {
-                    alert('Your 30-day free trial has started!');
+                    alert('Your 14 days free trial has started!');
                 } else {
                     alert('Your plan status has been updated. Please check your account for details.');
                 }
@@ -313,6 +402,66 @@ function Insights() {
 
     const handleUserAccountClick = () => {
         window.location.href = '/userAccount'
+    };
+
+    const handleAddStocksRedirect = async () => {
+        try {
+            // Check plan validity
+            const validityResponse = await axios.post(
+                `${baseApiURL()}/check-plan-validity`,
+                undefined,
+                {
+                    headers: {
+                        Authorization: `${token}`,
+                    },
+                }
+            );
+
+            if (validityResponse.data.status === 'newuser') {
+                // Initiate payment for free plan
+                const paymentResponse = await axios.post(
+                    `${baseApiURL()}/payment`,
+                    {
+                        plan_id: '1',
+                    },
+                    {
+                        headers: {
+                            Authorization: `${token}`,
+                        },
+                    }
+                );
+
+                const { transaction_id } = paymentResponse.data.data;
+
+                // Check payment status
+                const statusResponse = await axios.post(
+                    `${baseApiURL()}/check-payment-status`,
+                    {
+                        transaction_id: transaction_id,
+                    },
+                    {
+                        headers: {
+                            Authorization: `${token}`,
+                        },
+                    }
+                );
+
+                if (statusResponse.data.success) {
+                    alert('Your 14 days free trial has been activated!');
+                    window.location.href = '/addStocks';
+                } else {
+                    alert('Payment verification failed. Please try again.');
+                }
+            } else if (validityResponse.data.status === 'active') {
+                // If plan is already active, redirect directly
+                window.location.href = '/addStocks';
+            } else {
+                alert('Your plan is not active. Please purchase a plan to continue.');
+            }
+        } catch (error) {
+            console.error('Error in handleAddStocksRedirect:', error);
+            alert('An error occurred. Please try again.');
+        }
     };
 
     const handlePricingPageClick = () => {
@@ -394,10 +543,6 @@ function Insights() {
                         )}
                     </div>
                 </header>
-                {/* <div className="frame-parent4">
-                    <input className="frame-input" type="checkbox" />
-                    <div className="search-stock">Search Stocks</div>
-                </div> */}
                 <div className="simply-grow-all">OneMetric, All Right reserved © 2024</div>
                 <main className="watchlist-wrapper">
                     <section className="watchlist">
@@ -405,36 +550,7 @@ function Insights() {
                             <div className="add-your-favourite-container">
                                 <span className='favourite-stock'>Add your favourite stocks to watch list</span>
                                 <br />
-                                {isCheckingPlan ? (
-                                    <span style={{ color: 'white', fontSize: '14px' }}>Checking plan status...</span>
-                                ) : isPlanValid && planStatus === 'active' && !isPlanExpired ? (
-                                    daysUntilExpiry <= 5 ? (
-                                        <>
-                                            <span className="plan-expiring" style={{ color: 'red' }}>Your Plan is expiring in {daysUntilExpiry} days</span>&nbsp;&nbsp;
-                                            <button className="add-icon-parent" style={{ width: '120px', fontSize: '12px', cursor: 'pointer' }} onClick={handlePricingPageClick}>
-                                                <span className='add'>Renew Plan</span>
-                                            </button>
-                                        </>
-                                    ) : (
-                                        <span className="plan-expiring">Your Plan is expiring in {daysUntilExpiry} days</span>
-                                    )
-                                ) : isPlanExpired ? (
-                                    <>
-                                        <span className="plan-expired" style={{ color: 'white' }}>Your Plan has expired&nbsp;&nbsp;</span>
-                                        <button className="add-icon-parent" style={{ cursor: 'pointer' }} onClick={handlePricingPageClick}>
-                                            <span className='add'>Renew Plan</span>
-                                        </button>
-                                    </>
-                                ) : planStatus === 'newuser' ? (
-                                    <>
-                                        <span className="enjoy-your-30">Enjoy your free 30 days trial&nbsp;&nbsp;</span>
-                                        <button className="purchase-plan-button" onClick={handleAddToWatchlist}>
-                                            Purchase Plan
-                                        </button>
-                                    </>
-                                ) : (
-                                    <span style={{ color: 'white' }}>Checking your plan status...</span>
-                                )}
+                                {renderPlanStatus()}
                             </div>
                         </div>
                         <div className="insights-header-wrapper">
@@ -453,18 +569,12 @@ function Insights() {
                                     value={searchQuery}
                                     onChange={handleSearchChange}
                                 />
-                                <div className="price-wrapper">
-                                    <div className="price">Price</div>
-                                </div>
-                                <div className="delete-wrapper">
-                                    <div className="delete">Delete</div>
-                                </div>
                             </div>
                         </div>
                         <div className="watchlist-header">
                             <div className="alert-list-items">
                                 <h3 className="my-stock-watchlist">My Stock watchlist</h3>
-                                <button className="add-icon-parent" id="frameButton" onClick={() => window.location.href = '/addStocks'}>
+                                <button className="add-icon-parent" id="frameButton" onClick={handleAddStocksRedirect} style={{ cursor: 'pointer' }}>
                                     <div className="add-icon">
                                         <img
                                             className="add-icon-child"
@@ -486,24 +596,6 @@ function Insights() {
                                             <span className="span2">({stockData.length})</span>
                                         </div>
                                     </div>
-                                    {/* <div
-                                        className={`filter-names1 ${selectedFilter === 'bankNifty' ? 'active' : ''}`}
-                                        onClick={() => handleFilterChange('bankNifty')}
-                                    >
-                                        <div className="bank-nifty-50-container">
-                                            <span className="bank-nifty">Bank Nifty </span>
-                                            <span className="span3">({stockData.filter(stock => stock.category === 'bankNifty').length})</span>
-                                        </div>
-                                    </div>
-                                    <div
-                                        className={`filter-names2 ${selectedFilter === 'nifty50' ? 'active' : ''}`}
-                                        onClick={() => handleFilterChange('nifty50')}
-                                    >
-                                        <div className="all-nifty-50-container">
-                                            <span className="all">Nifty 50</span>
-                                            <span className="span3">({stockData.filter(stock => stock.category === 'nifty50').length})</span>
-                                        </div>
-                                    </div> */}
                                 </div>
                                 <div className="watchlist-items">
                                     {loading ? (
@@ -544,7 +636,7 @@ function Insights() {
                                                             onClick={() => handleEditClick(stock.id)}
                                                             style={{
                                                                 cursor: 'pointer',
-                                                                color: 'white'
+                                                                color: 'green'
                                                             }}
                                                         />
                                                     )}
@@ -566,68 +658,49 @@ function Insights() {
                                 <h3 className="newsfeed">Newsfeed</h3>
                             </div>
                             <div className="news-items">
-                                {newsLoading ? (
-                                    <div style={{ color: 'white', margin: 'auto' }}>Loading...</div>
-                                ) : noNewsDataFound ? (
-                                    <div style={{ color: 'white', margin: 'auto' }}>No data found</div>
-                                ) : (
-                                    newsData.slice(0, displayNewsCount).map((news) => (
-                                        <div className="newsfeed1" key={news.id}>
-                                            <div className="news-content">
-                                                <img
-                                                    className="image-9-icon"
-                                                    loading="lazy"
-                                                    alt=""
-                                                    src={news.imageUrl}
-                                                />
-                                            </div>
-                                            <div className="news-details">
-                                                <div className="watchlist-filters">
-                                                    <div className="reliance-industries">{news.stock_long_name}</div>
-                                                    <div className="reliance-gets-us">{news.subtitle}</div>
-                                                    <div className="news-time">
-                                                        <div className="jul-23-2024">{new Date(news.news_date_time).toLocaleString()}</div>
-                                                        <div className="read-parent">
-                                                            <div className="read">Read</div>
-                                                            <img
-                                                                className="frame-child4"
-                                                                alt=""
-                                                                src="./public/insights/vector-213.svg"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="traders-opinion-vote-on-this-n-parent">
-                                                        <div className="traders-opinion-vote">
-                                                            Traders opinion vote on this news
-                                                        </div>
-                                                        <div className="frame-parent5">
-                                                            <div className="vector-parent1">
-                                                                <img
-                                                                    className="frame-child21"
-                                                                    alt=""
-                                                                    src="./public/insights/polygon-3.svg"
-                                                                />
-                                                                <div className="buy">243 Buy</div>
-                                                            </div>
-                                                            <div className="vector-parent2">
-                                                                <img
-                                                                    className="frame-child22"
-                                                                    alt=""
-                                                                    src="./public/insights/polygon-3-1.svg"
-                                                                />
-                                                                <div className="buy">3938 Sell</div>
-                                                            </div>
-                                                        </div>
+                                {newsData.map((news, index) => (
+                                    <div className="newsfeed1" key={`${news.scrip_cd}-${index}`}>
+                                        <div className="news-content">
+                                            <img
+                                                className="image-9-icon"
+                                                loading="lazy"
+                                                alt=""
+                                                src={news.chart_img}
+                                            />
+                                        </div>
+                                        <div className="news-details">
+                                            <div className="watchlist-filters">
+                                                <div className="reliance-industries">{news.stock_long_name}</div>
+                                                <div className="reliance-gets-us">{news.summary}</div>
+                                                <div className="news-time">
+                                                    <div className="jul-23-2024">{new Date(news.announced_at).toLocaleString()}</div>
+                                                    <div className="read-parent">
+                                                        <div className="read">Read</div>
+                                                        <img
+                                                            className="frame-child4"
+                                                            alt=""
+                                                            src="./public/insights/vector-213.svg"
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    ))
-                                )
-                                }
+                                    </div>
+                                ))}
                             </div>
-                            {!newsLoading && newsData.length > displayNewsCount && (
-                                <button className="add-icon-parent" onClick={showNewsMore} style={{ width: "120px", margin: "auto", borderRadius: "8px", padding: "10px", cursor: 'pointer' }}>
+                            {newsLoading && <div style={{ color: 'white', margin: 'auto' }}>Loading...</div>}
+                            {currentPage < totalPages && !newsLoading && (
+                                <button
+                                    className="add-icon-parent"
+                                    onClick={handleShowMore}
+                                    style={{
+                                        width: "120px",
+                                        margin: "auto",
+                                        borderRadius: "8px",
+                                        padding: "10px",
+                                        cursor: 'pointer'
+                                    }}
+                                >
                                     <span className='add' style={{ margin: 'auto' }}>Show More</span>
                                 </button>
                             )}
@@ -684,6 +757,7 @@ function Insights() {
                                     <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us">About Us</a>
                                     <a href='/disclaimer' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Disclaimer</a>
                                     <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">Refund Policy</a>
+                                    <a href='/insights' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">News Feed</a>
                                     <a href='/plans' className="refund-policy" style={{ textDecoration: "none", color: "#8A8D9E" }}>Pricing</a>
                                 </div>
                                 <div className="link-names1">

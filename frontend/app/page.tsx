@@ -45,6 +45,7 @@ function Home() {
   const [showWatchlistButton, setShowWatchlistButton] = useState(false);
   const [filteredStockData, setFilteredStockData] = useState<any[]>([]);
   const [selectedStocks, setSelectedStocks] = useState<string[]>([]);
+  const [processingPlanId, setProcessingPlanId] = useState<string | null>(null);
   const [openFAQs, setOpenFAQs] = useState<{ [key: number]: boolean }>({});
   const router = useRouter();
 
@@ -272,14 +273,22 @@ function Home() {
 
 
   const handleStartNowClick = async (planId: string) => {
+    if (!isLoggedIn) {
+      window.location.href = '/login';
+      return;
+    }
+    setProcessingPlanId(planId);
+
     if (!razorpayLoaded) {
       console.error('Razorpay script not loaded');
+      setProcessingPlanId(null);
       return;
     }
 
     const token = sessionStorage.getItem('authToken');
     if (!token) {
       console.error('No token found in sessionStorage');
+      setProcessingPlanId(null);
       return;
     }
 
@@ -302,6 +311,7 @@ function Home() {
 
         if (!userDetails) {
           console.error('Failed to fetch user details');
+          setProcessingPlanId(null);
           return;
         }
         // Redirect to Razorpay payment page
@@ -338,6 +348,8 @@ function Home() {
       }
     } catch (error) {
       console.error('Error creating payment:', error);
+    } finally {
+      setProcessingPlanId(null);
     }
   };
 
@@ -462,7 +474,7 @@ function Home() {
   };
 
   const handleReferClick = () => {
-    window.location.href = '/login'
+    window.location.href = '/refer'
   };
 
   const handleHomeClick = () => {
@@ -523,7 +535,7 @@ function Home() {
               className="content-child"
               loading="lazy"
               alt=""
-              src="./public/home/Group 1000001008.png"
+              src="./public/whatsapp.png"
             />
             <img className="chart-icon" alt="" src="./public/home/chart.svg" />
             <div className="hero-container-parent">
@@ -1055,7 +1067,6 @@ function Home() {
                 <span>
                   ,secured two major contracts for its Theia Vision AI product, AI Facility Manager. The contracts, worth USD 1 million annually, are with five leading hospitals in India and a UAE-based gas station chain, for a five-year period
                 </span>
-                {/* <span className="posuere">#sapien</span> */}
               </div>
               <div className="frame-parent11">
                 <div className="rectangle-parent4">
@@ -1153,7 +1164,7 @@ function Home() {
           </section>
           <section className="free-trial-button">
             <button className="trial-button-container" onClick={handleTrialClick}>
-              <div className="started-30-days">Start Free Trial</div>
+              <div className="start-30-days">Start Free Trial</div>
             </button>
           </section>
           <section className="simply-grow-content-wrapper">
@@ -1168,7 +1179,7 @@ function Home() {
                         className="feature-checkmark-icon"
                         loading="lazy"
                         alt=""
-                        src="./public/home/vector-1.svg"
+                        src="./public/whatsapp.png"
                       />
                     </div>
                   </div>
@@ -1198,8 +1209,11 @@ function Home() {
                       src="./public/home/vector-21.svg"
                     />
                   </div>
-                  <div className="effortless-tracking-seamless" style={{ marginTop: '3.5%' }}>
+                  <div className="effortless-tracking-seamless-1">
                     Your Language, Your Choice
+                  </div>
+                  <div className="coming-soon-wrapper3">
+                    <i className="coming-soon1">Coming soon</i>
                   </div>
                 </div>
                 <div className="feature-containers3">
@@ -1232,12 +1246,12 @@ function Home() {
                     />
                   </div>
                   <div className="sub-feature-descriptions-parent">
-                    <div className="sub-feature-descriptions">
+                    <div className="sub-feature-descriptions-1">
                       <div className="effortless-tracking-seamless">
                         Family Portfolio Tracking
                       </div>
                     </div>
-                    <div className="coming-soon-wrapper1">
+                    <div className="coming-soon-wrapper2">
                       <i className="upgrade-available">Coming Soon</i>
                     </div>
                   </div>
@@ -1245,9 +1259,10 @@ function Home() {
               </div>
             </div>
           </section>
+          <h3 className="why-simply-grow2">Affordable plans</h3>
           <section className="affordable-plans">
             <div className="plan-options">
-              <h3 className="why-simply-grow1">Affordable plans!</h3>
+              <h3 className="why-simply-grow1">Affordable plans</h3>
               {loading ? 'Loading...' : planData.map((plan, index) => (
                 <div key={plan.id} className="diamond-plan">
                   <div className="diamond-details">
@@ -1341,15 +1356,15 @@ function Home() {
                       </div>
                     </div>
                   </div>
-                  <button className="start-now-wrapper" onClick={() => handleStartNowClick(plan.id)}>
-                    <div className="start-now">Start Now</div>
+                  <button className="start-now-wrapper" onClick={() => handleStartNowClick(plan.id)} disabled={processingPlanId === plan.id}>
+                    <div className="start-now">{processingPlanId === plan.id ? "Processing...." : "Subscribe Now"}</div>
                   </button>
                 </div>
               ))}
             </div>
           </section>
           <section className="f-a-q-container-wrapper">
-            <div className="plan-options">
+            <div className="plan-options1">
               <h3 className="faq">FAQs</h3>
               <div className="questions">
                 {[
@@ -1487,6 +1502,7 @@ function Home() {
                     <a href='/about' style={{ textDecoration: "none", color: "inherit" }} className="about-us">About Us</a>
                     <a href='/disclaimer' style={{ textDecoration: "none", color: "inherit" }} className="contact-us">Disclaimer</a>
                     <a href='/refund' style={{ textDecoration: "none", color: "inherit" }} className="refund-policy">Refund Policy</a>
+                    <a href='/insights' style={{ textDecoration: "none", color: "inherit" }} className="refund-policy">News Feed</a>
                     <a href='/plans' style={{ textDecoration: "none", color: "inherit" }} className="refund-policy">Pricing</a>
                   </div>
                   <div className="link-columns1">

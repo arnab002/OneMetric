@@ -80,7 +80,7 @@ const Referral: React.FC = () => {
     {
       title: "Agreement",
       content: [
-        "💡 By participating in our referral program, you agree to abide by the terms and conditions outlined in this policy."
+        "💡 By participating in the referral program on OneMetric, you acknowledge that you have read, understood, and agreed to the terms of this referral policy."
       ]
     }
   ];
@@ -208,13 +208,6 @@ const Referral: React.FC = () => {
                 </div>
               ))}
             </div>
-            <div className="by-making-a-container">
-              <span>By participating in the referral program on &nbsp;</span>
-              <b>OneMetric</b>
-              <span>
-                , you acknowledge that you have read, understood, and agreed to the terms of this referral policy.
-              </span>
-            </div>
           </section>
         </main>
         <div className="footer">
@@ -284,6 +277,7 @@ const Referral: React.FC = () => {
                   <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us1">About Us</a>
                   <a href='/disclaimer' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Disclaimer</a>
                   <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy1">Refund Policy</a>
+                  <a href='/insights' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy1">News Feed</a>
                   <a href='/plans' className="refund-policy1" style={{ textDecoration: "none", color: "inherit" }}>Pricing</a>
                 </div>
                 <div className="terms-conditions-parent">
@@ -331,3 +325,4 @@ const Referral: React.FC = () => {
 };
 
 export default Referral;
+

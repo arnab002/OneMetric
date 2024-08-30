@@ -36,6 +36,7 @@ function HomeDesktop() {
     const [razorpayLoaded, setRazorpayLoaded] = useState<boolean>(false);
     const [buttonStates, setButtonStates] = useState<{ [key: string]: ButtonState }>({});
     const [showWatchlistButton, setShowWatchlistButton] = useState(false);
+    const [processingPlanId, setProcessingPlanId] = useState<string | null>(null);
     const [selectedStocks, setSelectedStocks] = useState<string[]>([]);
     const [filteredStockData, setFilteredStockData] = useState<any[]>([]);
     const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
@@ -93,10 +94,6 @@ function HomeDesktop() {
 
     const handleUserAccountClick = () => {
         window.location.href = '/userAccount'
-    };
-
-    const toggleDropdown = () => {
-        setShowDropdown(!showDropdown);
     };
 
     const handleTabSwitch = (tab: string) => {
@@ -384,14 +381,23 @@ function HomeDesktop() {
 
 
     const handleStartNowClick = async (planId: string) => {
+        if (!isLoggedIn) {
+            window.location.href = '/login';
+            return;
+        }
+
+        setProcessingPlanId(planId);
+
         if (!razorpayLoaded) {
             console.error('Razorpay script not loaded');
+            setProcessingPlanId(null);
             return;
         }
 
         const token = sessionStorage.getItem('authToken');
         if (!token) {
             console.error('No token found in sessionStorage');
+            setProcessingPlanId(null);
             return;
         }
 
@@ -414,6 +420,7 @@ function HomeDesktop() {
 
                 if (!userDetails) {
                     console.error('Failed to fetch user details');
+                    setProcessingPlanId(null);
                     return;
                 }
                 // Redirect to Razorpay payment page
@@ -450,6 +457,8 @@ function HomeDesktop() {
             }
         } catch (error) {
             console.error('Error creating payment:', error);
+        } finally {
+            setProcessingPlanId(null);
         }
     };
 
@@ -1002,7 +1011,7 @@ function HomeDesktop() {
 
                                             </div>
                                             <div className="select-stocks-subscribe">
-                                                Select stocks that you follow or add to our precurated lists    
+                                                Select stocks that you follow or add to our precurated lists
                                             </div>
                                             <div className="line-parent12">
                                                 <div className="frame-child55" />
@@ -1281,7 +1290,7 @@ function HomeDesktop() {
                                                 className="placeholder-icon"
                                                 loading="lazy"
                                                 alt=""
-                                                src="./public/home-desktop/Group 1000001008.png"
+                                                src="./public/whatsapp.png"
                                             />
                                         </div>
                                     </div>
@@ -1302,7 +1311,7 @@ function HomeDesktop() {
                                                     className="benefit-icon"
                                                     loading="lazy"
                                                     alt=""
-                                                    src="./public/home-desktop/Group 1000001008.png"
+                                                    src="./public/whatsapp.png"
                                                 />
                                             </div>
                                         </div>
@@ -1489,8 +1498,8 @@ function HomeDesktop() {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <button className={index % 2 === 0 ? "start-now-wrapper" : "continue"} onClick={() => handleStartNowClick(plan.id)}>
-                                                <div className="start-now">Start Now</div>
+                                            <button className={index % 2 === 0 ? "start-now-wrapper" : "continue"} onClick={() => handleStartNowClick(plan.id)} disabled={processingPlanId === plan.id}>
+                                                <div className="start-now">{processingPlanId === plan.id ? "Processing...." : "Subscribe Now"}</div>
                                             </button>
                                         </div>
                                     ))}
@@ -1543,7 +1552,7 @@ function HomeDesktop() {
                                     </span>&nbsp;
                                 </h3>
                                 <button className="refer-now-button">
-                                    <a className="refer-now" href='/login' style={{ textDecoration: 'none' }}>Refer now</a>
+                                    <a className="refer-now" href='/refer' style={{ textDecoration: 'none' }}>Refer now</a>
                                 </button>
                             </div>
                             <img
@@ -1622,6 +1631,7 @@ function HomeDesktop() {
                                             <a href='/about' className="about-us" style={{ textDecoration: "none", color: "inherit" }}>About Us</a>
                                             <a href='/disclaimer' className="contact-us" style={{ textDecoration: "none", color: "inherit" }}>Disclaimer</a>
                                             <a href='/refund' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Refund Policy</a>
+                                            <a href='/insights' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>News Feed</a>
                                             <a href='/plan' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Pricing</a>
                                         </div>
                                         <div className="terms-links">

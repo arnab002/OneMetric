@@ -22,6 +22,7 @@ function Home() {
   const [loading, setLoading] = useState<boolean>(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [processingPlanId, setProcessingPlanId] = useState<string | null>(null);
   const [razorpayLoaded, setRazorpayLoaded] = useState<boolean>(false);
 
   useEffect(() => {
@@ -109,14 +110,22 @@ function Home() {
   };
 
   const handleStartNowClick = async (planId: string) => {
+    if (!isLoggedIn) {
+      window.location.href = '/login';
+      return;
+    }
+    setProcessingPlanId(planId);
+
     if (!razorpayLoaded) {
       console.error('Razorpay script not loaded');
+      setProcessingPlanId(null);
       return;
     }
 
     const token = sessionStorage.getItem('authToken');
     if (!token) {
       console.error('No token found in sessionStorage');
+      setProcessingPlanId(null);
       return;
     }
 
@@ -139,6 +148,7 @@ function Home() {
 
         if (!userDetails) {
           console.error('Failed to fetch user details');
+          setProcessingPlanId(null);
           return;
         }
         // Redirect to Razorpay payment page
@@ -177,6 +187,8 @@ function Home() {
       }
     } catch (error) {
       console.error('Error creating payment:', error);
+    } finally {
+      setProcessingPlanId(null);
     }
   };
 
@@ -332,8 +344,8 @@ function Home() {
                       </div>
                     </div>
                   </div>
-                  <button className="start-now-wrapper" onClick={() => handleStartNowClick(plan.id)}>
-                    <div className="start-now">Start Now</div>
+                  <button className="start-now-wrapper" onClick={() => handleStartNowClick(plan.id)} disabled={processingPlanId === plan.id}>
+                    <div className="start-now">{processingPlanId === plan.id ? "Processing...." : "Subscribe Now"}</div>
                   </button>
                 </div>
               ))}
