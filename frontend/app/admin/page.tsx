@@ -8,13 +8,16 @@ const AdminLogin: React.FC = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
-    const isAuthenticated = localStorage.getItem('isAdminAuthenticated') === 'true';
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
     useEffect(() => {
         // Check if admin is already logged in
-        const isAuthenticated = localStorage.getItem('isAdminAuthenticated') === 'true';
-        if (isAuthenticated) {
-            window.location.href = "/admin/dashboard"
+        if (typeof window !== 'undefined') {
+            const authStatus = localStorage.getItem('isAdminAuthenticated') === 'true';
+            setIsAuthenticated(authStatus);
+            if (authStatus) {
+                window.location.href = "/admin/dashboard"
+            }
         }
     }, []);
 
@@ -29,8 +32,10 @@ const AdminLogin: React.FC = () => {
 
         if (email === validEmail && password === validPassword) {
             // Set authentication in local storage
-            localStorage.setItem('isAdminAuthenticated', 'true');
-            window.location.href = "/admin/dashboard"
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('isAdminAuthenticated', 'true');
+            }
+            window.location.href = "/admin/dashboard";
         } else {
             setError('Invalid credentials');
         }
@@ -42,8 +47,8 @@ const AdminLogin: React.FC = () => {
         setShowPassword(!showPassword);
     };
 
-    if(isAuthenticated){
-        return null
+    if (isAuthenticated) {
+        return null;
     }
 
 
