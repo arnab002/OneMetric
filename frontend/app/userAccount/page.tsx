@@ -35,7 +35,7 @@ function UserAccount() {
 
     useEffect(() => {
         const checkTokenAndFetchDetails = async () => {
-            const storedToken = sessionStorage.getItem('authToken');
+            const storedToken = localStorage.getItem('authToken');
             setToken(storedToken);
             if (!storedToken) {
                 window.location.href = '/login';
@@ -75,7 +75,7 @@ function UserAccount() {
     };
 
     const handleLogout = () => {
-        sessionStorage.removeItem('authToken');
+        localStorage.removeItem('authToken');
         window.location.href = '/';
     };
 

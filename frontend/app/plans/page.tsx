@@ -63,7 +63,7 @@ function Home() {
   }, [showDropdown]);
 
   useEffect(() => {
-    const token = sessionStorage.getItem('authToken');
+    const token = localStorage.getItem('authToken');
     setIsLoggedIn(!!token);
   }, []);
 
@@ -93,7 +93,7 @@ function Home() {
 
   const fetchUserDetails = async (userId: string) => {
     try {
-      const token = sessionStorage.getItem('authToken');
+      const token = localStorage.getItem('authToken');
       const response = await axios.get(
         `${baseApiURL()}/fetchUserData`,
         {
@@ -122,9 +122,9 @@ function Home() {
       return;
     }
 
-    const token = sessionStorage.getItem('authToken');
+    const token = localStorage.getItem('authToken');
     if (!token) {
-      console.error('No token found in sessionStorage');
+      console.error('No token found in localStorage');
       setProcessingPlanId(null);
       return;
     }
@@ -417,6 +417,7 @@ function Home() {
                     <a href='/about' style={{ textDecoration: "none", color: "inherit" }} className="about-us">About Us</a>
                     <a href='/disclaimer' style={{ textDecoration: "none", color: "inherit" }} className="contact-us">Disclaimer</a>
                     <a href='/refund' style={{ textDecoration: "none", color: "inherit" }} className="refund-policy">Refund Policy</a>
+                    <a href='/insights' style={{ textDecoration: "none", color: "inherit" }} className="refund-policy">News Feed</a>
                     <a href='/plans' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Pricing</a>
                   </div>
                   <div className="link-columns1">

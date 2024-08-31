@@ -1,7 +1,13 @@
+'use client'
 import React from 'react'
 import { Icon } from '@iconify/react'
 
 function Header() {
+    const handleLogout = () => {
+        localStorage.removeItem('isAdminAuthenticated');
+        window.location.href = "/admin";
+    };
+
     return (
         <div className="navbar-header">
             <div className="row align-items-center justify-content-between">
@@ -223,10 +229,9 @@ function Header() {
                                             My Profile
                                         </a>
                                     </li>
-                                    <li>
+                                    <li onClick={handleLogout} style={{cursor: 'pointer'}}>
                                         <a
                                             className="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-danger d-flex align-items-center gap-3"
-                                            href="/admin"
                                         >
                                             <Icon icon="lucide:power" className="icon text-xl" />{" "}
                                             Log Out

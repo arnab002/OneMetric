@@ -3212,7 +3212,7 @@
   min-width: 50px;
 }
 .yearly-plan {
-  cursor: pointer;
+  cursor: none;
   border: 0;
   padding: var(--padding-7xs) var(--padding-base);
   background-color: transparent;
@@ -3432,7 +3432,7 @@
   min-width: 66px;
 }
 .monthly-plan {
-  cursor: pointer;
+  cursor: none;
   border: 0;
   padding: var(--padding-7xs) var(--padding-base);
   background-color: transparent;

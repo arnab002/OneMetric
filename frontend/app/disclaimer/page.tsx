@@ -86,7 +86,7 @@ const Referral: React.FC = () => {
   }, [showDropdown]);
 
   useEffect(() => {
-    const token = sessionStorage.getItem('authToken');
+    const token = localStorage.getItem('authToken');
     setIsLoggedIn(!!token);
   }, []);
 

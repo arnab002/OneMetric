@@ -1,5 +1,5 @@
-// ********************************** We can use  This code is for by ID ********************************* 
-(function ($) {
+// File Upload jQuery Plugin
+function initializeFileUploadPlugin($) {
     var fileUploadCount = 0;
 
     $.fn.fileUpload = function () {
@@ -70,7 +70,25 @@
             initializeFileUpload();
         });
     };
-})(jQuery);
+}
 
-// Apply fileUpload functionality to each container with the class "fileUpload"
-$('.fileUpload').fileUpload();
+// Check if jQuery is already loaded
+if (typeof jQuery === 'undefined') {
+    // If jQuery is not loaded, create a script element to load it
+    var script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js';
+    script.onload = function() {
+        // Once jQuery is loaded, initialize our plugin and apply it
+        initializeFileUploadPlugin(jQuery);
+        jQuery(document).ready(function($) {
+            $('.fileUpload').fileUpload();
+        });
+    };
+    document.head.appendChild(script);
+} else {
+    // If jQuery is already loaded, initialize our plugin and apply it immediately
+    initializeFileUploadPlugin(jQuery);
+    jQuery(document).ready(function($) {
+        $('.fileUpload').fileUpload();
+    });
+}

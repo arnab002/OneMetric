@@ -1,17 +1,14 @@
-(function ($) {
+// Wrap the entire code in a function that will be called once jQuery is loaded
+function initializeScript($) {
   'use strict';
 
   // sidebar submenu collapsible js
   $(".sidebar-menu .dropdown").on("click", function () {
     var item = $(this);
     item.siblings(".dropdown").children(".sidebar-submenu").slideUp();
-
     item.siblings(".dropdown").removeClass("dropdown-open");
-
     item.siblings(".dropdown").removeClass("open");
-
     item.children(".sidebar-submenu").slideToggle();
-
     item.toggleClass("dropdown-open");
   });
 
@@ -39,95 +36,73 @@
         .filter(function () {
           return this.href == nk;
         })
-        .addClass("active-page") // anchor
+        .addClass("active-page")
         .parent()
         .addClass("active-page");
       ;
-
     ) {
-      // li
       if (!o.is("li")) break;
       o = o.parent().addClass("show").parent().addClass("open");
     }
   });
 
   /**
-  * Utility function to calculate the current theme setting.
-  * Look for a local storage value.
-  * Fall back to system setting.
-  * Fall back to light mode.
-  */
+   * Utility function to calculate the current theme setting.
+   * Look for a local storage value.
+   * Fall back to light mode.
+   */
   function calculateSettingAsThemeString({ localStorageTheme }) {
-    if (localStorageTheme !== null) {
-      return localStorageTheme;
-    }
-    return "light";
+    return localStorageTheme !== null ? localStorageTheme : "light";
   }
 
   /**
-  * Utility function to update the button text and aria-label.
-  */
+   * Utility function to update the button text and aria-label.
+   */
   function updateButton({ buttonEl, isDark }) {
     const newCta = isDark ? "dark" : "light";
-    // use an aria-label if you are omitting text on the button
-    // and using a sun/moon icon, for example
     // buttonEl.setAttribute("aria-label", newCta);
     // buttonEl.innerText = newCta;
   }
 
   /**
-  * Utility function to update the theme setting on the html tag
-  */
+   * Utility function to update the theme setting on the html tag
+   */
   function updateThemeOnHtmlEl({ theme }) {
     document.querySelector("html").setAttribute("data-theme", theme);
   }
 
   /**
-  * 1. Grab what we need from the DOM and system settings on page load
-  */
-  const button = document.querySelector("[data-theme-toggle]");
-  const localStorageTheme = localStorage.getItem("theme");
+   * Theme toggle functionality
+   */
+  function setupThemeToggle() {
+    const button = document.querySelector("[data-theme-toggle]");
+    const localStorageTheme = localStorage.getItem("theme");
+    let currentThemeSetting = calculateSettingAsThemeString({ localStorageTheme });
 
-  /**
-  * 2. Work out the current site settings
-  */
-  let currentThemeSetting = calculateSettingAsThemeString({ localStorageTheme });
+    updateButton({ buttonEl: button, isDark: currentThemeSetting === "dark" });
+    updateThemeOnHtmlEl({ theme: currentThemeSetting });
 
-  /**
-  * 3. Update the theme setting and button text accoridng to current settings
-  */
-  updateButton({ buttonEl: button, isDark: currentThemeSetting === "dark" });
-  updateThemeOnHtmlEl({ theme: currentThemeSetting });
-
-  /**
-  * 4. Add an event listener to toggle the theme
-  */
-  if (button) {
-    button.addEventListener("click", (event) => {
-      const newTheme = currentThemeSetting === "dark" ? "light" : "dark";
-
-      localStorage.setItem("theme", newTheme);
-      updateButton({ buttonEl: button, isDark: newTheme === "dark" });
-      updateThemeOnHtmlEl({ theme: newTheme });
-
-      currentThemeSetting = newTheme;
-    });
+    if (button) {
+      button.addEventListener("click", (event) => {
+        const newTheme = currentThemeSetting === "dark" ? "light" : "dark";
+        localStorage.setItem("theme", newTheme);
+        updateButton({ buttonEl: button, isDark: newTheme === "dark" });
+        updateThemeOnHtmlEl({ theme: newTheme });
+        currentThemeSetting = newTheme;
+      });
+    }
   }
 
-  // =========================== Table Header Checkbox checked all js Start ================================
+  // Table Header Checkbox checked all js
   $('#selectAll').on('change', function () {
     $('.form-check .form-check-input').prop('checked', $(this).prop('checked'));
   });
 
-  // Remove Table Tr when click on remove btn start
+  // Remove Table Tr when click on remove btn
   $('.remove-btn').on('click', function () {
     $(this).closest('tr').remove();
-
-    // Check if the table has no rows left
     if ($('.table tbody tr').length === 0) {
       $('.table').addClass('bg-danger');
-
-      // Show notification
       $('.no-items-found').show();
     }
   });
@@ -143,6 +118,7 @@
       reader.readAsDataURL(input.files[0]);
     }
   }
+
   $("#imageUpload").change(function () {
     readURL(this);
   });
@@ -158,6 +134,22 @@
       }
     });
   }
+
   initializePasswordToggle('.toggle-password');
-  // Remove Table Tr when click on remove btn end
-})(jQuery);
+  setupThemeToggle();
+}
+
+// Check if jQuery is already loaded
+if (typeof jQuery === 'undefined') {
+  // If jQuery is not loaded, create a script element to load it
+  var script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js';
+  script.onload = function() {
+    // Once jQuery is loaded, initialize our script
+    initializeScript(jQuery);
+  };
+  document.head.appendChild(script);
+} else {
+  // If jQuery is already loaded, initialize our script immediately
+  initializeScript(jQuery);
+}

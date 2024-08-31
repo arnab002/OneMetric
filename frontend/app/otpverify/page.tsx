@@ -40,8 +40,7 @@ const OTPVerify: React.FC = () => {
                     setIsOtpInvalid(false);
                     const token = response.data.token;
                     const redirectUrl = response.data.redirect;
-                    sessionStorage.setItem('authToken', token);
-                    console.log('Token stored in session storage');
+                    localStorage.setItem('authToken', token);
                     window.location.href = `/successOtp?mobile=${mobile}&redirectUrl=${redirectUrl}`
                 })
                 .catch(error => {

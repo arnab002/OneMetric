@@ -1,7 +1,6 @@
 'use client'
-import React, { useState, FormEvent, useContext } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 import { Icon } from '@iconify/react';
-import { AuthContext } from './utilities/AuthContext';
 
 const AdminLogin: React.FC = () => {
     const [email, setEmail] = useState<string>('');
@@ -9,30 +8,43 @@ const AdminLogin: React.FC = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
-    const { login } = useContext(AuthContext);
+    const isAuthenticated = localStorage.getItem('isAdminAuthenticated') === 'true';
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    useEffect(() => {
+        // Check if admin is already logged in
+        const isAuthenticated = localStorage.getItem('isAdminAuthenticated') === 'true';
+        if (isAuthenticated) {
+            window.location.href = "/admin/dashboard"
+        }
+    }, []);
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError('');
         setLoading(true);
 
-        try {
-            const success = await login(email, password);
-            if (success) {
-                window.location.href ="/admin/dashboard"
-            } else {
-                setError('Invalid credentials');
-            }
-        } catch (err) {
-            setError('An error occurred during login');
-        } finally {
-            setLoading(false);
+        // Hardcoded credentials
+        const validEmail = 'admin@onemetric.in';
+        const validPassword = 'admin@123';
+
+        if (email === validEmail && password === validPassword) {
+            // Set authentication in local storage
+            localStorage.setItem('isAdminAuthenticated', 'true');
+            window.location.href = "/admin/dashboard"
+        } else {
+            setError('Invalid credentials');
         }
+
+        setLoading(false);
     };
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
+
+    if(isAuthenticated){
+        return null
+    }
 
 
     return (

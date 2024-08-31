@@ -1,14 +1,14 @@
 'use client'
-import React, {useEffect, useState, useContext} from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Icon } from '@iconify/react'
 import axios from 'axios'
 import baseApiURL from '@/baseUrl'
 import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import Footer from '../components/Footer'
-import { AuthContext } from '../utilities/AuthContext';
 
 function AdminHome() {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userStats, setUserStats] = useState({
         totalUsers: 0,
         paidUsers: 0
@@ -18,12 +18,20 @@ function AdminHome() {
         totalRevenue: 0
     });
 
-    const { isAuthenticated } = useContext(AuthContext);
+    const checkAuth = () => {
+        const authStatus = localStorage.getItem('isAdminAuthenticated') === 'true';
+        setIsAuthenticated(authStatus);
+        if (!authStatus) {
+            window.location.href = "/admin"
+        }
+    };
 
     useEffect(() => {
-        if (!isAuthenticated) {
-            window.location.href = "/admin";
-        } else {
+        checkAuth();
+    }, []);
+
+    useEffect(() => {
+        if (isAuthenticated) {
             fetchUserStats();
             fetchRevenueStats();
         }

@@ -3544,7 +3544,7 @@
     min-width: 100%;
   }
 
-  .diamond-value-txt-container{
+  .diamond-value-txt-container {
     font-size: 35px;
   }
 }
@@ -3562,9 +3562,6 @@
     width: 100%;
   }
 
-  /* .whats-app-promo{
-    align-items: stretch;
-  } */
 }
 
 @media (max-width: 767px) {
@@ -3575,21 +3572,56 @@
   }
 }
 
-@media only screen and (min-width: 768px) and (max-width: 1024px){
-  .why-simply-grow{
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+  .why-simply-grow {
     display: none;
   }
-  .affordable-plans{
+
+  .affordable-plans {
     margin-top: 0%;
     margin: auto;
   }
-  .plan-options{
+
+  .plan-options {
     flex-direction: row;
   }
 }
 
-@media only screen and (min-width: 820px) and (max-width: 1024px){
-  .homepage{
+@media only screen and (min-width: 820px) and (max-width: 1024px) {
+  .homepage {
     height: 100vh;
+  }
+  .plan-options{
+    margin-top: -10%;
+  }
+  .footer{
+    height: 285px;
+  }
+}
+
+@media only screen and (min-width: 1180px) and (max-width: 1182px) {
+  .affordable-plans {
+    flex-direction: column;
+    padding: 0 var(--padding-base);
+    box-sizing: border-box;
+    text-align: left;
+    font-size: var(--font-size-xl);
+    color: var(--color-white);
+    font-family: var(--font-poppins);
+    margin: auto;
+  }
+  .plan-options{
+    flex-direction: row;
+    margin-top: -10%;
+    margin-bottom: 5%;
+  }
+  .why-simply-grow{
+    display: none;
+  }
+  .link-columns-parent{
+    margin-top: -47px;
+  }
+  .footer{
+    height: 290px;
   }
 }

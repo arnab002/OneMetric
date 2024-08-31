@@ -88,7 +88,7 @@ function HomeDesktop() {
     }, [showDropdown]);
 
     useEffect(() => {
-        const token = sessionStorage.getItem('authToken');
+        const token = localStorage.getItem('authToken');
         setIsLoggedIn(!!token);
     }, []);
 
@@ -206,7 +206,7 @@ function HomeDesktop() {
     }, []);
 
     useEffect(() => {
-        const storedStocks = sessionStorage.getItem('selectedStocks');
+        const storedStocks = localStorage.getItem('selectedStocks');
         if (storedStocks) {
             const parsedStocks = JSON.parse(storedStocks);
             setSelectedStocks(parsedStocks);
@@ -222,7 +222,7 @@ function HomeDesktop() {
 
     useEffect(() => {
         const checkPlanValidity = async () => {
-            const token = sessionStorage.getItem('authToken');
+            const token = localStorage.getItem('authToken');
 
             if (token) {
                 try {
@@ -258,7 +258,7 @@ function HomeDesktop() {
             const updatedStocks = [...prevSelected, scrip_cd];
             setShowWatchlistButton(updatedStocks.length > 0);
             // Store selected stocks in session storage
-            sessionStorage.setItem('selectedStocks', JSON.stringify(updatedStocks));
+            localStorage.setItem('selectedStocks', JSON.stringify(updatedStocks));
             return updatedStocks;
         });
 
@@ -276,9 +276,9 @@ function HomeDesktop() {
             return;
         }
 
-        const token = sessionStorage.getItem('authToken');
+        const token = localStorage.getItem('authToken');
         if (!token) {
-            console.error('No token found in sessionStorage');
+            console.error('No token found in localStorage');
             return;
         }
 
@@ -307,7 +307,7 @@ function HomeDesktop() {
 
             if (checkStatusResponse.data.success) {
                 // Payment successful, now add stocks to watchlist
-                const selectedStocks = JSON.parse(sessionStorage.getItem('selectedStocks') || '[]');
+                const selectedStocks = JSON.parse(localStorage.getItem('selectedStocks') || '[]');
 
                 for (const scrip_cd of selectedStocks) {
                     try {
@@ -325,7 +325,7 @@ function HomeDesktop() {
 
                 window.location.href = '/insights'
                 // Clear selected stocks from session storage
-                sessionStorage.removeItem('selectedStocks');
+                localStorage.removeItem('selectedStocks');
                 setSelectedStocks([]);
                 setShowWatchlistButton(false);
 
@@ -355,7 +355,7 @@ function HomeDesktop() {
 
         setSelectedStocks((prevSelected) => {
             const updatedStocks = prevSelected.filter((stock) => stock !== scrip_cd);
-            sessionStorage.setItem('selectedStocks', JSON.stringify(updatedStocks));
+            localStorage.setItem('selectedStocks', JSON.stringify(updatedStocks));
             setShowWatchlistButton(updatedStocks.length > 0);
             return updatedStocks;
         });
@@ -363,7 +363,7 @@ function HomeDesktop() {
 
     const fetchUserDetails = async (userId: string) => {
         try {
-            const token = sessionStorage.getItem('authToken');
+            const token = localStorage.getItem('authToken');
             const response = await axios.post(
                 `${baseApiURL()}/fetchUserData`,
                 {
@@ -394,9 +394,9 @@ function HomeDesktop() {
             return;
         }
 
-        const token = sessionStorage.getItem('authToken');
+        const token = localStorage.getItem('authToken');
         if (!token) {
-            console.error('No token found in sessionStorage');
+            console.error('No token found in localStorage');
             setProcessingPlanId(null);
             return;
         }

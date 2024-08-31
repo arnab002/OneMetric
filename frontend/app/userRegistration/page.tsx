@@ -38,7 +38,7 @@ function Registration() {
 
     useEffect(() => {
         const checkToken = () => {
-            const storedToken = sessionStorage.getItem('authToken');
+            const storedToken = localStorage.getItem('authToken');
             setToken(storedToken);
             if (!storedToken) {
                 window.location.href = '/login';

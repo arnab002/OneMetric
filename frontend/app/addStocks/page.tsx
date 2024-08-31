@@ -44,7 +44,7 @@ function AddStocks() {
 
     useEffect(() => {
         const checkToken = () => {
-            const storedToken = sessionStorage.getItem('authToken');
+            const storedToken = localStorage.getItem('authToken');
             setToken(storedToken);
             if (!storedToken) {
                 window.location.href = '/login';
@@ -79,10 +79,12 @@ function AddStocks() {
             if (!lowercaseQuery) return stocks;
 
             return stocks.reduce((acc, stock) => {
-                const stockName = stock.stock_long_name.toLowerCase();
-                if (stockName === lowercaseQuery) {
+                const stockLongName = stock.stock_long_name.toLowerCase();
+                const scName = stock.sc_name ? stock.sc_name.toLowerCase() : '';
+                
+                if (stockLongName === lowercaseQuery || scName === lowercaseQuery) {
                     acc.unshift(stock);
-                } else if (stockName.includes(lowercaseQuery)) {
+                } else if (stockLongName.includes(lowercaseQuery) || scName.includes(lowercaseQuery)) {
                     acc.push(stock);
                 }
                 return acc;
@@ -146,7 +148,7 @@ function AddStocks() {
     }, [showDropdown]);
 
     useEffect(() => {
-        const token = sessionStorage.getItem('authToken');
+        const token = localStorage.getItem('authToken');
         setIsLoggedIn(!!token);
     }, []);
 
@@ -354,11 +356,11 @@ function AddStocks() {
                 if (daysUntilExpiry <= 10) {
                     return (
                         <>
-                            <span className="plan-expiring" style={{ color: daysUntilExpiry <= 5 ? 'red' : 'white' }}>
+                            <span className="plan-expiring" style={{ color: daysUntilExpiry <= 5 ? 'red' : '#ffbf00' }}>
                                 {expiryMessage}
                             </span>&nbsp;&nbsp;
-                            <button className="add-icon-parent" style={{ width: '120px', fontSize: '12px', cursor: 'pointer' }} onClick={handlePricingPageClick}>
-                                <span className='add'>Renew Plan</span>
+                            <button className="add-icon-parent-renew" style={{ width: '120px', fontSize: '12px', cursor: 'pointer' }} onClick={handlePricingPageClick}>
+                                <span className='add-renew'>Renew Plan</span>
                             </button>
                         </>
                     );
@@ -371,9 +373,9 @@ function AddStocks() {
         if (isPlanExpired) {
             return (
                 <>
-                    <span className="plan-expired" style={{ color: 'white' }}>Your Plan has expired&nbsp;&nbsp;</span>
-                    <button className="add-icon-parent" style={{ cursor: 'pointer' }} onClick={handlePricingPageClick}>
-                        <span className='add'>Renew Plan</span>
+                    <span className="plan-expired" style={{ color: 'red' }}>Your Plan has expired&nbsp;&nbsp;</span>
+                    <button className="add-icon-parent-renew" style={{ cursor: 'pointer' }} onClick={handlePricingPageClick}>
+                        <span className='add-renew'>Renew Plan</span>
                     </button>
                 </>
             );
@@ -512,9 +514,9 @@ function AddStocks() {
 
     const handleAddToWatchlist = async () => {
 
-        const token = sessionStorage.getItem('authToken');
+        const token = localStorage.getItem('authToken');
         if (!token) {
-            console.error('No token found in sessionStorage');
+            console.error('No token found in localStorage');
             return;
         }
 

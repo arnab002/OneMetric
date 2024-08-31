@@ -63,7 +63,7 @@ function Home() {
 
   useEffect(() => {
     const checkPlanValidity = async () => {
-      const token = sessionStorage.getItem('authToken');
+      const token = localStorage.getItem('authToken');
 
       if (token) {
         try {
@@ -104,7 +104,7 @@ function Home() {
   }, [showDropdown]);
 
   useEffect(() => {
-    const token = sessionStorage.getItem('authToken');
+    const token = localStorage.getItem('authToken');
     setIsLoggedIn(!!token);
   }, []);
 
@@ -151,7 +151,7 @@ function Home() {
 
   // Load selected stocks from session storage on component mount
   useEffect(() => {
-    const storedStocks = sessionStorage.getItem('selectedStocks');
+    const storedStocks = localStorage.getItem('selectedStocks');
     if (storedStocks) {
       const parsedStocks = JSON.parse(storedStocks);
       setSelectedStocks(parsedStocks);
@@ -255,7 +255,7 @@ function Home() {
 
   const fetchUserDetails = async (userId: string) => {
     try {
-      const token = sessionStorage.getItem('authToken');
+      const token = localStorage.getItem('authToken');
       const response = await axios.get(
         `${baseApiURL()}/fetchUserData`,
         {
@@ -285,9 +285,9 @@ function Home() {
       return;
     }
 
-    const token = sessionStorage.getItem('authToken');
+    const token = localStorage.getItem('authToken');
     if (!token) {
-      console.error('No token found in sessionStorage');
+      console.error('No token found in localStorage');
       setProcessingPlanId(null);
       return;
     }
@@ -362,7 +362,7 @@ function Home() {
     setSelectedStocks((prevSelected) => [...prevSelected, scrip_cd]);
 
     // Store selected stocks in session storage
-    sessionStorage.setItem('selectedStocks', JSON.stringify([...selectedStocks, scrip_cd]));
+    localStorage.setItem('selectedStocks', JSON.stringify([...selectedStocks, scrip_cd]));
 
     setTimeout(() => {
       setButtonStates((prevState) => ({
@@ -378,9 +378,9 @@ function Home() {
       return;
     }
 
-    const token = sessionStorage.getItem('authToken');
+    const token = localStorage.getItem('authToken');
     if (!token) {
-      console.error('No token found in sessionStorage');
+      console.error('No token found in localStorage');
       return;
     }
 
@@ -409,7 +409,7 @@ function Home() {
 
       if (checkStatusResponse.data.success) {
         // Payment successful, now add stocks to watchlist
-        const selectedStocks = JSON.parse(sessionStorage.getItem('selectedStocks') || '[]');
+        const selectedStocks = JSON.parse(localStorage.getItem('selectedStocks') || '[]');
 
         for (const scrip_cd of selectedStocks) {
           try {
@@ -427,7 +427,7 @@ function Home() {
 
         window.location.href = '/insights'
         // Clear selected stocks from session storage
-        sessionStorage.removeItem('selectedStocks');
+        localStorage.removeItem('selectedStocks');
         setSelectedStocks([]);
         setShowWatchlistButton(false);
 
@@ -461,7 +461,7 @@ function Home() {
 
     // Update session storage
     const updatedStocks = selectedStocks.filter((stock) => stock !== scrip_cd);
-    sessionStorage.setItem('selectedStocks', JSON.stringify(updatedStocks));
+    localStorage.setItem('selectedStocks', JSON.stringify(updatedStocks));
 
     // If no stocks are selected, hide the watchlist button
     if (updatedStocks.length === 0) {

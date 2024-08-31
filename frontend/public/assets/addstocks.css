@@ -1186,6 +1186,15 @@
     margin: auto;
   }
 
+  .add-icon-parent-renew {
+    width: 40%;
+    margin-top: 2%;
+  }
+
+  .add-renew {
+    margin: auto;
+  }
+
 }
 
 @media only screen and (min-width: 375px) and (max-width: 431px) {
@@ -1197,6 +1206,30 @@
 @media only screen and (min-width: 768px) and (max-width: 819px) {
   .add-icon-parent {
     margin-left: 76.5%;
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+  .add-icon-parent-subscribe {
+    width: 30%;
+    padding: 10px 0px;
+    margin-top: -5%;
+    margin-left: 66%;
+  }
+
+  .add-subscribe {
+    margin: auto;
+  }
+
+  .add-icon-parent-renew {
+    width: 15%;
+    padding: 8px 0px;
+    margin-top: -5%;
+    margin-left: 76%;
+  }
+
+  .add-renew {
+    margin: auto;
   }
 }
 
@@ -1250,11 +1283,23 @@
 
   .add-icon-parent-subscribe {
     width: 12%;
+    padding: 10px 0px;
     margin-top: -2.5%;
     margin-left: 86%;
   }
 
   .add-subscribe {
+    margin: auto;
+  }
+
+  .add-icon-parent-renew {
+    width: 11%;
+    padding: 8px 0px;
+    margin-top: -2.7%;
+    margin-left: 86%;
+  }
+
+  .add-renew {
     margin: auto;
   }
 }

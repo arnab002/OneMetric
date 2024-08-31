@@ -55,7 +55,7 @@ function Insights() {
 
     useEffect(() => {
         const checkToken = () => {
-            const storedToken = sessionStorage.getItem('authToken');
+            const storedToken = localStorage.getItem('authToken');
             setToken(storedToken);
             if (!storedToken) {
                 window.location.href = '/login';
@@ -102,7 +102,7 @@ function Insights() {
     }, [showDropdown]);
 
     useEffect(() => {
-        const token = sessionStorage.getItem('authToken');
+        const token = localStorage.getItem('authToken');
         setIsLoggedIn(!!token);
     }, []);
 
@@ -196,11 +196,11 @@ function Insights() {
                 if (daysUntilExpiry <= 10) {
                     return (
                         <>
-                            <span className="plan-expiring" style={{ color: daysUntilExpiry <= 5 ? 'red' : 'white' }}>
+                            <span className="plan-expiring" style={{ color: daysUntilExpiry <= 5 ? 'red' : '#ffbf00' }}>
                                 {expiryMessage}
                             </span>&nbsp;&nbsp;
-                            <button className="add-icon-parent" style={{ width: '120px', fontSize: '12px', cursor: 'pointer' }} onClick={handlePricingPageClick}>
-                                <span className='add'>Renew Plan</span>
+                            <button className="add-icon-parent-renew" style={{ width: '120px', fontSize: '12px', cursor: 'pointer' }} onClick={handlePricingPageClick}>
+                                <span className='add-renew'>Renew Plan</span>
                             </button>
                         </>
                     );
@@ -213,9 +213,9 @@ function Insights() {
         if (isPlanExpired) {
             return (
                 <>
-                    <span className="plan-expired" style={{ color: 'white' }}>Your Plan has expired&nbsp;&nbsp;</span>
-                    <button className="add-icon-parent" style={{ cursor: 'pointer' }} onClick={handlePricingPageClick}>
-                        <span className='add'>Renew Plan</span>
+                    <span className="plan-expiring" style={{ color: 'red' }}>Your Plan has expired&nbsp;&nbsp;</span>
+                    <button className="add-icon-parent-renew" style={{ cursor: 'pointer' }} onClick={handlePricingPageClick}>
+                        <span className='add-renew'>Renew Plan</span>
                     </button>
                 </>
             );
@@ -339,9 +339,9 @@ function Insights() {
 
     const handleAddToWatchlist = async () => {
 
-        const token = sessionStorage.getItem('authToken');
+        const token = localStorage.getItem('authToken');
         if (!token) {
-            console.error('No token found in sessionStorage');
+            console.error('No token found in localStorage');
             return;
         }
 

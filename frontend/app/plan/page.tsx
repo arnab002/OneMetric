@@ -64,7 +64,7 @@ function PlanDesktop() {
     }, [showDropdown]);
 
     useEffect(() => {
-        const token = sessionStorage.getItem('authToken');
+        const token = localStorage.getItem('authToken');
         setIsLoggedIn(!!token);
     }, []);
 
@@ -90,7 +90,7 @@ function PlanDesktop() {
 
     const fetchUserDetails = async (userId: string) => {
         try {
-            const token = sessionStorage.getItem('authToken');
+            const token = localStorage.getItem('authToken');
             const response = await axios.get(
                 `${baseApiURL()}/fetchUserData`,
                 {
@@ -120,9 +120,9 @@ function PlanDesktop() {
             return;
         }
 
-        const token = sessionStorage.getItem('authToken');
+        const token = localStorage.getItem('authToken');
         if (!token) {
-            console.error('No token found in sessionStorage');
+            console.error('No token found in localStorage');
             setProcessingPlanId(null);
             return;
         }
