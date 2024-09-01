@@ -7,6 +7,7 @@ import '../public/assets/index.css'
 import logo from "../public/public/home/image-18@2x.png";
 import { Edit3, Plus, Trash, Check } from 'react-feather';
 import { User } from 'react-feather';
+import { BarLoader, PulseLoader } from 'react-spinners'; // Import multiple loaders
 import statsData from '../public/json/stats.json';
 import HomeMobileView from '@/middlewares/home/HomeMobileView';
 
@@ -29,6 +30,7 @@ type Stock = {
 type ButtonState = 'plus' | 'check' | 'edit' | 'trash';
 
 function Home() {
+  const [contentReady, setContentReady] = useState<boolean>(false);
   const [stats, setStats] = useState(statsData);
   const [stockData, setStockData] = useState<any[]>([]);
   const [bankniftyData, setBankNiftyData] = useState<any[]>([]);
@@ -81,9 +83,10 @@ function Home() {
           }
         } catch (error) {
           console.error('Error checking plan validity:', error);
+          setTimeout(() => setContentReady(true), 1000);
         }
       }
-
+      setContentReady(true);
       setLoadingPlanValidity(false);
     };
 
@@ -111,7 +114,7 @@ function Home() {
   useEffect(() => {
     const fetchStockData = async () => {
       try {
-        const response = await axios.get(`${baseApiURL()}/stocks`);
+        const response = await axios.get(`${baseApiURL()}/stocks-lite`);
         const data = (response.data.data as { stock_long_name: string }[])
           .filter(stock => {
             // Remove entries with patterns like "182D050924" or other unwanted formats
@@ -489,8 +492,37 @@ function Home() {
     window.open('https://api.whatsapp.com/send?phone=917204946777&text=Hi', '_blank');
   };
 
-  if (loadingPlanValidity) {
-    return null;
+  if (loadingPlanValidity && loading || !contentReady) {
+    return (
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        backgroundColor: '#0B0C18',
+        fontFamily: 'Arial, sans-serif'
+      }}>
+        <img src={logo.src} alt="OneMetric Logo" style={{ width: '150px', marginBottom: '20px' }} />
+        <BarLoader
+          color={'#F37254'}
+          loading={true}
+          height={4}
+          width={150}
+        />
+        <p style={{ marginTop: '20px', color: '#fff' }}>
+          {loading ? 'Loading...' : 'Preparing your experience...'}
+        </p>
+        <div style={{ marginTop: '10px' }}>
+          <PulseLoader
+            color={'#F37254'}
+            loading={true}
+            size={10}
+            speedMultiplier={0.7}
+          />
+        </div>
+      </div>
+    );
   }
 
 
@@ -1212,9 +1244,9 @@ function Home() {
                   <div className="effortless-tracking-seamless-1">
                     Your Language, Your Choice
                   </div>
-                  <div className="coming-soon-wrapper3">
+                  {/* <div className="coming-soon-wrapper3">
                     <i className="coming-soon1">Coming soon</i>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="feature-containers3">
                   <div className="group-wrapper">

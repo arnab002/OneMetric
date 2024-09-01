@@ -1,56 +1,68 @@
 'use client'
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 const ViralLoopsWidget = () => {
+  const [iframeHeight, setIframeHeight] = useState('100vh');
+  const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
-    // Create the script element for Viral Loops
-    const script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = "https://app.viral-loops.com/widgetsV2/core/loader.js";
-    script.setAttribute("data-campaign-id", "hQstDmSyd6z5emjtu1IuxZWGctY");
-    script.id = "viral-loops-loader";
+    const updateIframeHeight = () => {
+      setIframeHeight(`${window.innerHeight}px`);
+    };
 
-    // Append the script to the document
-    document.body.appendChild(script);
+    // Initial height set
+    updateIframeHeight();
 
-    // Inject the custom widgets
-    const widgetContainer = document.getElementById("viral-loops-widget");
-    if (widgetContainer) {
-      // Add form-widget
-      const formWidget = document.createElement("form-widget");
-      formWidget.setAttribute("ucid", "hQstDmSyd6z5emjtu1IuxZWGctY");
-      widgetContainer.appendChild(formWidget);
+    // Update height on window resize
+    window.addEventListener('resize', updateIframeHeight);
 
-      // Add milestone-widget
-      const milestoneWidget = document.createElement("milestone-widget");
-      milestoneWidget.setAttribute("ucid", "hQstDmSyd6z5emjtu1IuxZWGctY");
-      widgetContainer.appendChild(milestoneWidget);
+    // Create an iframe to load the Viral Loops page
+    const iframe = document.createElement("iframe");
+    iframe.src = "https://vrlps.co/w50aqp5/cp";
+    iframe.style.width = "100%";
+    iframe.style.height = "100%";
+    iframe.style.border = "none";
+    iframe.style.position = "fixed";
+    iframe.style.top = "0";
+    iframe.style.left = "0";
+    iframe.style.zIndex = "9999";
 
-      // Add referral-count-widget
-      const referralCountWidget = document.createElement("referral-count-widget");
-      referralCountWidget.setAttribute("ucid", "hQstDmSyd6z5emjtu1IuxZWGctY");
-      widgetContainer.appendChild(referralCountWidget);
-    }
+    // Append the iframe to the body
+    document.body.appendChild(iframe);
 
-    // Clean up the script and widgets when the component unmounts
+    // Set loaded state to true when iframe is loaded
+    iframe.onload = () => setIsLoaded(true);
+
+    // Clean up function
     return () => {
-      const loaderScript = document.getElementById("viral-loops-loader");
-      if (loaderScript) {
-        document.body.removeChild(loaderScript);
-      }
-
-      // Clean up the widgets
-      if (widgetContainer) {
-        widgetContainer.innerHTML = ""; // Removes all child nodes
+      window.removeEventListener('resize', updateIframeHeight);
+      if (iframe && document.body.contains(iframe)) {
+        document.body.removeChild(iframe);
       }
     };
   }, []);
 
   return (
-    <div>
-      {/* Container for the Viral Loops widgets */}
-      <div id="viral-loops-widget"></div>
-    </div>
+    <>
+      <div 
+        style={{ 
+          position: 'fixed', 
+          top: 0, 
+          left: 0, 
+          width: '100%', 
+          height: iframeHeight, 
+          zIndex: 9998,
+          background: '#fff',
+          display: isLoaded ? 'none' : 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          fontSize: '1.2rem'
+        }}
+      >
+        Loading Viral Loops content...
+      </div>
+      {/* The iframe is now directly appended to the body in the useEffect hook */}
+    </>
   );
 };
 

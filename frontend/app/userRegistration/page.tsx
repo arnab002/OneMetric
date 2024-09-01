@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react'
 import '../../public/assets/register.css'
 import axios from 'axios';
+import logo from "../../public/public/register/OneMetric_Transparent.png";
+import { BarLoader, PulseLoader } from 'react-spinners'; // Import multiple loaders
 import baseApiURL from '@/baseUrl';
 
 function Registration() {
@@ -57,7 +59,36 @@ function Registration() {
     };
 
     if (!isTokenChecked) {
-        return null; // Render nothing until the token is checked
+        return (
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                backgroundColor: '#0B0C18',
+                fontFamily: 'Arial, sans-serif'
+            }}>
+                <img src={logo.src} alt="OneMetric Logo" style={{ width: '150px', marginBottom: '20px' }} />
+                <BarLoader
+                    color={'#F37254'}
+                    loading={true}
+                    height={4}
+                    width={150}
+                />
+                <p style={{ marginTop: '20px', color: '#fff' }}>
+                    {isTokenChecked ? 'Loading...' : 'Preparing your experience...'}
+                </p>
+                <div style={{ marginTop: '10px' }}>
+                    <PulseLoader
+                        color={'#F37254'}
+                        loading={true}
+                        size={10}
+                        speedMultiplier={0.7}
+                    />
+                </div>
+            </div>
+        );
     }
 
     return (

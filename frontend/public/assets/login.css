@@ -160,11 +160,11 @@
 }
 .country-code {
   width: 96px;
-  border-radius: var(--br-5xs);
-  background-color: var(--color-gray-100);
-  border: 1px solid var(--color-dimgray-100);
+  border-radius: 8px;
+  background-color: #21242d;
+  border: 1px solid #595f6a;
   flex-direction: row;
-  padding: 16px var(--padding-xs);
+  padding: 16px 12px;
   gap: 20px;
   color: white;
 }

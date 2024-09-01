@@ -1376,6 +1376,113 @@
   position: relative;
 }
 
+.refer-and-get-container,
+.refer-now {
+  position: relative;
+  display: inline-block;
+}
+
+.refer-and-get-container {
+  margin: 0;
+  font-size: inherit;
+  line-height: 130%;
+  max-width: 100%;
+  font-family: inherit;
+}
+
+.refer-now {
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  font-family: var(--font-poppins);
+  color: var(--color-mediumseagreen-200);
+  text-align: left;
+  min-width: 80px;
+}
+
+.refer-now-button {
+  width: 100%;
+  cursor: pointer;
+  border: 1px solid var(--color-mediumseagreen-200);
+  padding: var(--padding-xl) var(--padding-mini);
+  background-color: transparent;
+  height: 64px;
+  border-radius: var(--br-5xs);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.referral-offer {
+  width: 577px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-5xl);
+  max-width: 100%;
+}
+
+.icon {
+  height: 108px;
+  width: 108px;
+  position: relative;
+}
+
+.frame-child109 {
+  height: 150px;
+  width: 153.1px;
+  position: absolute;
+  margin: 0 !important;
+  top: 161px;
+  left: 171px;
+  border-radius: 50%;
+  border: 0 solid var(--color-white);
+  box-sizing: border-box;
+  transform: rotate(-90deg);
+  transform-origin: 0 0;
+  display: none;
+  mix-blend-mode: overlay;
+  z-index: 2;
+}
+
+.homepage-inner4,
+.referral-offer-parent {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  box-sizing: border-box;
+}
+
+.referral-offer-parent {
+  width: 880px;
+  margin: auto;
+  border-radius: var(--br-5xs);
+  background: linear-gradient(#161923, #161923),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.1));
+  overflow: hidden;
+  flex-shrink: 0;
+  padding: var(--padding-21xl) 123px var(--padding-21xl) 32px;
+  position: relative;
+  gap: var(--gap-21xl);
+  max-width: 100%;
+  text-align: left;
+  font-size: var(--font-size-xl);
+  color: var(--color-white);
+  font-family: var(--font-poppins);
+}
+
+.refer-now-button:hover{
+  background-color: #13d4191b;
+}
+
+.free-month {
+  color: var(--color-gold);
+}
+
 .buy {
   align-self: stretch;
   flex: 1;
@@ -2142,7 +2249,7 @@
   }
 
   .add-icon-parent-renew {
-    width: 40%;
+    width: 43%;
     margin-top: 2%;
   }
 

@@ -4,6 +4,7 @@ import axios from 'axios';
 import baseApiURL from '@/baseUrl';
 import '../../public/assets/plans.css'
 import { User } from 'react-feather';
+import { BarLoader, PulseLoader } from 'react-spinners'; // Import multiple loaders
 import logo from "../../public/public/home/image-18@2x.png";
 import PlanMobileView from '@/middlewares/plan/PlanMobileView';
 
@@ -24,6 +25,7 @@ function Home() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [processingPlanId, setProcessingPlanId] = useState<string | null>(null);
   const [razorpayLoaded, setRazorpayLoaded] = useState<boolean>(false);
+  const [contentReady, setContentReady] = useState<boolean>(false);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -82,9 +84,11 @@ function Home() {
         const filteredPlans = response.data.data.filter((plan: Plan) => ![1].includes(plan.id));
         setPlanData(filteredPlans);
         setLoading(false);
+        setTimeout(() => setContentReady(true), 1000);
       } catch (error) {
         console.error('Error fetching plan data:', error);
         setLoading(false);
+        setContentReady(true);
       }
     };
 
@@ -192,8 +196,37 @@ function Home() {
     }
   };
 
-  if (loading) {
-    return;
+  if (loading || !contentReady) {
+    return (
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        backgroundColor: '#0B0C18',
+        fontFamily: 'Arial, sans-serif'
+      }}>
+        <img src={logo.src} alt="OneMetric Logo" style={{ width: '150px', marginBottom: '20px' }} />
+        <BarLoader
+          color={'#F37254'}
+          loading={true}
+          height={4}
+          width={150}
+        />
+        <p style={{ marginTop: '20px', color: '#fff' }}>
+          {loading ? 'Loading...' : 'Preparing your experience...'}
+        </p>
+        <div style={{ marginTop: '10px' }}>
+          <PulseLoader
+            color={'#F37254'}
+            loading={true}
+            size={10}
+            speedMultiplier={0.7}
+          />
+        </div>
+      </div>
+    );
   }
 
 
@@ -202,9 +235,6 @@ function Home() {
       <div>
         <div className="homepage">
           <div className="homepage-child" />
-          <section className="rectangle-parent">
-            <div className="frame-child" />
-          </section>
           <section className="content">
             <div className="hero-container-parent">
               <div className="hero-container">

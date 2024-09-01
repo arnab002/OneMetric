@@ -3,8 +3,18 @@ import React, { useEffect, useState, useMemo } from 'react';
 import '../../public/assets/addstocks.css';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
+import logo from "../../public/public/addStocks/OneMetric_Transparent.png";
+import { BarLoader, PulseLoader } from 'react-spinners'; // Import multiple loaders
 import { ArrowLeft, User } from 'react-feather';
 import { Plus, Check, Edit3, Trash } from 'react-feather';
+
+interface Stock {
+    stock_long_name: string;
+    sc_name?: string;
+    scrip_cd: string;
+    isin_code: string;
+    // Add other properties as needed
+}
 
 type ButtonState = 'plus' | 'check' | 'edit' | 'trash' | 'removing';
 
@@ -74,21 +84,39 @@ function AddStocks() {
 
     // Memoized search function
     const searchStocks = useMemo(() => {
-        return (query: string, stocks: any[]) => {
+        return (query: string, stocks: Stock[]): Stock[] => {
             const lowercaseQuery = query.toLowerCase().trim();
             if (!lowercaseQuery) return stocks;
 
-            return stocks.reduce((acc, stock) => {
+            const filteredStocks = stocks.filter(stock => {
                 const stockLongName = stock.stock_long_name.toLowerCase();
                 const scName = stock.sc_name ? stock.sc_name.toLowerCase() : '';
                 
-                if (stockLongName === lowercaseQuery || scName === lowercaseQuery) {
-                    acc.unshift(stock);
-                } else if (stockLongName.includes(lowercaseQuery) || scName.includes(lowercaseQuery)) {
-                    acc.push(stock);
+                return stockLongName.startsWith(lowercaseQuery) || scName.startsWith(lowercaseQuery);
+            });
+
+            // Custom sorting function
+            const sortStocks = (a: Stock, b: Stock) => {
+                const aName = a.sc_name ? a.sc_name.toLowerCase() : a.stock_long_name.toLowerCase();
+                const bName = b.sc_name ? b.sc_name.toLowerCase() : b.stock_long_name.toLowerCase();
+
+                // First, sort by exact match
+                if (aName.startsWith(lowercaseQuery) && !bName.startsWith(lowercaseQuery)) return -1;
+                if (!aName.startsWith(lowercaseQuery) && bName.startsWith(lowercaseQuery)) return 1;
+
+                // Then, sort alphabetically
+                for (let i = 0; i < aName.length && i < bName.length; i++) {
+                    if (aName[i] !== bName[i]) {
+                        return aName.charCodeAt(i) - bName.charCodeAt(i);
+                    }
                 }
-                return acc;
-            }, []);
+
+                // If all characters are the same up to the length of the shorter string,
+                // sort by length (shorter first)
+                return aName.length - bName.length;
+            };
+
+            return filteredStocks.sort(sortStocks);
         };
     }, []);
 
@@ -279,7 +307,6 @@ function AddStocks() {
         }
     };
 
-    // const sortedStockData = useMemo(() => sortStocksAlphabetically(stockData), [stockData]);
 
     const checkPlanValidity = async () => {
         setIsCheckingPlan(true);
@@ -585,7 +612,36 @@ function AddStocks() {
     };
 
     if (!isTokenChecked) {
-        return null; // Render nothing until the token is checked
+        return (
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                backgroundColor: '#0B0C18',
+                fontFamily: 'Arial, sans-serif'
+            }}>
+                <img src={logo.src} alt="OneMetric Logo" style={{ width: '150px', marginBottom: '20px' }} />
+                <BarLoader
+                    color={'#F37254'}
+                    loading={true}
+                    height={4}
+                    width={150}
+                />
+                <p style={{ marginTop: '20px', color: '#fff' }}>
+                    {loading ? 'Loading...' : 'Preparing your experience...'}
+                </p>
+                <div style={{ marginTop: '10px' }}>
+                    <PulseLoader
+                        color={'#F37254'}
+                        loading={true}
+                        size={10}
+                        speedMultiplier={0.7}
+                    />
+                </div>
+            </div>
+        );
     }
 
     return (

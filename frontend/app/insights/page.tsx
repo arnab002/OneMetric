@@ -1,10 +1,20 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, ChangeEvent } from 'react';
 import { User } from 'react-feather';
 import { Edit3, Trash } from 'react-feather';
 import axios from 'axios';
+import logo from "../../public/public/insights/OneMetric_Transparent.png";
+import { BarLoader, PulseLoader } from 'react-spinners'; // Import multiple loaders
 import baseApiURL from '@/baseUrl';
 import '../../public/assets/insights.css'
+
+interface Stock {
+    stock_long_name: string;
+    sc_name?: string;
+    scrip_cd: string;
+    isin_code: string;
+    // Add other properties as needed
+}
 
 
 interface NewsItem {
@@ -27,7 +37,10 @@ type ButtonState = 'plus' | 'check' | 'edit' | 'trash';
 
 function Insights() {
     const [planId, setPlanId] = useState<string>('');
+    const [cachedStockData, setCachedStockData] = useState<any[]>([]);
+    const [showSearchResults, setShowSearchResults] = useState(false);
     const [trialStartDate, setTrialStartDate] = useState<Date | null>(null);
+    const [isSearchActive, setIsSearchActive] = useState<boolean>(false);
     const [newsData, setNewsData] = useState<NewsItem[]>([]);
     const [editingStockId, setEditingStockId] = useState<string | null>(null);
     const [isRemoving, setIsRemoving] = useState<{ [key: string]: boolean }>({});
@@ -134,7 +147,6 @@ function Insights() {
                     },
                 }
             );
-            console.log("Plan validity response:", response.data);
 
             const { success, status, data } = response.data;
 
@@ -156,14 +168,6 @@ function Insights() {
             } else {
                 setIsPlanExpired(true);
             }
-
-            console.log("Updated state:", {
-                isPlanValid: success,
-                planStatus: status,
-                planId: data.plan_id.toString(),
-                daysUntilExpiry: Math.ceil((new Date(data.expire_date).getTime() - new Date(data.current_date).getTime()) / (1000 * 3600 * 24)),
-                isPlanExpired: !success || status !== 'active'
-            });
 
         } catch (error) {
             console.error('Error checking plan validity:', error);
@@ -242,6 +246,36 @@ function Insights() {
         );
     };
 
+    const searchStocks = useMemo(() => {
+        return (query: string, stocks: Stock[]): Stock[] => {
+            const lowercaseQuery = query.toLowerCase().trim();
+            if (!lowercaseQuery) return stocks;
+            const filteredStocks = stocks.filter(stock => {
+                const stockLongName = stock.stock_long_name.toLowerCase();
+                return stockLongName.startsWith(lowercaseQuery);
+            });
+
+            const sortStocks = (a: Stock, b: Stock) => {
+                const aName = a.stock_long_name.toLowerCase();
+                const bName = b.stock_long_name.toLowerCase();
+                if (aName.startsWith(lowercaseQuery) && !bName.startsWith(lowercaseQuery)) return -1;
+                if (!aName.startsWith(lowercaseQuery) && bName.startsWith(lowercaseQuery)) return 1;
+                return aName.localeCompare(bName);
+            };
+            return filteredStocks.sort(sortStocks);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (cachedStockData.length > 0) {
+            const searchResults = searchStocks(searchQuery, cachedStockData);
+            setStockData(searchResults);
+            setNoDataFound(searchResults.length === 0);
+            setShowSearchResults(true);
+            setLoading(false);
+        }
+    }, [searchQuery, cachedStockData, searchStocks]);
+
     const fetchStockData = async () => {
         setLoading(true);
         setNoDataFound(false);
@@ -255,14 +289,9 @@ function Insights() {
 
             const data = response.data.data;
 
-            // Filter the data based on the search query
-            const filteredData = data.filter((stock: any) =>
-                stock.stock_long_name.toLowerCase().includes(searchQuery.toLowerCase())
-            );
-
-            const sortedData = sortStocksAlphabetically(filteredData);
+            const sortedData = sortStocksAlphabetically(data);
             setStockData(sortedData);
-
+            setCachedStockData(sortedData);
             setNoDataFound(sortedData.length === 0);
         } catch (error) {
             console.error('Error fetching stock data:', error);
@@ -276,7 +305,7 @@ function Insights() {
         setNewsLoading(true);
         try {
             console.log(`Fetching news data for page: ${page}`); // Debug log
-            const response = await axios.get<NewsResponse>(`https://api-dev.onemetric.in/news?page=${page}`);
+            const response = await axios.get<NewsResponse>(`${baseApiURL()}/news?page=${page}`);
             const result = response.data;
 
             if (result.success) {
@@ -295,8 +324,10 @@ function Insights() {
         }
     };
 
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(event.target.value);
+    const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const newQuery = event.target.value;
+        setSearchQuery(newQuery);
+        setIsSearchActive(newQuery.trim() !== '');
     };
 
     const handleFilterChange = (filter: string) => {
@@ -389,13 +420,6 @@ function Insights() {
         }
     };
 
-    const [newsImages, setNewsImages] = useState<string[]>([
-        "./public/insights/Stock_3.jpg",
-        "./public/insights/Stock_3.jpg",
-        "./public/insights/Stock_2.jpg",
-        "./public/insights/Stock_3.jpg",
-    ]);
-
     const handleHomeClick = () => {
         window.location.href = '/'
     };
@@ -478,7 +502,36 @@ function Insights() {
 
 
     if (!isTokenChecked) {
-        return null; // Render nothing until the token is checked
+        return (
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                backgroundColor: '#0B0C18',
+                fontFamily: 'Arial, sans-serif'
+            }}>
+                <img src={logo.src} alt="OneMetric Logo" style={{ width: '150px', marginBottom: '20px' }} />
+                <BarLoader
+                    color={'#F37254'}
+                    loading={true}
+                    height={4}
+                    width={150}
+                />
+                <p style={{ marginTop: '20px', color: '#fff' }}>
+                    {loading ? 'Loading...' : 'Preparing your experience...'}
+                </p>
+                <div style={{ marginTop: '10px' }}>
+                    <PulseLoader
+                        color={'#F37254'}
+                        loading={true}
+                        size={10}
+                        speedMultiplier={0.7}
+                    />
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -602,7 +655,7 @@ function Insights() {
                                         <div style={{ color: 'white', margin: 'auto' }}>Loading...</div>
                                     ) : noDataFound ? (
                                         <div style={{ color: 'white', margin: 'auto' }}>No data found</div>
-                                    ) : (
+                                    ) : showSearchResults || !isSearchActive ? (
                                         stockData.slice(0, displayCount).map((stock, index) => (
                                             <div key={stock.id} className="select-stocks">
                                                 <div className="select-stocks-inner">
@@ -643,7 +696,7 @@ function Insights() {
                                                 </div>
                                             </div>
                                         ))
-                                    )}
+                                    ) : null}
                                     <br />
                                     {!loading && stockData.length > displayCount && (
                                         <button className="add-icon-parent" onClick={showMore} style={{ width: "120px", margin: "auto", borderRadius: "8px", padding: "10px", cursor: 'pointer' }}>
@@ -707,6 +760,34 @@ function Insights() {
                         </div>
                     </section>
                 </main>
+                <section className="referral-offer-parent">
+                    <div className="referral-offer">
+                        <h3 className="refer-and-get-container">
+                            {/* <span>Refer and get a </span> */}
+                            <span className="free-month">
+                                <span className="free-month1">Refer Now</span>
+                            </span>&nbsp;
+                            <span>to</span>&nbsp;
+                            <span className="free-month">
+                                <span className="free-month1">Unlock Rewards,</span>
+                            </span>&nbsp;
+                            <span>build your</span>&nbsp;
+                            <span className="free-month">
+                                <span className="free-month1">#OneMStreak</span>
+                            </span>&nbsp;
+                        </h3>
+                        <button className="refer-now-button">
+                            <a className="refer-now" href='/refer' style={{ textDecoration: 'none' }}>Refer now</a>
+                        </button>
+                    </div>
+                    <img
+                        className="icon"
+                        loading="lazy"
+                        alt=""
+                        src="./public/home-desktop/8731674-1.svg"
+                    />
+                    <div className="frame-child109" />
+                </section>
                 <div className="good-evening">Good Evening</div>
                 <div className="footer">
                     <div className="footer-content">
