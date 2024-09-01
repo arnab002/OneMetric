@@ -236,7 +236,8 @@ function HomeDesktop() {
                             },
                         });
 
-                    if (response.data.success && response.data.status === 'active') {
+                    // Check if the response is successful and the status is either 'active' or 'expired'
+                    if (response.data.success && (response.data.status === 'active' || response.data.status === 'expired')) {
                         window.location.href = '/insights';
                         return;
                     }

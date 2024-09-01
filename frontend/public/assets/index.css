@@ -3772,7 +3772,7 @@
   }
 
   .content-child {
-    right: 310.6px;
+    right: 285.6px;
   }
 
   .trial-button-container {
@@ -3845,6 +3845,15 @@
   .coming-soon-wrapper3 {
     top: -20px;
     left: 55px;
+  }
+  .select-stocks-subscribe{
+    width: 195%;
+  }
+  .rectangle-parent4{
+    top: -200px;
+  }
+  .feature-containers2{
+    margin-top: -10px;
   }
 }
 

@@ -1475,7 +1475,7 @@
   font-family: var(--font-poppins);
 }
 
-.refer-now-button:hover{
+.refer-now-button:hover {
   background-color: #13d4191b;
 }
 
@@ -2258,7 +2258,31 @@
   }
 }
 
-@media only screen and (min-width: 768px) and (max-width: 1024px){
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+  .add-icon-parent-subscribe {
+    width: 30%;
+    padding: 10px 0px;
+    margin-top: -5%;
+    margin-left: 66%;
+  }
+
+  .add-subscribe {
+    margin: auto;
+  }
+
+  .add-icon-parent-renew {
+    width: 15%;
+    padding: 8px 0px;
+    margin-top: -5%;
+    margin-left: 76%;
+  }
+
+  .add-renew {
+    margin: auto;
+  }
+}
+
+@media only screen and (min-width: 1180px) and (max-width: 1182px) {
   .add-icon-parent-subscribe {
     width: 30%;
     padding: 10px 0px;

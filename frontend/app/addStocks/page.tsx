@@ -12,7 +12,6 @@ interface Stock {
     stock_long_name: string;
     sc_name?: string;
     scrip_cd: string;
-    isin_code: string;
     // Add other properties as needed
 }
 
@@ -434,18 +433,18 @@ function AddStocks() {
         setDisplayCount(prevCount => prevCount + 30);
     };
 
-    const handlePlusClick = async (isin_code: string, index: number) => {
+    const handlePlusClick = async (scrip_cd: string, index: number) => {
         if (watchlistCount >= MAX_WATCHLIST_STOCKS) {
             alert(`You've reached the maximum limit of ${MAX_WATCHLIST_STOCKS} stocks in your watchlist.`);
             return;
         }
 
         const selectedStock = stockData[index];
-        const scrip_cd = selectedStock.scrip_cd;
+        const scripcd = selectedStock.scrip_cd;
 
         setButtonStates((prevState) => ({
             ...prevState,
-            [isin_code]: 'check',
+            [scrip_cd]: 'check',
         }));
 
         try {
@@ -457,19 +456,19 @@ function AddStocks() {
                 },
             });
 
-            setUserWatchlist((prev) => [...prev, scrip_cd]);
+            setUserWatchlist((prev) => [...prev, scripcd]);
             setWatchlistCount((prevCount) => prevCount + 1);
 
             setButtonStates((prevState) => ({
                 ...prevState,
-                [isin_code]: 'edit',
+                [scrip_cd]: 'edit',
             }));
 
         } catch (error) {
             console.error('Error adding stock:', error);
             setButtonStates((prevState) => ({
                 ...prevState,
-                [isin_code]: 'plus',
+                [scrip_cd]: 'plus',
             }));
             alert("Failed to add stock. Please try again.");
         }
@@ -480,20 +479,20 @@ function AddStocks() {
         }));
     };
 
-    const handleEditClick = (isin_code: string) => {
+    const handleEditClick = (scrip_cd: string) => {
         setButtonStates((prevState) => ({
             ...prevState,
-            [isin_code]: 'trash',
+            [scrip_cd]: 'trash',
         }));
     };
 
-    const handleRemoveClick = async (isin_code: string, index: number) => {
+    const handleRemoveClick = async (scrip_cd: string, index: number) => {
         const selectedStock = stockData[index];
-        const scrip_cd = selectedStock.scrip_cd;
+        const scripcd = selectedStock.scrip_cd;
 
         setButtonStates((prevState) => ({
             ...prevState,
-            [isin_code]: 'removing',
+            [scrip_cd]: 'removing',
         }));
 
         setIsRemoving((prevState) => ({
@@ -510,13 +509,13 @@ function AddStocks() {
                 },
             });
 
-            setUserWatchlist((prev) => prev.filter(id => id !== scrip_cd));
+            setUserWatchlist((prev) => prev.filter(id => id !== scripcd));
             setWatchlistCount((prevCount) => prevCount - 1); // Decrement the count
 
             setTimeout(() => {
                 setButtonStates((prevState) => ({
                     ...prevState,
-                    [isin_code]: 'plus',
+                    [scrip_cd]: 'plus',
                 }));
 
                 setIsRemoving((prevState) => ({
@@ -529,7 +528,7 @@ function AddStocks() {
             console.error('Error deleting stock:', error);
             setButtonStates((prevState) => ({
                 ...prevState,
-                [isin_code]: 'edit',
+                [scrip_cd]: 'edit',
             }));
             setIsRemoving((prevState) => ({
                 ...prevState,
@@ -778,9 +777,9 @@ function AddStocks() {
                                             </div>
                                             <div className="edit-delete-options-wrapper">
                                                 {userWatchlist.includes(stock.scrip_cd) ? (
-                                                    buttonStates[stock.isin_code] === 'edit' || !buttonStates[stock.isin_code] ? (
+                                                    buttonStates[stock.scrip_cd] === 'edit' || !buttonStates[stock.scrip_cd] ? (
                                                         <Edit3
-                                                            onClick={() => handleEditClick(stock.isin_code)}
+                                                            onClick={() => handleEditClick(stock.scrip_cd)}
                                                             style={{
                                                                 transition: 'opacity 0.3s',
                                                                 opacity: 1,
@@ -788,9 +787,9 @@ function AddStocks() {
                                                                 color: 'green'
                                                             }}
                                                         />
-                                                    ) : buttonStates[stock.isin_code] === 'trash' ? (
+                                                    ) : buttonStates[stock.scrip_cd] === 'trash' ? (
                                                         <div
-                                                            onClick={() => handleRemoveClick(stock.isin_code, index)}
+                                                            onClick={() => handleRemoveClick(stock.scrip_cd, index)}
                                                             style={{
                                                                 display: 'flex',
                                                                 alignItems: 'center',
@@ -808,12 +807,12 @@ function AddStocks() {
                                                         </div>
                                                     ) : null
                                                 ) : (
-                                                    buttonStates[stock.isin_code] === 'plus' || !buttonStates[stock.isin_code] ? (
+                                                    buttonStates[stock.scrip_cd] === 'plus' || !buttonStates[stock.scrip_cd] ? (
                                                         <Plus
-                                                            onClick={() => handlePlusClick(stock.isin_code, index)}
+                                                            onClick={() => handlePlusClick(stock.scrip_cd, index)}
                                                             style={{ cursor: 'pointer', color: 'white' }}
                                                         />
-                                                    ) : buttonStates[stock.isin_code] === 'check' ? (
+                                                    ) : buttonStates[stock.scrip_cd] === 'check' ? (
                                                         <Check
                                                             style={{
                                                                 transition: 'opacity 0.3s',
@@ -826,7 +825,7 @@ function AddStocks() {
                                                         />
                                                     ) : null
                                                 )}
-                                                {buttonStates[stock.isin_code] === 'removing' && (
+                                                {buttonStates[stock.scrip_cd] === 'removing' && (
                                                     <div
                                                         style={{
                                                             display: 'flex',

@@ -76,6 +76,7 @@ function UserAccount() {
 
     const handleLogout = () => {
         localStorage.removeItem('authToken');
+        localStorage.removeItem('selectedStocks');
         window.location.href = '/';
     };
 
