@@ -3,7 +3,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import '../../public/assets/addstocks.css';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
-import logo from "../../public/public/addStocks/OneMetric_Transparent.png";
+import logo from "../../public/public/home/OneMetric_Transparent.png";
 import { BarLoader, PulseLoader } from 'react-spinners'; // Import multiple loaders
 import { ArrowLeft, User } from 'react-feather';
 import { Plus, Check, Edit3, Trash } from 'react-feather';
