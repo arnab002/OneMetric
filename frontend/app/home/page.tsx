@@ -470,8 +470,16 @@ function HomeDesktop() {
         window.location.href = '/insights'
     };
 
+    const handleLoginRedirect = () => {
+        window.location.href = '/login'
+    };
+
     const handleHomeClick = () => {
         window.location.href = '/'
+    };
+
+    const handleReferClick = () => {
+        window.location.href = '/refer'
     };
 
     const handleTwitterRedirect = () => {
@@ -520,11 +528,11 @@ function HomeDesktop() {
             <div>
                 <div className="homepage">
                     <div className="trial-button-parent">
-                        <button className="trial-button">
+                        <button className="trial-button" onClick={handleLoginRedirect}>
                             <div className="button-icon-wrapper">
                                 <img className="button-icon" alt="" src="./public/home-desktop/vector-3.svg" />
                             </div>
-                            <a className="started-30-days" href='/login' style={{ textDecoration: 'none' }}>Start Free Trial</a>
+                            <a className="started-30-days" style={{ textDecoration: 'none' }}>Start Free Trial</a>
                         </button>
                         <div className="frame-parent">
                             <img className="frame-child" alt="" src="./public/home-desktop/group-1000001019.svg" />
@@ -1146,8 +1154,8 @@ function HomeDesktop() {
                                             </div>
                                         </div>
                                     </div>
-                                    <button className="trial-button-container">
-                                        <a className="start-30-days" href='/login' style={{ textDecoration: 'none' }}>Start Free Trial</a>
+                                    <button className="trial-button-container" onClick={handleLoginRedirect}>
+                                        <a className="start-30-days" style={{ textDecoration: 'none' }}>Start Free Trial</a>
                                     </button>
                                 </div>
                                 <div className="frame-parent35">
@@ -1584,8 +1592,8 @@ function HomeDesktop() {
                                         <span className="free-month1">#OneMStreak</span>
                                     </span>&nbsp;
                                 </h3>
-                                <button className="refer-now-button">
-                                    <a className="refer-now" href='/refer' style={{ textDecoration: 'none' }}>Refer now</a>
+                                <button className="refer-now-button" onClick={handleReferClick}>
+                                    <a className="refer-now" style={{ textDecoration: 'none' }}>Refer now</a>
                                 </button>
                             </div>
                             <img

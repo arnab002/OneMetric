@@ -424,6 +424,10 @@ function Insights() {
         window.location.href = '/'
     };
 
+    const handleReferClick = () => {
+        window.location.href = '/refer'
+    };
+
     const handleUserAccountClick = () => {
         window.location.href = '/userAccount'
     };
@@ -776,8 +780,8 @@ function Insights() {
                                 <span className="free-month1">#OneMStreak</span>
                             </span>&nbsp;
                         </h3>
-                        <button className="refer-now-button">
-                            <a className="refer-now" href='/refer' style={{ textDecoration: 'none' }}>Refer now</a>
+                        <button className="refer-now-button" onClick={handleReferClick}>
+                            <a className="refer-now" style={{ textDecoration: 'none' }}>Refer now</a>
                         </button>
                     </div>
                     <img
