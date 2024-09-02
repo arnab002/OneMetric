@@ -37,9 +37,7 @@ function UserAccount() {
         const checkTokenAndFetchDetails = async () => {
             const storedToken = localStorage.getItem('authToken');
             setToken(storedToken);
-            if (!storedToken) {
-                window.location.href = '/login';
-            } else {
+            if (storedToken) {
                 setIsTokenChecked(true);
                 await fetchUserDetails(storedToken);
             }
@@ -100,7 +98,7 @@ function UserAccount() {
     return (
         <div>
             <div className="otp">
-                <header className="otp1">
+                <header className="otp2">
                     <img
                         className="image-18-icon"
                         loading="lazy"
@@ -108,90 +106,61 @@ function UserAccount() {
                         src="./public/register/image-18@2x.png"
                         onClick={handleHomeClick} style={{ cursor: 'pointer' }}
                     />
-                    <div className="main">
-                        <div className="main" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
+                    <div className="main1">
+                        <div className="main1" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
                             <a className="onemetric">OneMetric</a>
                         </div>
-                    </div>
-                    <div className="frame-parent">
-                        <img className="frame-child" alt="" src="./public/register/group-1000000964.svg" />
-                        <img className="frame-item" alt="" src="./public/register/group-1000000966.svg" />
                     </div>
                 </header>
                 <section className="metric-wrapper">
                     <div className="metric">
-                        <div className="metric-inner">
-                            <div className="frame-group">
-                                <div className="frame-container">
-                                    <div className="group-div">
-                                        <div className="frame-parent1">
-                                            <div className="rectangle-parent">
-                                                <div className="frame-inner" />
-                                                <div className="rectangle-div" />
-                                            </div>
-                                            <div className="ellipse-div" />
-                                        </div>
-                                        <img
-                                            className="group-icon"
-                                            loading="lazy"
-                                            alt=""
-                                            src="./public/register/group-1000000975@2x.png"
-                                        />
-                                    </div>
-                                    <div className="frame-child1" />
-                                </div>
-                                <div className="frame-child2" />
-                                <div className="frame-child3" />
-                                <div className="frame-child4" />
-                            </div>
-                        </div>
-                        <div className="input-fields-parent">
-                            <div className="input-fields">
-                                <div className="number-input">
-                                    <div className="number-field">
-                                        <span className='back-button' onClick={handleInsightsClick} style={{ cursor: 'pointer' }}><ArrowLeft /></span>
-                                        <h3 className="enter-your-whatsapp">
-                                            Hello, {userDetails.name}
+                        <div className="input-fields-parent-1">
+                            <div className="input-fields-1">
+                                <div className="number-input1">
+                                    <div className="number-field-1">
+                                        {/* <span className='back-button' onClick={handleInsightsClick} style={{ cursor: 'pointer' }}><ArrowLeft /></span> */}
+                                        <h3 className="enter-your-whatsapp-1">
+                                            Hello, &nbsp;{userDetails.name}
                                         </h3>
                                     </div>
                                 </div>
                                 <div>
                                     <div className="personal-info">
-                                        <div className="input-labels">
-                                            <div className="input-boxes">
-                                                <div className="nested-input-boxes" onClick={handleAccountDetailsClick} style={{ cursor: 'pointer' }}>
+                                        <div className="input-labels-1">
+                                            <div className="input-boxes-1">
+                                                <div className="nested-input-boxes-1" onClick={handleAccountDetailsClick} style={{ cursor: 'pointer' }}>
                                                     <div className="full-name"><User /></div>
                                                     <span>Account Details</span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="input-labels">
-                                            <div className="input-boxes">
-                                                <div className="nested-input-boxes" onClick={handleInsightsClick} style={{ cursor: 'pointer' }}>
+                                        <div className="input-labels-1">
+                                            <div className="input-boxes-1">
+                                                <div className="nested-input-boxes-1" onClick={handleInsightsClick} style={{ cursor: 'pointer' }}>
                                                     <div className="email-id"><ShoppingCart /></div>
                                                     <span>Your Stock Basket</span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="input-labels">
-                                            <div className="input-boxes">
-                                                <div className="nested-input-boxes" onClick={handlePricingClick} style={{ cursor: 'pointer' }}>
+                                        <div className="input-labels-1">
+                                            <div className="input-boxes-1">
+                                                <div className="nested-input-boxes-1" onClick={handlePricingClick} style={{ cursor: 'pointer' }}>
                                                     <div className="email-id"><span style={{ fontSize: '25px' }}>₹</span></div>
                                                     <span>Manage Subscriptions</span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="input-labels">
-                                            <div className="input-boxes">
-                                                <div className="nested-input-boxes" onClick={handleContactClick} style={{ cursor: 'pointer' }}>
+                                        <div className="input-labels-1">
+                                            <div className="input-boxes-1">
+                                                <div className="nested-input-boxes-1" onClick={handleContactClick} style={{ cursor: 'pointer' }}>
                                                     <div className="email-id"><Phone /></div>
                                                     <span>Customer Support</span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="input-labels">
-                                            <div className="input-boxes">
-                                                <div className="nested-input-boxes" onClick={handleAboutClick} style={{ cursor: 'pointer' }}>
+                                        <div className="input-labels-1">
+                                            <div className="input-boxes-1">
+                                                <div className="nested-input-boxes-1" onClick={handleAboutClick} style={{ cursor: 'pointer' }}>
                                                     <div className="email-id"><Info /></div>
                                                     <span>We @ Onemetric</span>
                                                 </div>
@@ -202,9 +171,9 @@ function UserAccount() {
                                         Log Out
                                     </button>
                                     <div className="personal-info" style={{ marginTop: '12%' }}>
-                                        <div className="input-labels">
-                                            <div className="input-boxes">
-                                                <div className="nested-input-boxes" style={{ justifyContent: 'center', border: 'none' }}>
+                                        <div className="input-labels-1">
+                                            <div className="input-boxes-1">
+                                                <div className="nested-input-boxes-1" style={{ justifyContent: 'center', border: 'none' }}>
                                                     <span>Made with ❤️</span>
                                                     <div className="email-id">in &nbsp;<span><ReactCountryFlag countryCode="IN" svg /></span></div>
                                                 </div>

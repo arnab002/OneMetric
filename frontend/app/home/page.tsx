@@ -10,6 +10,7 @@ import { User } from 'react-feather';
 import { BarLoader, PulseLoader } from 'react-spinners'; // Import multiple loaders
 import statsData from '../../public/json/stats.json';
 import HomeDesktopView from '@/middlewares/home/HomeDesktopView';
+import CustomSidebar from '../sidebar';
 
 interface RazorpayResponse {
     razorpay_payment_id: string;
@@ -24,6 +25,7 @@ interface Plan {
 type ButtonState = 'plus' | 'check' | 'edit' | 'trash';
 
 function HomeDesktop() {
+    const [sidebarOpen, setSidebarOpen] = useState(false);
     const [activeTab, setActiveTab] = useState<string>('All');
     const [planData, setPlanData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -59,6 +61,10 @@ function HomeDesktop() {
             isOpen: false
         }
     ]);
+
+    const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+    };
 
     const toggleFAQ = (index: number) => {
         setOpenFaqIndex(openFaqIndex === index ? null : index);
@@ -755,7 +761,7 @@ function HomeDesktop() {
                             </div>
                             {isLoggedIn ? (
                                 <div className="user-icon-wrapper" style={{ position: 'relative' }}>
-                                    <User onClick={handleUserAccountClick} style={{ cursor: 'pointer' }} />
+                                    <User onClick={toggleSidebar} style={{ cursor: 'pointer' }} />
                                 </div>
                             ) : (
                                 <button className="sign-in-button-container">
@@ -775,6 +781,7 @@ function HomeDesktop() {
                                 />
                             </div>
                         </header>
+                        <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar}/>
                     </div>
                     <div className="homepage-inner">
                         <div className="frame-parent9">

@@ -2,10 +2,16 @@
 import React, { useState, useEffect } from 'react'
 import '../../public/assets/about.css'
 import { User } from 'react-feather';
+import CustomSidebar from '../sidebar';
 
 function About() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
+    const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+    };
 
     const handleHomeClick = () => {
         window.location.href = '/'
@@ -86,8 +92,8 @@ function About() {
                             />
                         </div>
                         {isLoggedIn ? (
-                            <div className="user-icon-wrapper" style={{ position: 'relative' }}>
-                                <User onClick={handleUserAccountClick} style={{ cursor: 'pointer' }} />
+                            <div className="user-icon-wrapper">
+                                <User onClick={toggleSidebar} style={{ cursor: 'pointer' }} />
                             </div>
                         ) : (
                             <div className="content" onClick={handleLoginClick} style={{ cursor: 'pointer' }}>
@@ -246,6 +252,7 @@ function About() {
                     </div>
                 </div>
             </div>
+            <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar}/>
         </div>
     )
 }

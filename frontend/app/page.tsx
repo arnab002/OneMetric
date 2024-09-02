@@ -10,6 +10,7 @@ import { User } from 'react-feather';
 import { BarLoader, PulseLoader } from 'react-spinners'; // Import multiple loaders
 import statsData from '../public/json/stats.json';
 import HomeMobileView from '@/middlewares/home/HomeMobileView';
+import CustomSidebar from './sidebar';
 
 interface RazorpayResponse {
   razorpay_payment_id: string;
@@ -30,6 +31,7 @@ type Stock = {
 type ButtonState = 'plus' | 'check' | 'edit' | 'trash';
 
 function Home() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [contentReady, setContentReady] = useState<boolean>(false);
   const [stats, setStats] = useState(statsData);
   const [stockData, setStockData] = useState<any[]>([]);
@@ -62,6 +64,10 @@ function Home() {
       document.body.removeChild(script);
     };
   }, []);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
 
   useEffect(() => {
     const checkPlanValidity = async () => {
@@ -179,10 +185,6 @@ function Home() {
 
   const handleUserAccountClick = () => {
     window.location.href = '/userAccount'
-  };
-
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
   };
 
   const handleClick = () => {
@@ -589,7 +591,7 @@ function Home() {
                     </div>
                     {isLoggedIn ? (
                       <div className="user-icon-wrapper" style={{ position: 'relative' }}>
-                        <User onClick={handleUserAccountClick} style={{ cursor: 'pointer' }} />
+                        <User onClick={toggleSidebar} style={{ cursor: 'pointer' }} />
                       </div>
                     ) : (
                       <button className="sign-in-wrapper" id="frameButton">
@@ -609,6 +611,7 @@ function Home() {
                       />
                     </div>
                   </header>
+                  <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
                   <div className="whats-app-promo">
                     <div className="whats-app-promo-child" />
                     <div className="promo-content">
@@ -807,10 +810,10 @@ function Home() {
                                           padding: '10px 20px',
                                           borderRadius: '5px',
                                           cursor: 'pointer',
-                                          zIndex: 1000,
+                                          zIndex: 9999, // Ensure the button has the highest stacking context
                                           transition: 'opacity 0.3s',
                                           opacity: 1,
-                                          width: '80%', // Adjust this value to change the button width
+                                          width: '80%',
                                           textAlign: 'center',
                                           boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
                                         }}

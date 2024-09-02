@@ -7,6 +7,7 @@ import { User } from 'react-feather';
 import { BarLoader, PulseLoader } from 'react-spinners'; // Import multiple loaders
 import logo from "../../public/public/home/image-18@2x.png";
 import PlanMobileView from '@/middlewares/plan/PlanMobileView';
+import CustomSidebar from '../sidebar';
 
 interface RazorpayResponse {
   razorpay_payment_id: string;
@@ -19,6 +20,7 @@ interface Plan {
 }
 
 function Home() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [planData, setPlanData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -38,6 +40,10 @@ function Home() {
       document.body.removeChild(script);
     };
   }, []);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
 
   const handleHomeClick = () => {
     window.location.href = '/'
@@ -254,7 +260,7 @@ function Home() {
                     </div>
                     {isLoggedIn ? (
                       <div className="user-icon-wrapper" style={{ position: 'relative' }}>
-                        <User onClick={handleUserAccountClick} style={{ cursor: 'pointer' }} />
+                        <User onClick={toggleSidebar} style={{ cursor: 'pointer' }} />
                       </div>
                     ) : (
                       <button className="sign-in-wrapper" id="frameButton">
@@ -492,6 +498,7 @@ function Home() {
           </div>
         </div>
       </div>
+      <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar}/>
     </PlanMobileView>
   )
 }

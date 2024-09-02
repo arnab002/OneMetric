@@ -240,7 +240,7 @@ const OTPVerify: React.FC = () => {
                                 <div className="resend-container">
                                     <button
                                         className="add-icon-parent"
-                                        style={{ width: "120px", margin: "auto", borderRadius: "8px", padding: "10px", cursor: resendDisabled ? 'not-allowed' : 'pointer' }}
+                                        style={{ width: "120px", margin: "auto", borderRadius: "8px", padding: "10px", cursor: resendDisabled ? 'not-allowed' : 'pointer', backgroundColor: resendDisabled ? '#a4a4a47a' : 'transparent' }}
                                         onClick={handleResend}
                                         disabled={resendDisabled}
                                     >

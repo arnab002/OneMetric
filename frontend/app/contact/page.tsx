@@ -2,8 +2,10 @@
 import React, { useState, useEffect } from 'react'
 import '../../public/assets/contact.css'
 import { User } from 'react-feather';
+import CustomSidebar from '../sidebar';
 
 function Contact() {
+    const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
 
@@ -21,6 +23,10 @@ function Contact() {
 
     const handleWhatsAppRedirect = () => {
         window.open('https://api.whatsapp.com/send?phone=917204946777&text=Hi', '_blank');
+    };
+
+    const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
     };
 
     useEffect(() => {
@@ -87,8 +93,8 @@ function Contact() {
                             />
                         </div>
                         {isLoggedIn ? (
-                            <div className="user-icon-wrapper" style={{ position: 'relative' }}>
-                                <User onClick={handleUserAccountClick} style={{ cursor: 'pointer' }} />
+                            <div className="user-icon-wrapper">
+                                <User onClick={toggleSidebar} style={{ cursor: 'pointer' }} />
                             </div>
                         ) : (
                             <div className="content" onClick={handleLoginClick} style={{ cursor: 'pointer' }}>
@@ -102,6 +108,7 @@ function Contact() {
                         )}
                     </div>
                 </header>
+                <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar}/>
                 <section className="about">
                     <div className="about-us-parent">
                         <h3 className="about-us1">Contact Us</h3>

@@ -294,7 +294,6 @@
   background-color: var(--color-gray-100);
   border: 1px solid var(--color-dimgray-100);
   box-sizing: border-box;
-  align-items: center;
   padding: var(--padding-lg) var(--padding-xs);
 }
 
@@ -305,7 +304,11 @@
 }
 
 .input-labels {
+  align-self: stretch;
+  display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
   gap: var(--gap-5xs);
 }
 
@@ -372,13 +375,17 @@
 }
 
 .input-labels-child {
-  height: 54px;
+  align-self: stretch;
+  display: flex;
   flex-direction: row;
   align-items: flex-start;
+  justify-content: flex-start;
+  height: 54px;
   padding: 0;
   box-sizing: border-box;
   text-align: left;
   font-size: var(--font-size-sm);
+  max-width: 100%;
 }
 
 .input-fields,
@@ -387,15 +394,25 @@
 }
 
 .personal-info {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
   align-items: flex-start;
+  justify-content: flex-start;
   gap: 24px;
   text-align: center;
   font-size: var(--font-size-xs);
+  max-width: 100%;
 }
 
 .input-fields {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   gap: 40px;
+  max-width: 100%;
 }
 
 .finish {
@@ -423,9 +440,13 @@
 
 .input-fields-parent {
   flex: 1;
+  display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
   gap: 48px;
   z-index: 6;
+  max-width: 100%;
 }
 
 .input-fields-parent,
@@ -451,8 +472,12 @@
 
 .metric-wrapper {
   align-self: stretch;
+  display: flex;
   flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
   padding: 0 var(--padding-base);
+  box-sizing: border-box;
   text-align: left;
   font-size: 20px;
   color: var(--color-white);
@@ -460,15 +485,25 @@
 }
 
 .otp {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
   width: 100%;
   height: 100vh;
   background-color: var(--color-gray-200);
   overflow: hidden;
-  flex-direction: column;
   padding: 32px 0 95px;
   gap: 43px;
   line-height: normal;
   letter-spacing: normal;
+  box-sizing: border-box;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 376px){
+  .otp{
+    height: 100%;
+  }
 }
 
 @media only screen and (min-width: 1280px) and (max-width: 1920px){

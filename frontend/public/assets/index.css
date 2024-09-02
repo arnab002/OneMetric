@@ -195,8 +195,8 @@
 .chart-icon {
   height: 45.5px;
   width: 113.5px;
-  right: 112.5px;
-  bottom: 419.5px;
+  right: 129.5px;
+  bottom: 474.5px;
 }
 
 .image-18-icon {
@@ -1048,7 +1048,7 @@
   position: relative;
   font-size: var(--font-size-sm);
   color: var(--color-lightslategray-100);
-  width: 120%;
+  width: 150%;
   margin-top: -18px;
 }
 
@@ -1466,7 +1466,7 @@
 .rectangle-parent3 {
   position: absolute;
   top: 0;
-  left: 0;
+  left: 30px;
   box-shadow: 0 2px 3px #3b4aac inset, 0 4px 12px rgba(36, 56, 192, 0.25) inset;
   border-radius: var(--br-3xl) var(--br-3xl) 0 0;
   background: linear-gradient(180deg, #101747, #0a0c18);
@@ -1746,7 +1746,7 @@
 .stock-categories {
   position: absolute;
   top: 71px;
-  left: 18px;
+  left: 52px;
   width: 153px;
   height: 112px;
   overflow: hidden;
@@ -1910,7 +1910,7 @@
 
 .hero-container-parent {
   width: 100%;
-  padding: 0 0 51px;
+  padding: 0 0 45px;
   box-sizing: border-box;
   gap: 103px;
 }

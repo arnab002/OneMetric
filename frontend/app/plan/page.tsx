@@ -5,6 +5,7 @@ import baseApiURL from '@/baseUrl';
 import logo from "../../public/public/home/OneMetric_Transparent.png";
 import '../../public/assets/plan-global.css';
 import '../../public/assets/plan-desktop.css';
+import CustomSidebar from '../sidebar';
 import { BarLoader, PulseLoader } from 'react-spinners'; // Import multiple loaders
 import { User } from 'react-feather';
 import PlanDesktopView from '@/middlewares/plan/PlanDesktopView';
@@ -20,6 +21,7 @@ interface Plan {
 }
 
 function PlanDesktop() {
+    const [sidebarOpen, setSidebarOpen] = useState(false);
     const [planData, setPlanData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -39,6 +41,10 @@ function PlanDesktop() {
             document.body.removeChild(script);
         };
     }, []);
+
+    const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+    };
 
     const handleHomeClick = () => {
         window.location.href = '/'
@@ -69,10 +75,6 @@ function PlanDesktop() {
         const token = localStorage.getItem('authToken');
         setIsLoggedIn(!!token);
     }, []);
-
-    const handleUserAccountClick = () => {
-        window.location.href = '/userAccount'
-    };
 
     useEffect(() => {
         const fetchPlanData = async () => {
@@ -244,25 +246,13 @@ function PlanDesktop() {
                         </div>
                         {isLoggedIn ? (
                             <div className="user-icon-wrapper" style={{ position: 'relative' }}>
-                                <User onClick={handleUserAccountClick} style={{ cursor: 'pointer' }} />
+                                <User onClick={toggleSidebar} style={{ cursor: 'pointer' }} />
                             </div>
                         ) : (
                             <button className="sign-in-button-container">
                                 <a className="sign-in" href='/login'>Sign In</a>
                             </button>
                         )}
-                        <div className="frame-parent8">
-                            <img
-                                className="frame-child43"
-                                alt=""
-                                src="./public/home-desktop/group-1000000964.svg"
-                            />
-                            <img
-                                className="frame-child44"
-                                alt=""
-                                src="./public/home-desktop/group-1000000966-1.svg"
-                            />
-                        </div>
                     </header>
                     <div className="homepage-inner2">
                         <div className="frame-parent47">
@@ -378,26 +368,6 @@ function PlanDesktop() {
                     <div className="footer-parent">
                         <footer className="footer">
                             <div className="frame-parent55">
-                                <div className="frame-parent8">
-                                    <img
-                                        className="frame-child43"
-                                        alt=""
-                                        src="./public/home-desktop/group-1000000964.svg"
-                                    />
-                                    <img
-                                        className="frame-child44"
-                                        alt=""
-                                        src="./public/home-desktop/group-1000000966-1.svg"
-                                    />
-                                </div>
-                                <div className="frame-parent57">
-                                    <img
-                                        className="frame-child112"
-                                        alt=""
-                                        src="./public/home-desktop/group-1000001000.svg"
-                                    />
-                                    <div className="your-language-your">Add Stocks</div>
-                                </div>
                                 <img
                                     className="image-18-icon1"
                                     alt=""
@@ -482,6 +452,7 @@ function PlanDesktop() {
                     </div>
                 </div>
             </div>
+            <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar}/>
         </PlanDesktopView>
     )
 }

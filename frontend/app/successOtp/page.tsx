@@ -19,7 +19,7 @@ function OTPSuccess() {
             if (redirectUrlParam) {
                 window.location.href = `${redirectUrlParam}`;
             }
-        }, 2000); // 2 seconds
+        }, 1000); // 1 second
 
         return () => clearTimeout(timer);
     }, []);

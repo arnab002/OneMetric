@@ -7,6 +7,7 @@ import logo from "../../public/public/insights/OneMetric_Transparent.png";
 import { BarLoader, PulseLoader } from 'react-spinners'; // Import multiple loaders
 import baseApiURL from '@/baseUrl';
 import '../../public/assets/insights.css'
+import CustomSidebar from '../sidebar';
 
 interface Stock {
     stock_long_name: string;
@@ -36,6 +37,7 @@ interface NewsResponse {
 type ButtonState = 'plus' | 'check' | 'edit' | 'trash';
 
 function Insights() {
+    const [sidebarOpen, setSidebarOpen] = useState(false);
     const [planId, setPlanId] = useState<string>('');
     const [cachedStockData, setCachedStockData] = useState<any[]>([]);
     const [showSearchResults, setShowSearchResults] = useState(false);
@@ -65,6 +67,10 @@ function Insights() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [token, setToken] = useState<string | null>(null);
+
+    const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+    };
 
     useEffect(() => {
         const checkToken = () => {
@@ -251,8 +257,8 @@ function Insights() {
             const lowercaseQuery = query.toLowerCase().trim();
             if (!lowercaseQuery) return stocks;
             const filteredStocks = stocks.filter(stock => {
-                const stockLongName = stock.stock_long_name.toLowerCase();
-                return stockLongName.startsWith(lowercaseQuery);
+                const stockLongName = stock.stock_long_name?.toLowerCase();
+                return stockLongName?.startsWith(lowercaseQuery);
             });
 
             const sortStocks = (a: Stock, b: Stock) => {
@@ -586,7 +592,7 @@ function Insights() {
                         </div>
                         {isLoggedIn ? (
                             <div className="user-icon-wrapper" style={{ position: 'relative' }}>
-                                <User onClick={handleUserAccountClick} style={{ cursor: 'pointer', color: 'white' }} />
+                                <User onClick={toggleSidebar} style={{ cursor: 'pointer', color: 'white' }} />
                             </div>
                         ) : (
                             <div className="union-wrapper">
@@ -600,6 +606,7 @@ function Insights() {
                         )}
                     </div>
                 </header>
+                <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar}/>
                 <div className="simply-grow-all">OneMetric, All Right reserved © 2024</div>
                 <main className="watchlist-wrapper">
                     <section className="watchlist">

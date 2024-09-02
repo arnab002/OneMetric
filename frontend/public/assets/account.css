@@ -13,49 +13,23 @@
   color: inherit;
   display: inline-block;
   min-width: 100px;
+  color: var(--color-white);
 }
 
-.main {
+.main1 {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
 }
 
-.frame-child {
-  width: 24px;
-  height: 24px;
-  position: relative;
-  display: none;
-}
-
-.frame-item {
-  width: 13px;
-  height: 12px;
-  position: relative;
-}
-
-.frame-parent,
-.otp1 {
+.otp2 {
   overflow: hidden;
   align-items: center;
   justify-content: center;
 }
 
-.frame-parent {
-  height: 40px;
-  width: 40px;
-  backdrop-filter: blur(40px);
-  border-radius: var(--br-5xs);
-  flex-shrink: 0;
-  display: none;
-  flex-direction: column;
-  padding: 10px 0;
-  box-sizing: border-box;
-  gap: var(--gap-5xs);
-}
-
-.otp1 {
+.otp2 {
   margin-left: -2%;
   align-self: stretch;
   background-color: var(--color-gray-200);
@@ -72,151 +46,7 @@
   font-family: var(--font-montserrat);
 }
 
-.frame-inner,
-.rectangle-div {
-  position: absolute;
-  border-radius: var(--br-5xs);
-}
-
-.frame-inner {
-  top: 0;
-  left: 0;
-  box-shadow: 0 2px 3px #3b4aac inset, 0 4px 12px rgba(36, 56, 192, 0.25) inset;
-  background: linear-gradient(180deg, #101747, #0a0c18);
-  width: 100%;
-  height: 100%;
-  display: none;
-}
-
-.rectangle-div {
-  width: calc(100% - 4.5px);
-  top: 4.5px;
-  right: 2.2px;
-  left: 2.3px;
-  box-shadow: 0 2px 2px rgba(58, 69, 148, 0.3) inset;
-  background-color: #000;
-  height: 91.1px;
-  z-index: 1;
-}
-
-.ellipse-div,
-.rectangle-parent {
-  position: absolute;
-  background: linear-gradient(180deg, #101747, #0a0c18);
-}
-
-.rectangle-parent {
-  top: 0;
-  left: 0;
-  box-shadow: 0 2px 3px #3b4aac inset, 0 4px 12px rgba(36, 56, 192, 0.25) inset;
-  border-radius: var(--br-5xs);
-  width: 100%;
-  height: 100%;
-}
-
-.ellipse-div {
-  top: 97.6px;
-  left: 26px;
-  box-shadow: 0 1px 0 rgba(59, 74, 172, 0.4);
-  border-radius: 50%;
-  width: 7.9px;
-  height: 7.9px;
-  z-index: 2;
-}
-
-.frame-parent1 {
-  position: absolute;
-  height: 100%;
-  top: 0;
-  bottom: 0;
-  left: 17.3px;
-  width: 59.8px;
-}
-
-.group-icon {
-  position: absolute;
-  top: 27.6px;
-  left: 0;
-  width: 63px;
-  height: 35.9px;
-  object-fit: contain;
-  z-index: 3;
-}
-
-.group-div {
-  position: absolute;
-  height: 100%;
-  top: 0;
-  bottom: 0;
-  left: 5.1px;
-  width: 77px;
-}
-
-.frame-child1 {
-  position: absolute;
-  top: 60.5px;
-  left: 0;
-  background: linear-gradient(180deg, rgba(10, 12, 24, 0), #0a0c18);
-  width: 103.1px;
-  height: 53px;
-  z-index: 4;
-}
-
-.frame-container {
-  position: absolute;
-  top: 0;
-  left: 26.9px;
-  width: 103.1px;
-  height: 113.6px;
-}
-
-.frame-child2,
-.frame-child3,
-.frame-child4 {
-  position: absolute;
-  top: 32.1px;
-  left: 18.7px;
-  background: linear-gradient(90deg,
-      rgba(31, 118, 217, 0),
-      rgba(31, 118, 217, 0.5));
-  width: 14.9px;
-  height: 3px;
-  z-index: 5;
-}
-
-.frame-child3,
-.frame-child4 {
-  top: 39.6px;
-  left: 9.7px;
-  width: 23.9px;
-}
-
-.frame-child4 {
-  top: 47.1px;
-  left: 0;
-  width: 33.6px;
-}
-
-.frame-group {
-  height: 113.6px;
-  flex: 1;
-  position: relative;
-}
-
-.metric-inner {
-  width: 130px;
-  margin: 0 !important;
-  position: absolute;
-  top: -75px;
-  left: 88px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  opacity: 0;
-}
-
-.enter-your-whatsapp {
+.enter-your-whatsapp-1 {
   margin: 0;
   position: relative;
   font-size: inherit;
@@ -225,7 +55,7 @@
   font-family: inherit;
 }
 
-.number-field {
+.number-field-1 {
   align-self: stretch;
   display: flex;
   flex-direction: row;
@@ -243,7 +73,7 @@
   display: inline-block;
 }
 
-.number-input {
+.number-input1 {
   align-self: stretch;
   display: flex;
   flex-direction: column;
@@ -280,16 +110,16 @@
   padding: 0;
 }
 
-.input-boxes,
-.input-labels,
-.nested-input-boxes {
+.input-boxes-1,
+.input-labels-1,
+.nested-input-boxes-1 {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   width: 100%;
 }
 
-.nested-input-boxes {
+.nested-input-boxes-1 {
   flex: 1;
   border-radius: var(--br-5xs);
   background-color: var(--color-gray-100);
@@ -299,17 +129,17 @@
   padding: var(--padding-lg) var(--padding-xs);
 }
 
-.input-boxes,
-.input-labels {
+.input-boxes-1,
+.input-labels-1 {
   align-self: stretch;
   align-items: flex-start;
 }
 
-.input-boxes{
+.input-boxes-1{
   font-size: 20px;
 }
 
-.input-labels {
+.input-labels-1 {
   flex-direction: row;
   gap: var(--gap-5xs);
 }
@@ -367,7 +197,7 @@
   color: white;
 }
 
-.input-fields,
+.input-fields-1,
 .input-labels-child,
 .personal-info {
   align-self: stretch;
@@ -386,7 +216,7 @@
   font-size: var(--font-size-sm);
 }
 
-.input-fields,
+.input-fields-1,
 .personal-info {
   flex-direction: column;
 }
@@ -398,7 +228,7 @@
   font-size: var(--font-size-xs);
 }
 
-.input-fields {
+.input-fields-1 {
   align-items: center;
   gap: 40px;
 }
@@ -427,14 +257,14 @@
   cursor: pointer;
 }
 
-.input-fields-parent {
+.input-fields-parent-1 {
   flex: 1;
   flex-direction: column;
   gap: 48px;
   z-index: 6;
 }
 
-.input-fields-parent,
+.input-fields-parent-1,
 .metric,
 .metric-wrapper,
 .otp {
@@ -478,9 +308,6 @@
 }
 
 @media only screen and (min-width: 320px) and (max-width: 767px){
-  .enter-your-whatsapp{
-    margin-left: 38%;
-  }
   .back-button{
     margin-left: -47%;
     margin-top: 2.5%;
@@ -491,7 +318,7 @@
   .otp{
     height: 100vh;
   }
-  .enter-your-whatsapp{
+  .enter-your-whatsapp-1{
     margin-left: 38%;
   }
   .back-button{
@@ -504,9 +331,6 @@
 @media only screen and (min-width: 1280px) and (max-width: 1920px){
   .personal-info{
     width: 500px;
-  }
-  .enter-your-whatsapp{
-    margin-left: 88%;
   }
   .back-button{
     margin-left: -100%;

@@ -536,7 +536,7 @@
 }
 
 .footer {
-  height: 260px;
+  height: 285px;
   background-color: var(--color-gray-200);
   overflow: hidden;
   flex-shrink: 0;

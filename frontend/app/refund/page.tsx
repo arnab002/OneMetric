@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import '../../public/assets/refund.css';
 import { User } from 'react-feather';
+import CustomSidebar from '../sidebar';
 
 interface SectionContent {
   title: string;
@@ -9,6 +10,7 @@ interface SectionContent {
 }
 
 const Refund: React.FC = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [openSection, setOpenSection] = useState<number | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -31,6 +33,10 @@ const Refund: React.FC = () => {
 
   const toggleSection = (index: number) => {
     setOpenSection(openSection === index ? null : index);
+  };
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
   };
 
   const sections: SectionContent[] = [
@@ -150,7 +156,7 @@ const Refund: React.FC = () => {
             </div>
             {isLoggedIn ? (
               <div className="user-icon-wrapper" style={{ position: 'relative' }}>
-                <User onClick={handleUserAccountClick} style={{ cursor: 'pointer' }} />
+                <User onClick={toggleSidebar} style={{ cursor: 'pointer' }} />
               </div>
             ) : (
               <div className="refund-content-container" onClick={handleLoginClick} style={{ cursor: 'pointer' }}>
@@ -164,6 +170,7 @@ const Refund: React.FC = () => {
             )}
           </div>
         </header>
+        <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar}/>
         <main className="about-us-inner">
           <section className="refund-policy-parent">
             <h3 className="refund-policy">Refund Policy</h3>

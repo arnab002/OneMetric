@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import '../../public/assets/privacy.css';
 import { User } from 'react-feather';
+import CustomSidebar from '../sidebar';
 
 interface SectionContent {
   title: string;
@@ -9,6 +10,7 @@ interface SectionContent {
 }
 
 const Referral: React.FC = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [openSection, setOpenSection] = useState<number | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -90,6 +92,10 @@ const Referral: React.FC = () => {
     setIsLoggedIn(!!token);
   }, []);
 
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
   const handleUserAccountClick = () => {
     window.location.href = '/userAccount'
   };
@@ -136,7 +142,7 @@ const Referral: React.FC = () => {
             </div>
             {isLoggedIn ? (
               <div className="user-icon-wrapper" style={{ position: 'relative' }}>
-                <User onClick={handleUserAccountClick} style={{ cursor: 'pointer' }} />
+                <User onClick={toggleSidebar} style={{ cursor: 'pointer' }} />
               </div>
             ) : (
               <div className="union-wrapper" onClick={handleLoginClick} style={{ cursor: 'pointer' }}>
@@ -150,6 +156,7 @@ const Referral: React.FC = () => {
             )}
           </div>
         </header>
+        <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar}/>
         <section className="about-us-inner">
           <div className="referral-policy-parent">
             <h3 className="referral-policy">Disclaimer</h3>

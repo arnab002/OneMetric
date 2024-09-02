@@ -7,6 +7,7 @@ import logo from "../../public/public/home/OneMetric_Transparent.png";
 import { BarLoader, PulseLoader } from 'react-spinners'; // Import multiple loaders
 import { ArrowLeft, User } from 'react-feather';
 import { Plus, Check, Edit3, Trash } from 'react-feather';
+import CustomSidebar from '../sidebar';
 
 interface Stock {
     stock_long_name: string;
@@ -25,7 +26,7 @@ function AddStocks() {
     const [stockData, setStockData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [isSearching, setIsSearching] = useState<boolean>(false);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
     const [noDataFound, setNoDataFound] = useState<boolean>(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
@@ -50,6 +51,10 @@ function AddStocks() {
     const [isCheckingPlan, setIsCheckingPlan] = useState(false);
     const [token, setToken] = useState<string | null>(null);
     const MAX_WATCHLIST_STOCKS = 500;
+
+    const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+    };
 
     useEffect(() => {
         const checkToken = () => {
@@ -90,7 +95,7 @@ function AddStocks() {
             const filteredStocks = stocks.filter(stock => {
                 const stockLongName = stock.stock_long_name.toLowerCase();
                 const scName = stock.sc_name ? stock.sc_name.toLowerCase() : '';
-                
+
                 return stockLongName.startsWith(lowercaseQuery) || scName.startsWith(lowercaseQuery);
             });
 
@@ -671,7 +676,7 @@ function AddStocks() {
                             </div>
                             {isLoggedIn ? (
                                 <div className="user-icon-wrapper" style={{ position: 'relative' }}>
-                                    <User onClick={handleUserAccountClick} style={{ cursor: 'pointer' }} />
+                                    <User onClick={toggleSidebar} style={{ cursor: 'pointer' }} />
                                 </div>
                             ) : (
                                 <div className="union-wrapper">
@@ -685,6 +690,7 @@ function AddStocks() {
                             )}
                         </div>
                     </header>
+                    <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar}/>
                     <div className="add-stocks2">
                         <span onClick={handleInsightsClick} style={{ cursor: 'pointer' }}><ArrowLeft /></span>
                         &nbsp;&nbsp;<span style={{ paddingTop: '0.2%' }}>Add Stocks</span>
