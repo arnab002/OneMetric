@@ -2,7 +2,7 @@
 import React from 'react';
 import { Sidebar, Menu } from 'react-pro-sidebar';
 import { X } from 'react-feather';
-import UserAccount from '../userAccount/page';
+import UserAccount from '../userAccount';
 
 interface SidebarProps {
   sidebarOpen: boolean;
