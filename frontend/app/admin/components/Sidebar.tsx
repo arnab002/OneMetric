@@ -37,6 +37,7 @@ function Sidebar() {
                             <span>Dashboard</span>
                         </a>
                     </li>
+                    &nbsp;
                     <li className="dropdown">
                         <a href="javascript:void(0)">
                             <Icon
@@ -56,6 +57,12 @@ function Sidebar() {
                                 <a href="/admin/addUser">
                                     <i className="ri-circle-fill circle-icon text-info-main w-auto" />{" "}
                                     Add User
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/admin/bulkUsers">
+                                    <i className="ri-circle-fill circle-icon text-info-main w-auto" />{" "}
+                                    Bulk Users
                                 </a>
                             </li>
                         </ul>

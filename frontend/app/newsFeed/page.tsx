@@ -1,21 +1,12 @@
 'use client'
-import React, { useEffect, useState, useMemo, ChangeEvent } from 'react';
+import React, { useEffect, useState, ChangeEvent } from 'react';
 import { User } from 'react-feather';
-import { Edit3, Trash } from 'react-feather';
 import axios from 'axios';
 import logo from "../../public/public/insights/OneMetric_Transparent.png";
 import { BarLoader, PulseLoader } from 'react-spinners'; // Import multiple loaders
 import baseApiURL from '@/baseUrl';
-import '../../public/assets/insights.css'
+import '../../public/assets/newsfeed.css'
 import CustomSidebar from '../sidebar';
-
-interface Stock {
-    stock_long_name: string;
-    sc_name?: string;
-    scrip_cd: string;
-    isin_code: string;
-    // Add other properties as needed
-}
 
 
 interface NewsItem {
@@ -36,25 +27,16 @@ interface NewsResponse {
 
 type ButtonState = 'plus' | 'check' | 'edit' | 'trash';
 
-function Insights() {
+function NewsFeed() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [planId, setPlanId] = useState<string>('');
-    const [cachedStockData, setCachedStockData] = useState<any[]>([]);
-    const [showSearchResults, setShowSearchResults] = useState(false);
     const [trialStartDate, setTrialStartDate] = useState<Date | null>(null);
     const [isSearchActive, setIsSearchActive] = useState<boolean>(false);
     const [newsData, setNewsData] = useState<NewsItem[]>([]);
-    const [editingStockId, setEditingStockId] = useState<string | null>(null);
-    const [isRemoving, setIsRemoving] = useState<{ [key: string]: boolean }>({});
-    const [stockData, setStockData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [newsLoading, setNewsLoading] = useState<boolean>(true);
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [isSearching, setIsSearching] = useState<boolean>(false);
     const [isStartingTrial, setIsStartingTrial] = useState(false);
-    const [noDataFound, setNoDataFound] = useState<boolean>(false);
-    const [noNewsDataFound, setNoNewsDataFound] = useState<boolean>(false);
-    const [selectedFilter, setSelectedFilter] = useState('all');
     const [displayCount, setDisplayCount] = useState(20);
     const [isPlanValid, setIsPlanValid] = useState<boolean>(false);
     const [planStatus, setPlanStatus] = useState<string>('');
@@ -95,12 +77,6 @@ function Insights() {
         }
     }, [isTokenChecked, token]);
 
-
-    useEffect(() => {
-        if (isTokenChecked && token) {
-            fetchStockData();
-        }
-    }, [isTokenChecked, token, searchQuery]);
 
     useEffect(() => {
         if (isTokenChecked && token) {
@@ -247,67 +223,6 @@ function Insights() {
         return <span style={{ color: 'white' }}>Unable to determine plan status. Please contact support.</span>;
     };
 
-    const sortStocksAlphabetically = (stocks: any[]) => {
-        return [...stocks].sort((a, b) =>
-            a.stock_long_name?.localeCompare(b.stock_long_name, undefined, { sensitivity: 'base' })
-        );
-    };
-
-    const searchStocks = useMemo(() => {
-        return (query: string, stocks: Stock[]): Stock[] => {
-            const lowercaseQuery = query.toLowerCase().trim();
-            if (!lowercaseQuery) return stocks;
-            const filteredStocks = stocks.filter(stock => {
-                const stockLongName = stock.stock_long_name?.toLowerCase();
-                return stockLongName?.startsWith(lowercaseQuery);
-            });
-
-            const sortStocks = (a: Stock, b: Stock) => {
-                const aName = a.stock_long_name.toLowerCase();
-                const bName = b.stock_long_name.toLowerCase();
-                if (aName.startsWith(lowercaseQuery) && !bName.startsWith(lowercaseQuery)) return -1;
-                if (!aName.startsWith(lowercaseQuery) && bName.startsWith(lowercaseQuery)) return 1;
-                return aName.localeCompare(bName);
-            };
-            return filteredStocks.sort(sortStocks);
-        };
-    }, []);
-
-    useEffect(() => {
-        if (cachedStockData.length > 0) {
-            const searchResults = searchStocks(searchQuery, cachedStockData);
-            setStockData(searchResults);
-            setNoDataFound(searchResults.length === 0);
-            setShowSearchResults(true);
-            setLoading(false);
-        }
-    }, [searchQuery, cachedStockData, searchStocks]);
-
-    const fetchStockData = async () => {
-        setLoading(true);
-        setNoDataFound(false);
-
-        try {
-            const endpoint = `${baseApiURL()}/stock-watchlist`;
-
-            const response = await axios.get(endpoint, {
-                headers: { Authorization: `${token}` }
-            });
-
-            const data = response.data.data;
-
-            const sortedData = sortStocksAlphabetically(data);
-            setStockData(sortedData);
-            setCachedStockData(sortedData);
-            setNoDataFound(sortedData.length === 0);
-        } catch (error) {
-            console.error('Error fetching stock data:', error);
-            setNoDataFound(true);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     const fetchNewsData = async (page: number) => {
         setNewsLoading(true);
         try {
@@ -336,44 +251,6 @@ function Insights() {
         setSearchQuery(newQuery);
         setIsSearchActive(newQuery.trim() !== '');
     };
-
-    const handleFilterChange = (filter: string) => {
-        setSelectedFilter(filter);
-        setIsSearching(false);
-        setSearchQuery('');
-    };
-
-    const handleEditClick = (id: string) => {
-        setEditingStockId(currentId => currentId === id ? null : id);
-    };
-
-    const handleRemoveClick = async (isin_code: string, scrip_cd: string, id: string) => {
-        setIsRemoving((prevState) => ({
-            ...prevState,
-            [id]: true,
-        }));
-
-        try {
-            await axios.post(`${baseApiURL()}/delete-stock-from-watchlist`, {
-                scrip_cd: scrip_cd,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            setEditingStockId(null); // Reset editing state
-            fetchStockData();
-        } catch (error) {
-            console.error('Error deleting stock:', error);
-        } finally {
-            setIsRemoving((prevState) => ({
-                ...prevState,
-                [id]: false,
-            }));
-        }
-    };
-
 
     const handleAddToWatchlist = async () => {
 
@@ -437,66 +314,6 @@ function Insights() {
 
     const handleReferClick = () => {
         window.location.href = '/refer'
-    };
-
-    const handleAddStocksRedirect = async () => {
-        try {
-            // Check plan validity
-            const validityResponse = await axios.post(
-                `${baseApiURL()}/check-plan-validity`,
-                undefined,
-                {
-                    headers: {
-                        Authorization: `${token}`,
-                    },
-                }
-            );
-
-            if (validityResponse.data.status === 'newuser') {
-                // Initiate payment for free plan
-                const paymentResponse = await axios.post(
-                    `${baseApiURL()}/payment`,
-                    {
-                        plan_id: '1',
-                    },
-                    {
-                        headers: {
-                            Authorization: `${token}`,
-                        },
-                    }
-                );
-
-                const { transaction_id } = paymentResponse.data.data;
-
-                // Check payment status
-                const statusResponse = await axios.post(
-                    `${baseApiURL()}/check-payment-status`,
-                    {
-                        transaction_id: transaction_id,
-                    },
-                    {
-                        headers: {
-                            Authorization: `${token}`,
-                        },
-                    }
-                );
-
-                if (statusResponse.data.success) {
-                    alert('Your 14 days free trial has been activated!');
-                    window.location.href = '/addStocks';
-                } else {
-                    alert('Payment verification failed. Please try again.');
-                }
-            } else if (validityResponse.data.status === 'active') {
-                // If plan is already active, redirect directly
-                window.location.href = '/addStocks';
-            } else {
-                alert('Your plan is not active. Please purchase a plan to continue.');
-            }
-        } catch (error) {
-            console.error('Error in handleAddStocksRedirect:', error);
-            alert('An error occurred. Please try again.');
-        }
     };
 
     const handlePricingPageClick = () => {
@@ -629,93 +446,11 @@ function Insights() {
                                 </div>
                                 <input
                                     className="search-placeholder"
-                                    placeholder="Search stocks in watchlist"
+                                    placeholder="Search news in news feed"
                                     type="text"
                                     value={searchQuery}
                                     onChange={handleSearchChange}
                                 />
-                            </div>
-                        </div>
-                        <div className="watchlist-header">
-                            <div className="alert-list-items">
-                                <h3 className="my-stock-watchlist">My Stock watchlist</h3>
-                                <button className="add-icon-parent" id="frameButton" onClick={handleAddStocksRedirect} style={{ cursor: 'pointer' }}>
-                                    <div className="add-icon">
-                                        <img
-                                            className="add-icon-child"
-                                            alt=""
-                                            src="./public/insights/group-1000001002.svg"
-                                        />
-                                    </div>
-                                    <div className="add">Add</div>
-                                </button>
-                            </div>
-                            <div className="watchlist-filters">
-                                <div className="filter-tabs">
-                                    <div
-                                        className={`filter-names ${selectedFilter === 'all' ? 'active' : ''}`}
-                                        onClick={() => handleFilterChange('all')}
-                                    >
-                                        <div className="all-16">
-                                            <b className="all">All </b>
-                                            <span className="span2">({stockData.length})</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="watchlist-items">
-                                    {loading ? (
-                                        <div style={{ color: 'white', margin: 'auto' }}>Loading...</div>
-                                    ) : noDataFound ? (
-                                        <div style={{ color: 'white', margin: 'auto' }}>No data found</div>
-                                    ) : showSearchResults || !isSearchActive ? (
-                                        stockData.slice(0, displayCount).map((stock, index) => (
-                                            <div key={stock.id} className="select-stocks">
-                                                <div className="select-stocks-inner">
-                                                    <div className="vector-wrapper">
-                                                        <img className="frame-child5" alt="" />
-                                                    </div>
-                                                </div>
-                                                <div className="stock-item">
-                                                    <div className="adani-group1">{stock.stock_long_name}</div>
-                                                </div>
-                                                <div className="actions">
-                                                    {editingStockId === stock.id ? (
-                                                        <div
-                                                            onClick={() => handleRemoveClick(stock.isin_code, stock.scrip_cd, stock.id)}
-                                                            style={{
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                backgroundColor: 'red',
-                                                                padding: '10px',
-                                                                borderRadius: '4px',
-                                                                cursor: 'pointer',
-                                                            }}
-                                                        >
-                                                            <Trash style={{ color: 'white' }} />
-                                                            <span style={{ marginLeft: '4px', color: 'white' }}>
-                                                                {isRemoving[stock.id] ? 'Removing....' : 'Remove'}
-                                                            </span>
-                                                        </div>
-                                                    ) : (
-                                                        <Edit3
-                                                            onClick={() => handleEditClick(stock.id)}
-                                                            style={{
-                                                                cursor: 'pointer',
-                                                                color: 'green'
-                                                            }}
-                                                        />
-                                                    )}
-                                                </div>
-                                            </div>
-                                        ))
-                                    ) : null}
-                                    <br />
-                                    {!loading && stockData.length > displayCount && (
-                                        <button className="add-icon-parent" onClick={showMore} style={{ width: "120px", margin: "auto", borderRadius: "8px", padding: "10px", cursor: 'pointer' }}>
-                                            <span className='add' style={{ margin: 'auto' }}>Show More</span>
-                                        </button>
-                                    )}
-                                </div>
                             </div>
                         </div>
                         <div className="watchlist-header">
@@ -772,10 +507,9 @@ function Insights() {
                         </div>
                     </section>
                 </main>
-                <section className="referral-offer-parent">
+                {/* <section className="referral-offer-parent">
                     <div className="referral-offer">
                         <h3 className="refer-and-get-container">
-                            {/* <span>Refer and get a </span> */}
                             <span className="free-month">
                                 <span className="free-month1">Refer Now</span>
                             </span>&nbsp;
@@ -799,9 +533,8 @@ function Insights() {
                         src="./public/home-desktop/8731674-1.svg"
                     />
                     <div className="frame-child109" />
-                </section>
-                <div className="good-evening">Good Evening</div>
-                <div className="footer">
+                </section> */}
+                <footer className="footer">
                     <div className="footer-content">
                         <img
                             className="image-18-icon1"
@@ -868,8 +601,10 @@ function Insights() {
                             />
                         </div>
                     </div>
-                </div>
-                <footer className="bottom-sheet-icon-parent">
+                </footer>
+
+                {/* CopyRight Section */}
+                <div className="bottom-sheet-icon-parent">
                     <h6 style={{ position: 'absolute', color: 'white', top: '-20px', left: '80px' }}>OneMetric, All Right reserved © 2024</h6>
                     <img
                         className="bottom-sheet-icon"
@@ -895,10 +630,10 @@ function Insights() {
                             <div className="remove-from-watchlist">Remove from Watchlist</div>
                         </div>
                     </div>
-                </footer>
+                </div>
             </div>
         </div>
     )
 }
 
-export default Insights
+export default NewsFeed
