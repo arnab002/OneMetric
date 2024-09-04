@@ -189,7 +189,7 @@
   margin: 0 !important;
   right: 71.6px;
   bottom: -120.9px;
-  z-index: 3;
+  z-index: 2;
 }
 
 .chart-icon {
@@ -1193,7 +1193,7 @@
   box-shadow: 0 1px 0 rgba(59, 74, 172, 0.4);
   border-radius: 50%;
   background: linear-gradient(180deg, #101747, #0a0c18);
-  z-index: 3;
+  z-index: 1;
 }
 
 .input-dots,
@@ -1751,7 +1751,7 @@
   height: 112px;
   overflow: hidden;
   gap: 5.8px;
-  z-index: 3;
+  z-index: 1;
   text-align: center;
   font-size: var(--font-size-7xs);
   color: var(--color-gray-600);
@@ -2344,7 +2344,7 @@
   position: relative;
   border-radius: var(--br-8xs);
   background-color: var(--color-gray-200);
-  z-index: 3;
+  z-index: 1;
 }
 
 .frame-parent11,
