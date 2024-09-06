@@ -137,17 +137,35 @@ function UsersList() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   useEffect(() => {
-    // Fetch user data from the API
-    fetchUserData();
+    const checkAuthAndFetchData = async () => {
+      const authStatus = localStorage.getItem('isAdminAuthenticated') === 'true';
+      const token = localStorage.getItem('adminToken');
+      if (!authStatus || !token) {
+        window.location.href = "/admin";
+      } else {
+        await fetchUserData(token);
+      }
+    };
+
+    checkAuthAndFetchData();
   }, []);
 
-  const fetchUserData = async () => {
+  const fetchUserData = async (token: string) => {
     try {
-      const response = await axios.get(`${baseApiURL()}/user-details`);
+      const response = await axios.get(`${baseApiURL()}/user-details`, {
+        headers: {
+          Authorization: `${token}`
+        }
+      });
       const data = await response.data;
       setUsers([data]); // Wrap the single user object in an array
     } catch (error) {
       console.error("Error fetching user data:", error);
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        localStorage.removeItem('isAdminAuthenticated');
+        localStorage.removeItem('adminToken');
+        window.location.href = "/admin";
+      }
     }
   };
 

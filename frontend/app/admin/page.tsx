@@ -1,5 +1,6 @@
 'use client'
 import React, { useState, FormEvent, useEffect } from 'react';
+import baseApiURL from '@/baseUrl';
 import { Icon } from '@iconify/react';
 
 const AdminLogin: React.FC = () => {
@@ -13,31 +14,40 @@ const AdminLogin: React.FC = () => {
     useEffect(() => {
         // Check if admin is already logged in
         if (typeof window !== 'undefined') {
-            const authStatus = localStorage.getItem('isAdminAuthenticated') === 'true';
-            setIsAuthenticated(authStatus);
-            if (authStatus) {
-                window.location.href = "/admin/dashboard"
-            }
+          const token = localStorage.getItem('adminToken');
+          const authStatus = !!token;
+          setIsAuthenticated(authStatus);
+          if (authStatus) {
+            window.location.href = "/admin/dashboard";
+          }
         }
-    }, []);
+      }, []);
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError('');
         setLoading(true);
 
-        // Hardcoded credentials
-        const validEmail = 'admin@onemetric.in';
-        const validPassword = 'admin@123';
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminlogin`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
 
-        if (email === validEmail && password === validPassword) {
-            // Set authentication in local storage
-            if (typeof window !== 'undefined') {
+            if (response.ok) {
+                const { token } = await response.json();
+                localStorage.setItem('adminToken', token);
                 localStorage.setItem('isAdminAuthenticated', 'true');
+                window.location.href = "/admin/dashboard";
+            } else {
+                const { error } = await response.json();
+                setError(error || 'An error occurred during login');
             }
-            window.location.href = "/admin/dashboard";
-        } else {
-            setError('Invalid credentials');
+        } catch (error) {
+            setError('An error occurred during login');
         }
 
         setLoading(false);

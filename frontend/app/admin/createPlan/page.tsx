@@ -1,10 +1,59 @@
 "use client";
-import React from 'react'
-import Sidebar from '../components/Sidebar'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import React, { useState, FormEvent, ChangeEvent, useEffect } from 'react';
+import axios from 'axios';
+import Sidebar from '../components/Sidebar';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
-function EditPlan() {
+function CreatePlan() {
+    const [duration, setDuration] = useState<string>('');
+    const [price, setPrice] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [message, setMessage] = useState<string>('');
+    const [adminToken, setAdminToken] = useState<string | null>(null);
+
+    useEffect(() => {
+        // Access localStorage only after component mounts (client-side)
+        const token = localStorage.getItem('adminToken');
+        setAdminToken(token);
+    }, []);
+
+    const handleDurationChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setDuration(e.target.value);
+    };
+
+    const handlePriceChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setPrice(e.target.value);
+    };
+
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setIsLoading(true);
+        setMessage('');
+
+        try {
+            const payload = {
+                amount_in_rs: parseInt(price),
+                duration_in_months: parseInt(duration),
+                status: 'active', // Status is always active
+            };
+
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/plans`, payload, {
+                headers: {
+                    Authorization: `${adminToken}`, // Passing the token in the Authorization header
+                }
+            });
+
+            setMessage('Plan created successfully!');
+            setDuration('');
+            setPrice('');
+        } catch (error: any) {
+            setMessage(error.response?.data?.message || 'An error occurred while creating the plan.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <div>
             <>
@@ -21,38 +70,42 @@ function EditPlan() {
                                     <div className="col-xxl-6 col-xl-8 col-lg-10">
                                         <div className="card border">
                                             <div className="card-body">
-                                                <form action="#">
+                                                <form onSubmit={handleSubmit}>
                                                     <div className="mb-20">
                                                         <label
-                                                            htmlFor="name"
+                                                            htmlFor="duration"
                                                             className="form-label fw-semibold text-primary-light text-sm mb-8"
                                                         >
                                                             Plan Duration <span className="text-danger-600">*</span>
                                                         </label>
                                                         <input
-                                                            type='text'
-                                                            inputMode='numeric'
-                                                            maxLength={1}
+                                                            type="text"
+                                                            inputMode="numeric"
+                                                            maxLength={2}
                                                             className="form-control radius-8"
-                                                            id="plan-price"
+                                                            id="duration"
                                                             placeholder="Enter Plan Duration in Months"
+                                                            value={duration}
+                                                            onChange={handleDurationChange}
                                                             required
                                                         />
                                                     </div>
                                                     <div className="mb-20">
                                                         <label
-                                                            htmlFor="name"
+                                                            htmlFor="price"
                                                             className="form-label fw-semibold text-primary-light text-sm mb-8"
                                                         >
                                                             Plan Price <span className="text-danger-600">*</span>
                                                         </label>
                                                         <input
-                                                            type='text'
-                                                            inputMode='numeric'
-                                                            maxLength={5}
+                                                            type="text"
+                                                            inputMode="numeric"
+                                                            maxLength={6}
                                                             className="form-control radius-8"
-                                                            id="plan-price"
+                                                            id="price"
                                                             placeholder="Enter Plan Price"
+                                                            value={price}
+                                                            onChange={handlePriceChange}
                                                             pattern="[0-9]*"
                                                             required
                                                             onKeyPress={(e) => {
@@ -66,17 +119,29 @@ function EditPlan() {
                                                         <button
                                                             type="button"
                                                             className="border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-56 py-11 radius-8"
+                                                            onClick={() => {
+                                                                setDuration('');
+                                                                setPrice('');
+                                                                setMessage('');
+                                                            }}
+                                                            disabled={isLoading}
                                                         >
                                                             Cancel
                                                         </button>
                                                         <button
                                                             type="submit"
                                                             className="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8"
+                                                            disabled={isLoading}
                                                         >
-                                                            Save
+                                                            {isLoading ? 'Saving...' : 'Save'}
                                                         </button>
                                                     </div>
                                                 </form>
+                                                {message && (
+                                                    <div className={`alert ${message.includes('successfully') ? 'alert-success' : 'alert-danger'} mt-3`} role="alert">
+                                                        {message}
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -88,7 +153,7 @@ function EditPlan() {
                 </main>
             </>
         </div>
-    )
+    );
 }
 
-export default EditPlan
+export default CreatePlan;

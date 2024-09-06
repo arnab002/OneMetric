@@ -5,6 +5,7 @@ import { Icon } from '@iconify/react'
 function Header() {
     const handleLogout = () => {
         localStorage.removeItem('isAdminAuthenticated');
+        localStorage.removeItem('adminToken');
         window.location.href = "/admin";
     };
 

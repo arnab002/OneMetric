@@ -201,7 +201,7 @@ function HomeDesktop() {
         const fetchPlanData = async () => {
             try {
                 const response = await axios.get<{ data: Plan[] }>(`${baseApiURL()}/plans`);
-                const filteredPlans = response.data.data.filter((plan: Plan) => ![1].includes(plan.id));
+                const filteredPlans = response.data.data.filter((plan: Plan) => ![0,1].includes(plan.id));
                 setPlanData(filteredPlans);
                 setLoading(false);
             } catch (error) {

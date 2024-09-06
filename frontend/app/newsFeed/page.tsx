@@ -11,7 +11,7 @@ import CustomSidebar from '../sidebar';
 
 interface NewsItem {
     news_id: string;
-    scrip_cd: number;
+    scrip_cd: string;
     summary: string;
     chart_img: string;
     announced_at: string;
@@ -131,27 +131,27 @@ function NewsFeed() {
                     },
                 }
             );
-    
+
             const { success, status, data } = response.data;
-    
+
             setIsPlanValid(success);
             setPlanStatus(status);
-    
+
             // Check if data exists before accessing plan_id
             if (data && data.plan_id) {
                 setPlanId(data.plan_id.toString());
             }
-    
+
             if (success) {
                 if (status === 'active') {
                     const expiryDate = new Date(data.expire_date);
                     const currentDate = new Date(data.current_date);
                     const timeDifference = expiryDate.getTime() - currentDate.getTime();
                     const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
-    
+
                     setDaysUntilExpiry(daysDifference);
                     setIsPlanExpired(daysDifference <= 0);
-    
+
                     if (data.plan_id === 1) {
                         setTrialStartDate(new Date(data.current_date));
                     }
@@ -165,7 +165,7 @@ function NewsFeed() {
             } else {
                 setIsPlanExpired(true);
             }
-    
+
         } catch (error) {
             console.error('Error checking plan validity:', error);
             setIsPlanExpired(true);
@@ -173,20 +173,20 @@ function NewsFeed() {
             setIsCheckingPlan(false);
         }
     };
-    
+
     const renderPlanStatus = () => {
         if (isCheckingPlan) {
             return <span style={{ color: 'white', fontSize: '14px' }}>Checking plan status...</span>;
         }
-    
+
         if (isPlanValid && planStatus === 'active') {
             const expiryMessage = `Your Plan is expiring in ${daysUntilExpiry} days`;
-    
+
             if (planId === '1') {
                 // Free trial
                 return (
                     <>
-                        <span className="plan-expiring">{expiryMessage}</span>&nbsp;&nbsp;
+                        <span className="plan-expiring" style={{ color: daysUntilExpiry <= 10 ? 'red' : '#ffbf00' }}>{expiryMessage}</span>&nbsp;&nbsp;
                         <button className="add-icon-parent-subscribe" style={{ cursor: 'pointer' }} onClick={handlePricingPageClick}>
                             <span className='add-subscribe'>Subscribe Now</span>
                         </button>
@@ -210,7 +210,7 @@ function NewsFeed() {
                 }
             }
         }
-    
+
         if (isPlanExpired) {
             return (
                 <>
@@ -221,18 +221,18 @@ function NewsFeed() {
                 </>
             );
         }
-    
+
         if (planStatus === 'newuser') {
             return (
                 <>
                     <span className="plan-expiring">Start your free 14 days trial&nbsp;&nbsp;</span>
                     <button className="add-icon-parent-renew" onClick={handleAddToWatchlist}>
-                        <span className='add-renew'>Start Trial</span>
+                        <span className='add-renew'>{isStartingTrial ? 'Starting.....' : 'Start Trial'}</span>
                     </button>
                 </>
             );
         }
-    
+
         // Default case if none of the above conditions are met
         return <span style={{ color: 'white' }}>Unable to determine plan status. Please contact support.</span>;
     };
@@ -342,10 +342,23 @@ function NewsFeed() {
         window.open('https://api.whatsapp.com/send?phone=917204946777&text=Hi', '_blank');
     };
 
-    const handleNewsClick = (stockLongName: string, scripCd: number, newsId: string) => {
-        const formattedName = stockLongName.replace(/\s+/g, '-').toLowerCase();
-        window.open(`/singleNews/${formattedName}/${scripCd}/${newsId}`,'_blank');
-    };    
+    const handleNewsClick = (stockLongName: string, scripCd: string, newsId: string) => {
+        const formattedName = sanitizeAndCapitalizeStockName(stockLongName);
+        window.open(`/singleNews/${formattedName}/${scripCd}/${newsId}`);
+    };
+
+    // Reuse the same sanitization and capitalization function from generateStaticParams
+    function sanitizeAndCapitalizeStockName(stockName: string): string {
+        // Remove any trailing period
+        const trimmedName = stockName.trim().replace(/\.$/, '');
+
+        // Capitalize each word and replace spaces or special characters with dashes
+        return trimmedName
+            .split(/\s+/)
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join('-')
+            .replace(/[^a-zA-Z0-9-]/g, ''); // Remove any remaining non-alphanumeric characters except for dashes
+    }
 
     if (!isTokenChecked) {
         return (
@@ -453,7 +466,7 @@ function NewsFeed() {
                                 {renderPlanStatus()}
                             </div>
                         </div>
-                        <div className="insights-header-wrapper">
+                        {/* <div className="insights-header-wrapper">
                             <div className="stock-search" id="stockSearchContainer">
                                 <div className="search-input">
                                     <img
@@ -470,7 +483,7 @@ function NewsFeed() {
                                     onChange={handleSearchChange}
                                 />
                             </div>
-                        </div>
+                        </div> */}
                         <div className="watchlist-header">
                             <div className="alert-list-items">
                                 <h3 className="newsfeed">Newsfeed</h3>

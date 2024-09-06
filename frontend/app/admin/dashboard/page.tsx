@@ -8,6 +8,7 @@ import Sidebar from '../components/Sidebar'
 import Footer from '../components/Footer'
 
 function AdminHome() {
+    const [adminToken, setAdminToken] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userStats, setUserStats] = useState({
         totalUsers: 0,
@@ -20,9 +21,11 @@ function AdminHome() {
 
     const checkAuth = () => {
         const authStatus = localStorage.getItem('isAdminAuthenticated') === 'true';
+        const token = localStorage.getItem('adminToken');
         setIsAuthenticated(authStatus);
-        if (!authStatus) {
-            window.location.href = "/admin"
+        setAdminToken(token || '');
+        if (!authStatus || !token) {
+            window.location.href = "/admin";
         }
     };
 
@@ -31,15 +34,19 @@ function AdminHome() {
     }, []);
 
     useEffect(() => {
-        if (isAuthenticated) {
+        if (isAuthenticated && adminToken) {
             fetchUserStats();
             fetchRevenueStats();
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated, adminToken]);
 
     const fetchUserStats = async () => {
         try {
-            const response = await axios.get(`${baseApiURL()}/user-stats`);
+            const response = await axios.get(`${baseApiURL()}/user-stats`, {
+                headers: {
+                    Authorization: `${adminToken}`
+                }
+            });
             const data = await response.data;
             setUserStats({
                 totalUsers: data.totalUsers,
@@ -47,18 +54,34 @@ function AdminHome() {
             });
         } catch (error) {
             console.error('Error fetching user statistics:', error);
+            // Handle unauthorized access
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                localStorage.removeItem('isAdminAuthenticated');
+                localStorage.removeItem('adminToken');
+                window.location.href = "/admin";
+            }
         }
     };
 
     const fetchRevenueStats = async () => {
         try {
-            const response = await axios.get(`${baseApiURL()}/total-revenue`);
+            const response = await axios.get(`${baseApiURL()}/total-revenue`, {
+                headers: {
+                    Authorization: `${adminToken}`
+                }
+            });
             const data = await response.data;
             setRevenueStats({
                 totalRevenue: data.totalRevenue
             });
         } catch (error) {
             console.error('Error fetching revenue statistics:', error);
+            // Handle unauthorized access
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                localStorage.removeItem('isAdminAuthenticated');
+                localStorage.removeItem('adminToken');
+                window.location.href = "/admin";
+            }
         }
     };
 

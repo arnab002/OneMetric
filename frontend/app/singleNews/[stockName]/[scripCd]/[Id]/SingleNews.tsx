@@ -12,17 +12,16 @@ import { useParams } from 'next/navigation';
 
 interface NewsItem {
     scrip_cd: number;
-    summary: string;
-    chart_img: string;
-    announced_at: string;
+    news_id: string;
     stock_long_name: string;
+    chart_img: string;
+    summary: string;
+    announced_at: string;
 }
 
 interface NewsResponse {
     success: boolean;
-    data: NewsItem[];
-    currentPage: number;
-    totalPages: number;
+    data: NewsItem;
     message: string;
 }
 
@@ -125,18 +124,31 @@ function SingleNews({ initialStockName, initialScripCd, initialId }: SingleNewsP
 
             setIsPlanValid(success);
             setPlanStatus(status);
-            setPlanId(data.plan_id.toString());
 
-            if (success && status === 'active') {
-                const expiryDate = new Date(data.expire_date);
-                const currentDate = new Date(data.current_date);
-                const timeDifference = expiryDate.getTime() - currentDate.getTime();
-                const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
-                setDaysUntilExpiry(daysDifference);
-                setIsPlanExpired(daysDifference <= 0);
+            // Check if data exists before accessing plan_id
+            if (data && data.plan_id) {
+                setPlanId(data.plan_id.toString());
+            }
 
-                if (data.plan_id === 1) {
-                    setTrialStartDate(new Date(data.current_date));
+            if (success) {
+                if (status === 'active') {
+                    const expiryDate = new Date(data.expire_date);
+                    const currentDate = new Date(data.current_date);
+                    const timeDifference = expiryDate.getTime() - currentDate.getTime();
+                    const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+
+                    setDaysUntilExpiry(daysDifference);
+                    setIsPlanExpired(daysDifference <= 0);
+
+                    if (data.plan_id === 1) {
+                        setTrialStartDate(new Date(data.current_date));
+                    }
+                } else if (status === 'newuser') {
+                    // Handle new user case, no plan expiry
+                    setIsPlanExpired(false);
+                    setDaysUntilExpiry(0);
+                } else {
+                    setIsPlanExpired(true);
                 }
             } else {
                 setIsPlanExpired(true);
@@ -162,7 +174,7 @@ function SingleNews({ initialStockName, initialScripCd, initialId }: SingleNewsP
                 // Free trial
                 return (
                     <>
-                        <span className="plan-expiring">{expiryMessage}</span>&nbsp;&nbsp;
+                        <span className="plan-expiring" style={{ color: daysUntilExpiry <= 10 ? 'red' : '#ffbf00' }}>{expiryMessage}</span>&nbsp;&nbsp;
                         <button className="add-icon-parent-subscribe" style={{ cursor: 'pointer' }} onClick={handlePricingPageClick}>
                             <span className='add-subscribe'>Subscribe Now</span>
                         </button>
@@ -201,9 +213,9 @@ function SingleNews({ initialStockName, initialScripCd, initialId }: SingleNewsP
         if (planStatus === 'newuser') {
             return (
                 <>
-                    <span className="enjoy-your-30">Start your free 14 days trial&nbsp;&nbsp;</span>
-                    <button className="purchase-plan-button" onClick={handleAddToWatchlist}>
-                        Start Trial
+                    <span className="plan-expiring">Start your free 14 days trial&nbsp;&nbsp;</span>
+                    <button className="add-icon-parent-renew" onClick={handleAddToWatchlist}>
+                        <span className='add-renew'>{isStartingTrial ? 'Starting.....' : 'Start Trial'}</span>
                     </button>
                 </>
             );
@@ -216,11 +228,11 @@ function SingleNews({ initialStockName, initialScripCd, initialId }: SingleNewsP
     const fetchNewsData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get<NewsResponse>(`${baseApiURL()}/news?news_id=${newsId}`);
+            const response = await axios.get<NewsResponse>(`${baseApiURL()}/newssummary/${newsId}`);
             const result = response.data;
 
-            if (result.success && result.data.length > 0) {
-                setNewsData(result.data[0]);
+            if (result.success) {
+                setNewsData(result.data);
             } else {
                 setError('News data not found');
             }
@@ -417,38 +429,15 @@ function SingleNews({ initialStockName, initialScripCd, initialId }: SingleNewsP
                                 {renderPlanStatus()}
                             </div>
                         </div>
-                        <div className="insights-header-wrapper">
-                            <div className="stock-search" id="stockSearchContainer">
-                                <div className="search-input">
-                                    <img
-                                        className="search-input-child"
-                                        alt=""
-                                        src="../../../../public/insights/group-1000000977-2.svg"
-                                    />
-                                </div>
-                                <input
-                                    className="search-placeholder"
-                                    placeholder="Search news in news feed"
-                                    type="text"
-                                    value={searchQuery}
-                                    onChange={handleSearchChange}
-                                />
-                            </div>
-                        </div>
                         <div className="watchlist-header">
-                            <div className="alert-list-items">
-                                <h3 className="newsfeed">Newsfeed</h3>
-                            </div>
                             {newsData && (
                                 <div className="news-items">
                                     <div className="newsfeed1">
                                         <div className="news-content">
-                                            {/* <Image
+                                            <img
                                                 src={newsData.chart_img}
-                                                alt="News Chart"
-                                                width={300}
-                                                height={200}
-                                            /> */}
+                                                className="image-9-icon"
+                                            />
                                         </div>
                                         <div className="news-details">
                                             <div className="watchlist-filters">
