@@ -2,15 +2,15 @@
 import React, { useEffect, useState, ChangeEvent } from 'react';
 import { User } from 'react-feather';
 import axios from 'axios';
-import logo from "../../public/public/insights/OneMetric_Transparent.png";
+import logo from "../../../../../public/public/insights/OneMetric_Transparent.png";
 import { BarLoader, PulseLoader } from 'react-spinners'; // Import multiple loaders
 import baseApiURL from '@/baseUrl';
-import '../../public/assets/newsfeed.css'
-import CustomSidebar from '../sidebar';
+import '../../../../../public/assets/singleNews.css'
+import CustomSidebar from '@/app/sidebar';
+import { useParams } from 'next/navigation';
 
 
 interface NewsItem {
-    news_id: string;
     scrip_cd: number;
     summary: string;
     chart_img: string;
@@ -26,31 +26,49 @@ interface NewsResponse {
     message: string;
 }
 
-type ButtonState = 'plus' | 'check' | 'edit' | 'trash';
+interface SingleNewsProps {
+    initialStockName: string;
+    initialScripCd: string;
+    initialId: string;
+}
 
-function NewsFeed() {
+
+function SingleNews({ initialStockName, initialScripCd, initialId }: SingleNewsProps) {
+    const params = useParams();
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [planId, setPlanId] = useState<string>('');
+    const [stockName, setStockName] = useState(initialStockName);
+    const [scripCd, setScripCd] = useState(initialScripCd);
+    const [newsId, setNewsId] = useState(initialId);
     const [trialStartDate, setTrialStartDate] = useState<Date | null>(null);
     const [isSearchActive, setIsSearchActive] = useState<boolean>(false);
-    const [newsData, setNewsData] = useState<NewsItem[]>([]);
+    const [newsData, setNewsData] = useState<NewsItem | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [newsLoading, setNewsLoading] = useState<boolean>(true);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [isStartingTrial, setIsStartingTrial] = useState(false);
-    const [displayCount, setDisplayCount] = useState(20);
     const [isPlanValid, setIsPlanValid] = useState<boolean>(false);
     const [planStatus, setPlanStatus] = useState<string>('');
     const [daysUntilExpiry, setDaysUntilExpiry] = useState<number>(0);
     const [isPlanExpired, setIsPlanExpired] = useState<boolean>(false);
     const [isTokenChecked, setIsTokenChecked] = useState(false);
     const [isCheckingPlan, setIsCheckingPlan] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
     const [error, setError] = useState<string | null>(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [showDropdown, setShowDropdown] = useState(false);
     const [token, setToken] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (params.stockName && params.stockName !== stockName) {
+            setStockName(params.stockName as string);
+        }
+        if (params.scripCd && params.scripCd !== scripCd) {
+            setScripCd(params.scripCd as string);
+        }
+
+        if (params.Id && params.Id !== newsId) {
+            setNewsId(params.Id as string);
+        }
+    }, [params, stockName, scripCd, newsId]);
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -81,43 +99,14 @@ function NewsFeed() {
 
     useEffect(() => {
         if (isTokenChecked && token) {
-            fetchNewsData(1);
+            fetchNewsData();
         }
     }, [isTokenChecked, token]);
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (showDropdown && !(event.target as Element).closest('.user-icon-wrapper')) {
-                setShowDropdown(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [showDropdown]);
 
     useEffect(() => {
         const token = localStorage.getItem('authToken');
         setIsLoggedIn(!!token);
     }, []);
-
-    const showMore = () => {
-        setDisplayCount(prevCount => prevCount + 8);
-    };
-
-    const handleShowMore = () => {
-        const nextPage = currentPage + 1;
-        if (nextPage <= totalPages) {
-            console.log(`Loading more news. Fetching page: ${nextPage}`); // Debug log
-            fetchNewsData(nextPage);
-        }
-    };
-
-    if (error) {
-        return <div style={{ color: 'white', margin: 'auto' }}>{error}</div>;
-    }
 
     const checkPlanValidity = async () => {
         setIsCheckingPlan(true);
@@ -131,41 +120,28 @@ function NewsFeed() {
                     },
                 }
             );
-    
+
             const { success, status, data } = response.data;
-    
+
             setIsPlanValid(success);
             setPlanStatus(status);
-    
-            // Check if data exists before accessing plan_id
-            if (data && data.plan_id) {
-                setPlanId(data.plan_id.toString());
-            }
-    
-            if (success) {
-                if (status === 'active') {
-                    const expiryDate = new Date(data.expire_date);
-                    const currentDate = new Date(data.current_date);
-                    const timeDifference = expiryDate.getTime() - currentDate.getTime();
-                    const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
-    
-                    setDaysUntilExpiry(daysDifference);
-                    setIsPlanExpired(daysDifference <= 0);
-    
-                    if (data.plan_id === 1) {
-                        setTrialStartDate(new Date(data.current_date));
-                    }
-                } else if (status === 'newuser') {
-                    // Handle new user case, no plan expiry
-                    setIsPlanExpired(false);
-                    setDaysUntilExpiry(0);
-                } else {
-                    setIsPlanExpired(true);
+            setPlanId(data.plan_id.toString());
+
+            if (success && status === 'active') {
+                const expiryDate = new Date(data.expire_date);
+                const currentDate = new Date(data.current_date);
+                const timeDifference = expiryDate.getTime() - currentDate.getTime();
+                const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+                setDaysUntilExpiry(daysDifference);
+                setIsPlanExpired(daysDifference <= 0);
+
+                if (data.plan_id === 1) {
+                    setTrialStartDate(new Date(data.current_date));
                 }
             } else {
                 setIsPlanExpired(true);
             }
-    
+
         } catch (error) {
             console.error('Error checking plan validity:', error);
             setIsPlanExpired(true);
@@ -173,15 +149,15 @@ function NewsFeed() {
             setIsCheckingPlan(false);
         }
     };
-    
+
     const renderPlanStatus = () => {
         if (isCheckingPlan) {
             return <span style={{ color: 'white', fontSize: '14px' }}>Checking plan status...</span>;
         }
-    
+
         if (isPlanValid && planStatus === 'active') {
             const expiryMessage = `Your Plan is expiring in ${daysUntilExpiry} days`;
-    
+
             if (planId === '1') {
                 // Free trial
                 return (
@@ -210,7 +186,7 @@ function NewsFeed() {
                 }
             }
         }
-    
+
         if (isPlanExpired) {
             return (
                 <>
@@ -221,42 +197,38 @@ function NewsFeed() {
                 </>
             );
         }
-    
+
         if (planStatus === 'newuser') {
             return (
                 <>
-                    <span className="plan-expiring">Start your free 14 days trial&nbsp;&nbsp;</span>
-                    <button className="add-icon-parent-renew" onClick={handleAddToWatchlist}>
-                        <span className='add-renew'>Start Trial</span>
+                    <span className="enjoy-your-30">Start your free 14 days trial&nbsp;&nbsp;</span>
+                    <button className="purchase-plan-button" onClick={handleAddToWatchlist}>
+                        Start Trial
                     </button>
                 </>
             );
         }
-    
+
         // Default case if none of the above conditions are met
         return <span style={{ color: 'white' }}>Unable to determine plan status. Please contact support.</span>;
     };
 
-    const fetchNewsData = async (page: number) => {
-        setNewsLoading(true);
+    const fetchNewsData = async () => {
+        setLoading(true);
         try {
-            console.log(`Fetching news data for page: ${page}`); // Debug log
-            const response = await axios.get<NewsResponse>(`${baseApiURL()}/news?page=${page}`);
+            const response = await axios.get<NewsResponse>(`${baseApiURL()}/news?news_id=${newsId}`);
             const result = response.data;
 
-            if (result.success) {
-                setNewsData(prevData => (page === 1 ? result.data : [...prevData, ...result.data]));
-                setCurrentPage(page);
-                setTotalPages(result.totalPages);
-                console.log(`Fetched page ${page} successfully. Total pages: ${result.totalPages}`); // Debug log
+            if (result.success && result.data.length > 0) {
+                setNewsData(result.data[0]);
             } else {
-                setError('Failed to fetch news data');
+                setError('News data not found');
             }
         } catch (error) {
             console.error('Error fetching the news data:', error);
             setError('An error occurred while fetching news');
         } finally {
-            setNewsLoading(false);
+            setLoading(false);
         }
     };
 
@@ -326,10 +298,6 @@ function NewsFeed() {
         window.location.href = '/'
     };
 
-    const handleReferClick = () => {
-        window.location.href = '/refer'
-    };
-
     const handlePricingPageClick = () => {
         window.location.href = '/plans'
     };
@@ -342,10 +310,6 @@ function NewsFeed() {
         window.open('https://api.whatsapp.com/send?phone=917204946777&text=Hi', '_blank');
     };
 
-    const handleNewsClick = (stockLongName: string, scripCd: number, newsId: string) => {
-        const formattedName = stockLongName.replace(/\s+/g, '-').toLowerCase();
-        window.open(`/singleNews/${formattedName}/${scripCd}/${newsId}`,'_blank');
-    };    
 
     if (!isTokenChecked) {
         return (
@@ -385,24 +349,24 @@ function NewsFeed() {
             <div className="dashboard">
                 <div className="dashboard-child" />
                 <div className="dashboard-item" />
-                <img className="image-13-icon" alt="" src="./public/insights/image-13@2x.png" />
-                <img className="vector-icon" alt="" src="./public/insights/vector.svg" />
+                <img className="image-13-icon" alt="" src="../../../../public/insights/image-13@2x.png" />
+                <img className="vector-icon" alt="" src="../../../../public/insights/vector.svg" />
                 <div className="dashboard-inner" />
-                <img className="subtract-icon" alt="" src="./public/insights/subtract.svg" />
+                <img className="subtract-icon" alt="" src="../../../../public/insights/subtract.svg" />
                 <header className="main">
                     <div className="frame-parent">
-                        <img className="frame-child" alt="" src="./public/insights/group-1000000964.svg" />
-                        <img className="frame-item" alt="" src="./public/insights/group-1000000966.svg" />
+                        <img className="frame-child" alt="" src="../../../../public/insights/group-1000000964.svg" />
+                        <img className="frame-item" alt="" src="../../../../public/insights/group-1000000966.svg" />
                     </div>
                     <div className="frame-group">
-                        <img className="frame-inner" alt="" src="./public/insights/group-1000001000.svg" />
+                        <img className="frame-inner" alt="" src="../../../../public/insights/group-1000001000.svg" />
                         <div className="add-stocks">Add Stocks</div>
                     </div>
                     <img
                         className="image-18-icon"
                         loading="lazy"
                         alt=""
-                        src="./public/insights/OneMetric_Transparent.png"
+                        src="../../../../public/insights/OneMetric_Transparent.png"
                         onClick={handleHomeClick}
                         style={{ cursor: 'pointer' }}
                     />
@@ -416,14 +380,14 @@ function NewsFeed() {
                             <img
                                 className="group-icon"
                                 alt=""
-                                src="./public/insights/group-1000000977.svg"
+                                src="../../../../public/insights/group-1000000977.svg"
                             />
                         </div>
                         <div className="frame-div">
                             <img
                                 className="frame-child1"
                                 alt=""
-                                src="./public/insights/group-1000000998@2x.png"
+                                src="../../../../public/insights/group-1000000998@2x.png"
                             />
                         </div>
                         {isLoggedIn ? (
@@ -436,7 +400,7 @@ function NewsFeed() {
                                     className="union-icon"
                                     loading="lazy"
                                     alt=""
-                                    src="./public/insights/union.svg"
+                                    src="../../../../public/insights/union.svg"
                                 />
                             </div>
                         )}
@@ -459,7 +423,7 @@ function NewsFeed() {
                                     <img
                                         className="search-input-child"
                                         alt=""
-                                        src="./public/insights/group-1000000977-2.svg"
+                                        src="../../../../public/insights/group-1000000977-2.svg"
                                     />
                                 </div>
                                 <input
@@ -475,52 +439,26 @@ function NewsFeed() {
                             <div className="alert-list-items">
                                 <h3 className="newsfeed">Newsfeed</h3>
                             </div>
-                            <div className="news-items">
-                                {newsData.map((news, index) => (
-                                    <div className="newsfeed1" key={`${news.scrip_cd}-${index}`}>
+                            {newsData && (
+                                <div className="news-items">
+                                    <div className="newsfeed1">
                                         <div className="news-content">
-                                            <img
-                                                className="image-9-icon"
-                                                loading="lazy"
-                                                alt=""
-                                                src={news.chart_img}
-                                            />
+                                            {/* <Image
+                                                src={newsData.chart_img}
+                                                alt="News Chart"
+                                                width={300}
+                                                height={200}
+                                            /> */}
                                         </div>
                                         <div className="news-details">
                                             <div className="watchlist-filters">
-                                                <div className="reliance-industries">{news.stock_long_name}</div>
-                                                <div className="reliance-gets-us" onClick={() => handleNewsClick(news.stock_long_name, news.scrip_cd, news.news_id)} style={{ cursor: 'pointer' }}>{news.summary}</div>
-                                                <div className="news-time">
-                                                    <div className="jul-23-2024">{new Date(news.announced_at).toLocaleString()}</div>
-                                                    <div className="read-parent">
-                                                        <div className="read">Read</div>
-                                                        <img
-                                                            className="frame-child4"
-                                                            alt=""
-                                                            src="./public/insights/vector-213.svg"
-                                                        />
-                                                    </div>
-                                                </div>
+                                                <div className="reliance-industries">{newsData.stock_long_name}</div>
+                                                <div className="reliance-gets-us">{newsData.summary}</div>
+                                                <div className="announced-at">Announced at: {newsData.announced_at}</div>
                                             </div>
                                         </div>
                                     </div>
-                                ))}
-                            </div>
-                            {newsLoading && <div style={{ color: 'white', margin: 'auto' }}>Loading...</div>}
-                            {currentPage < totalPages && !newsLoading && (
-                                <button
-                                    className="add-icon-parent"
-                                    onClick={handleShowMore}
-                                    style={{
-                                        width: "120px",
-                                        margin: "auto",
-                                        borderRadius: "8px",
-                                        padding: "10px",
-                                        cursor: 'pointer'
-                                    }}
-                                >
-                                    <span className='add' style={{ margin: 'auto' }}>Show More</span>
-                                </button>
+                                </div>
                             )}
                         </div>
                     </section>
@@ -548,7 +486,7 @@ function NewsFeed() {
                         className="icon"
                         loading="lazy"
                         alt=""
-                        src="./public/home-desktop/8731674-1.svg"
+                        src="../../../../public/home-desktop/8731674-1.svg"
                     />
                     <div className="frame-child109" />
                 </section> */}
@@ -558,7 +496,7 @@ function NewsFeed() {
                             className="image-18-icon1"
                             loading="lazy"
                             alt=""
-                            src="./public/insights/OneMetric_Transparent.png"
+                            src="../../../../public/insights/OneMetric_Transparent.png"
                             onClick={handleHomeClick}
                             style={{ cursor: 'pointer' }}
                         />
@@ -574,7 +512,7 @@ function NewsFeed() {
                                     className="social-icon"
                                     loading="lazy"
                                     alt=""
-                                    src="./public/insights/vector.svg"
+                                    src="../../../../public/insights/vector.svg"
                                     onClick={handleWhatsAppRedirect} style={{ cursor: 'pointer' }}
                                 />
                             </div>
@@ -582,7 +520,7 @@ function NewsFeed() {
                                 className="vector-icon1"
                                 loading="lazy"
                                 alt=""
-                                src="./public/insights/vector-1.svg"
+                                src="../../../../public/insights/vector-1.svg"
                                 onClick={handleTwitterRedirect}
                                 style={{ cursor: 'pointer' }}
                             />
@@ -594,7 +532,7 @@ function NewsFeed() {
                                 className="link-icons"
                                 loading="lazy"
                                 alt=""
-                                src="./public/insights/vector-172.svg"
+                                src="../../../../public/insights/vector-172.svg"
                             />
                             <div className="link-items">
                                 <div className="link-names">
@@ -615,7 +553,7 @@ function NewsFeed() {
                                 className="link-icons1"
                                 loading="lazy"
                                 alt=""
-                                src="./public/insights/vector-172.svg"
+                                src="../../../../public/insights/vector-172.svg"
                             />
                         </div>
                     </div>
@@ -628,13 +566,13 @@ function NewsFeed() {
                         className="bottom-sheet-icon"
                         loading="lazy"
                         alt=""
-                        src="./public/insights/vector-2.svg"
+                        src="../../../../public/insights/vector-2.svg"
                     />
                     <img
                         className="frame-child32"
                         loading="lazy"
                         alt=""
-                        src="./public/insights/group-219911503.svg"
+                        src="../../../../public/insights/group-219911503.svg"
                     />
                     <div className="bottomsheet">
                         <div className="bottom-sheet-header">
@@ -654,4 +592,4 @@ function NewsFeed() {
     )
 }
 
-export default NewsFeed
+export default SingleNews

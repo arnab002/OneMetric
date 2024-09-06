@@ -32,6 +32,7 @@ function AddStocks() {
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState('all');
     const [isRemoving, setIsRemoving] = useState<{ [key: number]: boolean }>({});
+    const [activeRemoveButton, setActiveRemoveButton] = useState<string | null>(null);
     const [visibleActions, setVisibleActions] = useState<{ [key: number]: boolean }>({});
     const [buttonStates, setButtonStates] = useState<{ [key: string]: ButtonState }>({});
     const [addedStocks, setAddedStocks] = useState<number[]>([]); // Track added stocks
@@ -184,10 +185,6 @@ function AddStocks() {
         setIsLoggedIn(!!token);
     }, []);
 
-    const handleUserAccountClick = () => {
-        window.location.href = '/userAccount'
-    };
-
     const SelectAllButton = ({ stocks, onSelectAll }: { stocks: any[], onSelectAll: (selected: boolean) => void }) => {
         const [isAllSelected, setIsAllSelected] = useState(false);
 
@@ -324,36 +321,40 @@ function AddStocks() {
                     },
                 }
             );
-            console.log("Plan validity response:", response.data);
 
             const { success, status, data } = response.data;
 
             setIsPlanValid(success);
             setPlanStatus(status);
-            setPlanId(data.plan_id.toString());
 
-            if (success && status === 'active') {
-                const expiryDate = new Date(data.expire_date);
-                const currentDate = new Date(data.current_date);
-                const timeDifference = expiryDate.getTime() - currentDate.getTime();
-                const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
-                setDaysUntilExpiry(daysDifference);
-                setIsPlanExpired(daysDifference <= 0);
+            // Check if data exists before accessing plan_id
+            if (data && data.plan_id) {
+                setPlanId(data.plan_id.toString());
+            }
 
-                if (data.plan_id === 1) {
-                    setTrialStartDate(new Date(data.current_date));
+            if (success) {
+                if (status === 'active') {
+                    const expiryDate = new Date(data.expire_date);
+                    const currentDate = new Date(data.current_date);
+                    const timeDifference = expiryDate.getTime() - currentDate.getTime();
+                    const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+
+                    setDaysUntilExpiry(daysDifference);
+                    setIsPlanExpired(daysDifference <= 0);
+
+                    if (data.plan_id === 1) {
+                        setTrialStartDate(new Date(data.current_date));
+                    }
+                } else if (status === 'newuser') {
+                    // Handle new user case, no plan expiry
+                    setIsPlanExpired(false);
+                    setDaysUntilExpiry(0);
+                } else {
+                    setIsPlanExpired(true);
                 }
             } else {
                 setIsPlanExpired(true);
             }
-
-            console.log("Updated state:", {
-                isPlanValid: success,
-                planStatus: status,
-                planId: data.plan_id.toString(),
-                daysUntilExpiry: Math.ceil((new Date(data.expire_date).getTime() - new Date(data.current_date).getTime()) / (1000 * 3600 * 24)),
-                isPlanExpired: !success || status !== 'active'
-            });
 
         } catch (error) {
             console.error('Error checking plan validity:', error);
@@ -364,7 +365,6 @@ function AddStocks() {
     };
 
     const renderPlanStatus = () => {
-
         if (isCheckingPlan) {
             return <span style={{ color: 'white', fontSize: '14px' }}>Checking plan status...</span>;
         }
@@ -376,7 +376,7 @@ function AddStocks() {
                 // Free trial
                 return (
                     <>
-                        <span className="plan-expiring">{expiryMessage}</span>&nbsp;&nbsp;
+                        <span className="plan-expiring" style={{ color: daysUntilExpiry <= 10 ? 'red' : '#ffbf00' }}>{expiryMessage}</span>&nbsp;&nbsp;
                         <button className="add-icon-parent-subscribe" style={{ cursor: 'pointer' }} onClick={handlePricingPageClick}>
                             <span className='add-subscribe'>Subscribe Now</span>
                         </button>
@@ -404,7 +404,7 @@ function AddStocks() {
         if (isPlanExpired) {
             return (
                 <>
-                    <span className="plan-expired" style={{ color: 'red' }}>Your Plan has expired&nbsp;&nbsp;</span>
+                    <span className="plan-expiring" style={{ color: 'red' }}>Your Plan has expired&nbsp;&nbsp;</span>
                     <button className="add-icon-parent-renew" style={{ cursor: 'pointer' }} onClick={handlePricingPageClick}>
                         <span className='add-renew'>Renew Plan</span>
                     </button>
@@ -415,9 +415,9 @@ function AddStocks() {
         if (planStatus === 'newuser') {
             return (
                 <>
-                    <span className="enjoy-your-30">Start your free 14 days trial&nbsp;&nbsp;</span>
-                    <button className="purchase-plan-button" onClick={handleAddToWatchlist}>
-                        Start Trial
+                    <span className="plan-expiring">Start your free 14 days trial&nbsp;&nbsp;</span>
+                    <button className="add-icon-parent-renew" onClick={handleAddToWatchlist}>
+                        <span className='add-renew'>Start Trial</span>
                     </button>
                 </>
             );
@@ -485,6 +485,14 @@ function AddStocks() {
     };
 
     const handleEditClick = (scrip_cd: string) => {
+        if (activeRemoveButton && activeRemoveButton !== scrip_cd) {
+            // Close the previously active Remove button
+            setButtonStates((prevState) => ({
+                ...prevState,
+                [activeRemoveButton]: 'edit',
+            }));
+        }
+        setActiveRemoveButton(scrip_cd);
         setButtonStates((prevState) => ({
             ...prevState,
             [scrip_cd]: 'trash',
@@ -492,6 +500,7 @@ function AddStocks() {
     };
 
     const handleRemoveClick = async (scrip_cd: string, index: number) => {
+        setActiveRemoveButton(null);
         const selectedStock = stockData[index];
         const scripcd = selectedStock.scrip_cd;
 
@@ -574,6 +583,27 @@ function AddStocks() {
 
             if (checkStatusResponse.data.success) {
 
+                // Payment successful, now add stocks to watchlist
+                const selectedStocks = JSON.parse(localStorage.getItem('selectedStocks') || '[]');
+
+                if (selectedStocks.length > 0) {
+                    for (const scrip_cd of selectedStocks) {
+                        try {
+                            await axios.post(`${baseApiURL()}/add-stock-to-watchlist`, {
+                                scrip_cd: scrip_cd,
+                            }, {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                },
+                            });
+                        } catch (error) {
+                            console.error(`Failed to add stock ${scrip_cd} to watchlist:`, error);
+                        }
+                    }
+
+                    localStorage.removeItem('selectedStocks');
+                }
+
                 // Re-check plan validity
                 await checkPlanValidity();
 
@@ -581,7 +611,7 @@ function AddStocks() {
                 if (isPlanValid && planStatus === 'active') {
                     alert(`Your plan is now active and will expire in ${daysUntilExpiry} days.`);
                 } else if (planStatus === 'newuser') {
-                    alert('Your 30-day free trial has started!');
+                    alert('Your 14 days free trial has started!');
                 } else {
                     alert('Your plan status has been updated. Please check your account for details.');
                 }
@@ -690,7 +720,7 @@ function AddStocks() {
                             )}
                         </div>
                     </header>
-                    <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar}/>
+                    <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
                     <div className="add-stocks2">
                         <span onClick={handleInsightsClick} style={{ cursor: 'pointer' }}><ArrowLeft /></span>
                         &nbsp;&nbsp;<span style={{ paddingTop: '0.2%' }}>Add Stocks</span>
@@ -801,6 +831,7 @@ function AddStocks() {
                                                                 alignItems: 'center',
                                                                 backgroundColor: 'red',
                                                                 padding: '10px',
+                                                                borderRadius: '10%',
                                                                 transition: 'opacity 0.3s',
                                                                 opacity: 1,
                                                                 cursor: 'pointer',
@@ -837,6 +868,7 @@ function AddStocks() {
                                                             display: 'flex',
                                                             alignItems: 'center',
                                                             backgroundColor: 'red',
+                                                            borderRadius: '10%',
                                                             padding: '10px',
                                                             transition: 'opacity 0.3s',
                                                             opacity: 1,
@@ -907,7 +939,7 @@ function AddStocks() {
                                         <a href='/about' style={{ textDecoration: "none", color: "#8A8D9E" }} className="about-us">About Us</a>
                                         <a href='/disclaimer' style={{ textDecoration: "none", color: "#8A8D9E" }} className="contact-us">Disclaimer</a>
                                         <a href='/refund' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">Refund Policy</a>
-                                        <a href='/insights' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">News Feed</a>
+                                        <a href='/newsfeed' style={{ textDecoration: "none", color: "#8A8D9E" }} className="refund-policy">News Feed</a>
                                         <a href='/plans' className="refund-policy" style={{ textDecoration: "none", color: "#8A8D9E" }}>Pricing</a>
                                     </div>
                                     <div className="link-names1">

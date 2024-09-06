@@ -13,7 +13,7 @@ function EditPlan() {
                     <Header />
                     <div className="dashboard-main-body">
                         <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
-                            <h6 className="fw-semibold mb-0">Edit Plan</h6>
+                            <h6 className="fw-semibold mb-0">Create Plan</h6>
                         </div>
                         <div className="card h-100 p-0 radius-12">
                             <div className="card-body p-24">
@@ -24,18 +24,20 @@ function EditPlan() {
                                                 <form action="#">
                                                     <div className="mb-20">
                                                         <label
-                                                            htmlFor="planName"
+                                                            htmlFor="name"
                                                             className="form-label fw-semibold text-primary-light text-sm mb-8"
                                                         >
-                                                            Plan Name <span className="text-danger-600">*</span>
+                                                            Plan Duration <span className="text-danger-600">*</span>
                                                         </label>
-                                                        <select
-                                                            className="form-control radius-8 form-select"
-                                                            id="planName"
-                                                        >
-                                                            <option value="2">Gold</option>
-                                                            <option value="3">Diamond</option>
-                                                        </select>
+                                                        <input
+                                                            type='text'
+                                                            inputMode='numeric'
+                                                            maxLength={1}
+                                                            className="form-control radius-8"
+                                                            id="plan-price"
+                                                            placeholder="Enter Plan Duration in Months"
+                                                            required
+                                                        />
                                                     </div>
                                                     <div className="mb-20">
                                                         <label
@@ -52,6 +54,7 @@ function EditPlan() {
                                                             id="plan-price"
                                                             placeholder="Enter Plan Price"
                                                             pattern="[0-9]*"
+                                                            required
                                                             onKeyPress={(e) => {
                                                                 if (!/[0-9]/.test(e.key)) {
                                                                     e.preventDefault();

@@ -509,7 +509,6 @@
   border-radius: var(--br-9xs);
   background-color: #1e1f27;
   padding: 0 0 0 var(--padding-base);
-  gap: var(--gap-base);
   flex-shrink: 0;
   color: var(--color-dimgray-200);
 }

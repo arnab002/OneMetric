@@ -327,6 +327,25 @@ app.get('/news', (req, res) => {
     });
 });
 
+app.get('/news/:news_id', (req, res) => {
+    const newsId = req.params.news_id;
+    const sql = 'SELECT * FROM bse_news WHERE news_id = ?';
+    
+    db.query(sql, [newsId], (err, results) => {
+        if (err) {
+            console.error('Error fetching news:', err);
+            res.status(500).send('Server error');
+            return;
+        }
+        if (results.length === 0) {
+            res.status(404).send('News not found');
+            return;
+        }
+        res.json(results[0]);
+    });
+});
+
+
 app.post('/generate-otp', (req, res) => {
     const { mobile } = req.body;
 

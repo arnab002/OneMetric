@@ -103,95 +103,110 @@
 
 'use client'
 import React, { useState, useCallback } from 'react';
-import { Importer, ImporterField } from 'react-csv-importer';
+import { Importer } from 'react-csv-importer';
 import axios from 'axios';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 
-// Don't forget to import the CSS
+// Import the CSS for react-csv-importer
 import 'react-csv-importer/dist/index.css';
 
-function BulkUser() {
-    const [uploadStatus, setUploadStatus] = useState<string>('');
-    const [isUploading, setIsUploading] = useState<boolean>(false);
+interface UserData {
+  customer_name: string;
+  mobile_number: string;
+  email: string;
+  plan_id: number;
+}
 
-    const handleUpload = useCallback(async (rows: any[]) => {
-        setIsUploading(true);
-        setUploadStatus('Uploading data...');
+interface ApiResponse {
+  usersData: UserData[];
+}
 
-        try {
-            const response = await axios.post('/bulkUser', rows, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+function BulkUser(): JSX.Element {
+  const [uploadStatus, setUploadStatus] = useState<string>('');
+  const [isUploading, setIsUploading] = useState<boolean>(false);
 
-            if (response.status === 200) {
-                setUploadStatus(`Successfully uploaded ${rows.length} rows.`);
-            } else {
-                setUploadStatus('Upload failed. Please try again.');
-            }
-        } catch (error) {
-            console.error('Error uploading data:', error);
-            setUploadStatus('An error occurred. Please try again.');
-        } finally {
-            setIsUploading(false);
-        }
-    }, []);
+  const handleUpload = useCallback(async (rows: Record<string, string>[]) => {
+    setIsUploading(true);
+    setUploadStatus('Processing data...');
 
-    return (
-        <div>
-            <>
-                <Sidebar />
-                <main className="dashboard-main">
-                    <Header />
-                    <div className="dashboard-main-body">
-                        <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
-                            <h6 className="fw-semibold mb-0">Upload Bulk Users</h6>
-                        </div>
-                        <div className="row gy-4">
-                            <div className="col-md-8 m-auto mt-5">
-                                <div className="card h-100 p-0">
-                                    <div className="card-header border-bottom bg-base py-16 px-24">
-                                        <h6 className="text-lg fw-semibold mb-0">
-                                            Upload CSV File
-                                        </h6>
-                                    </div>
-                                    <div className="card-body p-24">
-                                        <Importer
-                                            chunkSize={10000} // Adjust this based on your needs
-                                            assumeNoHeaders={false}
-                                            restartable={true}
-                                            onStart={() => {
-                                                setUploadStatus('');
-                                                setIsUploading(true);
-                                            }}
-                                            processChunk={handleUpload}
-                                            onComplete={() => {
-                                                setUploadStatus('Import completed successfully!');
-                                                setIsUploading(false);
-                                            }}
-                                            onClose={() => {
-                                                setIsUploading(false);
-                                            }}
-                                        >
-                                            <ImporterField name="name" label="Name" />
-                                            <ImporterField name="email" label="Email" />
-                                            {/* Add more ImporterField components as needed */}
-                                        </Importer>
-                                        {uploadStatus && <p className="mt-3">{uploadStatus}</p>}
-                                        {isUploading && <p>Uploading in progress...</p>}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <Footer />
-                </main>
-            </>
+    // Transform the data to match the required structure
+    const usersData: UserData[] = rows.map(row => ({
+      customer_name: row.customer_name,
+      mobile_number: row.mobile_number,
+      email: row.email,
+      plan_id: parseInt(row.plan_id, 10)
+    }));
+
+    try {
+      const response = await axios.post<ApiResponse>('/bulkUser', { usersData }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 200) {
+        setUploadStatus(`Successfully uploaded ${usersData.length} users.`);
+      } else {
+        setUploadStatus('Upload failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error uploading data:', error);
+      setUploadStatus('An error occurred. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
+  }, []);
+
+  return (
+    <div>
+      <Sidebar />
+      <main className="dashboard-main">
+        <Header />
+        <div className="dashboard-main-body">
+          <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
+            <h6 className="fw-semibold mb-0">Upload Bulk Users</h6>
+          </div>
+          <div className="row gy-4">
+            <div className="col-md-8 m-auto mt-5">
+              <div className="card h-100 p-0">
+                <div className="card-header border-bottom bg-base py-16 px-24">
+                  <h6 className="text-lg fw-semibold mb-0">
+                    Upload CSV File
+                  </h6>
+                </div>
+                <div className="card-body p-24">
+                  <Importer
+                    chunkSize={10000}
+                    assumeNoHeaders={false}
+                    restartable={true}
+                    onStart={() => {
+                      setUploadStatus('');
+                      setIsUploading(true);
+                    }}
+                    processChunk={handleUpload}
+                    onComplete={() => {
+                      setUploadStatus('Import completed successfully!');
+                      setIsUploading(false);
+                    }}
+                    onClose={() => {
+                      setIsUploading(false);
+                    }}
+                  >
+                    {/* We don't need to specify ImporterField components anymore */}
+                  </Importer>
+                  {uploadStatus && <p className="mt-3">{uploadStatus}</p>}
+                  {isUploading && <p>Upload in progress...</p>}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-    );
+        <Footer />
+      </main>
+    </div>
+  );
 }
 
 export default BulkUser;

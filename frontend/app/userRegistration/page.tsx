@@ -212,7 +212,7 @@ function Registration() {
                                         </div>
                                     </div>
                                     <button type="submit" className="finish-wrapper" disabled={isRegistering}>
-                                        {isRegistering ? "Registering" : "Register"}
+                                        {isRegistering ? "Registering...." : "Register"}
                                     </button>
                                 </form>
                             </div>

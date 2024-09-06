@@ -72,7 +72,7 @@ function Home() {
   useEffect(() => {
     const checkPlanValidity = async () => {
       const token = localStorage.getItem('authToken');
-
+  
       if (token) {
         try {
           const response = await axios.post(`${baseApiURL()}/check-plan-validity`,
@@ -82,9 +82,10 @@ function Home() {
                 Authorization: `${token}`,
               },
             });
-
-          // Check if the response is successful and the status is either 'active' or 'expired'
-          if (response.data.success && (response.data.status === 'active' || response.data.status === 'expired')) {
+  
+          // Check if the response is successful and the status is 'active', 'expired', or 'newuser'
+          if (response.data.success && 
+              (response.data.status === 'active' || response.data.status === 'expired' || response.data.status === 'newuser')) {
             window.location.href = '/insights';
             return;
           }
@@ -96,9 +97,9 @@ function Home() {
       setContentReady(true);
       setLoadingPlanValidity(false);
     };
-
+  
     checkPlanValidity();
-  }, []);
+  }, []);  
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -1538,7 +1539,7 @@ function Home() {
                     <a href='/about' style={{ textDecoration: "none", color: "inherit" }} className="about-us">About Us</a>
                     <a href='/disclaimer' style={{ textDecoration: "none", color: "inherit" }} className="contact-us">Disclaimer</a>
                     <a href='/refund' style={{ textDecoration: "none", color: "inherit" }} className="refund-policy">Refund Policy</a>
-                    <a href='/insights' style={{ textDecoration: "none", color: "inherit" }} className="refund-policy">News Feed</a>
+                    <a href='/newsfeed' style={{ textDecoration: "none", color: "inherit" }} className="refund-policy">News Feed</a>
                     <a href='/plans' style={{ textDecoration: "none", color: "inherit" }} className="refund-policy">Pricing</a>
                   </div>
                   <div className="link-columns1">

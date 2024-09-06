@@ -14,7 +14,6 @@
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "libphonenumber-js": "^1.11.5",
-    "mysql": "^2.18.1",
     "next": "14.2.5",
     "papaparse": "^5.4.1",
     "react": "^18",
@@ -25,8 +24,8 @@
     "react-pro-sidebar": "^1.1.0",
     "react-responsive": "^10.0.0",
     "react-responsive-modal": "^6.4.2",
-    "react-sliding-side-panel": "^2.0.3",
     "react-spinners": "^0.14.1",
+    "sharp": "^0.33.5",
     "styled-components": "^6.1.12",
     "sweetalert2": "^11.12.4"
   },

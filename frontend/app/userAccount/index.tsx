@@ -1,6 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react'
 import '../../public/assets/account.css'
+import logo from '../../public/public/register/OneMetric_Transparent.png'
+import Image from 'next/image';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
 import { Modal } from 'react-responsive-modal';
@@ -49,7 +51,7 @@ function UserAccount() {
     }, []);
 
     if (!isTokenChecked) {
-        return null; // Render nothing until the token is checked
+        return; // Render nothing until the token is checked
     }
 
     const handleInsightsClick = () => {
@@ -99,12 +101,13 @@ function UserAccount() {
         <div>
             <div className="otp">
                 <header className="otp2">
-                    <img
+                    <Image
                         className="image-18-icon"
                         loading="lazy"
                         alt=""
-                        src="./public/register/image-18@2x.png"
-                        onClick={handleHomeClick} style={{ cursor: 'pointer' }}
+                        src={logo}
+                        onClick={handleHomeClick}
+                        style={{ cursor: 'pointer' }}
                     />
                     <div className="main1">
                         <div className="main1" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>

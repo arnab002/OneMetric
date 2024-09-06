@@ -242,8 +242,9 @@ function HomeDesktop() {
                             },
                         });
 
-                    // Check if the response is successful and the status is either 'active' or 'expired'
-                    if (response.data.success && (response.data.status === 'active' || response.data.status === 'expired')) {
+                    // Check if the response is successful and the status is 'active', 'expired', or 'newuser'
+                    if (response.data.success &&
+                        (response.data.status === 'active' || response.data.status === 'expired' || response.data.status === 'newuser')) {
                         window.location.href = '/insights';
                         return;
                     }
@@ -781,7 +782,7 @@ function HomeDesktop() {
                                 />
                             </div>
                         </header>
-                        <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar}/>
+                        <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
                     </div>
                     <div className="homepage-inner">
                         <div className="frame-parent9">
@@ -1679,7 +1680,7 @@ function HomeDesktop() {
                                             <a href='/about' className="about-us" style={{ textDecoration: "none", color: "inherit" }}>About Us</a>
                                             <a href='/disclaimer' className="contact-us" style={{ textDecoration: "none", color: "inherit" }}>Disclaimer</a>
                                             <a href='/refund' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Refund Policy</a>
-                                            <a href='/insights' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>News Feed</a>
+                                            <a href='/newsfeed' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>News Feed</a>
                                             <a href='/plan' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Pricing</a>
                                         </div>
                                         <div className="terms-links">

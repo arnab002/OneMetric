@@ -412,7 +412,7 @@ function PlanDesktop() {
                                             <a href='/about' className="about-us" style={{ textDecoration: "none", color: "inherit" }}>About Us</a>
                                             <a href='/disclaimer' className="contact-us" style={{ textDecoration: "none", color: "inherit" }}>Disclaimer</a>
                                             <a href='/refund' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Refund Policy</a>
-                                            <a href='/insights' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>News Feed</a>
+                                            <a href='/newsfeed' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>News Feed</a>
                                             <a href='/plan' className="refund-policy" style={{ textDecoration: "none", color: "inherit" }}>Pricing</a>
                                         </div>
                                         <div className="terms-links">
