@@ -2,13 +2,11 @@
 import React, { useEffect, useState, ChangeEvent } from 'react';
 import { User } from 'react-feather';
 import axios from 'axios';
-import logo from "../../../../../public/public/insights/OneMetric_Transparent.png";
+import logo from "../../public/public/insights/OneMetric_Transparent.png";
 import { BarLoader, PulseLoader } from 'react-spinners'; // Import multiple loaders
 import baseApiURL from '@/baseUrl';
-import '../../../../../public/assets/singleNews.css'
+import '../../public/assets/singleNews.css'
 import CustomSidebar from '@/app/sidebar';
-import { useParams } from 'next/navigation';
-
 
 interface NewsItem {
     scrip_cd: number;
@@ -27,18 +25,14 @@ interface NewsResponse {
 
 interface SingleNewsProps {
     initialStockName: string;
-    initialScripCd: string;
     initialId: string;
 }
 
 
-function SingleNews({ initialStockName, initialScripCd, initialId }: SingleNewsProps) {
-    const params = useParams();
+function SingleNews() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [planId, setPlanId] = useState<string>('');
-    const [stockName, setStockName] = useState(initialStockName);
-    const [scripCd, setScripCd] = useState(initialScripCd);
-    const [newsId, setNewsId] = useState(initialId);
+    const [newsId, setNewsId] = useState<string | null>(null);
     const [trialStartDate, setTrialStartDate] = useState<Date | null>(null);
     const [isSearchActive, setIsSearchActive] = useState<boolean>(false);
     const [newsData, setNewsData] = useState<NewsItem | null>(null);
@@ -56,18 +50,15 @@ function SingleNews({ initialStockName, initialScripCd, initialId }: SingleNewsP
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [token, setToken] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (params.stockName && params.stockName !== stockName) {
-            setStockName(params.stockName as string);
-        }
-        if (params.scripCd && params.scripCd !== scripCd) {
-            setScripCd(params.scripCd as string);
-        }
 
-        if (params.Id && params.Id !== newsId) {
-            setNewsId(params.Id as string);
-        }
-    }, [params, stockName, scripCd, newsId]);
+    useEffect(() => {
+        // Fetch search params only on the client side
+        const searchParams = new URLSearchParams(window.location.search);
+        const newsIdParam = searchParams.get('id');
+        
+        setNewsId(newsIdParam);
+
+    }, [newsId]);
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -432,6 +423,7 @@ function SingleNews({ initialStockName, initialScripCd, initialId }: SingleNewsP
                         <div className="watchlist-header">
                             {newsData && (
                                 <div className="news-items">
+                                    <div className="reliance-industries">{newsData.stock_long_name}</div>
                                     <div className="newsfeed1">
                                         <div className="news-content">
                                             <img
@@ -441,9 +433,9 @@ function SingleNews({ initialStockName, initialScripCd, initialId }: SingleNewsP
                                         </div>
                                         <div className="news-details">
                                             <div className="watchlist-filters">
-                                                <div className="reliance-industries">{newsData.stock_long_name}</div>
+                                                {/* <div className="reliance-industries">{newsData.stock_long_name}</div> */}
                                                 <div className="reliance-gets-us">{newsData.summary}</div>
-                                                <div className="announced-at">Announced at: {newsData.announced_at}</div>
+                                                {/* <div className="announced-at">Announced at: {newsData.announced_at}</div> */}
                                             </div>
                                         </div>
                                     </div>

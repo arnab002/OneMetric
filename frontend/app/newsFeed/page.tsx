@@ -11,7 +11,7 @@ import CustomSidebar from '../sidebar';
 
 interface NewsItem {
     news_id: string;
-    scrip_cd: string;
+    scrip_cd: number;
     summary: string;
     chart_img: string;
     announced_at: string;
@@ -25,8 +25,6 @@ interface NewsResponse {
     totalPages: number;
     message: string;
 }
-
-type ButtonState = 'plus' | 'check' | 'edit' | 'trash';
 
 function NewsFeed() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -342,23 +340,9 @@ function NewsFeed() {
         window.open('https://api.whatsapp.com/send?phone=917204946777&text=Hi', '_blank');
     };
 
-    const handleNewsClick = (stockLongName: string, scripCd: string, newsId: string) => {
-        const formattedName = sanitizeAndCapitalizeStockName(stockLongName);
-        window.open(`/singleNews/${formattedName}/${scripCd}/${newsId}`);
+    const handleNewsClick = (stockLongName: string, scripCd: number, newsId: string) => {
+        window.open(`/singleNews/?id=${newsId}`,'_blank');
     };
-
-    // Reuse the same sanitization and capitalization function from generateStaticParams
-    function sanitizeAndCapitalizeStockName(stockName: string): string {
-        // Remove any trailing period
-        const trimmedName = stockName.trim().replace(/\.$/, '');
-
-        // Capitalize each word and replace spaces or special characters with dashes
-        return trimmedName
-            .split(/\s+/)
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-            .join('-')
-            .replace(/[^a-zA-Z0-9-]/g, ''); // Remove any remaining non-alphanumeric characters except for dashes
-    }
 
     if (!isTokenChecked) {
         return (
