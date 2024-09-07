@@ -297,6 +297,26 @@ function NewsFeed() {
 
             if (checkStatusResponse.data.success) {
 
+                const selectedStocks = JSON.parse(localStorage.getItem('selectedStocks') || '[]');
+
+                if (selectedStocks.length > 0) {
+                    for (const scrip_cd of selectedStocks) {
+                        try {
+                            await axios.post(`${baseApiURL()}/add-stock-to-watchlist`, {
+                                scrip_cd: scrip_cd,
+                            }, {
+                                headers: {
+                                    Authorization: `${token}`,
+                                },
+                            });
+                        } catch (error) {
+                            console.error(`Failed to add stock ${scrip_cd} to watchlist:`, error);
+                        }
+                    }
+
+                    localStorage.removeItem('selectedStocks');
+                }
+
                 // Re-check plan validity
                 await checkPlanValidity();
 
