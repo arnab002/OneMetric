@@ -23,11 +23,6 @@ interface NewsResponse {
     message: string;
 }
 
-interface SingleNewsProps {
-    initialStockName: string;
-    initialId: string;
-}
-
 
 function SingleNews() {
     const [sidebarOpen, setSidebarOpen] = useState(false);

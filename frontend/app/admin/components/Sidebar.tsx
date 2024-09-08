@@ -23,7 +23,7 @@ function Sidebar() {
                 <Icon icon="radix-icons:cross-2" />
             </button>
             <div>
-                <Link href="/admin/dashboard" className="sidebar-logo">
+                <a href="/admin/dashboard" className="sidebar-logo">
                     <img
                         src="/public/home/OneMetric_Transparent.png"
                         alt="site logo"
@@ -39,22 +39,22 @@ function Sidebar() {
                         alt="site logo"
                         className="logo-icon"
                     />
-                </Link>
+                </a>
             </div>
-            <div className="sidebar-menu-area">
-                <ul className="sidebar-menu" id="sidebar-menu">
-                    <li className={isActive('/admin/dashboard') ? 'active' : ''}>
-                        <Link href="/admin/dashboard">
+            <div className="sidebar-menu-area open">
+                <ul className="sidebar-menu show" id="sidebar-menu">
+                    <li>
+                        <a href="/admin/dashboard" className={isActive('/admin/dashboard') ? 'active-page' : ''}>
                             <Icon
                                 icon="solar:home-smile-angle-outline"
                                 className="menu-icon"
                             />
                             <span>Dashboard</span>
-                        </Link>
+                        </a>
                     </li>
                     &nbsp;
-                    <li className={`dropdown ${isUsersOpen ? 'open' : ''} ${pathname.startsWith('/admin/users') || pathname === '/admin/addUser' || pathname === '/admin/bulkUsers' ? 'active' : ''}`}>
-                        <a href="#" onClick={() => toggleDropdown(setIsUsersOpen)}>
+                    <li className={`dropdown ${isUsersOpen ? 'open' : ''} ${pathname.startsWith('/admin/users') || pathname === '/admin/addUser' || pathname === '/admin/bulkUsers' ? 'show' : ''}`}>
+                        <a href="javascript:void(0)" onClick={() => toggleDropdown(setIsUsersOpen)}>
                             <Icon
                                 icon="flowbite:users-group-outline"
                                 className="menu-icon"
@@ -63,29 +63,29 @@ function Sidebar() {
                         </a>
                         {isUsersOpen && (
                             <ul className="sidebar-submenu">
-                                <li className={isActive('/admin/users') ? 'active' : ''}>
-                                    <Link href="/admin/users">
+                                <li className={isActive('/admin/users') ? 'active-page' : ''}>
+                                    <a href="/admin/users">
                                         <i className="ri-circle-fill circle-icon text-primary-600 w-auto" />{" "}
                                         Users List
-                                    </Link>
+                                    </a>
                                 </li>
-                                <li className={isActive('/admin/addUser') ? 'active' : ''}>
-                                    <Link href="/admin/addUser">
+                                <li className={isActive('/admin/addUser') ? 'active-page' : ''}>
+                                    <a href="/admin/addUser">
                                         <i className="ri-circle-fill circle-icon text-info-main w-auto" />{" "}
                                         Add User
-                                    </Link>
+                                    </a>
                                 </li>
-                                <li className={isActive('/admin/bulkUsers') ? 'active' : ''}>
-                                    <Link href="/admin/bulkUsers">
+                                <li className={isActive('/admin/bulkUsers') ? 'active-page' : ''}>
+                                    <a href="/admin/bulkUsers">
                                         <i className="ri-circle-fill circle-icon text-info-main w-auto" />{" "}
                                         Bulk Users
-                                    </Link>
+                                    </a>
                                 </li>
                             </ul>
                         )}
                     </li>
-                    <li className={`dropdown ${isPlansOpen ? 'open' : ''} ${pathname.startsWith('/admin/createPlan') ? 'active' : ''}`}>
-                        <a href="#" onClick={() => toggleDropdown(setIsPlansOpen)}>
+                    <li className={`dropdown ${isPlansOpen ? 'open' : ''} ${pathname.startsWith('/admin/createPlan') ? 'active-page' : ''}`}>
+                        <a href="javascript:void(0)" onClick={() => toggleDropdown(setIsPlansOpen)}>
                             <Icon
                                 icon="fa6-solid:hand-holding-dollar"
                                 className="menu-icon"
@@ -94,23 +94,23 @@ function Sidebar() {
                         </a>
                         {isPlansOpen && (
                             <ul className="sidebar-submenu">
-                                <li className={isActive('/admin/createPlan') ? 'active' : ''}>
-                                    <Link href="/admin/createPlan">
+                                <li className={isActive('/admin/createPlan') ? 'active-page' : ''}>
+                                    <a href="/admin/createPlan">
                                         <i className="ri-circle-fill circle-icon text-info-main w-auto" />{" "}
                                         Create Plan
-                                    </Link>
+                                    </a>
                                 </li>
                             </ul>
                         )}
                     </li>
-                    <li className={isActive('/admin/blockUser') ? 'active' : ''}>
-                        <Link href="/admin/blockUser">
+                    <li className={isActive('/admin/blockUser') ? 'active-page' : ''}>
+                        <a href="/admin/blockUser">
                             <i className="ri-user-settings-line" />
                             <span>Block User</span>
-                        </Link>
+                        </a>
                     </li>
-                    <li className={isActive('/admin/profile') ? 'active' : ''}>
-                        <Link href="/admin/profile">
+                    <li className={isActive('/admin/profile') ? 'active-page' : ''}>
+                        <a href="/admin/profile">
                             <Icon
                                 width={23}
                                 height={23}
@@ -118,7 +118,7 @@ function Sidebar() {
                                 className="menu-icon"
                             />
                             <span>&nbsp;Profile</span>
-                        </Link>
+                        </a>
                     </li>
                 </ul>
             </div>

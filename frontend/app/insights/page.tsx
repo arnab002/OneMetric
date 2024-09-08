@@ -14,11 +14,11 @@ interface Stock {
     sc_name?: string;
     scrip_cd: string;
     isin_code: string;
-    // Add other properties as needed
 }
 
 
 interface NewsItem {
+    news_id: string;
     scrip_cd: number;
     summary: string;
     chart_img: string;
@@ -406,7 +406,7 @@ function Insights() {
                                 scrip_cd: scrip_cd,
                             }, {
                                 headers: {
-                                    Authorization: `Bearer ${token}`,
+                                    Authorization: `${token}`,
                                 },
                             });
                         } catch (error) {
@@ -520,6 +520,9 @@ function Insights() {
         window.open('https://api.whatsapp.com/send?phone=917204946777&text=Hi', '_blank');
     };
 
+    const handleNewsClick = (stockLongName: string, scripCd: number, newsId: string) => {
+        window.open(`/singleNews/?id=${newsId}`,'_blank');
+    };
 
     if (!isTokenChecked) {
         return (
@@ -745,7 +748,7 @@ function Insights() {
                                         <div className="news-details">
                                             <div className="watchlist-filters">
                                                 <div className="reliance-industries">{news.stock_long_name}</div>
-                                                <div className="reliance-gets-us">{news.summary}</div>
+                                                <div className="reliance-gets-us" onClick={() => handleNewsClick(news.stock_long_name, news.scrip_cd, news.news_id)} style={{ cursor: 'pointer' }}>{news.summary}</div>
                                                 <div className="news-time">
                                                     <div className="jul-23-2024">{new Date(news.announced_at).toLocaleString()}</div>
                                                     <div className="read-parent">

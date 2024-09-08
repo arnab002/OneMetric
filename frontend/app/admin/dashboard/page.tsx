@@ -7,7 +7,20 @@ import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import Footer from '../components/Footer'
 
+interface User {
+    name: string;
+    email: string;
+    mobile: string;
+    created_at: string;
+    registeredPlan: {
+        plan_id: number;
+        expire_date: string;
+        created_at: string;
+    };
+}
+
 function AdminHome() {
+    const [users, setUsers] = useState<User[]>([]);
     const [adminToken, setAdminToken] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userStats, setUserStats] = useState({
@@ -37,6 +50,7 @@ function AdminHome() {
         if (isAuthenticated && adminToken) {
             fetchUserStats();
             fetchRevenueStats();
+            fetchUserData(adminToken);
         }
     }, [isAuthenticated, adminToken]);
 
@@ -77,6 +91,25 @@ function AdminHome() {
         } catch (error) {
             console.error('Error fetching revenue statistics:', error);
             // Handle unauthorized access
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                localStorage.removeItem('isAdminAuthenticated');
+                localStorage.removeItem('adminToken');
+                window.location.href = "/admin";
+            }
+        }
+    };
+
+    const fetchUserData = async (token: string) => {
+        try {
+            const response = await axios.get(`${baseApiURL()}/user-details`, {
+                headers: {
+                    Authorization: `${token}`
+                }
+            });
+            const data = await response.data;
+            setUsers([data].slice(0,5)); // Wrap the single user object in an array
+        } catch (error) {
+            console.error("Error fetching user data:", error);
             if (axios.isAxiosError(error) && error.response?.status === 401) {
                 localStorage.removeItem('isAdminAuthenticated');
                 localStorage.removeItem('adminToken');
@@ -175,16 +208,9 @@ function AdminHome() {
                                                     Show
                                                 </span>
                                                 <select className="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">
-                                                    <option>1</option>
-                                                    <option>2</option>
-                                                    <option>3</option>
-                                                    <option>4</option>
-                                                    <option>5</option>
-                                                    <option>6</option>
-                                                    <option>7</option>
-                                                    <option>8</option>
-                                                    <option>9</option>
-                                                    <option>10</option>
+                                                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
+                                                        <option key={num}>{num}</option>
+                                                    ))}
                                                 </select>
                                                 <form className="navbar-search">
                                                     <input
@@ -247,50 +273,56 @@ function AdminHome() {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                <div className="d-flex align-items-center gap-10">
-                                                                    <div className="form-check style-check d-flex align-items-center">
-                                                                        <input
-                                                                            className="form-check-input radius-4 border border-neutral-400"
-                                                                            type="checkbox"
-                                                                            name="checkbox"
-                                                                        />
+                                                        {users.map((user, index) => (
+                                                            <tr key={index}>
+                                                                <td>
+                                                                    <div className="d-flex align-items-center gap-10">
+                                                                        <div className="form-check style-check d-flex align-items-center">
+                                                                            <input
+                                                                                className="form-check-input radius-4 border border-neutral-400"
+                                                                                type="checkbox"
+                                                                                name="checkbox"
+                                                                            />
+                                                                        </div>
+                                                                        <span
+                                                                            style={{ cursor: 'pointer', textDecoration: 'none' }}
+                                                                        >
+                                                                            {user.mobile}
+                                                                        </span>
                                                                     </div>
-                                                                    9865786551
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                                    Kathryn Murphy
-                                                                </span>
-                                                            </td>
-                                                            <td>
-                                                                <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                                    osgoodwy@gmail.com
-                                                                </span>
-                                                            </td>
-                                                            <td className="text-center">
-                                                                <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                                    Diamond
-                                                                </span>
-                                                            </td>
-                                                            <td className="text-center">
-                                                                <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                                    01 Aug 2024
-                                                                </span>
-                                                            </td>
-                                                            <td className="text-center">
-                                                                <span className="text-md mb-0 fw-normal text-secondary-light">
-                                                                    31 July 2025
-                                                                </span>
-                                                            </td>
-                                                            <td className="text-center">
-                                                                <span className="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">
-                                                                    Active
-                                                                </span>
-                                                            </td>
-                                                        </tr>
+                                                                </td>
+                                                                <td>
+                                                                    <span className="text-md mb-0 fw-normal text-secondary-light">
+                                                                        {user.name}
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <span className="text-md mb-0 fw-normal text-secondary-light">
+                                                                        {user.email}
+                                                                    </span>
+                                                                </td>
+                                                                <td className="text-center">
+                                                                    <span className="text-md mb-0 fw-normal text-secondary-light">
+                                                                        {user.registeredPlan.plan_id}
+                                                                    </span>
+                                                                </td>
+                                                                <td className="text-center">
+                                                                    <span className="text-md mb-0 fw-normal text-secondary-light">
+                                                                        {new Date(user.registeredPlan.created_at).toLocaleDateString()}
+                                                                    </span>
+                                                                </td>
+                                                                <td className="text-center">
+                                                                    <span className="text-md mb-0 fw-normal text-secondary-light">
+                                                                        {new Date(user.registeredPlan.expire_date).toLocaleDateString()}
+                                                                    </span>
+                                                                </td>
+                                                                <td className="text-center">
+                                                                    <span className="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">
+                                                                        {new Date(user.registeredPlan.expire_date) > new Date() ? "Active" : "Expired"}
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                        ))}
                                                     </tbody>
                                                 </table>
                                             </div>

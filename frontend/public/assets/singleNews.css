@@ -1551,7 +1551,6 @@
   align-self: stretch;
   align-items: flex-start;
   padding: var(--padding-base);
-  margin-bottom: 11%;
 }
 
 .newsfeed1 {
@@ -2237,6 +2236,10 @@
     align-items: center;
   }
 
+  .news-details{
+    margin-bottom: 500px;
+  }
+
   .reliance-industries{
     font-size: 18px;
     margin-bottom: 5%;
@@ -2292,11 +2295,14 @@
     font-size: 18px;
     margin-bottom: 2%;
   }
+  .news-details{
+    margin-bottom: 20%;
+  }
 }
 
 @media only screen and (min-width: 820px) and (max-width: 822px){
   .news-details{
-    margin-bottom: 35%;
+    margin-bottom: 40%;
   }
 }
 
@@ -2322,6 +2328,10 @@
   .add-renew {
     margin: auto;
   }
+
+  .news-details{
+    margin-bottom: 12%;
+  }
 }
 
 @media only screen and (min-width: 1280px) and (max-width: 1920px) {
@@ -2339,6 +2349,10 @@
     background-color: var(--color-gray-200);
     overflow: hidden;
     align-items: center;
+  }
+
+  .news-details{
+    margin-bottom: 12%;
   }
 
   .reliance-industries{
