@@ -112,7 +112,7 @@ function Insights() {
     };
 
     const handleShowMore = () => {
-        window.open('/newsFeed', '_blank');
+        window.open('/newsfeed', '_blank');
     };
 
     if (error) {
