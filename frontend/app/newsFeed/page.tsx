@@ -101,14 +101,9 @@ function NewsFeed() {
         setIsLoggedIn(!!token);
     }, []);
 
-    const showMore = () => {
-        setDisplayCount(prevCount => prevCount + 8);
-    };
-
     const handleShowMore = () => {
         const nextPage = currentPage + 1;
         if (nextPage <= totalPages) {
-            console.log(`Loading more news. Fetching page: ${nextPage}`); // Debug log
             fetchNewsData(nextPage);
         }
     };
