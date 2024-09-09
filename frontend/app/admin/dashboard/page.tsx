@@ -19,8 +19,19 @@ interface User {
     };
 }
 
+interface ApiResponse {
+    data: User[];
+    meta: {
+        totalUsers: number;
+        currentPage: number;
+        totalPages: number;
+    };
+}
+
 function AdminHome() {
     const [users, setUsers] = useState<User[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
     const [adminToken, setAdminToken] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userStats, setUserStats] = useState({
@@ -50,9 +61,9 @@ function AdminHome() {
         if (isAuthenticated && adminToken) {
             fetchUserStats();
             fetchRevenueStats();
-            fetchUserData(adminToken);
+            fetchUserData(adminToken, currentPage);
         }
-    }, [isAuthenticated, adminToken]);
+    }, [isAuthenticated, adminToken, currentPage]);
 
     const fetchUserStats = async () => {
         try {
@@ -99,15 +110,16 @@ function AdminHome() {
         }
     };
 
-    const fetchUserData = async (token: string) => {
+    const fetchUserData = async (token: string, page: number) => {
         try {
-            const response = await axios.get(`${baseApiURL()}/user-details`, {
+            const response = await axios.get<ApiResponse>(`${baseApiURL()}/user-details?page=${page}`, {
                 headers: {
                     Authorization: `${token}`
                 }
             });
-            const data = await response.data;
-            setUsers([data].slice(0,5)); // Wrap the single user object in an array
+            const { data, meta } = response.data;
+            setUsers(data);
+            setTotalPages(meta.totalPages);
         } catch (error) {
             console.error("Error fetching user data:", error);
             if (axios.isAxiosError(error) && error.response?.status === 401) {
@@ -116,6 +128,28 @@ function AdminHome() {
                 window.location.href = "/admin";
             }
         }
+    };
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
+    const renderPagination = () => {
+        const pages = [];
+        for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
+            pages.push(
+                <li key={i} className="page-item">
+                    <a
+                        className={`page-link ${i === currentPage ? 'bg-primary-600 text-white' : 'bg-neutral-200 text-secondary-light'} fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md`}
+                        href="javascript:void(0)"
+                        onClick={() => handlePageChange(i)}
+                    >
+                        {i}
+                    </a>
+                </li>
+            );
+        }
+        return pages;
     };
 
     if (!isAuthenticated) {
@@ -327,36 +361,23 @@ function AdminHome() {
                                                 </table>
                                             </div>
                                             <div className="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-24">
-                                                <span>Showing 1 to 1 of 1 entries</span>
+                                                <span>Showing {(currentPage - 1) * 10 + 1} to {Math.min(currentPage * 10, users.length)} of {users.length} entries</span>
                                                 <ul className="pagination d-flex flex-wrap align-items-center gap-2 justify-content-center">
                                                     <li className="page-item">
                                                         <a
                                                             className="page-link bg-neutral-200 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
                                                             href="javascript:void(0)"
+                                                            onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                                                         >
                                                             <Icon icon="ep:d-arrow-left" className="" />
                                                         </a>
                                                     </li>
-                                                    <li className="page-item">
-                                                        <a
-                                                            className="page-link text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md bg-primary-600 text-white"
-                                                            href="javascript:void(0)"
-                                                        >
-                                                            1
-                                                        </a>
-                                                    </li>
-                                                    <li className="page-item">
-                                                        <a
-                                                            className="page-link bg-neutral-200 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
-                                                            href="javascript:void(0)"
-                                                        >
-                                                            2
-                                                        </a>
-                                                    </li>
+                                                    {renderPagination()}
                                                     <li className="page-item">
                                                         <a
                                                             className="page-link bg-neutral-200 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
                                                             href="javascript:void(0)"
+                                                            onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                                                         >
                                                             <Icon icon="ep:d-arrow-right" className="" />
                                                         </a>

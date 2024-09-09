@@ -42,18 +42,47 @@ function Contact() {
         };
     }, [showDropdown]);
 
-    useEffect(() => {
+    // Function to check if the token is expired
+    const isTokenExpired = (token: string): boolean => {
+        if (!token) return true;
+        const decodedToken = JSON.parse(atob(token.split('.')[1]));
+        const currentTime = Math.floor(Date.now() / 1000);
+        return decodedToken.exp < currentTime;
+    };
+
+    // Function to handle logout
+    const handleLogout = () => {
+        localStorage.removeItem('authToken');
+        setIsLoggedIn(false);
+        window.location.href = '/login';
+    };
+
+    // Function to check token expiration and handle logout
+    const checkTokenExpiration = () => {
         const token = localStorage.getItem('authToken');
-        setIsLoggedIn(!!token);
+        if (token && isTokenExpired(token)) {
+            handleLogout();
+        }
+    };
+
+    useEffect(() => {
+        checkTokenExpiration();
+        const intervalId = setInterval(checkTokenExpiration, 60000); // Check every minute
+        return () => clearInterval(intervalId);
     }, []);
 
-    const handleUserAccountClick = () => {
-        window.location.href = '/userAccount'
-    };
-
-    const toggleDropdown = () => {
-        setShowDropdown(!showDropdown);
-    };
+    // Modify the existing useEffect for token checking
+    useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        if (token && !isTokenExpired(token)) {
+            setIsLoggedIn(true);
+        } else {
+            setIsLoggedIn(false);
+            if (token) {
+                handleLogout(); // Auto-logout if token exists but is expired
+            }
+        }
+    }, []);
 
 
     return (
@@ -108,7 +137,7 @@ function Contact() {
                         )}
                     </div>
                 </header>
-                <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar}/>
+                <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
                 <section className="about">
                     <div className="about-us-parent">
                         <h3 className="about-us1">Contact Us</h3>

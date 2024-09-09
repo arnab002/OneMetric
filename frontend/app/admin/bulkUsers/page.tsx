@@ -1,7 +1,8 @@
 'use client'
 import React, { useState, useCallback, useEffect } from 'react';
-import { Importer } from 'react-csv-importer';
+import { Importer, ImporterField, ImporterProps } from 'react-csv-importer';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
@@ -25,12 +26,13 @@ function BulkUser(): JSX.Element {
   const [uploadStatus, setUploadStatus] = useState<string>('');
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [adminToken, setAdminToken] = useState<string | null>(null);
+  const [importerKey, setImporterKey] = useState<number>(0); // Add this line
 
   useEffect(() => {
     // Access localStorage only after component mounts (client-side)
     const token = localStorage.getItem('adminToken');
     setAdminToken(token);
-}, []);
+  }, []);
 
   const handleUpload = useCallback(async (rows: Record<string, string>[]) => {
     setIsUploading(true);
@@ -38,10 +40,10 @@ function BulkUser(): JSX.Element {
 
     // Transform the data to match the required structure
     const usersData: UserData[] = rows.map(row => ({
-      customer_name: row.customer_name?.trim(),
-      mobile_number: row.mobile_number?.trim(),
-      email: row.email?.trim(),
-      plan_id: parseInt(row.plan_id, 10)
+      customer_name: String(row.customer_name || '').trim(),
+      mobile_number: String(row.mobile_number || '').trim(),
+      email: String(row.email || '').trim(),
+      plan_id: parseInt(String(row.plan_id || '0'), 10)
     }));
 
     try {
@@ -52,17 +54,36 @@ function BulkUser(): JSX.Element {
       });
 
       if (response.status === 200 && response.data.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Upload Successful',
+          text: response.data.message,
+        });
         setUploadStatus(`Successfully uploaded ${usersData.length} users. ${response.data.message}`);
       } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Upload Failed',
+          text: response.data.message || 'Unknown error',
+        });
         setUploadStatus(`Upload failed: ${response.data.message || 'Unknown error'}.`);
+        // Reset the importer after an error
+        setImporterKey(importerKey + 1); // Increment the key to force a re-render and reset the importer
       }
     } catch (error) {
       console.error('Error uploading data:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An error occurred. Please try again.',
+      });
       setUploadStatus('An error occurred. Please try again.');
+      // Reset the importer after an error
+      setImporterKey(importerKey + 1); // Increment the key to force a re-render and reset the importer
     } finally {
       setIsUploading(false);
     }
-  }, []);
+  }, [adminToken, importerKey]); // Add importerKey to the dependency array
 
   return (
     <div>
@@ -83,8 +104,8 @@ function BulkUser(): JSX.Element {
                 </div>
                 <div className="card-body p-24">
                   <Importer
+                    key={importerKey} // Add this line
                     chunkSize={10000}
-                    assumeNoHeaders={false}
                     restartable={true}
                     onStart={() => {
                       setUploadStatus('');
@@ -99,7 +120,10 @@ function BulkUser(): JSX.Element {
                       setIsUploading(false);
                     }}
                   >
-                    {/* Columns will be auto-mapped based on CSV headers */}
+                    <ImporterField name="customer_name" label="Customer_Name" />
+                    <ImporterField name="mobile_number" label="Mobile_Number" />
+                    <ImporterField name="email" label="Email" />
+                    <ImporterField name="plan_id" label="Plan_ID" />
                   </Importer>
                   {uploadStatus && <p className="mt-3">{uploadStatus}</p>}
                   {isUploading && <p>Upload in progress...</p>}

@@ -1,6 +1,5 @@
 'use client'
 import React, { useState, FormEvent, useEffect } from 'react';
-import baseApiURL from '@/baseUrl';
 import { Icon } from '@iconify/react';
 
 const AdminLogin: React.FC = () => {

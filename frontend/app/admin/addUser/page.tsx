@@ -139,10 +139,10 @@ function AddUser() {
                                                         <option value="2">Diamond</option>
                                                     </select>
                                                 </div>
-                                                <div className="d-flex align-items-center justify-content-center gap-3">
+                                                <div className="d-flex align-items-center justify-content-center gap-3 flex-wrap">
                                                     <button
                                                         type="button"
-                                                        className="border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-56 py-11 radius-8"
+                                                        className="border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-3 py-2 radius-8"
                                                         onClick={() => setFormData({ name: '', email: '', phone: '', planName: '1' })}
                                                         disabled={isLoading}
                                                     >
@@ -150,7 +150,7 @@ function AddUser() {
                                                     </button>
                                                     <button
                                                         type="submit"
-                                                        className="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8"
+                                                        className="btn btn-primary border border-primary-600 text-md px-3 py-4 radius-8"
                                                         disabled={isLoading}
                                                     >
                                                         {isLoading ? 'Saving...' : 'Save'}

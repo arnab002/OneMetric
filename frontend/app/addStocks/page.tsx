@@ -180,9 +180,46 @@ function AddStocks() {
         };
     }, [showDropdown]);
 
+    // Function to check if the token is expired
+    const isTokenExpired = (token: string): boolean => {
+        if (!token) return true;
+        const decodedToken = JSON.parse(atob(token.split('.')[1]));
+        const currentTime = Math.floor(Date.now() / 1000);
+        return decodedToken.exp < currentTime;
+    };
+
+    // Function to handle logout
+    const handleLogout = () => {
+        localStorage.removeItem('authToken');
+        setIsLoggedIn(false);
+        window.location.href = '/login';
+    };
+
+    // Function to check token expiration and handle logout
+    const checkTokenExpiration = () => {
+        const token = localStorage.getItem('authToken');
+        if (token && isTokenExpired(token)) {
+            handleLogout();
+        }
+    };
+
+    useEffect(() => {
+        checkTokenExpiration();
+        const intervalId = setInterval(checkTokenExpiration, 60000); // Check every minute
+        return () => clearInterval(intervalId);
+    }, []);
+
+    // Modify the existing useEffect for token checking
     useEffect(() => {
         const token = localStorage.getItem('authToken');
-        setIsLoggedIn(!!token);
+        if (token && !isTokenExpired(token)) {
+            setIsLoggedIn(true);
+        } else {
+            setIsLoggedIn(false);
+            if (token) {
+                handleLogout(); // Auto-logout if token exists but is expired
+            }
+        }
     }, []);
 
     const SelectAllButton = ({ stocks, onSelectAll }: { stocks: any[], onSelectAll: (selected: boolean) => void }) => {
@@ -555,9 +592,9 @@ function AddStocks() {
     const handleAddToWatchlist = async () => {
 
         const token = localStorage.getItem('authToken');
-        if (!token) {
-            console.error('No token found in localStorage');
-            return;
+        if (token && isTokenExpired(token)) {
+            handleLogout();
+            return null;
         }
 
         try {
@@ -622,6 +659,9 @@ function AddStocks() {
         } catch (error) {
             console.error('Error processing payment or adding stocks:', error);
             alert('An error occurred. Please try again.');
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                handleLogout(); // Logout if unauthorized
+            }
         }
     };
 
@@ -832,6 +872,7 @@ function AddStocks() {
                                                                 backgroundColor: 'red',
                                                                 padding: '10px',
                                                                 borderRadius: '10%',
+                                                                marginLeft: '-13px',
                                                                 transition: 'opacity 0.3s',
                                                                 opacity: 1,
                                                                 cursor: 'pointer',
@@ -870,12 +911,12 @@ function AddStocks() {
                                                             backgroundColor: 'red',
                                                             borderRadius: '10%',
                                                             padding: '10px',
+                                                            marginLeft: '-10px',
                                                             transition: 'opacity 0.3s',
                                                             opacity: 1,
                                                             cursor: 'pointer',
                                                         }}
                                                     >
-                                                        <Trash style={{ color: 'white' }} />
                                                         <span style={{ marginLeft: '4px', marginTop: '4px', color: 'white' }}>Removing...</span>
                                                     </div>
                                                 )}

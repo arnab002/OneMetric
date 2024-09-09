@@ -102,9 +102,46 @@ function Insights() {
         }
     }, [isTokenChecked, token]);
 
+    // Function to check if the token is expired
+    const isTokenExpired = (token: string): boolean => {
+        if (!token) return true;
+        const decodedToken = JSON.parse(atob(token.split('.')[1]));
+        const currentTime = Math.floor(Date.now() / 1000);
+        return decodedToken.exp < currentTime;
+    };
+
+    // Function to handle logout
+    const handleLogout = () => {
+        localStorage.removeItem('authToken');
+        setIsLoggedIn(false);
+        window.location.href = '/login';
+    };
+
+    // Function to check token expiration and handle logout
+    const checkTokenExpiration = () => {
+        const token = localStorage.getItem('authToken');
+        if (token && isTokenExpired(token)) {
+            handleLogout();
+        }
+    };
+
+    useEffect(() => {
+        checkTokenExpiration();
+        const intervalId = setInterval(checkTokenExpiration, 60000); // Check every minute
+        return () => clearInterval(intervalId);
+    }, []);
+
+    // Modify the existing useEffect for token checking
     useEffect(() => {
         const token = localStorage.getItem('authToken');
-        setIsLoggedIn(!!token);
+        if (token && !isTokenExpired(token)) {
+            setIsLoggedIn(true);
+        } else {
+            setIsLoggedIn(false);
+            if (token) {
+                handleLogout(); // Auto-logout if token exists but is expired
+            }
+        }
     }, []);
 
     const showMore = () => {
@@ -366,9 +403,9 @@ function Insights() {
     const handleAddToWatchlist = async () => {
 
         const token = localStorage.getItem('authToken');
-        if (!token) {
-            console.error('No token found in localStorage');
-            return;
+        if (token && isTokenExpired(token)) {
+            handleLogout();
+            return null;
         }
 
         setIsStartingTrial(true);
@@ -435,6 +472,9 @@ function Insights() {
         } catch (error) {
             console.error('Error processing payment or adding stocks:', error);
             alert('An error occurred. Please try again.');
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                handleLogout(); // Logout if unauthorized
+            }
         } finally {
             setIsStartingTrial(false);
         }
@@ -521,7 +561,7 @@ function Insights() {
     };
 
     const handleNewsClick = (stockLongName: string, scripCd: number, newsId: string) => {
-        window.open(`/singleNews/?id=${newsId}`,'_blank');
+        window.open(`/singleNews/?id=${newsId}`, '_blank');
     };
 
     if (!isTokenChecked) {

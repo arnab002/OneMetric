@@ -70,24 +70,54 @@ function Home() {
     };
   }, [showDropdown]);
 
-  useEffect(() => {
+  // Function to check if the token is expired
+  const isTokenExpired = (token: string): boolean => {
+    if (!token) return true;
+    const decodedToken = JSON.parse(atob(token.split('.')[1]));
+    const currentTime = Math.floor(Date.now() / 1000);
+    return decodedToken.exp < currentTime;
+  };
+
+  // Function to handle logout
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    setIsLoggedIn(false);
+    window.location.href = '/login';
+  };
+
+  // Function to check token expiration and handle logout
+  const checkTokenExpiration = () => {
     const token = localStorage.getItem('authToken');
-    setIsLoggedIn(!!token);
+    if (token && isTokenExpired(token)) {
+      handleLogout();
+    }
+  };
+
+  useEffect(() => {
+    checkTokenExpiration();
+    const intervalId = setInterval(checkTokenExpiration, 60000); // Check every minute
+    return () => clearInterval(intervalId);
   }, []);
 
-  const handleUserAccountClick = () => {
-    window.location.href = '/userAccount'
-  };
+  // Modify the existing useEffect for token checking
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token && !isTokenExpired(token)) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+      if (token) {
+        handleLogout(); // Auto-logout if token exists but is expired
+      }
+    }
+  }, []);
 
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
-  };
 
   useEffect(() => {
     const fetchPlanData = async () => {
       try {
         const response = await axios.get<{ data: Plan[] }>(`${baseApiURL()}/plans`);
-        const filteredPlans = response.data.data.filter((plan: Plan) => ![0,1].includes(plan.id));
+        const filteredPlans = response.data.data.filter((plan: Plan) => ![0, 1].includes(plan.id));
         setPlanData(filteredPlans);
         setLoading(false);
         setTimeout(() => setContentReady(true), 1000);
@@ -104,6 +134,10 @@ function Home() {
   const fetchUserDetails = async (userId: string) => {
     try {
       const token = localStorage.getItem('authToken');
+      if (token && isTokenExpired(token)) {
+        handleLogout();
+        return null;
+      }
       const response = await axios.get(
         `${baseApiURL()}/fetchUserData`,
         {
@@ -115,6 +149,9 @@ function Home() {
       return response.data.data;
     } catch (error) {
       console.error('Error fetching user details:', error);
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        handleLogout(); // Logout if unauthorized
+      }
       return null;
     }
   };
@@ -133,9 +170,10 @@ function Home() {
     }
 
     const token = localStorage.getItem('authToken');
-    if (!token) {
+    if (!token || isTokenExpired(token)) {
       console.error('No token found in localStorage');
       setProcessingPlanId(null);
+      handleLogout();
       return;
     }
 
@@ -197,6 +235,9 @@ function Home() {
       }
     } catch (error) {
       console.error('Error creating payment:', error);
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        handleLogout(); // Logout if unauthorized
+      }
     } finally {
       setProcessingPlanId(null);
     }
@@ -498,7 +539,7 @@ function Home() {
           </div>
         </div>
       </div>
-      <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar}/>
+      <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
     </PlanMobileView>
   )
 }

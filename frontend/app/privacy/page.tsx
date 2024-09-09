@@ -83,18 +83,48 @@ const Referral: React.FC = () => {
     };
   }, [showDropdown]);
 
-  useEffect(() => {
+  // Function to check if the token is expired
+  const isTokenExpired = (token: string): boolean => {
+    if (!token) return true;
+    const decodedToken = JSON.parse(atob(token.split('.')[1]));
+    const currentTime = Math.floor(Date.now() / 1000);
+    return decodedToken.exp < currentTime;
+  };
+
+  // Function to handle logout
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    setIsLoggedIn(false);
+    window.location.href = '/login';
+  };
+
+  // Function to check token expiration and handle logout
+  const checkTokenExpiration = () => {
     const token = localStorage.getItem('authToken');
-    setIsLoggedIn(!!token);
+    if (token && isTokenExpired(token)) {
+      handleLogout();
+    }
+  };
+
+  useEffect(() => {
+    checkTokenExpiration();
+    const intervalId = setInterval(checkTokenExpiration, 60000); // Check every minute
+    return () => clearInterval(intervalId);
   }, []);
 
-  const handleUserAccountClick = () => {
-    window.location.href = '/userAccount'
-  };
+  // Modify the existing useEffect for token checking
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token && !isTokenExpired(token)) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+      if (token) {
+        handleLogout(); // Auto-logout if token exists but is expired
+      }
+    }
+  }, []);
 
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
-  };
 
   return (
     <div>
@@ -148,7 +178,7 @@ const Referral: React.FC = () => {
             )}
           </div>
         </header>
-        <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar}/>
+        <CustomSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
         <section className="about-us-inner">
           <div className="referral-policy-parent">
             <h3 className="referral-policy">Privacy Policy</h3>
