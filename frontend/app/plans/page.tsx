@@ -5,7 +5,7 @@ import baseApiURL from '@/baseUrl';
 import '../../public/assets/plans.css'
 import { User } from 'react-feather';
 import { BarLoader, PulseLoader } from 'react-spinners'; // Import multiple loaders
-import logo from "../../public/public/home/image-18@2x.png";
+import logo from "../../public/public/home/OneMetric_Transparent.png";
 import PlanMobileView from '@/middlewares/plan/PlanMobileView';
 import CustomSidebar from '../sidebar';
 

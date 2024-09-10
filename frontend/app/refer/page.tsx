@@ -1,9 +1,12 @@
 'use client'
 import React, { useEffect, useState } from "react";
+import logo from "../../public/public/home/OneMetric_Transparent.png";
+import { BarLoader, PulseLoader } from "react-spinners";
 
 const ViralLoopsWidget = () => {
   const [iframeHeight, setIframeHeight] = useState('100vh');
   const [isLoaded, setIsLoaded] = useState(false);
+  const [contentReady, setContentReady] = useState(false);
 
   useEffect(() => {
     const updateIframeHeight = () => {
@@ -31,7 +34,11 @@ const ViralLoopsWidget = () => {
     document.body.appendChild(iframe);
 
     // Set loaded state to true when iframe is loaded
-    iframe.onload = () => setIsLoaded(true);
+    iframe.onload = () => {
+      setIsLoaded(true);
+      // Simulate content preparation time
+      setTimeout(() => setContentReady(true), 1000);
+    };
 
     // Clean up function
     return () => {
@@ -42,28 +49,40 @@ const ViralLoopsWidget = () => {
     };
   }, []);
 
-  return (
-    <>
-      <div 
-        style={{ 
-          position: 'fixed', 
-          top: 0, 
-          left: 0, 
-          width: '100%', 
-          height: iframeHeight, 
-          zIndex: 9998,
-          background: '#fff',
-          display: isLoaded ? 'none' : 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          fontSize: '1.2rem'
-        }}
-      >
-        Loading Viral Loops content...
+  if (!isLoaded || !contentReady) {
+    return (
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        backgroundColor: '#0B0C18',
+        fontFamily: 'Arial, sans-serif'
+      }}>
+        <img src={logo.src} alt="OneMetric Logo" style={{ width: '150px', marginBottom: '20px' }} />
+        <BarLoader
+          color={'#F37254'}
+          loading={true}
+          height={4}
+          width={150}
+        />
+        <p style={{ marginTop: '20px', color: '#fff' }}>
+          {!isLoaded ? 'Loading...' : 'Preparing your experience...'}
+        </p>
+        <div style={{ marginTop: '10px' }}>
+          <PulseLoader
+            color={'#F37254'}
+            loading={true}
+            size={10}
+            speedMultiplier={0.7}
+          />
+        </div>
       </div>
-      {/* The iframe is now directly appended to the body in the useEffect hook */}
-    </>
-  );
+    );
+  }
+
+  return null; // The iframe is directly appended to the body in the useEffect hook
 };
 
 export default ViralLoopsWidget;

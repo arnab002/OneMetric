@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import baseApiURL from '@/baseUrl';
 import '../public/assets/index.css'
-import logo from "../public/public/home/image-18@2x.png";
+import logo from "../public/public/home/OneMetric_Transparent.png";
 import { Edit3, Plus, Trash, Check } from 'react-feather';
 import { User } from 'react-feather';
 import { BarLoader, PulseLoader } from 'react-spinners'; // Import multiple loaders

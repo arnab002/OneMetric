@@ -2,7 +2,6 @@
 import React, { useState, Dispatch, SetStateAction } from 'react'
 import { Icon } from '@iconify/react'
 import { usePathname } from 'next/navigation'
-import Link from 'next/link'
 
 function Sidebar() {
     const [isUsersOpen, setIsUsersOpen] = useState<boolean>(false);
@@ -53,7 +52,7 @@ function Sidebar() {
                         </a>
                     </li>
                     &nbsp;
-                    <li className={`dropdown ${isUsersOpen ? 'open' : ''} ${pathname.startsWith('/admin/users') || pathname === '/admin/addUser' || pathname === '/admin/bulkUsers' ? 'show' : ''}`}>
+                    <li className={`dropdown ${(isUsersOpen || pathname.startsWith('/admin/users') || pathname === '/admin/addUser' || pathname === '/admin/bulkUsers') ? 'open' : ''}`}>
                         <a href="javascript:void(0)" onClick={() => toggleDropdown(setIsUsersOpen)}>
                             <Icon
                                 icon="flowbite:users-group-outline"
@@ -61,8 +60,8 @@ function Sidebar() {
                             />
                             <span>Users</span>
                         </a>
-                        {isUsersOpen && (
-                            <ul className="sidebar-submenu">
+                        {(isUsersOpen || pathname.startsWith('/admin/users') || pathname === '/admin/addUser' || pathname === '/admin/bulkUsers') && (
+                            <ul className="sidebar-submenu show">
                                 <li className={isActive('/admin/users') ? 'active-page' : ''}>
                                     <a href="/admin/users">
                                         <i className="ri-circle-fill circle-icon text-primary-600 w-auto" />{" "}
@@ -84,7 +83,7 @@ function Sidebar() {
                             </ul>
                         )}
                     </li>
-                    <li className={`dropdown ${isPlansOpen ? 'open' : ''} ${pathname.startsWith('/admin/createPlan') ? 'active-page' : ''}`}>
+                    <li className={`dropdown ${(isPlansOpen || pathname.startsWith('/admin/createPlan')) ? 'open' : ''}`}>
                         <a href="javascript:void(0)" onClick={() => toggleDropdown(setIsPlansOpen)}>
                             <Icon
                                 icon="fa6-solid:hand-holding-dollar"
@@ -92,8 +91,8 @@ function Sidebar() {
                             />
                             <span>Plans</span>
                         </a>
-                        {isPlansOpen && (
-                            <ul className="sidebar-submenu">
+                        {(isPlansOpen || pathname.startsWith('/admin/createPlan')) && (
+                            <ul className="sidebar-submenu show">
                                 <li className={isActive('/admin/createPlan') ? 'active-page' : ''}>
                                     <a href="/admin/createPlan">
                                         <i className="ri-circle-fill circle-icon text-info-main w-auto" />{" "}
