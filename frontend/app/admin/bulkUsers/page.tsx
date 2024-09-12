@@ -23,6 +23,7 @@ interface ApiResponse {
 }
 
 function BulkUser(): JSX.Element {
+  const [isSidebarActive, setIsSidebarActive] = useState<boolean>(false);
   const [uploadStatus, setUploadStatus] = useState<string>('');
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [adminToken, setAdminToken] = useState<string | null>(null);
@@ -85,11 +86,15 @@ function BulkUser(): JSX.Element {
     }
   }, [adminToken, importerKey]); // Add importerKey to the dependency array
 
+  const toggleSidebar = (): void => {
+    setIsSidebarActive(prev => !prev);
+  };
+
   return (
     <div>
-      <Sidebar />
-      <main className="dashboard-main">
-        <Header />
+      <Sidebar isSidebarActive={isSidebarActive} toggleSidebar={toggleSidebar} />
+      <main className={`dashboard-main ${isSidebarActive ? 'active' : ''}`}>
+        <Header isSidebarActive={isSidebarActive} toggleSidebar={toggleSidebar} />
         <div className="dashboard-main-body">
           <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
             <h6 className="fw-semibold mb-0">Upload Bulk Users</h6>

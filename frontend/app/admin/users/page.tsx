@@ -142,6 +142,7 @@ const UserModal: React.FC<UserModalProps> = ({ user, onClose }) => {
 }
 
 function UsersList() {
+  const [isSidebarActive, setIsSidebarActive] = useState<boolean>(false);
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -211,12 +212,16 @@ function UsersList() {
     return pages;
   };
 
+  const toggleSidebar = (): void => {
+    setIsSidebarActive(prev => !prev);
+  };
+
   return (
     <div>
       <>
-        <Sidebar />
-        <main className="dashboard-main">
-          <Header />
+        <Sidebar isSidebarActive={isSidebarActive} toggleSidebar={toggleSidebar} />
+        <main className={`dashboard-main ${isSidebarActive ? 'active' : ''}`}>
+          <Header isSidebarActive={isSidebarActive} toggleSidebar={toggleSidebar} />
           <div className="dashboard-main-body">
             <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24"></div>
             <div className="card h-100 p-0 radius-12">

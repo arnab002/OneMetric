@@ -19,7 +19,7 @@ function AddUser() {
         phone: '',
         planName: '1', // Default to Gold (1)
     });
-
+    const [isSidebarActive, setIsSidebarActive] = useState<boolean>(false);
     const [message, setMessage] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [adminToken, setAdminToken] = useState<string | null>(null);
@@ -65,11 +65,15 @@ function AddUser() {
         }
     };
 
+    const toggleSidebar = (): void => {
+        setIsSidebarActive(prev => !prev);
+    };
+
     return (
         <div>
-            <Sidebar />
-            <main className="dashboard-main">
-                <Header />
+            <Sidebar isSidebarActive={isSidebarActive} toggleSidebar={toggleSidebar} />
+            <main className={`dashboard-main ${isSidebarActive ? 'active' : ''}`}>
+                <Header isSidebarActive={isSidebarActive} toggleSidebar={toggleSidebar} />
                 <div className="dashboard-main-body">
                     <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
                         <h6 className="fw-semibold mb-0">Add User</h6>

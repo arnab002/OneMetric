@@ -1,8 +1,13 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import { Icon } from '@iconify/react'
 
-function Header() {
+interface HeaderProps {
+    isSidebarActive: boolean;
+    toggleSidebar: () => void;
+}
+
+function Header({ isSidebarActive, toggleSidebar }: HeaderProps) {
     const handleLogout = () => {
         localStorage.removeItem('isAdminAuthenticated');
         localStorage.removeItem('adminToken');
@@ -14,7 +19,7 @@ function Header() {
             <div className="row align-items-center justify-content-between">
                 <div className="col-auto">
                     <div className="d-flex flex-wrap align-items-center gap-4">
-                        <button type="button" className="sidebar-toggle">
+                        <button type="button" className={`sidebar-toggle ${isSidebarActive ? 'active' : ''}`} onClick={toggleSidebar}>
                             <Icon
                                 icon="heroicons:bars-3-solid"
                                 className="icon text-2xl non-active"
@@ -24,7 +29,7 @@ function Header() {
                                 className="icon text-2xl active"
                             />
                         </button>
-                        <button type="button" className="sidebar-mobile-toggle">
+                        <button type="button" className='sidebar-mobile-toggle' onClick={toggleSidebar}>
                             <Icon icon="heroicons:bars-3-solid" className="icon" />
                         </button>
                         <form className="navbar-search">

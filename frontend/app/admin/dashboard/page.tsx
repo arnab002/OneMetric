@@ -29,6 +29,7 @@ interface ApiResponse {
 }
 
 function AdminHome() {
+    const [isSidebarActive, setIsSidebarActive] = useState<boolean>(false);
     const [users, setUsers] = useState<User[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -152,6 +153,10 @@ function AdminHome() {
         return pages;
     };
 
+    const toggleSidebar = (): void => {
+        setIsSidebarActive(prev => !prev);
+    };
+
     if (!isAuthenticated) {
         return null;
     }
@@ -159,9 +164,9 @@ function AdminHome() {
     return (
         <div>
             <>
-                <Sidebar />
-                <main className="dashboard-main">
-                    <Header />
+                <Sidebar isSidebarActive={isSidebarActive} toggleSidebar={toggleSidebar} />
+                <main className={`dashboard-main ${isSidebarActive ? 'active' : ''}`}>
+                    <Header isSidebarActive={isSidebarActive} toggleSidebar={toggleSidebar} />
                     <div className="dashboard-main-body">
                         <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
                             <h6 className="fw-semibold mb-0">Dashboard</h6>

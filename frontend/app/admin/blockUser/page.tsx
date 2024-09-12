@@ -1,4 +1,5 @@
-import React from 'react';
+'use client'
+import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
@@ -13,6 +14,7 @@ interface User {
 }
 
 function BlockUser() {
+    const [isSidebarActive, setIsSidebarActive] = useState<boolean>(false);
     const users: User[] = [
         {
             phone: "9865786551",
@@ -30,12 +32,18 @@ function BlockUser() {
         }
         // Add more users as needed
     ];
+
+    const toggleSidebar = (): void => {
+        setIsSidebarActive(prev => !prev);
+    };
+
+
     return (
         <div>
             <>
-                <Sidebar />
-                <main className="dashboard-main">
-                    <Header />
+                <Sidebar isSidebarActive={isSidebarActive} toggleSidebar={toggleSidebar} />
+                <main className={`dashboard-main ${isSidebarActive ? 'active' : ''}`}>
+                    <Header isSidebarActive={isSidebarActive} toggleSidebar={toggleSidebar} />
                     <div className="dashboard-main-body">
                         <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
                             <h6 className="fw-semibold mb-0">Block Users</h6>
